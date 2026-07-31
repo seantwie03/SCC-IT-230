@@ -1,0 +1,35 @@
+# Dependencies and package-manager state
+node_modules/
+.pnpm-store/
+
+# Generated sites, decks, and test output
+dist/
+.slidev/
+coverage/
+playwright-report/
+test-results/
+.artifacts/
+exports/
+
+# Tool caches and logs
+.cache/
+.eslintcache
+*.log
+pnpm-debug.log*
+
+# Local configuration and secrets
+.env
+.env.*
+!.env.example
+*.local
+
+# Editors and operating systems
+.idea/
+.vscode/
+*.code-workspace
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
