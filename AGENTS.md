@@ -16,6 +16,9 @@
 - Work directly on `main`; do not create feature branches or pull requests.
 - Keep prospective changes unstaged during the instructor's manual review.
   Stage files only after the instructor explicitly approves the review.
+- Install dependencies from the repository root with
+  `pnpm install --frozen-lockfile`; do not create nested installations.
+- Run the current validation suite with `pnpm check`.
 - Run the relevant local validation before committing and pushing.
 
 For an authorized weekly course-preparation task, consult the instructor’s
@@ -35,4 +38,3 @@ Read the relevant document before changing files in its area:
 If a task crosses more than one area, read each applicable document. Update the
 authoritative document when its enduring behavior changes rather than copying
 its detailed rules into this file.
-

@@ -11,6 +11,23 @@ The local Slidev theme is a workspace package at
 `packages/slidev-theme-it230`. Keeping the theme in the repository allows
 presentations and theme changes to be validated together.
 
+## Toolchain contract
+
+The project supports the Node.js 24 major line. `package.json` is the
+authoritative runtime declaration, and `.nvmrc` is a convenience for local
+version managers. The exact pnpm release is declared by `packageManager` in
+`package.json`.
+
+Application dependencies use exact versions in the root manifest and are
+resolved by the single root `pnpm-lock.yaml`. Install dependencies from the
+repository root with `pnpm install --frozen-lockfile`. Run current validation
+with `pnpm check`; use `pnpm format` to apply formatting to the file types
+currently covered by the formatter.
+
+`pnpm-workspace.yaml` registers packages under `packages/`. Workspace packages
+share the root dependency installation and lockfile; they do not own separate
+lockfiles or `node_modules` directories.
+
 ## Main areas
 
 - `course/` contains weekly composition files and canonical chapter/topic
@@ -39,4 +56,3 @@ processed by the presentation and site build tools. Generated output is not comm
 Stable presentation routes use week or topic identifiers without semester or
 implementation details. The site and presentations must work with the base
 path used by GitHub Pages and with the configured custom domain.
-

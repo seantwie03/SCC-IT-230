@@ -1,0 +1,22 @@
+{
+    "name": "scc-it-230",
+    "version": "0.0.0",
+    "private": true,
+    "type": "module",
+    "license": "MIT",
+    "packageManager": "pnpm@11.18.0",
+    "engines": {
+        "node": "24.x"
+    },
+    "scripts": {
+        "check": "pnpm run check:format && pnpm run check:toolchain",
+        "check:format": "prettier --check package.json pnpm-workspace.yaml packages/slidev-theme-it230/package.json scripts/check-toolchain.mjs",
+        "check:toolchain": "node scripts/check-toolchain.mjs",
+        "format": "prettier --write package.json pnpm-workspace.yaml packages/slidev-theme-it230/package.json scripts/check-toolchain.mjs"
+    },
+    "devDependencies": {
+        "@slidev/cli": "52.18.0",
+        "prettier": "3.9.6",
+        "vue": "3.5.40"
+    }
+}

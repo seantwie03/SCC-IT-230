@@ -11,6 +11,21 @@ The scripts in the root `package.json` are the authoritative commands for
 local development, validation, and builds. Use a frozen pnpm installation when
 verifying a clean checkout.
 
+Install and validate from the repository root:
+
+```sh
+pnpm install --frozen-lockfile
+pnpm check
+```
+
+If the format check reports a supported file, apply the configured formatter
+and validate again:
+
+```sh
+pnpm format
+pnpm check
+```
+
 ## Publication gates
 
 Before pushing, confirm that:
@@ -40,4 +55,3 @@ Use a roll-forward workflow. If production is faulty, make the smallest
 appropriate correction locally, run the complete validation workflow, commit
 the correction, and push the new commit to `main`. The manual workflow trigger
 may redeploy a known commit when the content itself does not require a change.
-

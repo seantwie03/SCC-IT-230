@@ -1,0 +1,14 @@
+{
+    "name": "slidev-theme-it230",
+    "version": "0.0.0",
+    "private": true,
+    "type": "module",
+    "license": "MIT",
+    "keywords": [
+        "slidev-theme",
+        "slidev"
+    ],
+    "engines": {
+        "slidev": ">=52.18.0"
+    }
+}
