@@ -8,8 +8,8 @@ course-site content, and generated course documents. Apply the target to both
 source decisions and the artifacts students use.
 
 WCAG conformance is a technical baseline, not a complete guarantee of equitable
-access. Authoring and publication review must also consider classroom
-projection, reading and focus order, assistive-technology use, effective
+access. Authoring and publication review must also consider Zoom screen
+sharing, reading and focus order, assistive-technology use, effective
 communication, and individual accommodation needs.
 
 Do not describe an artifact as accessible merely because it builds, passes an
@@ -89,7 +89,8 @@ manual review as a required gate. For each applicable change:
 2. Navigate interactive output with the keyboard and verify visible focus.
 3. Review text alternatives, links, tables, and media alternatives.
 4. Check contrast and color-independent meaning.
-5. Inspect representative browser and classroom-projection rendering.
+5. Inspect representative browser rendering at the 1920x1080 desktop viewport
+   used for Zoom screen sharing.
 
 Record and resolve failures before publication. If a criterion cannot yet be
 reliably validated, document the limitation without treating it as a pass.

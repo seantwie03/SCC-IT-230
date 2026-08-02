@@ -1,0 +1,72 @@
+[mcp_servers.it230_slidev]
+command = "pnpm"
+args = [
+    "exec",
+    "slidev",
+    "mcp",
+    "packages/slidev-theme-it230/example.md",
+]
+cwd = "."
+default_tools_approval_mode = "prompt"
+startup_timeout_sec = 30
+tool_timeout_sec = 60
+
+[mcp_servers.it230_slidev.tools."slidev-get-info"]
+approval_mode = "approve"
+
+[mcp_servers.it230_slidev.tools."slidev-list-slides"]
+approval_mode = "approve"
+
+[mcp_servers.it230_slidev.tools."slidev-get-slide"]
+approval_mode = "approve"
+
+[mcp_servers.it230_slidev.tools."slidev-update-slide"]
+approval_mode = "approve"
+
+[mcp_servers.it230_slidev.tools."slidev-insert-slide"]
+approval_mode = "approve"
+
+[mcp_servers.it230_slidev.tools."slidev-remove-slide"]
+approval_mode = "approve"
+
+[mcp_servers.it230_slidev.tools."slidev-move-slide"]
+approval_mode = "approve"
+
+[mcp_servers.it230_browser]
+command = "pnpm"
+args = [
+    "exec",
+    "playwright-mcp",
+    "--browser",
+    "chrome",
+    "--headless",
+    "--isolated",
+    "--viewport-size",
+    "1920x1080",
+    "--allowed-origins",
+    "http://127.0.0.1:2121;http://localhost:2121",
+    "--output-dir",
+    "/tmp/it230-playwright-mcp",
+]
+cwd = "."
+default_tools_approval_mode = "prompt"
+startup_timeout_sec = 30
+tool_timeout_sec = 60
+
+[mcp_servers.it230_browser.tools.browser_navigate]
+approval_mode = "approve"
+
+[mcp_servers.it230_browser.tools.browser_resize]
+approval_mode = "approve"
+
+[mcp_servers.it230_browser.tools.browser_snapshot]
+approval_mode = "approve"
+
+[mcp_servers.it230_browser.tools.browser_take_screenshot]
+approval_mode = "approve"
+
+[mcp_servers.it230_browser.tools.browser_console_messages]
+approval_mode = "approve"
+
+[mcp_servers.it230_browser.tools.browser_evaluate]
+approval_mode = "approve"

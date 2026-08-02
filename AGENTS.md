@@ -18,6 +18,8 @@
   Stage files only after the instructor explicitly approves the review.
 - Install dependencies from the repository root with
   `pnpm install --frozen-lockfile`; do not create nested installations.
+- When updating the pinned Slidev dependencies, refresh
+  `.agents/skills/slidev/` from the matching `@slidev/cli` release.
 - Run the current validation suite with `pnpm check`.
 - Run the relevant local validation before committing and pushing.
 - Treat WCAG 2.1 Level AA as the minimum accessibility target. Do not claim an

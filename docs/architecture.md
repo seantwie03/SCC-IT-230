@@ -19,10 +19,20 @@ authoritative runtime declaration, and `.nvmrc` is a convenience for local
 version managers. The exact pnpm release is declared by `packageManager` in
 `package.json`.
 
+AI-assisted visual review uses Playwright MCP with the locally installed Google
+Chrome channel. Google Chrome is therefore a system-level development
+prerequisite and is verified by `pnpm run check:toolchain`; its release is not
+managed by the repository lockfile. Slidev PDF and PNG export continue to use
+the separately pinned `playwright-chromium` package.
+
 Application dependencies use exact versions in the root manifest and are
 resolved by the single root `pnpm-lock.yaml`. Install dependencies from the
 repository root with `pnpm install --frozen-lockfile` so installation does not
 silently change the reviewed dependency graph.
+
+The repository-scoped Slidev skill lives at `.agents/skills/slidev/`. It is
+copied from the skill bundled with the pinned `@slidev/cli` release and must be
+refreshed whenever the pinned Slidev dependencies are updated.
 
 `pnpm-workspace.yaml` registers packages under `packages/`. Workspace packages
 share the root dependency installation and lockfile; they do not own separate
@@ -44,6 +54,8 @@ and are not committed.
 
 - `course/` contains weekly composition files and canonical chapter/topic
   content.
+- `.agents/skills/` contains repository-scoped agent skills that apply to the
+  project.
 - `packages/slidev-theme-it230/` contains shared presentation styling,
   layouts, components, its focused gallery, and theme-specific validation.
 - `site/` contains the student-facing course index.

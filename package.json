@@ -10,15 +10,18 @@
     },
     "scripts": {
         "build:theme": "pnpm --filter slidev-theme-it230 build",
+        "capture:theme": "pnpm --filter slidev-theme-it230 capture",
         "check": "pnpm run check:format && pnpm run check:toolchain && pnpm run test && pnpm run build:theme",
         "check:format": "prettier --check package.json pnpm-workspace.yaml AGENTS.md \"docs/*.md\" \"packages/slidev-theme-it230/**/*.{css,json,mjs,ts,vue}\" \"scripts/*.mjs\"",
         "check:toolchain": "node scripts/check-toolchain.mjs",
         "dev:theme": "pnpm --filter slidev-theme-it230 dev",
         "export:theme": "pnpm --filter slidev-theme-it230 export",
         "format": "prettier --write package.json pnpm-workspace.yaml AGENTS.md \"docs/*.md\" \"packages/slidev-theme-it230/**/*.{css,json,mjs,ts,vue}\" \"scripts/*.mjs\"",
+        "review:theme": "pnpm --filter slidev-theme-it230 review",
         "test": "pnpm --filter slidev-theme-it230 test"
     },
     "devDependencies": {
+        "@playwright/mcp": "0.0.78",
         "@slidev/cli": "52.18.0",
         "@slidev/types": "52.18.0",
         "playwright-chromium": "1.62.0",

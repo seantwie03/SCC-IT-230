@@ -10,6 +10,8 @@ files for the applicable license terms.
   [CC BY 4.0](LICENSE-CONTENT.md), except where a file states otherwise.
 - Code, scripts, configuration, styles, and theme implementation are covered
   by the [MIT License](LICENSE-CODE.md), except where a file states otherwise.
+- The repository-local Slidev skill under `.agents/skills/slidev/` is copied
+  from Slidev and remains covered by its included upstream MIT license.
 - For a file or asset with its own notice, follow the terms stated for that
   item.
 

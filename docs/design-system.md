@@ -42,7 +42,7 @@ not impair hierarchy.
 
 Validate every intended text and surface pairing against the applicable
 threshold whenever the palette changes. Passing contrast thresholds is a
-minimum check, not a complete accessibility claim. Browser and projection
+minimum check, not a complete accessibility claim. Browser and Zoom
 review must also check type size and weight, spacing, focus visibility,
 overflow, and color-independent meaning.
 
@@ -97,7 +97,8 @@ Theme spacing follows named steps from `--it230-space-1` through
 `--it230-space-7`. Shared surfaces use the small, medium, or large radius tokens
 and one restrained raised-surface shadow. The rounded geometry follows
 Adwaita's visual character, while type, spacing, and control proportions remain
-large enough for projection rather than copying desktop-interface dimensions.
+large enough for Zoom screen sharing rather than copying desktop-interface
+dimensions.
 Reuse the tokens instead of adding nearly equivalent one-off values to shared
 theme code.
 
@@ -250,16 +251,25 @@ Use the root commands:
 
 ```sh
 pnpm run dev:theme
+pnpm run review:theme
 pnpm run build:theme
+pnpm run capture:theme
 pnpm run export:theme
 ```
 
 `pnpm check` verifies formatting, the supported toolchain, and the production
-gallery build. Theme review also requires representative browser and
-projector-size captures. The optional PDF export may be inspected for visual
-export regressions, but its untagged output is not an accessible student
-deliverable. Generated theme-review output belongs under the theme package's
-`dist/` and is not committed.
+gallery build. `pnpm run review:theme` serves the gallery only on a loopback
+address for browser-first inspection at the 1920x1080 desktop viewport used
+for Zoom screen sharing. Maintainer-run theme development uses fixed port 2020,
+and agent-run theme review uses fixed port 2121. An occupied port causes the
+corresponding command to fail rather than silently selecting another port.
+`pnpm run capture:theme` exports the complete gallery directly to PNG; pass
+one validated range such as
+`pnpm run capture:theme -- 1,4-7` when only selected slides need deterministic
+batch review. The optional PDF export is reserved for PDF-specific visual
+regressions, and its untagged output is not an accessible student deliverable.
+Generated theme-review output belongs under the theme package `dist/` and is
+not committed.
 
 When a theme contract changes, update the gallery and this document in the
 same reviewed change. Check every published deck for regressions once real
