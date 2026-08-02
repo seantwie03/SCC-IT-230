@@ -20,6 +20,9 @@
   `pnpm install --frozen-lockfile`; do not create nested installations.
 - Run the current validation suite with `pnpm check`.
 - Run the relevant local validation before committing and pushing.
+- Treat WCAG 2.1 Level AA as the minimum accessibility target. Do not claim an
+  artifact is accessible based only on a successful build, automated check, or
+  contrast measurement.
 
 For an authorized weekly course-preparation task, consult the instructor’s
 private source repository only as a read-only reference. Follow its root guidance
@@ -29,11 +32,13 @@ and use only material explicitly approved for public release.
 
 Read the relevant document before changing files in its area:
 
-| Work | Required document |
-| --- | --- |
+| Work                                                                                       | Required document          |
+| ------------------------------------------------------------------------------------------ | -------------------------- |
 | Slides, presenter notes, demonstrations, exercises, topic assets, or other course material | `docs/course-authoring.md` |
-| Project structure, workspace boundaries, presentation registry, routes, or build output | `docs/architecture.md` |
-| Staging, committing, pushing, deployment, publication checks, or production corrections | `docs/publishing.md` |
+| Project structure, workspace boundaries, presentation registry, routes, or build output    | `docs/architecture.md`     |
+| Theme tokens, global styles, layouts, shared components, or the theme gallery              | `docs/design-system.md`    |
+| Accessibility standards, audits, remediation, or cross-cutting accessibility work          | `docs/accessibility.md`    |
+| Staging, committing, pushing, deployment, publication checks, or production corrections    | `docs/publishing.md`       |
 
 If a task crosses more than one area, read each applicable document. Update the
 authoritative document when its enduring behavior changes rather than copying

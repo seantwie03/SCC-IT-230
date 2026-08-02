@@ -3,9 +3,10 @@
 ## Project boundary
 
 IT-230 is one root Node.js project with one pnpm lockfile. The root project
-owns development commands, dependency versions, validation, production builds,
-and the course site. Individual weeks and chapters do not install their own
-toolchains.
+exposes repository-wide commands and owns dependency versions, validation,
+production builds, and the course site. Workspace packages own package-specific
+command implementations invoked by the root. Individual weeks and chapters do
+not install their own toolchains.
 
 The local Slidev theme is a workspace package at
 `packages/slidev-theme-it230`. Keeping the theme in the repository allows
@@ -20,23 +21,33 @@ version managers. The exact pnpm release is declared by `packageManager` in
 
 Application dependencies use exact versions in the root manifest and are
 resolved by the single root `pnpm-lock.yaml`. Install dependencies from the
-repository root with `pnpm install --frozen-lockfile`. Run current validation
-with `pnpm check`; use `pnpm format` to apply formatting to the file types
-currently covered by the formatter.
+repository root with `pnpm install --frozen-lockfile` so installation does not
+silently change the reviewed dependency graph.
 
 `pnpm-workspace.yaml` registers packages under `packages/`. Workspace packages
 share the root dependency installation and lockfile; they do not own separate
 lockfiles or `node_modules` directories.
+
+## Theme workspace
+
+`packages/slidev-theme-it230/` is a private local workspace package consumed by
+the root project. It owns shared visual tokens, global slide styles, layouts,
+components, Shiki configuration and custom languages, its focused gallery, and
+package-specific validation. The gallery is public theme source and validation
+input, but it is not a student-facing course week.
+
+The theme package must not create a nested dependency installation or lockfile.
+Its generated gallery review artifacts belong under its own `dist/` directory
+and are not committed.
 
 ## Main areas
 
 - `course/` contains weekly composition files and canonical chapter/topic
   content.
 - `packages/slidev-theme-it230/` contains shared presentation styling,
-  layouts, components, and its focused gallery.
+  layouts, components, its focused gallery, and theme-specific validation.
 - `site/` contains the student-facing course index.
-- `scripts/` contains deterministic repository operations.
-- `tests/` contains structural and behavioral checks.
+- `scripts/` contains deterministic repository-wide operations.
 - `docs/` contains enduring maintainer documentation.
 
 ## Presentation registry
@@ -51,7 +62,13 @@ exists; it must have a valid registry entry.
 Production output is assembled in `dist/`. Each production build recreates
 dist/ from scratch, builds every presentation listed in `slides.config.mjs`,
 and generates the course landing page. Assets referenced by those sources are
-processed by the presentation and site build tools. Generated output is not committed.
+processed by the presentation and site build tools. Generated output is not
+committed.
+
+The focused theme gallery is generated inside
+`packages/slidev-theme-it230/dist/`. Root presentation and site builds use the
+repository-level `dist/`; each workspace package keeps its generated review
+artifacts within its own boundary.
 
 Stable presentation routes use week or topic identifiers without semester or
 implementation details. The site and presentations must work with the base

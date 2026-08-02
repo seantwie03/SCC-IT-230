@@ -38,10 +38,52 @@ Do not reproduce Red Hat Academy source material, guided exercises, labs,
 quizzes, instructor-guide content, transcripts, or extracted media. References
 to curriculum names are for alignment only.
 
+## Accessibility
+
+Read `docs/accessibility.md` before adding or substantially revising student-
+facing course material. Author source so its meaning and sequence remain clear
+without depending on visual position, color, or presenter narration alone.
+
+- Use meaningful headings, lists, tables, and link text in a logical source and
+  reading order.
+- Give informative images useful text alternatives and explain complex visual
+  material in text. Mark genuinely decorative images accordingly.
+- Provide captions for prerecorded instructional video and an appropriate text
+  alternative for instructional audio.
+- Keep code and terminal examples as text whenever possible. If an image of
+  technical content is necessary, provide the equivalent commands, output, or
+  explanation as text.
+- Keep essential instructions and distinctions in student-facing content; do
+  not encode them only through color, spatial position, animation, or presenter
+  notes.
+- Review tables and custom components for a sensible reading order before
+  publishing them.
+
+Treat accessibility as part of authoring, not as an export-time repair.
+
+## Terminal transcripts
+
+Use an ordinary `bash` fence for example commands when their output is omitted.
+If a slide displays command output, use `TerminalWindow`. Every
+`TerminalWindow` transcript must use a `bash-session` fence and include the
+complete prompt on each command line.
+
+A `bash-session` command line begins with a literal `user@host:directory$` or
+`user@host:directory#` prompt. Lines without that complete prompt are plain output.
+Do not remove or rewrite valid `#` or `$` characters merely to affect highlighting.
+The command region receives the theme's automatic Bash syntax highlighting. Do not
+add manual color markup to either region.
+
+Because `bash-session` remains an ordinary fenced language, it supports
+Slidev's static and staged line-highlighting syntax. Line numbers count every
+physical transcript line, including output and blank lines. Dimming
+nonessential lines is an intentional focus treatment. Give each important line
+a full-contrast stage, and include an `all` stage when students need to compare
+the complete transcript.
+
 ## Presenter notes
 
 Treat presenter notes as public source. Notes may contain delivery cues,
 technical explanation, and anticipated questions, but no confidential
 information or material that would be inappropriate for a student to read.
 Production presentations omit notes from the published output.
-

@@ -9,14 +9,22 @@
         "node": "24.x"
     },
     "scripts": {
-        "check": "pnpm run check:format && pnpm run check:toolchain",
-        "check:format": "prettier --check package.json pnpm-workspace.yaml packages/slidev-theme-it230/package.json scripts/check-toolchain.mjs",
+        "build:theme": "pnpm --filter slidev-theme-it230 build",
+        "check": "pnpm run check:format && pnpm run check:toolchain && pnpm run test && pnpm run build:theme",
+        "check:format": "prettier --check package.json pnpm-workspace.yaml AGENTS.md \"docs/*.md\" \"packages/slidev-theme-it230/**/*.{css,json,mjs,ts,vue}\" \"scripts/*.mjs\"",
         "check:toolchain": "node scripts/check-toolchain.mjs",
-        "format": "prettier --write package.json pnpm-workspace.yaml packages/slidev-theme-it230/package.json scripts/check-toolchain.mjs"
+        "dev:theme": "pnpm --filter slidev-theme-it230 dev",
+        "export:theme": "pnpm --filter slidev-theme-it230 export",
+        "format": "prettier --write package.json pnpm-workspace.yaml AGENTS.md \"docs/*.md\" \"packages/slidev-theme-it230/**/*.{css,json,mjs,ts,vue}\" \"scripts/*.mjs\"",
+        "test": "pnpm --filter slidev-theme-it230 test"
     },
     "devDependencies": {
         "@slidev/cli": "52.18.0",
+        "@slidev/types": "52.18.0",
+        "playwright-chromium": "1.62.0",
         "prettier": "3.9.6",
+        "shiki": "4.3.1",
+        "slidev-theme-it230": "workspace:*",
         "vue": "3.5.40"
     }
 }

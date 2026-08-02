@@ -1,0 +1,46 @@
+# Allow the maintainer-approved validation, generated-output, and formatting
+# scripts to run outside the sandbox without an approval prompt.
+prefix_rule(
+    pattern = [
+        "pnpm",
+        "run",
+        [
+            "build:theme",
+            "check",
+            "check:format",
+            "check:toolchain",
+            "export:theme",
+            "format",
+            "test",
+        ],
+    ],
+    decision = "allow",
+    justification = "The maintainer approved these validation, generated-output, and formatting scripts.",
+    match = [
+        "pnpm run build:theme",
+        "pnpm run check",
+        "pnpm run check:format",
+        "pnpm run check:toolchain",
+        "pnpm run export:theme",
+        "pnpm run format",
+        "pnpm run test",
+    ],
+    not_match = [
+        "pnpm run dev:theme",
+        "pnpm run check:future",
+        "pnpm check",
+    ],
+)
+
+# Allow dependency installation only when pnpm must honor the existing public repository lockfile.
+prefix_rule(
+    pattern = ["pnpm", "install", "--frozen-lockfile"],
+    decision = "allow",
+    justification = "The maintainer approved frozen-lockfile installation for the public repository.",
+    match = ["pnpm install --frozen-lockfile"],
+    not_match = [
+        "pnpm install",
+        "pnpm install --no-frozen-lockfile",
+        "pnpm update",
+    ],
+)

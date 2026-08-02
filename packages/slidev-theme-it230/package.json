@@ -4,11 +4,24 @@
     "private": true,
     "type": "module",
     "license": "MIT",
+    "scripts": {
+        "build": "node scripts/build-theme.mjs",
+        "dev": "slidev example.md",
+        "export": "slidev export example.md --output dist/gallery.pdf",
+        "test": "node scripts/check-bash-session.mjs"
+    },
     "keywords": [
         "slidev-theme",
         "slidev"
     ],
     "engines": {
         "slidev": ">=52.18.0"
+    },
+    "slidev": {
+        "colorSchema": "light",
+        "defaults": {
+            "aspectRatio": "16/9",
+            "lineNumbers": true
+        }
     }
 }

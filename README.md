@@ -27,11 +27,12 @@ in the material.
 
 - `course/` contains weekly presentation entries and reusable chapter or topic
   material.
-- `packages/slidev-theme-it230/` contains the shared Slidev theme.
+- `packages/slidev-theme-it230/` contains the shared Slidev theme, its focused
+  gallery, and theme-specific validation.
 - `site/` contains the course landing page.
 - `docs/` explains the project architecture, course-authoring conventions, and
   publishing workflow.
-- `scripts/` and `tests/` support validation and publication.
+- `scripts/` supports repository-wide validation and publication.
 
 The root project provides the authoritative development, validation, and build
 commands. See [the publishing guide](docs/publishing.md) for the normal local

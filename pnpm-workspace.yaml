@@ -1,5 +1,8 @@
 packages:
   - packages/*
 
+allowBuilds:
+  playwright-chromium: true
+
 engineStrict: true
 verifyDepsBeforeRun: error
