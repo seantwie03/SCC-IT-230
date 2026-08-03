@@ -12,10 +12,10 @@ instructor's visual preference and students who find sustained dark-theme
 reading difficult. The minimum theme does not provide a dark counterpart.
 
 The visual language is Adwaita-inspired. It translates Adwaita's semantic
-light surfaces, blue accent, typography, rounded geometry, and restrained depth
-into presentation-scale choices. It is an original presentation system, not an
-exact reproduction of a particular GNOME or RHEL release and not an SCC or Red
-Hat brand treatment.
+light surfaces, named accent palette, typography, rounded geometry, and
+restrained depth into presentation-scale choices. It is an original
+presentation system, not an exact reproduction of a particular GNOME or RHEL
+release and not an SCC or Red Hat brand treatment.
 
 ## Design principles
 
@@ -50,32 +50,116 @@ overflow, and color-independent meaning.
 
 ### Color
 
-`packages/slidev-theme-it230/styles/theme.css` is authoritative for exact
-color values. This document defines each token's semantic responsibility and
-usage contract.
+`packages/slidev-theme-it230/styles/theme.css` is authoritative for fixed
+colors, and `packages/slidev-theme-it230/setup/accent.ts` is authoritative for
+the selectable accent palette. This document defines each token's semantic
+responsibility and usage contract.
 
-| Token                       | Responsibility                             |
-| --------------------------- | ------------------------------------------ |
-| `--it230-color-canvas`      | Main slide canvas                          |
-| `--it230-color-surface`     | Cards, terminals, and primary surfaces     |
-| `--it230-color-raised`      | Headers and secondary surfaces             |
-| `--it230-color-line`        | Borders and separators                     |
-| `--it230-color-text`        | Primary text                               |
-| `--it230-color-muted`       | Secondary text                             |
-| `--it230-color-accent`      | Links, markers, and informational emphasis |
-| `--it230-color-accent-fill` | Decorative fills, boundaries, and focus    |
-| `--it230-color-success`     | Labeled successful or helpful states       |
-| `--it230-color-warning`     | Labeled warning states                     |
-| `--it230-color-danger`      | Labeled caution or dangerous states        |
+| Token                       | Responsibility                         |
+| --------------------------- | -------------------------------------- |
+| `--it230-color-canvas`      | Main slide canvas                      |
+| `--it230-color-surface`     | Cards, terminals, and primary surfaces |
+| `--it230-color-raised`      | Headers and secondary surfaces         |
+| `--it230-color-line`        | Borders and separators                 |
+| `--it230-color-text`        | Primary text                           |
+| `--it230-color-muted`       | Secondary text                         |
+| `--it230-color-accent-text` | Links and informational text           |
+| `--it230-color-accent-fill` | Adwaita-derived deck identity fill     |
+| `--it230-color-accent-wash` | Subtle canvas depth                    |
+| `--it230-color-success`     | Labeled successful or helpful states   |
+| `--it230-color-warning`     | Labeled warning states                 |
+| `--it230-color-danger`      | Labeled caution or dangerous states    |
 
 Do not place these colors on arbitrary backgrounds. Use the intended theme
 surfaces or verify the new pairing independently.
 
-The canvas combines a near-white base, a restrained blue wash, and an original
-low-opacity procedural texture. The texture creates quiet desktop-like depth;
-it is not a copied GNOME asset and must remain visually secondary. Keep cards,
-code, terminals, and any surface where texture could impair reading flat and
-high contrast.
+The canvas combines a near-white base, a restrained selected-accent wash, and
+an original low-opacity procedural texture. The texture creates quiet
+desktop-like depth; it is not a copied GNOME asset and must remain visually
+secondary. Keep cards, code, terminals, and any surface where texture could
+impair reading flat and high contrast.
+
+### Deck accent selection
+
+A presentation may select one named Adwaita accent for its complete deck:
+
+```yaml
+themeConfig:
+  it230Accent: purple
+```
+
+The supported values are `blue`, `teal`, `green`, `yellow`, `orange`, `red`,
+`pink`, `purple`, and `slate`. Omitting `themeConfig.it230Accent` uses `blue`.
+The value is case-sensitive. Unknown names, arbitrary color values, nulls, and
+per-slide accent settings are not supported. During local authoring, an invalid
+deck accent displays a blocking in-slide configuration error with the rejected
+value and supported names. Repository review and build commands reject the same
+configuration before starting Slidev.
+
+For Bash-heavy presentations, prefer the cool `blue`, `teal`, `green`,
+`purple`, or `slate` accents. Syntax and terminal colors remain fixed across
+deck accents; warm `yellow`, `orange`, and `red` can compete visually with that
+palette and with status colors.
+
+The central resolver in
+`packages/slidev-theme-it230/setup/accent.ts` owns the complete palette and its
+semantic roles:
+
+| Accent | Adwaita fill | Theme text |
+| ------ | ------------ | ---------- |
+| Blue   | `#3584e4`    | `#0461be`  |
+| Teal   | `#2190a4`    | `#006e80`  |
+| Green  | `#3a944a`    | `#15732d`  |
+| Yellow | `#bd8000`    | `#905300`  |
+| Orange | `#ed5b00`    | `#b62200`  |
+| Red    | `#e62d42`    | `#c00023`  |
+| Pink   | `#d56199`    | `#a2326c`  |
+| Purple | `#9141ac`    | `#8939a4`  |
+| Slate  | `#6f8396`    | `#526678`  |
+
+The fill column preserves the official Adwaita accent backgrounds except for
+yellow, which is minimally darkened to clear 3:1 across the canvas gradient.
+The theme uses Adwaita's light standalone colors for text where they meet its
+stronger 5.68:1 floor on the intended near-white and white surfaces. Teal and
+green are minimally darkened for that floor. The wash role derives a
+low-opacity canvas treatment from the selected fill.
+
+The selected accent controls canvas depth, cover and section accents,
+ordinary-slide title treatment, footer rule, links, list markers, focus
+indicators, technical-content borders, and informational callouts. Success,
+warning, danger, syntax-highlighting, terminal-prompt, ordinary-text, and
+neutral-surface colors remain fixed so presentation identity cannot change
+their meaning.
+
+#### Runtime application through `global-top.vue`
+
+Slidev makes `themeConfig` available to Vue through its global slide context,
+but CSS cannot read that headmatter directly, and importing the palette module
+does not cause Slidev to invoke its resolver. The theme therefore uses
+`packages/slidev-theme-it230/global-top.vue` as the runtime bridge between the
+deck configuration and the visual tokens.
+
+`global-top.vue` is a Slidev global layer with one instance for the complete
+presentation. After mounting, it watches the reactive
+`$slidev.themeConfigs.it230Accent` value, passes that value to the central
+resolver, and writes the resulting fill, text, and wash custom properties to
+the document root. Every layout and component can then consume the same deck
+accent without receiving props or repeating configuration logic. The root
+`data-it230-accent` attribute records the resolved name for inspection.
+
+The single global instance is intentional. A per-slide layer such as
+`slide-top.vue` would create duplicate watchers and could render the same
+configuration error once for every slide. The top layer also provides an
+appropriate host for the authoring error that must appear above slide content.
+
+If resolution fails, the component marks the root accent state as invalid,
+applies the default blue variables only to keep the underlying interface
+stable, and teleports a blocking `role="alert"` message to the document body.
+The fallback does not accept the invalid value: repository review and build
+commands still reject it. Correcting the headmatter during local development
+causes the watcher to remove the message and apply the valid accent without a
+server restart. This file is runtime theme infrastructure; it does not contain
+course content or a decorative element that authors add to individual slides.
 
 ### Typography
 
@@ -112,13 +196,13 @@ keywords, red errors, and muted comments adapt GtkSourceView's Adwaita syntax
 roles to the theme's stronger contrast floor. Links remain underlined, list
 markers retain visible shape, and semantic meaning must survive without color.
 
-An ordinary slide title is followed by a subtle tapered accent. Non-cover
-slides also receive a compact footer with the course identity and current slide
-number, separated from the content by a rounded rule that moves from the neutral
-line color toward the strongest blue in the canvas gradient. The rule is
-decorative and hidden from assistive technology. The title accent and footer
-provide continuity and orientation without competing with instructional
-content or resembling application chrome.
+An ordinary slide title is followed by a subtle tapered accent. Slides other
+than `cover` and `section` receive a compact footer with the course identity and
+current slide number, separated from the content by a rounded rule that moves
+from the neutral line color toward the selected accent. The rule is decorative
+and hidden from assistive technology. The title accent and footer provide
+continuity and orientation without competing with instructional content or
+resembling application chrome.
 
 Use ordinary fenced code for source and short commands. Use `TerminalWindow`
 when a terminal frame clarifies that the content is an interactive session or
@@ -257,8 +341,10 @@ pnpm run capture:theme
 pnpm run export:theme
 ```
 
-`pnpm check` verifies formatting, the supported toolchain, and the production
-gallery build. `pnpm run review:theme` serves the gallery only on a loopback
+`pnpm check` verifies formatting, the supported toolchain, palette and contrast
+tests, all nine focused accent builds, and the production gallery build. The
+deck validator rejects an unsupported `themeConfig.it230Accent` before a
+reviewed build can be published. `pnpm run review:theme` serves the gallery only on a loopback
 address for browser-first inspection at the 1920x1080 desktop viewport used
 for Zoom screen sharing. Maintainer-run theme development uses fixed port 2020,
 and agent-run theme review uses fixed port 2121. An occupied port causes the

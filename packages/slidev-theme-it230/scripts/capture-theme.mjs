@@ -15,6 +15,8 @@ import { rm } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
+import { validateDeckAccent } from "./validate-accent.mjs";
+
 const rawArguments = process.argv.slice(2);
 const argumentsFromUser =
     rawArguments[0] === "--" ? rawArguments.slice(1) : rawArguments;
@@ -36,6 +38,8 @@ if (pageRange && !validPageRange.test(pageRange)) {
 const themeRoot = fileURLToPath(new URL("../", import.meta.url));
 const distRoot = path.join(themeRoot, "dist");
 const outputDirectory = path.join(distRoot, "gallery-png");
+
+await validateDeckAccent(path.join(themeRoot, "example.md"));
 
 if (path.relative(distRoot, outputDirectory) !== "gallery-png") {
     throw new Error(

@@ -6,8 +6,11 @@
     --it230-color-line: #b9b9bf;
     --it230-color-text: #25252b;
     --it230-color-muted: #55555b;
-    --it230-color-accent: #0461be;
+    --it230-color-accent-text: #0461be;
     --it230-color-accent-fill: #3584e4;
+    --it230-color-accent-wash: rgb(53 132 228 / 14%);
+    --it230-accent-origin-x: 95%;
+    --it230-accent-origin-y: 5%;
     --it230-color-success: #00753a;
     --it230-color-warning: #905400;
     --it230-color-danger: #c30000;
@@ -49,21 +52,16 @@ body {
 }
 
 ::selection {
-    background: #cde7ff;
+    background: color-mix(in srgb, var(--it230-color-accent-fill) 22%, white);
     color: var(--it230-color-text);
 }
 
 .slidev-layout {
     background:
         radial-gradient(
-            circle at 92% 8%,
-            rgb(53 132 228 / 14%),
-            transparent 30%
-        ),
-        radial-gradient(
-            circle at 14% 94%,
-            rgb(235 235 237 / 84%),
-            transparent 38%
+            circle at var(--it230-accent-origin-x) var(--it230-accent-origin-y),
+            var(--it230-color-accent-wash),
+            transparent 40%
         ),
         radial-gradient(circle, rgb(0 0 6 / 2%) 0 0.035rem, transparent 0.04rem)
             0 0 / 0.22rem 0.22rem,
@@ -141,14 +139,14 @@ body {
 }
 
 .slidev-layout a {
-    color: var(--it230-color-accent);
+    color: var(--it230-color-accent-text);
     text-decoration: underline;
     text-decoration-thickness: 0.08em;
     text-underline-offset: 0.16em;
 }
 
 .slidev-layout a:hover {
-    color: var(--it230-color-accent);
+    color: var(--it230-color-accent-text);
     text-decoration-thickness: 0.14em;
 }
 
@@ -250,7 +248,7 @@ body {
 }
 
 .it230-eyebrow {
-    color: var(--it230-color-accent);
+    color: var(--it230-color-accent-text);
     font-family: var(--it230-font-sans);
     font-size: 0.85rem;
     font-weight: 750;

@@ -15,11 +15,16 @@
 import { spawn } from "node:child_process";
 import { fileURLToPath } from "node:url";
 
+import { validateDeckAccent } from "./validate-accent.mjs";
+
 if (process.argv.length > 2) {
     throw new Error("Theme review does not accept command-line arguments.");
 }
 
 const themeRoot = fileURLToPath(new URL("../", import.meta.url));
+await validateDeckAccent(
+    fileURLToPath(new URL("../example.md", import.meta.url)),
+);
 const child = spawn("slidev", ["example.md", "--port", "2121"], {
     cwd: themeRoot,
     shell: process.platform === "win32",

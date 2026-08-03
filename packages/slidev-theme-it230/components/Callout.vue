@@ -77,31 +77,35 @@ const label = computed(() => props.title ?? defaults[props.type].title);
 
 <style scoped>
 .it230-callout {
-    --it230-callout-color: var(--it230-color-accent);
+    --it230-callout-boundary: var(--it230-color-accent-fill);
+    --it230-callout-text: var(--it230-color-accent-text);
 
     background: var(--it230-color-surface);
-    border: 1px solid var(--it230-callout-color);
-    border-left: 0.35rem solid var(--it230-callout-color);
+    border: 1px solid var(--it230-callout-boundary);
+    border-left: 0.35rem solid var(--it230-callout-boundary);
     border-radius: var(--it230-radius-md);
     box-shadow: 0 0.5rem 1.5rem rgb(0 0 6 / 7%);
     padding: var(--it230-space-4) var(--it230-space-5);
 }
 
 .it230-callout[data-tone="tip"] {
-    --it230-callout-color: var(--it230-color-success);
+    --it230-callout-boundary: var(--it230-color-success);
+    --it230-callout-text: var(--it230-color-success);
 }
 
 .it230-callout[data-tone="warning"] {
-    --it230-callout-color: var(--it230-color-warning);
+    --it230-callout-boundary: var(--it230-color-warning);
+    --it230-callout-text: var(--it230-color-warning);
 }
 
 .it230-callout[data-tone="danger"] {
-    --it230-callout-color: var(--it230-color-danger);
+    --it230-callout-boundary: var(--it230-color-danger);
+    --it230-callout-text: var(--it230-color-danger);
 }
 
 .it230-callout__heading {
     align-items: center;
-    color: var(--it230-callout-color);
+    color: var(--it230-callout-text);
     display: flex;
     font-size: 0.9rem;
     font-weight: 800;

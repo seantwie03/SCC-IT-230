@@ -25,7 +25,7 @@
     align-self: stretch;
     background: var(--it230-color-accent-fill);
     border-radius: 999px;
-    box-shadow: 0 0.35rem 1rem rgb(53 132 228 / 18%);
+    box-shadow: 0 0.35rem 1rem var(--it230-color-accent-wash);
     max-height: 15rem;
 }
 
@@ -46,16 +46,17 @@
 
 .it230-section__accent {
     background: radial-gradient(
-        circle at 45% 42%,
-        rgb(53 132 228 / 22%),
-        rgb(205 231 255 / 16%) 36%,
+        circle at center,
+        color-mix(in srgb, var(--it230-color-accent-fill) 22%, transparent),
+        color-mix(in srgb, var(--it230-color-accent-fill) 4%, transparent) 36%,
         transparent 68%
     );
     border-radius: 50%;
     height: 36rem;
+    left: var(--it230-accent-origin-x);
     position: absolute;
-    right: -10rem;
-    top: -10rem;
+    top: var(--it230-accent-origin-y);
+    transform: translate(-50%, -50%);
     width: 36rem;
 }
 </style>

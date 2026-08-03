@@ -43,8 +43,10 @@ lockfiles or `node_modules` directories.
 `packages/slidev-theme-it230/` is a private local workspace package consumed by
 the root project. It owns shared visual tokens, global slide styles, layouts,
 components, Shiki configuration and custom languages, its focused gallery, and
-package-specific validation. The gallery is public theme source and validation
-input, but it is not a student-facing course week.
+package-specific validation. Its central named-accent resolver consumes the
+deck-level `themeConfig.it230Accent` value, and its deck validator rejects
+unsupported names before build or publication. The gallery is public theme
+source and validation input, but it is not a student-facing course week.
 
 The theme package must not create a nested dependency installation or lockfile.
 Its generated gallery review artifacts belong under its own `dist/` directory

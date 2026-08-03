@@ -45,16 +45,17 @@
 
 .it230-cover__accent {
     background: radial-gradient(
-        circle at 45% 42%,
-        rgb(53 132 228 / 22%),
-        rgb(205 231 255 / 16%) 36%,
+        circle at center,
+        color-mix(in srgb, var(--it230-color-accent-fill) 22%, transparent),
+        color-mix(in srgb, var(--it230-color-accent-fill) 4%, transparent) 36%,
         transparent 68%
     );
     border-radius: 50%;
     height: 36rem;
+    left: var(--it230-accent-origin-x);
     position: absolute;
-    right: -10rem;
-    top: -10rem;
+    top: var(--it230-accent-origin-y);
+    transform: translate(-50%, -50%);
     width: 36rem;
 }
 </style>

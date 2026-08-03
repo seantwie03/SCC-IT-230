@@ -1,5 +1,7 @@
 ---
 theme: ./
+themeConfig:
+  it230Accent: teal
 title: IT-230 Theme Gallery
 info: A focused gallery for the Adwaita-inspired IT-230 Slidev theme.
 layout: cover
@@ -154,3 +156,21 @@ Do not interrupt an active remote-access path.
 
 Use spacing, weight, labels, and borders alongside color so the slide remains
 understandable when colors are difficult to distinguish.
+
+---
+
+# Select one deck accent
+
+Set one named Adwaita accent in the presentation headmatter. The selection
+applies to the complete deck; omitting it keeps the default blue identity.
+
+```yaml
+themeConfig:
+  it230Accent: purple
+```
+
+Supported names: `blue`, `teal`, `green`, `yellow`, `orange`, `red`, `pink`,
+`purple`, and `slate`.
+
+Syntax highlighting, terminal prompts, and labeled status colors do not change
+with the deck accent.

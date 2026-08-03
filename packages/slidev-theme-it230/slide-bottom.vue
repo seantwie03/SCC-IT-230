@@ -26,7 +26,7 @@
     background: linear-gradient(
         90deg,
         var(--it230-color-line) 0 52%,
-        rgb(53 132 228 / 25%) 100%
+        color-mix(in srgb, var(--it230-color-accent-fill) 25%, transparent) 100%
     );
     border-radius: 999px;
     height: 0.125rem;
@@ -41,7 +41,8 @@
     padding-inline: 0.2rem;
 }
 
-.slidev-page:has(.it230-cover) .it230-footer {
+.slidev-page:has(.it230-cover) .it230-footer,
+.slidev-page:has(.it230-section) .it230-footer {
     display: none;
 }
 </style>

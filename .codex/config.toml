@@ -70,3 +70,9 @@ approval_mode = "approve"
 
 [mcp_servers.it230_browser.tools.browser_evaluate]
 approval_mode = "approve"
+
+[mcp_servers.it230_browser.tools.browser_close]
+approval_mode = "approve"
+
+[mcp_servers.it230_browser.tools.browser_wait_for]
+approval_mode = "approve"

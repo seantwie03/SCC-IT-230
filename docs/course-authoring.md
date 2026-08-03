@@ -61,6 +61,33 @@ without depending on visual position, color, or presenter narration alone.
 
 Treat accessibility as part of authoring, not as an export-time repair.
 
+## Deck accent
+
+Choose a deck accent to have some variety throughout the course. Set it once
+in the entry file's headmatter:
+
+```yaml
+themeConfig:
+  it230Accent: purple
+```
+
+Supported values are `blue`, `teal`, `green`, `yellow`, `orange`, `red`,
+`pink`, `purple`, and `slate`. Omit the setting to use blue. Do not provide an
+arbitrary color, change the accent per slide, or use the accent as the only
+way to distinguish instructional meaning.
+
+Prefer the cool `blue`, `teal`, `green`, `purple`, or `slate` accents for
+Bash-heavy presentations. They sit comfortably beside the fixed cool syntax
+palette. Use `yellow`, `orange`, or `red` deliberately in decks with little
+syntax because those warm identity colors can compete with syntax and status
+colors.
+
+The theme applies the selection to links, markers, focus, technical
+content borders, informational callouts, and recurring deck framing. Syntax,
+terminal prompts, success, warning, and danger colors intentionally remain
+independent. Authors must continue to pair meaning with labels, symbols,
+structure, or text.
+
 ## Terminal transcripts
 
 Use an ordinary `bash` fence for example commands when their output is omitted.
