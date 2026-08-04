@@ -29,7 +29,8 @@ in the material.
   material.
 - `packages/slidev-theme-it230/` contains the shared Slidev theme, its focused
   gallery, and theme-specific validation.
-- `site/` contains the course landing page.
+- `site/` contains the course landing-page HTML template, its build-time
+  renderer, and its stylesheet.
 - `docs/` explains the project architecture, course-authoring conventions, and
   publishing workflow.
 - `scripts/` supports repository-wide validation and publication.
@@ -37,6 +38,30 @@ in the material.
 The root project provides the authoritative development, validation, and build
 commands. See [the publishing guide](docs/publishing.md) for the normal local
 workflow.
+
+Common root commands are:
+
+```sh
+pnpm dev
+pnpm build
+pnpm preview
+pnpm check
+```
+
+`pnpm dev` serves the registry-driven landing page on localhost port 3030 and
+reloads the browser when the registry, landing-page template, renderer, or
+stylesheet changes. It does not start registered presentations. Presentations
+are added to the site through the `presentations` array in
+`slides.config.mjs`. The `pnpm build` command validates that array, builds
+every registered presentation, and generates the corresponding landing-page
+links. A Markdown deck that is not registered does not appear on the site.
+
+For focused authoring, pass one validated Markdown entry beneath `course/`. For
+example, this command runs only the Week 1 slides with hot reload on localhost:
+
+```sh
+pnpm dev -- course/w01.md
+```
 
 ## Licensing
 

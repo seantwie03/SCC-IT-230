@@ -9,16 +9,26 @@
         "node": "24.x"
     },
     "scripts": {
+        "build": "pnpm run build:theme && pnpm run build:site",
+        "build:deck": "node scripts/build-deck.mjs",
+        "build:site": "node scripts/build-site.mjs",
         "build:theme": "pnpm --filter slidev-theme-it230 build",
         "capture:theme": "pnpm --filter slidev-theme-it230 capture",
-        "check": "pnpm run check:format && pnpm run check:toolchain && pnpm run test && pnpm run build:theme",
-        "check:format": "prettier --check package.json pnpm-workspace.yaml AGENTS.md \"docs/*.md\" \"packages/slidev-theme-it230/**/*.{css,json,mjs,ts,vue}\" \"scripts/*.mjs\"",
+        "check": "pnpm run check:format && pnpm run check:toolchain && pnpm run test && pnpm run build && pnpm run check:links",
+        "check:format": "prettier --check .",
+        "check:links": "node scripts/check-links.mjs",
         "check:toolchain": "node scripts/check-toolchain.mjs",
+        "dev": "node scripts/serve-course.mjs dev",
         "dev:theme": "pnpm --filter slidev-theme-it230 dev",
+        "export:pdf": "node scripts/export-deck.mjs",
         "export:theme": "pnpm --filter slidev-theme-it230 export",
-        "format": "prettier --write package.json pnpm-workspace.yaml AGENTS.md \"docs/*.md\" \"packages/slidev-theme-it230/**/*.{css,json,mjs,ts,vue}\" \"scripts/*.mjs\"",
+        "format": "prettier --write .",
+        "preview": "node scripts/preview-site.mjs",
+        "review": "node scripts/serve-course.mjs review",
         "review:theme": "pnpm --filter slidev-theme-it230 review",
-        "test": "pnpm --filter slidev-theme-it230 test"
+        "test": "pnpm run test:theme && pnpm run test:site",
+        "test:site": "node --test tests/site.test.mjs && node scripts/check-site.mjs",
+        "test:theme": "pnpm --filter slidev-theme-it230 test"
     },
     "devDependencies": {
         "@playwright/mcp": "0.0.78",

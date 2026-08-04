@@ -91,6 +91,17 @@ manual review as a required gate. For each applicable change:
 4. Check contrast and color-independent meaning.
 5. Inspect representative browser rendering at the 1920x1080 desktop viewport
    used for Zoom screen sharing.
+6. Inspect the course site at desktop and narrow viewports for meaningful
+   reflow, readable text, intact links, and absence of horizontal overflow.
 
 Record and resolve failures before publication. If a criterion cannot yet be
 reliably validated, document the limitation without treating it as a pass.
+
+The Phase 5 checks verify deterministic structure around accessibility: the
+landing page is generated from a semantic HTML template, required generated
+files and internal links exist, standard Slidev PDFs cannot enter the resource
+allowlist, and production decks omit presenter notes. The responsive stylesheet
+provides visible focus treatment and narrow-screen reflow. These checks reduce
+known failure modes; they do not test assistive-technology behavior, keyboard
+use, reading order, visual quality, or WCAG conformance. The manual publication
+review remains required.

@@ -44,7 +44,7 @@ args = [
     "--viewport-size",
     "1920x1080",
     "--allowed-origins",
-    "http://127.0.0.1:2121;http://localhost:2121",
+    "http://127.0.0.1:2121;http://localhost:2121;http://127.0.0.1:3131;http://localhost:3131",
     "--output-dir",
     "/tmp/it230-playwright-mcp",
 ]

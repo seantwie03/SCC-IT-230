@@ -26,6 +26,46 @@ pnpm format
 pnpm check
 ```
 
+## Course-site development and production review
+
+The course commands distinguish rapid source review from exact production
+review:
+
+```sh
+pnpm dev
+pnpm dev -- course/w01.md
+pnpm run review
+pnpm run review -- course/w01.md
+pnpm build
+pnpm run build:site
+pnpm run build:deck -- w01
+pnpm preview
+```
+
+With no argument, `dev` and `review` serve only the registry-driven landing
+page. They reload the browser after a valid change to the registry,
+landing-page template, renderer, or stylesheet and do not start Slidev. With
+exactly one argument, they start one Slidev development server for that
+validated Markdown entry beneath `course/`, whether or not it is already
+registered. Focused review does not publish the entry, add it to the landing
+page, or change `dist/`.
+
+Production operations are registry-driven. `pnpm build` generates the theme
+gallery and then runs `build:site`, which validates the complete registry,
+recreates `dist/`, generates the landing page, copies allowlisted resources,
+and builds each registered deck without presenter notes. The `build:theme` and
+`build:site` commands retain those focused build operations. `build:deck`
+accepts one registered ID for a focused production build. `export:pdf` also
+accepts one registered ID, but its PDF is an optional review artifact under
+`exports/`, not student-facing production output.
+
+`pnpm preview` accepts no arguments. It first recreates the complete course-site
+production artifact, checks its required files and internal links, and then
+serves that exact static artifact on port 4040 without live reload. It cannot
+silently display stale or internally inconsistent output. Set
+`IT230_SITE_BASE` only when testing a validated project-subpath deployment; the
+custom-domain production base is `/`.
+
 ## Theme review
 
 Use the theme gallery deck at
@@ -57,26 +97,27 @@ output location.
 
 Local development and agent review use separate reserved ports:
 
-| Purpose                             | Command                 | Port |
-| ----------------------------------- | ----------------------- | ---: |
-| Maintainer-run theme development    | `pnpm run dev:theme`    | 2020 |
-| Agent-run theme review              | `pnpm run review:theme` | 2121 |
-| Future maintainer-run course site   | `pnpm dev`              | 3030 |
-| Future agent-run course-site review | Not yet implemented     | 3131 |
+| Purpose                           | Command                 | Port |
+| --------------------------------- | ----------------------- | ---: |
+| Maintainer-run theme development  | `pnpm run dev:theme`    | 2020 |
+| Agent-run theme review            | `pnpm run review:theme` | 2121 |
+| Maintainer-run course development | `pnpm dev`              | 3030 |
+| Agent-run course review           | `pnpm run review`       | 3131 |
+| Exact production-site preview     | `pnpm preview`          | 4040 |
 
 The fixed assignments are intentional. If a reserved port is occupied, the new
 command fails. An agent reports the conflict and does not scan for another
 port, stop the existing process, or start another server. After a successful
-review, the agent stops only the `review:theme` process it started.
+review, the agent stops only the review process it started.
 
-The AI-assisted review command uses Slidev local mode and does not enable
-remote access or tunneling. The project MCP configuration allows the isolated
-browser to request only the theme-review origin on port 2121. Review the
-gallery at the 1920x1080 desktop viewport used for Zoom screen sharing. All
-Slidev MCP tools are preapproved because they operate on the same deck Markdown
-that an authorized repository task can edit directly. This removes a redundant
-tool-specific prompt; it does not expand the task's scope, bypass repository
-guidance, stage changes, or authorize publication.
+The AI-assisted review commands use localhost-only mode and do not enable
+remote access or tunneling. The project MCP configuration limits the isolated
+browser to the theme-review and course-review origins on ports 2121 and 3131.
+The repository rules allow the validated `review` wrappers and `pnpm check`
+without an additional command prompt; they do not automatically allow
+maintainer development, production preview, dependency changes, staging,
+publication, or deployment. These permissions remove redundant tool prompts;
+they do not expand the authorized task.
 
 Use the visual-validation tools in this order:
 
@@ -104,6 +145,13 @@ regressions when PDF behavior is under review.
 The complete `pnpm check` command includes the production gallery build. PDF
 export remains an explicit, optional visual-review command rather than part of
 the standard validation path or a student publication target.
+
+For course changes, review a focused entry on port 3131 at the 1920x1080 Zoom
+viewport, then review the landing page at desktop and narrow widths. Inspect
+source structure, semantics, reading and focus order, keyboard operation,
+visible focus, console output, text alternatives, rendering, reflow, links,
+overflow, and color-independent meaning. Use `pnpm preview` to review working
+landing-page links and the final exact production artifact.
 
 ## Accessibility review
 
@@ -134,19 +182,28 @@ Before pushing, confirm that:
 - The theme gallery, every registered presentation, and the course site build.
 - `dist/` contains only intended public output.
 
+The validation-only workflow in `.github/workflows/validate.yml` repeats a
+frozen install and `pnpm check` on every push to `main`. Its actions are pinned
+to reviewed commit SHAs, and its only repository permission is read-only
+repository contents. It does not deploy, upload a Pages artifact, request an
+identity token, or establish that the course site is live. Automated validation
+does not replace the manual review gates above.
+
 ## Deployment
 
-GitHub Actions repeats deterministic validation on every push to `main` and
-deploys only after validation succeeds. The deployment job uploads only
-`dist/` to GitHub Pages. The production site uses
-<https://it230.systemsmeta.tech>.
+Deployment is not implemented in Phase 5. A later phase will configure GitHub
+Pages and the `it230.systemsmeta.tech` custom domain. That deployment workflow
+must depend on successful validation and upload only the reviewed root `dist/`
+artifact.
 
-After deployment, verify the landing page, every changed presentation, linked
-downloads, and a representative nested hash route in production.
+After deployment is implemented, verify the landing page, every changed
+presentation, linked downloads, and a representative nested hash route in
+production.
 
 ## Corrections
 
 Use a roll-forward workflow. If production is faulty, make the smallest
 appropriate correction locally, run the complete validation workflow, commit
-the correction, and push the new commit to `main`. The manual workflow trigger
-may redeploy a known commit when the content itself does not require a change.
+the correction, and push the new commit to `main`. A future deployment workflow
+may provide a manual redeploy of a known commit when the content itself does not
+require a change.

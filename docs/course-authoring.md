@@ -12,6 +12,36 @@ directories may begin with `rh124-` or `rh134-`; original course topics may
 begin with `it230-`. These names express subject alignment and do not indicate
 ownership of third-party curriculum material.
 
+## Presentation entries and publication
+
+A presentation entry is a Markdown file beneath `course/`. Its first
+headmatter block must select the local theme and static-site router:
+
+```yaml
+---
+theme: it230
+routerMode: hash
+---
+```
+
+Use `pnpm dev -- course/<entry>.md` for focused authoring and
+`pnpm run review -- course/<entry>.md` for agent review. These commands may
+open an incomplete, unregistered deck without publishing it.
+
+Add a deck to `slides.config.mjs` only after it is ready to be public. A
+presentation registry entry contains exactly:
+
+- `id`: `w01` through `w16`, or a durable lowercase topic ID beginning with
+  `it230-`, `rh124-`, or `rh134-`. The site derives its stable `/<id>/` route
+  from this value.
+- `title` and `summary`: student-facing landing-page text.
+- `entry`: the canonical repository-relative Markdown path beneath `course/`.
+- `topics`: a non-empty list of concise student-facing topic labels.
+
+Do not add a `published` flag, semester-specific route, migration status,
+reviewer name, private source location, or private note. Registry membership
+itself means the deck is publishable. Keep the accent in deck headmatter.
+
 ## Fragments
 
 Give reusable fragments meaningful names based on the concept they teach, not
@@ -37,6 +67,14 @@ publication basis and any required attribution at or near the asset.
 Do not reproduce Red Hat Academy source material, guided exercises, labs,
 quizzes, instructor-guide content, transcripts, or extracted media. References
 to curriculum names are for alignment only.
+
+Assets consumed only by a presentation stay with the owning topic and are
+processed by Slidev. A standalone downloadable resource must be explicitly
+listed in the registry with student-facing `title` and `summary`, a stable file
+route beneath `/resources/`, and a `publicationBasis` explaining why it can be
+published. The source must remain inside this repository. Do not list a
+standard Slidev PDF as a resource; PDF publication requires a separate tagged-
+document accessibility workflow.
 
 ## Accessibility
 

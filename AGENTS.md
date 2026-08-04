@@ -20,11 +20,20 @@
   `pnpm install --frozen-lockfile`; do not create nested installations.
 - When updating the pinned Slidev dependencies, refresh
   `.agents/skills/slidev/` from the matching `@slidev/cli` release.
+- Before running a repository command, consult `.codex/rules/default.rules` and
+  prefer an approved equivalent command form when one exists.
 - Run the current validation suite with `pnpm check`.
 - Run the relevant local validation before committing and pushing.
+- Treat registration in `slides.config.mjs` as publication approval. Keep
+  incomplete presentations out of the registry instead of adding a publication
+  flag.
 - Treat WCAG 2.1 Level AA as the minimum accessibility target. Do not claim an
   artifact is accessible based only on a successful build, automated check, or
   contrast measurement.
+- Treat mobile viewing of the course site and slide decks as a secondary
+  compatibility requirement: both must remain functional and viewable on narrow
+  screens. Design slide content, layout, and information density for the intended
+  presentation viewport, not for mobile optimization.
 
 For an authorized weekly course-preparation task, consult the instructor’s
 private source repository only as a read-only reference. Follow its root guidance

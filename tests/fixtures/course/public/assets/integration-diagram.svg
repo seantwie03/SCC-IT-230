@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 180" role="img" aria-labelledby="title description">
+  <title id="title">Integration build sequence</title>
+  <desc id="description">Source connects to build, which connects to site.</desc>
+  <g fill="none" stroke="#526678" stroke-width="8">
+    <path d="M210 90h100m100 0h100" />
+  </g>
+  <g fill="#edf6ff" stroke="#0461be" stroke-width="4">
+    <rect x="30" y="35" width="180" height="110" rx="22" />
+    <rect x="270" y="35" width="180" height="110" rx="22" />
+    <rect x="510" y="35" width="180" height="110" rx="22" />
+  </g>
+  <g fill="#242424" font-family="sans-serif" font-size="30" font-weight="700" text-anchor="middle">
+    <text x="120" y="101">Source</text>
+    <text x="360" y="101">Build</text>
+    <text x="600" y="101">Site</text>
+  </g>
+</svg>

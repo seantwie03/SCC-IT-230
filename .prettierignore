@@ -1,0 +1,8 @@
+# Markdown content
+**/*.md
+
+# Generated package-manager state
+pnpm-lock.yaml
+
+# Vendored agent resources
+.agents/
