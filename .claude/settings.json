@@ -1,0 +1,40 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pnpm run build)",
+      "Bash(pnpm run build:*)",
+      "Bash(pnpm run capture:*)",
+      "Bash(pnpm run check)",
+      "Bash(pnpm run check:*)",
+      "Bash(pnpm run export:*)",
+      "Bash(pnpm run format)",
+      "Bash(pnpm run review:*)",
+      "Bash(pnpm run test)",
+      "Bash(pnpm build:*)",
+      "Bash(pnpm build:theme)",
+      "Bash(pnpm capture:*)",
+      "Bash(pnpm check)",
+      "Bash(pnpm check:*)",
+      "Bash(pnpm export:*)",
+      "Bash(pnpm format)",
+      "Bash(pnpm review:*)",
+      "Bash(pnpm test)",
+      "Bash(pnpm install --frozen-lockfile)",
+      "mcp__it230_slidev__slidev-get-info",
+      "mcp__it230_slidev__slidev-list-slides",
+      "mcp__it230_slidev__slidev-get-slide",
+      "mcp__it230_slidev__slidev-update-slide",
+      "mcp__it230_slidev__slidev-insert-slide",
+      "mcp__it230_slidev__slidev-remove-slide",
+      "mcp__it230_slidev__slidev-move-slide",
+      "mcp__it230_browser__browser_navigate",
+      "mcp__it230_browser__browser_resize",
+      "mcp__it230_browser__browser_snapshot",
+      "mcp__it230_browser__browser_take_screenshot",
+      "mcp__it230_browser__browser_console_messages",
+      "mcp__it230_browser__browser_evaluate",
+      "mcp__it230_browser__browser_close",
+      "mcp__it230_browser__browser_wait_for"
+    ]
+  }
+}

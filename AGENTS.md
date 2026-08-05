@@ -20,8 +20,20 @@
   `pnpm install --frozen-lockfile`; do not create nested installations.
 - When updating the pinned Slidev dependencies, refresh
   `.agents/skills/slidev/` from the matching `@slidev/cli` release.
-- Before running a repository command, consult `.codex/rules/default.rules` and
-  prefer an approved equivalent command form when one exists.
+- This repository is worked on with both Codex and Claude Code. Their
+  configurations mirror each other: `.codex/config.toml` and `.mcp.json` both
+  define the MCP servers; `.codex/rules/default.rules`
+  and `.claude/settings.json` both define which commands run without an approval
+  prompt; skills live in `.agents/skills/` for both tools, but Claude Code only
+  discovers a skill if `.claude/skills/<name>` exists as a symlink to it (e.g.
+  `.claude/skills/slidev -> ../../.agents/skills/slidev`). When you add,
+  remove, or change an MCP server, a command-approval rule, a tool permission,
+  or a skill under `.agents/skills/`, make the equivalent change (including
+  adding or removing its `.claude/skills/` symlink) for both harnesses in the
+  same commit — do not let one drift ahead of the other.
+- Before running a command, consult `.codex/rules/default.rules` (Codex) or
+  `.claude/settings.json` (Claude Code) and prefer an approved equivalent
+  command form when one exists.
 - Run the current validation suite with `pnpm check`.
 - Run the relevant local validation before committing and pushing.
 - Treat registration in `slides.config.mjs` as publication approval. Keep
