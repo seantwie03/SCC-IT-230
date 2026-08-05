@@ -192,7 +192,7 @@ does not replace the manual review gates above.
 ## Deployment
 
 Deployment is not implemented in Phase 5. A later phase will configure GitHub
-Pages and the `it230.systemsmeta.tech` custom domain. That deployment workflow
+Pages and the `it230.systemsmetanow.tech` custom domain. That deployment workflow
 must depend on successful validation and upload only the reviewed root `dist/`
 artifact.
 

@@ -7,7 +7,7 @@ administration skills associated with the Red Hat Certified System
 Administrator learning path.
 
 Published course materials are available at
-[it230.systemsmeta.tech](https://it230.systemsmeta.tech).
+[it230.systemsmetanow.tech](https://it230.systemsmetanow.tech).
 
 ## Course materials
 
