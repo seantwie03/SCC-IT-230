@@ -182,28 +182,36 @@ Before pushing, confirm that:
 - The theme gallery, every registered presentation, and the course site build.
 - `dist/` contains only intended public output.
 
-The validation-only workflow in `.github/workflows/validate.yml` repeats a
-frozen install and `pnpm check` on every push to `main`. Its actions are pinned
-to reviewed commit SHAs, and its only repository permission is read-only
-repository contents. It does not deploy, upload a Pages artifact, request an
-identity token, or establish that the course site is live. Automated validation
-does not replace the manual review gates above.
+The workflow in `.github/workflows/validate.yml` repeats a frozen install and
+`pnpm check` for pushes to `main`, pull-request changes targeting `main`, and
+manual runs. Pull-request runs use read-only repository contents and stop after
+validation. Conditions on the Pages configuration and artifact-upload steps,
+plus a separate condition on the deployment job, restrict all publication work
+to `refs/heads/main`. All actions are pinned to reviewed commit SHAs. Automated
+validation does not replace the manual review gates above.
 
 ## Deployment
 
-Deployment is not implemented in Phase 5. A later phase will configure GitHub
-Pages and the `it230.systemsmetanow.tech` custom domain. That deployment workflow
-must depend on successful validation and upload only the reviewed root `dist/`
-artifact.
+Successful `main` validation configures GitHub Pages and uploads only the
+reviewed root `dist/` artifact. The dependent deployment job targets the
+`github-pages` environment and receives only `pages: write` and
+`id-token: write`; it cannot run when validation fails. Successful pushes to
+`main` publish automatically at
+`https://it230.systemsmetanow.tech` with HTTPS enforcement enabled.
 
-After deployment is implemented, verify the landing page, every changed
-presentation, linked downloads, and a representative nested hash route in
-production.
+The `workflow_dispatch` trigger provides recovery without a content-only
+commit. Run it against `main` to repeat the same frozen installation,
+validation, Pages artifact, and dependent deployment for the current reviewed
+commit. It does not provide an input for selecting an arbitrary historical
+commit.
+
+After deployment, verify the landing page, every changed presentation, linked
+downloads, and a representative nested hash route in production.
 
 ## Corrections
 
 Use a roll-forward workflow. If production is faulty, make the smallest
 appropriate correction locally, run the complete validation workflow, commit
-the correction, and push the new commit to `main`. A future deployment workflow
-may provide a manual redeploy of a known commit when the content itself does not
-require a change.
+the correction, and push the new commit to `main`. When the reviewed content is
+already correct, manually run the publication workflow against `main` to
+rebuild and redeploy the current commit through the same gates.

@@ -9,6 +9,11 @@ Administrator learning path.
 Published course materials are available at
 [it230.systemsmetanow.tech](https://it230.systemsmetanow.tech).
 
+GitHub Actions validates pushes to `main` and pull-request changes targeting
+`main`. After a successful `main` validation, the workflow publishes only the
+reviewed root `dist/` artifact to the course site. The same workflow can be run
+manually on `main` to rebuild and redeploy the current reviewed commit.
+
 ## Course materials
 
 As each topic is published, the repository may provide:
