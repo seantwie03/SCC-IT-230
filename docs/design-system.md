@@ -11,7 +11,7 @@ The theme is light-first. A near-white canvas and dark text support the
 instructor's visual preference and students who find sustained dark-theme
 reading difficult. The minimum theme does not provide a dark counterpart.
 
-The visual language is Adwaita-inspired. It translates Adwaita's semantic
+The visual language is Adwaita-inspired. It translates [Adwaita's](https://gnome.pages.gitlab.gnome.org/libadwaita/doc/1-latest/) semantic
 light surfaces, named accent palette, typography, rounded geometry, and
 restrained depth into presentation-scale choices. It is an original
 presentation system, not an exact reproduction of a particular GNOME or RHEL
@@ -28,6 +28,7 @@ release and not an SCC or Red Hat brand treatment.
 - Use Adwaita as a neutral Linux reference while keeping treatments original.
 - Keep ordinary slides recognizably presentations, not simulated application
   windows.
+- Utilize accent colors
 
 ## Accessibility contract
 

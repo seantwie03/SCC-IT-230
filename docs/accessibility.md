@@ -2,7 +2,7 @@
 
 ## Repository standard
 
-This repository adopts Web Content Accessibility Guidelines (WCAG) 2.1 Level
+This repository adopts [Web Content Accessibility Guidelines (WCAG) 2.1](https://www.w3.org/TR/WCAG21/) Level
 AA as its minimum accessibility target for web-delivered presentations,
 course-site content, and generated course documents. Apply the target to both
 source decisions and the artifacts students use.
@@ -30,13 +30,9 @@ The Department of Justice's
 identifies public community colleges as covered public entities and WCAG 2.1
 Level AA as the technical standard for covered web content and mobile apps. The
 rule has defined scope, exceptions, compliance dates, and obligations beyond
-technical conformance. Consult the current official sources when making a
-legal or institutional-policy determination; this repository document does not
-replace them or provide legal advice.
+technical conformance.
 
-The repository uses WCAG 2.1 Level AA as its minimum acceptance target even
-when a particular artifact's legal classification or deadline has not been
-determined.
+The repository uses WCAG 2.1 Level AA as its minimum acceptance target.
 
 ## Shared requirements
 
@@ -97,11 +93,10 @@ manual review as a required gate. For each applicable change:
 Record and resolve failures before publication. If a criterion cannot yet be
 reliably validated, document the limitation without treating it as a pass.
 
-The Phase 5 checks verify deterministic structure around accessibility: the
-landing page is generated from a semantic HTML template, required generated
-files and internal links exist, standard Slidev PDFs cannot enter the resource
-allowlist, and production decks omit presenter notes. The responsive stylesheet
-provides visible focus treatment and narrow-screen reflow. These checks reduce
-known failure modes; they do not test assistive-technology behavior, keyboard
-use, reading order, visual quality, or WCAG conformance. The manual publication
-review remains required.
+The automated build and validation checks verify deterministic structure around
+accessibility: the landing page is generated from a semantic HTML template,
+required generated files and internal links exist and production decks omit
+presenter notes. The responsive stylesheet provides visible focus treatment and
+narrow-screen reflow. These checks reduce known failure modes; they do not test
+assistive-technology behavior, keyboard use, reading order, visual quality, or
+WCAG conformance. The manual publication review remains required.
