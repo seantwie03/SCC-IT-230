@@ -7,9 +7,13 @@
   omits them.
 - Preserve the technical meaning of commands, output, learning objectives,
   demonstrations, exercises, and presenter notes.
-- Do not add student information, credentials, assessment solutions,
-  instructor-only material, restricted curriculum material, or an asset whose
-  publication rights are unclear.
+- Do not add student information, assessment solutions, instructor-only
+  material, restricted curriculum material, or an asset whose publication
+  rights are unclear. Do not add credentials or other confidential values to
+  demos, scripts, exercises, documentation, or configuration. A credential or
+  contact detail that already appeared in a previously used course slide deck
+  may be ported into slide content as-is; this narrow allowance covers only
+  slide content, not other repository material.
 - Use text references only for St. Charles Community College and Red Hat. Do
   not add their logos, branded artwork, or visual identity elements without
   explicit authorization.
