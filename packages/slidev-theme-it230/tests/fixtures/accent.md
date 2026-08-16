@@ -20,12 +20,14 @@ The selected accent applies without per-slide configuration.
 
 # Semantic accent roles
 
-- Links and markers use accessible standalone roles.
+- Links and markers use accessible <AccentText>standalone roles.</AccentText>
 - Technical boundaries remain visible on light surfaces.
-- Status and syntax colors retain their original meaning.
+- Status and `syntax` colors retain their original meaning.
 
-<Callout type="note">
+<Callout type="accent">
+
 Informational callouts follow the selected deck accent.
+
 </Callout>
 
 ---

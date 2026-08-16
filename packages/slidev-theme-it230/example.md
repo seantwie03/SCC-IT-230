@@ -31,6 +31,80 @@ custom Vue markup.
 
 > Prefer the smallest command that proves the system state you need to inspect.
 
+### Search unit files with `-k`
+
+Inline code carries no background or border, in prose or in a heading; accent
+color and the monospace face are the only emphasis.
+
+---
+
+# Even vertical content
+
+**Observe:** Keep the slide title anchored while the body uses the available
+height.
+
+**Decide:** Treat each top-level Markdown block after the title as one item in
+the distribution.
+
+<Callout>
+
+The default layout distributes body items evenly unless another vertical alignment is selected.
+
+</Callout>
+
+---
+vertical: center
+listSpacing: padded
+---
+
+# Centered content with a padded list
+
+- Keep the list together as one centered body block.
+- Add deliberate space between its top-level items.
+- Leave nested lists at the theme's normal spacing.
+
+---
+layout: two-cols-header
+horizontal: center
+leftWidth: 60
+vertical: center
+listSpacing: padded
+---
+
+# Centered 60/40 comparison columns
+
+::left::
+
+## Inspect
+
+- Observe the current state.
+- Gather the evidence you need.
+
+::right::
+
+## Change
+
+- Make one deliberate change.
+- Verify the resulting state.
+
+---
+layout: two-cols-header
+listSpacing: padded
+vertical: evenly
+---
+
+# Text with a centered image
+
+::left::
+
+- Arrange the text independently of the image.
+- Add space between top-level list items.
+- Let the image fit its available area.
+
+::right::
+
+![Three connected systems](./assets/image-right-example.svg)
+
 ---
 layout: section
 ---
@@ -60,7 +134,17 @@ sudo systemctl enable --now sshd
 
 <TerminalWindow title="student@lab:~">
 
-```bash-session {1|all}
+````md magic-move {lines:true}
+```bash-session
+student@lab:~$
+```
+```bash-session
+student@lab:~$ cd /etc/ssh
+student@lab:/etc/ssh$ printf '%s\n' '# [ ] $HOME'
+# [ ] $HOME
+student@lab:/etc/ssh$
+```
+```bash-session {1|2-3|4-7|all}
 student@lab:~$ cd /etc/ssh
 student@lab:/etc/ssh$ printf '%s\n' '# [ ] $HOME'
 # [ ] $HOME
@@ -69,75 +153,69 @@ student@lab:/etc/ssh$ sudo -i
 root@lab:~# systemctl is-active sshd
 active
 ```
+````
 
 </TerminalWindow>
 
 ---
-layout: two-cols-header
+layout: center
 ---
 
-# Compare inspection and change workflows
+# Explain a command sequence
 
-Use the full-width header to establish one shared idea, then compare related
-technical evidence in equal columns.
-
-::left::
-
-## Inspect state
-
-Use a Bash fence when command output is intentionally omitted.
-
-```bash
-systemctl is-enabled sshd
-systemctl is-active sshd
-journalctl -u sshd -n 20
-```
-
-- Confirm current state before changing it.
-- Capture evidence needed to explain the decision.
-
-::right::
-
-## Change and verify
-
-Use a terminal session when the resulting output matters.
-
-<TerminalWindow title="student@lab:~">
-
-```bash-session
-student@lab:~$ sudo systemctl is-enabled sshd
-enabled
-student@lab:~$ systemctl is-active sshd
-active
-```
-
-</TerminalWindow>
-
-- Make one deliberate change at a time.
-- Verify the resulting state before moving on.
+<CommandExplainer
+  command="student@workstation:/etc$ ls -l"
+  :steps="[
+    { active: 'student', explanation: 'The user you are logged in as' },
+    { active: 'workstation', explanation: 'The host you are logged into' },
+    { active: '/etc', explanation: 'Your current working directory' },
+  ]"
+/>
 
 ---
 
-# Labeled callouts
+# Semantic emphasis and labeled callouts
 
-Color reinforces each state; its label and symbol carry the same meaning.
+<p>
+  Semantic text:
+  <AccentText>accent emphasis</AccentText> ·
+  <SuccessText>successful state</SuccessText> ·
+  <WarningText>warning state</WarningText> ·
+  <DangerText>dangerous state</DangerText> ·
+  <InfoText>information</InfoText>
+</p>
+
+<p>
+  Variants:
+  <AccentText normal>normal weight</AccentText>,
+  <AccentText italic>italic emphasis</AccentText>, and
+  <AccentText code>monospace text</AccentText>.
+</p>
 
 <div class="grid grid-cols-2 gap-4">
 
-<Callout type="note">
+<Callout type="accent">
+
 Read the unit file before creating an override.
+
 </Callout>
 
-<Callout type="tip">
+<Callout type="success">
+
 Use <code>--no-pager</code> during a projected demonstration.
+
 </Callout>
 
 <Callout type="warning">
+
 Confirm the service name before enabling it at boot.
+
 </Callout>
 
 <Callout type="danger" title="Stop and verify">
+
 Do not interrupt an active remote-access path.
+
 </Callout>
 
 </div>
@@ -156,21 +234,3 @@ Do not interrupt an active remote-access path.
 
 Use spacing, weight, labels, and borders alongside color so the slide remains
 understandable when colors are difficult to distinguish.
-
----
-
-# Select one deck accent
-
-Set one named Adwaita accent in the presentation headmatter. The selection
-applies to the complete deck; omitting it keeps the default blue identity.
-
-```yaml
-themeConfig:
-  it230Accent: purple
-```
-
-Supported names: `blue`, `teal`, `green`, `yellow`, `orange`, `red`, `pink`,
-`purple`, and `slate`.
-
-Syntax highlighting, terminal prompts, and labeled status colors do not change
-with the deck accent.

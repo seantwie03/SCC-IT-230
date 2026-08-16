@@ -8,19 +8,38 @@ and exercises. Weekly files such as `course/w01.md` are concise composition
 documents that import canonical topic fragments in teaching order.
 
 Use stable, descriptive, lowercase kebab-case names. Curriculum-aligned topic
-directories may begin with `rh124-` or `rh134-`; original course topics may
-begin with `it230-`. These names express subject alignment and do not indicate
-ownership of third-party curriculum material.
+directories may begin with `rh124-` or `rh134-` when they align with Red Hat
+Academy course material; original course topics may begin with `it230-`.
+These names express subject alignment and do not indicate ownership of
+third-party curriculum material.
+
+## Instructional model
+
+Course material follows "I Do, We Do, You Do": the instructor presents slides
+(I Do), leads the class through in-class exercises (We Do), then students
+complete a lab assignment independently after class (You Do).
+Focus a demonstration or exercise on the core workflow — the "formula" — and
+vary only the parameters between the in-class exercise and the lab assignment
+that follows it. Delay edge cases until the primary concept is solidly
+understood; introduce them on a later slide or in a later week rather than
+complicating the first pass.
+
+Verify commands and output against RHEL 10.0, the version this course
+targets.
 
 ## Presentation entries and publication
 
 A presentation entry is a Markdown file beneath `course/`. Its first
-headmatter block must select the local theme and static-site router:
+headmatter block must select the local theme and static-site router. It should
+usually supply an `it230Accent` and a title as shown in the example below:
 
 ```yaml
 ---
 theme: it230
+themeConfig:
+  it230Accent: teal
 routerMode: hash
+title: IT-230 — Week 01
 ---
 ```
 
@@ -49,15 +68,141 @@ their position in a particular week. Reuse a canonical fragment instead of
 copying slides. Keep a fragment focused enough that its title, notes, assets,
 and expected teaching sequence remain understandable at its source location.
 
+## Slide structure
+
+Organize each major topic within a fragment as a **section**: a
+`layout: section` title slide followed by focused content slides. Usually the
+topic includes an exercise, place it at the end of that section. Name a
+section for the concept it covers ("Physical Volumes"), not one procedure
+("Creating a Physical Volume").
+
+1. `layout: section` — topic title
+2. An intro slide explaining what the concept is and why it matters
+3. One slide per idea, command, or tightly related procedure
+4. An exercise slide when the topic includes a "We Do" activity
+
+Keep a slide focused on one concept or tightly related procedure. Use
+`TerminalWindow` for terminal interaction, `CommandExplainer` for the anatomy
+of a short command or prompt, and `Callout` for a genuinely supplemental
+caveat. Use a click sequence only when progressive disclosure helps explain a
+procedure; do not hide unrelated commands in one sequence.
+
+Try to make the slides visually interesting by adding color, components, tables,
+charts, images, etc. Pure text slides are very borring. Keep slides short, fewer
+words is generally better.
+
+### Choosing a layout
+
+Use the theme contracts in `docs/design-system.md`:
+
+- Omit `layout` for an ordinary titled slide. Use `vertical`, `horizontal`, and
+  `listSpacing` only when their defaults do not express the content.
+- Use HTML sparringly, prefer layout props. If similar HTML is needed across
+  multiple slides, that is an indication that a component or prop is needed. prop.
+- Use `center` for a short statement or compact composition that should be
+  centered as one unit.
+- Use `two-cols-header` for a comparison or text-and-image composition. Keep
+  source order as shared context, left column, then right column; use
+  `leftWidth` only when equal columns are not appropriate.
+
+Prefer layout props and ordinary block structure to spacing-only `<br />`
+elements or wrapper markup. Split content that remains crowded at the theme's
+intended type size.
+
+### Exercise slides
+
+Place an exercise at the **end of the section it belongs to**, not at the end
+of the whole presentation. It covers only what that section taught. Steps
+describe *what* to accomplish, not the commands to copy; a verification step
+may name its tool when verification is not the learning objective.
+
+```md
+# Exercise: Title
+
+## Requirements
+
+Host: `servera`
+
+## Steps
+
+1. Vague step — describes the goal, not the command
+2. Vague step
+3. Verify with `tool1` and `tool2`
+```
+
+This vagueness is what keeps a published exercise slide a learner-facing
+activity rather than an answer key; see "Demonstrations and exercises" below
+for the file-based counterpart under `exercises/`.
+
+Each Exercise slide should be followed up with a slide with the same title as the
+Exercise but only contains:
+
+- A link to the exercise on Asciinema
+- A link to a long-form exercise explination
+- A `gif` showing the exercise being performed
+
+### Naming convention
+
+Use generic stand-in names on ordinary slides (`vg01`, `lv01`) — like
+variables in algebra. Give exercises distinct, meaningful names (`vg_data`,
+`lv_data`) so students must think through the mapping rather than copy the
+slide verbatim. Graded lab assignments follow the same meaningful-name
+pattern.
+
 ## Demonstrations and exercises
 
-Store runnable demonstrations under the owning topic's `demos/` directory and
-in-class activities under `exercises/`. Include prerequisites, expected
-environment, safe execution instructions, and cleanup steps when needed.
-Never embed credentials or internal-only endpoints.
+Live command-line activities are always authored and stored as exercises.
+Normally, the instructor performs the exercise with `kitty-demo.sh` while students
+type along. When time is limited, the instructor may perform the same exercise solo;
+this delivery mode is called a demonstration. A demonstration is not a separate content
+type: use the existing exercise file and do not create a demos/ directory or
+demonstration-specific copy.
 
-Exercises published here are learner-facing activities. Do not publish answer
-keys, grading records, restricted assessments, or student information.
+Present command workflows in slides with `TerminalWindow`, using progressive disclosure
+when it helps students follow the sequence. When a workflow is too long, interactive, or
+cumbersome to present clearly in `TerminalWindow`, make it an in-class type-along
+exercise instead.
+
+Store type-along exercises under the owning topic's `exercises/` directory.
+The instructor performs each exercise with
+[`kitty-demo.sh`](https://github.com/seantwie03/cli_demos) while students type
+the same steps on their own VMs. This is the guided "We Do" phase of the
+instructional model, not a separate demonstration.
+
+Each exercise is a command file for `kitty-demo.sh`, which uses Kitty's remote
+control to drive a two-window presentation: a Controller window for the
+instructor and an audience-facing Presentation window. Within the file:
+
+- `#^` marks a visible step header, shown to the audience.
+- `#!` marks a delivery note, shown only in the Controller window. The note is
+  still public repository source.
+- Every other line — including a literal `#` comment — is typed into the
+  Presentation window and executed live, including keystrokes for a TUI such
+  as `vim`, `less`, or `fdisk`.
+
+Every exercise file opens with the target host and a clear screen:
+
+```sh
+kitten @ set-font-size 30.0 && ssh {HOSTNAME}
+clear
+```
+
+Write file edits as literal keystrokes — for example, `i`, the text to insert,
+then `jj:wq` to exit insert mode and save, since lab hosts map `jj` to
+<kbd>Esc</kbd>. An exercise must be self-contained because students follow it
+on their own VMs in real time: include prerequisites, the expected environment,
+required setup, safe execution guidance, verification, and cleanup when
+needed. Target the SCC Lab, defaulting to `servera` and `workstation` unless the
+topic explicitly needs more nodes. Nothing may depend on pre-staged student
+machines.
+
+Write a companion `.md` file that mirrors the command file but omit the keystrokes
+and transform the `#^` and `#!` into prose that would make sense when read as a
+student stepping through the exercise.
+
+These exercises are public guided activities, not answer keys for graded work.
+Do not publish assessment solutions, grading records, restricted material, or
+student information.
 
 ## Assets
 
@@ -68,13 +213,15 @@ Do not reproduce Red Hat Academy source material, guided exercises, labs,
 quizzes, instructor-guide content, transcripts, or extracted media. References
 to curriculum names are for alignment only.
 
+Generate a exercise's screen-recording GIF from its `kitty-demo.sh`
+Asciinema recording with
+`agg --cols 120 --rows 24 --theme github-light --last-frame-duration 10 <cast-or-url> <output>.gif`,
+keeping the recording visually consistent with the theme's light terminal surface.
+
 Assets consumed only by a presentation stay with the owning topic and are
 processed by Slidev. A standalone downloadable resource must be explicitly
 listed in the registry with student-facing `title` and `summary`, a stable file
-route beneath `/resources/`, and a `publicationBasis` explaining why it can be
-published. The source must remain inside this repository. Do not list a
-standard Slidev PDF as a resource; PDF publication requires a separate tagged-
-document accessibility workflow.
+route beneath `/resources/`. The source must remain inside this repository.
 
 ## Accessibility
 
@@ -128,10 +275,10 @@ structure, or text.
 
 ## Terminal transcripts
 
-Use an ordinary `bash` fence for example commands when their output is omitted.
-If a slide displays command output, use `TerminalWindow`. Every
-`TerminalWindow` transcript must use a `bash-session` fence and include the
-complete prompt on each command line.
+Use an ordinary `bash` fence for commands without output. Use `TerminalWindow`
+when terminal context is itself instructional or when the slide shows command
+output. Its transcript uses `bash-session` and includes the complete prompt on
+each command line.
 
 A `bash-session` command line begins with a literal `user@host:directory$` or
 `user@host:directory#` prompt. Lines without that complete prompt are plain output.
@@ -139,12 +286,44 @@ Do not remove or rewrite valid `#` or `$` characters merely to affect highlighti
 The command region receives the theme's automatic Bash syntax highlighting. Do not
 add manual color markup to either region.
 
-Because `bash-session` remains an ordinary fenced language, it supports
-Slidev's static and staged line-highlighting syntax. Line numbers count every
-physical transcript line, including output and blank lines. Dimming
-nonessential lines is an intentional focus treatment. Give each important line
-a full-contrast stage, and include an `all` stage when students need to compare
-the complete transcript.
+### Simulate typing with magic-move
+
+A fixed prompt, command, or transcript may use one `bash-session` fence. Use an
+```` ```md magic-move ```` block when the instructor should reveal a terminal
+session step by step. Each nested fence repeats the complete transcript so far
+and adds the next visible state: an initial prompt when useful, a typed command,
+then its output or the prompt returned by a command with no output. A final
+state may stop after the relevant output when the next prompt is not part of
+the lesson.
+
+`````md
+<TerminalWindow title="student@lab:~">
+
+````md magic-move
+```bash-session
+student@lab:~$ systemctl is-active sshd
+```
+```bash-session
+student@lab:~$ systemctl is-active sshd
+active
+student@lab:~$
+```
+````
+
+</TerminalWindow>
+`````
+
+A bare prompt after a command means it completed and returned control without
+displayed output. Do not use that state when the command's real output has only
+been omitted; either show the output or stop at the typed command.
+
+Magic Move supports both line highlighting and visible line numbers. Add a
+click-based sequence such as `{1|2|4|5|all}` to a nested `bash-session` fence,
+and enable visible line numbers with `{lines:true}` on the `magic-move` wrapper
+or an individual nested fence. Highlight selectors count every physical line
+in that transcript state, including prompts, output, and blank lines. The same
+highlighting and line-number options also work on ordinary code fences outside
+`TerminalWindow`.
 
 ## Presenter notes
 

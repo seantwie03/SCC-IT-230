@@ -28,7 +28,7 @@ release and not an SCC or Red Hat brand treatment.
 - Use Adwaita as a neutral Linux reference while keeping treatments original.
 - Keep ordinary slides recognizably presentations, not simulated application
   windows.
-- Utilize accent colors
+- Use the deck accent for identity and fixed semantic colors for status.
 
 ## Accessibility contract
 
@@ -134,33 +134,12 @@ their meaning.
 
 #### Runtime application through `global-top.vue`
 
-Slidev makes `themeConfig` available to Vue through its global slide context,
-but CSS cannot read that headmatter directly, and importing the palette module
-does not cause Slidev to invoke its resolver. The theme therefore uses
-`packages/slidev-theme-it230/global-top.vue` as the runtime bridge between the
-deck configuration and the visual tokens.
-
-`global-top.vue` is a Slidev global layer with one instance for the complete
-presentation. After mounting, it watches the reactive
-`$slidev.themeConfigs.it230Accent` value, passes that value to the central
-resolver, and writes the resulting fill, text, and wash custom properties to
-the document root. Every layout and component can then consume the same deck
-accent without receiving props or repeating configuration logic. The root
-`data-it230-accent` attribute records the resolved name for inspection.
-
-The single global instance is intentional. A per-slide layer such as
-`slide-top.vue` would create duplicate watchers and could render the same
-configuration error once for every slide. The top layer also provides an
-appropriate host for the authoring error that must appear above slide content.
-
-If resolution fails, the component marks the root accent state as invalid,
-applies the default blue variables only to keep the underlying interface
-stable, and teleports a blocking `role="alert"` message to the document body.
-The fallback does not accept the invalid value: repository review and build
-commands still reject it. Correcting the headmatter during local development
-causes the watcher to remove the message and apply the valid accent without a
-server restart. This file is runtime theme infrastructure; it does not contain
-course content or a decorative element that authors add to individual slides.
+`global-top.vue` is the one deck-wide bridge from reactive Slidev
+`themeConfig` to CSS. It resolves `it230Accent`, writes the three accent tokens
+to the document root, and records the name in `data-it230-accent`. An invalid
+value produces a blocking `role="alert"` while blue keeps the underlying view
+stable; review and build commands still reject the deck. Authors never add this
+runtime component to slide content.
 
 ### Typography
 
@@ -172,7 +151,18 @@ without downloading fonts. It disables font ligatures and contextual
 alternates globally so adjacent source characters remain visibly distinct
 throughout slides and match selectable text.
 
-Headings use strong weight, compact line height, and balanced wrapping.
+Slidev's optional image-preload pass is disabled by the theme. Images in
+imported topic fragments are still processed, bundled, and displayed normally;
+disabling the separate preload pass prevents it from generating unresolved
+fragment-relative URLs in production output.
+
+Inline code, fenced code, terminal transcripts, and semantic text using a
+color-text component's `code` prop use `--it230-font-weight-code` at weight
+`600`. This selects a real semibold face when the installed monospace font
+provides one and gives projected technical text more presence than the normal
+weight without making every token bold.
+
+Headings use strong weight, compact line height, and readable wrapping.
 Technical text uses a classroom-readable monospace size and line height. Do not
 reduce type merely to fit overcrowded content; simplify or split the slide.
 
@@ -187,6 +177,10 @@ dimensions.
 Reuse the tokens instead of adding nearly equivalent one-off values to shared
 theme code.
 
+Ordinary block elements and shared components use these tokens for consistent
+spacing. Do not add `<br />` merely to create a gap; use the layout controls or
+fix a recurring gap in the shared theme.
+
 ## Ordinary Markdown and technical content
 
 The default Slidev layout receives the theme's canvas, typography, spacing,
@@ -197,18 +191,35 @@ keywords, red errors, and muted comments adapt GtkSourceView's Adwaita syntax
 roles to the theme's stronger contrast floor. Links remain underlined, list
 markers retain visible shape, and semantic meaning must survive without color.
 
+Inline code renders as accent-colored monospace text with no background or
+border, in prose, in a heading, or alone on a line. A bordered chip reads as
+heavy, boxy chrome, so color and the monospace face are the only emphasis.
+
 An ordinary slide title is followed by a subtle tapered accent. Slides other
 than `cover` and `section` receive a compact footer with the course identity and
 current slide number, separated from the content by a rounded rule that moves
 from the neutral line color toward the selected accent. The rule is decorative
 and hidden from assistive technology. The title accent and footer provide
 continuity and orientation without competing with instructional content or
-resembling application chrome.
+resembling application chrome. On the final state of any non-empty click
+sequence, the footer displays `NEXT →` immediately before the slide number.
 
 Use ordinary fenced code for source and short commands. Use `TerminalWindow`
 when a terminal frame clarifies that the content is an interactive session or
 captured command output. Use a `bash-session` fence inside `TerminalWindow`
 when the transcript includes Bash prompts, commands, and output.
+
+Images receive `min-width: 0` so they can shrink inside grid and flex tracks.
+The `default` and `two-cols-header` layouts additionally fit a lone Markdown
+image within its available region while preserving its aspect ratio. Size
+other images deliberately when they should be smaller than their container.
+
+Every image also receives the theme's large corner radius and an opaque
+background gradient from `--it230-color-accent-fill` in the bottom-left to
+`--it230-color-accent-text` in the top-right. Opaque image pixels cover the
+background completely; transparent and partially transparent pixels reveal
+the selected deck accent. Authors do not add a wrapper, class, or slide-scoped
+style for this treatment.
 
 ## Layouts
 
@@ -224,22 +235,97 @@ Use at a meaningful instructional boundary. The default slot holds a concise
 section title and orientation sentence. The optional `kicker` slot supplies a
 section number or short context label.
 
+### `center`
+
+Use for a short statement or compact composition that should be centered as one
+unit both vertically and horizontally. The layout also centers text. Do not use
+it to rescue an overcrowded slide.
+
+### `default`
+
+The local default layout needs no `layout` declaration. Its first top-level
+element is one `h1`; each later top-level element is one body item.
+
+| Prop          | Values                        | Default  | Effect                                    |
+| ------------- | ----------------------------- | -------- | ----------------------------------------- |
+| `vertical`    | `start`, `center`, `evenly`   | `evenly` | Positions body items below the fixed title |
+| `horizontal`  | `start`, `center`, `end`      | `start`  | Aligns body blocks, not their inner text   |
+| `listSpacing` | `normal`, `padded`             | `normal` | Adds space to top-level list items only    |
+
+Flexible spacing collapses before content when height is constrained. A lone
+Markdown image fits the available body region without changing its aspect
+ratio. Split an overcrowded slide instead of reducing type.
+
+```md
+---
+vertical: center
+listSpacing: padded
+---
+
+# Before changing a service
+
+- Inspect its current state
+- Identify the desired state
+- Make one change
+- Verify the result
+```
+
 ### `two-cols-header`
 
 Use when two related ideas need to be compared beneath one full-width title or
-shared introduction. The default slot holds the common header content. The
-`left` and `right` slots hold equal-width columns with enough space between them
-for code and terminal line-number gutters. Keep the source order as shared
-context, left column, then right column so the reading sequence remains clear
-without relying on visual position.
+shared introduction. The default, `left`, and `right` slots stay in that source
+order. `vertical`, `horizontal`, and `listSpacing` have the same values and
+defaults as the default layout but apply independently within each column.
+`leftWidth` accepts a number greater than 0 and less than 100, defaults to `50`,
+and determines the remaining right-column share.
 
-Ordinary content slides use Slidev's default layout with global theme styling.
-Do not use `cover` or `section` merely to create visual variety.
+A lone Markdown image fits its column while preserving its aspect ratio, so a
+specialized image layout is unnecessary. Place it in source order, set
+`leftWidth` only when unequal tracks help the content, and provide an
+appropriate text alternative.
+
+Ordinary content slides use the theme's override of Slidev's default layout.
+Do not add a `layout` declaration for them, and do not use `cover` or `section`
+merely to create visual variety.
 
 Layouts do not add title bars, window controls, or other application chrome.
 Ordinary slides must not pretend to be desktop applications.
 
 ## Components
+
+### `SequenceEndCue`
+
+This internal footer component displays `NEXT →` at the final state of a
+non-empty click sequence without shifting slide content. It appears in main and
+presenter rendering, not overview or next-slide preview. Authors never add it;
+the footer owns the instance, and layouts that hide the footer hide the cue.
+
+### `CommandExplainer`
+
+`CommandExplainer` reveals parts of one selectable prompt or command without
+moving the text. `command` supplies the base string; each ordered `steps` entry
+supplies `active`, `explanation`, and optionally a replacement `command` or
+one-based `occurrence` for repeated text.
+
+```md
+<CommandExplainer
+  command="student@workstation:/etc$ ls -l"
+  :steps="[
+    { active: 'student', explanation: 'The logged-in user' },
+    { active: 'workstation', explanation: 'The current host' },
+    { active: '/etc', explanation: 'The working directory' },
+  ]"
+/>
+```
+
+An active substring must resolve unambiguously; invalid, missing, overlapping,
+or ambiguous matches produce an authoring error. The low-level `segments` plus
+`explanation` form handles one unusual explicit state and requires exactly one
+active segment.
+
+The component owns the slide's click progression. Use it for short command,
+prompt, or path anatomy, not multiline procedures or output. Keep a complete
+reference nearby when several parts are introduced.
 
 ### `TerminalWindow`
 
@@ -250,43 +336,18 @@ region and defaults to `Terminal`. Terminal transcripts omit Slidev's copy
 control because the transcript can contain output that is not valid command
 input. Ordinary command-only fences retain the copy control.
 
-````md
-<TerminalWindow title="student@lab:~">
+`bash-session` recognizes a prompt only when a line begins with a complete
+`user@host:directory$` or `user@host:directory#` prompt. A command may follow
+after optional whitespace, and a bare prompt is valid. User prompts use green,
+privileged prompts use danger red, commands use the Bash grammar, and unmatched
+output uses the normal foreground. Literal prompt text preserves user,
+location, and privilege meaning without color.
 
-```bash-session {1|2|4|5|all}
-student@lab:~$ cd /etc/ssh
-student@lab:/etc/ssh$ printf '%s\n' '# [ ] $HOME'
-# [ ] $HOME
-student@lab:/etc/ssh$ sudo -i
-root@lab:~# systemctl is-active sshd
-active
-```
-
-</TerminalWindow>
-````
-
-`bash-session` recognizes a command only when a line begins with a complete
-`user@host:directory$` or `user@host:directory#` prompt followed by whitespace.
-It preserves the complete transcript as visible, selectable text. Following
-the light Ptyxis terminal model, the user, host, `@`, and working directory use
-an accessible terminal green for prompts ending in `$` and an accessible danger
-red for privileged prompts ending in `#`. The `:` and final `$` or `#` symbol
-use the normal foreground. The command region uses Shiki's Bash grammar and the
-same Adwaita-derived syntax palette as an ordinary `bash` fence; unmatched
-output stays in the normal terminal foreground. Valid `#`, and `$` characters
-in commands and output do not change the prompt, command, or output boundaries.
-The prompt's literal text communicates user, location, and privilege information
-without relying on color alone.
-
-Because `bash-session` remains an ordinary fenced language, it supports
-Slidev's static and staged line-highlighting syntax. Line numbers count every
-physical transcript line, including output and blank lines. Dimming
-nonessential lines is an intentional focus treatment. Give each important line
-a full-contrast stage, and include an `all` stage when students need to compare
-the complete transcript.
-
-The Bash-specific name leaves room for a separate `powershell-session`
-language if course material later establishes that need.
+`TerminalWindow` accepts either a fixed `bash-session` fence or a `md
+magic-move` sequence. See "Terminal transcripts" in
+`docs/course-authoring.md` for the authoring rule. On a sequence's final state,
+the footer cue indicates that the next click advances to another slide. Line
+numbers count every physical transcript line, including output and blank lines.
 
 Application chrome is appropriate here because the component depicts a real
 terminal interaction. A future browser frame may use the same exception when a
@@ -297,9 +358,10 @@ interface.
 ### `Callout`
 
 `Callout` highlights a short supporting statement. Its `type` prop accepts
-`note`, `tip`, `warning`, or `danger`; each type renders a visible label and
-symbol in addition to color. Its optional `title` prop replaces the default
-label.
+`accent` (the default), `success`, `warning`, or `danger` — the same four
+names as the color-text components below — and each renders a visible label
+and symbol in addition to color, so meaning survives without color. Its
+optional `title` prop replaces the default label.
 
 ```md
 <Callout type="warning">
@@ -309,6 +371,31 @@ Confirm the unit name before enabling it at boot.
 
 Do not stack many callouts as the main structure of a slide. Use ordinary
 headings and lists when information is not genuinely supplemental.
+
+### `AccentText`, `SuccessText`, `DangerText`, `WarningText`, `InfoText`
+
+Five plain `<span>` components apply semantic color and bold weight with no
+background. `AccentText`, `SuccessText`, `WarningText`, and `DangerText` match
+the four `Callout` types. `InfoText` is an informational alias for the accent
+color because the palette has no separate info hue.
+
+Each also accepts three boolean props: `normal` explicitly uses normal font
+weight for a one-off span, `italic` adds italic emphasis, and `code` selects the
+monospace face with no chip, matching inline code elsewhere. Combine as needed.
+
+```md
+# Effortful practice is required <DangerText>to pass the RHCSA exam</DangerText>
+
+- <AccentText normal>This one-off span uses normal weight.</AccentText>
+- Run <DangerText code>rm -rf /</DangerText> and there's no undo.
+```
+
+Use these to color a run of prose or part of a heading. Color alone is not an
+accessible way to convey meaning — pair it with wording that already says
+what's being emphasized, the way `Do not <DangerText>...</DangerText>`
+reads correctly even without color. Do not use these as a substitute for
+`Callout`, which pairs its color with a label and symbol specifically because
+a supplemental note needs to survive without color.
 
 ## Adding shared patterns
 
@@ -332,31 +419,11 @@ The focused gallery is `packages/slidev-theme-it230/example.md`. It covers every
 layout and component the theme supports, ordinary Markdown, fenced code,
 terminal output, and the visual foundations.
 
-Use the root commands:
-
-```sh
-pnpm run dev:theme
-pnpm run review:theme
-pnpm run build:theme
-pnpm run capture:theme
-pnpm run export:theme
-```
-
-`pnpm check` verifies formatting, the supported toolchain, palette and contrast
-tests, all nine focused accent builds, and the production gallery build. The
-deck validator rejects an unsupported `themeConfig.it230Accent` before a
-reviewed build can be published. `pnpm run review:theme` serves the gallery only on a loopback
-address for browser-first inspection at the 1920x1080 desktop viewport used
-for Zoom screen sharing. Maintainer-run theme development uses fixed port 2020,
-and agent-run theme review uses fixed port 2121. An occupied port causes the
-corresponding command to fail rather than silently selecting another port.
-`pnpm run capture:theme` exports the complete gallery directly to PNG; pass
-one validated range such as
-`pnpm run capture:theme -- 1,4-7` when only selected slides need deterministic
-batch review. The optional PDF export is reserved for PDF-specific visual
-regressions, and its untagged output is not an accessible student deliverable.
-Generated theme-review output belongs under the theme package `dist/` and is
-not committed.
+The root theme review commands and their artifacts are documented in
+`docs/publishing.md`. `pnpm check` verifies formatting, the toolchain, palette
+and contrast tests, every accent build, and the production gallery build. The
+deck validator rejects unsupported accents. Automated checks do not replace
+browser and Zoom review at the intended 1920x1080 viewport.
 
 When a theme contract changes, update the gallery and this document in the
 same reviewed change. Check every published deck for regressions once real

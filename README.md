@@ -19,8 +19,7 @@ manually on `main` to rebuild and redeploy the current reviewed commit.
 As each topic is published, the repository may provide:
 
 - Slide presentations and their source Markdown
-- Command-line demonstration scripts
-- In-class exercises
+- Command-line exercise scripts
 - Presenter notes that are safe for public reading
 - Original diagrams, media, and student downloads
 

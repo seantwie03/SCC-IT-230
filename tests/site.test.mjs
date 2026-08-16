@@ -34,11 +34,14 @@ import { assertPortAvailable } from "../scripts/lib/server.mjs";
 const root = fileURLToPath(new URL("../", import.meta.url));
 const fixtureOptions = { root, courseRoot: "tests/fixtures/course" };
 
-test("production registry is genuinely empty", async () => {
+test("production registry contains the reviewed publications", async () => {
     const registry = await loadRegistry(path.join(root, "slides.config.mjs"), {
         root,
     });
-    assert.deepEqual(registry.presentations, []);
+    assert.deepEqual(
+        registry.presentations.map(({ id }) => id),
+        ["w01"],
+    );
     assert.deepEqual(registry.resources, []);
 });
 

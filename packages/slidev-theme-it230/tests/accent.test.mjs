@@ -36,6 +36,14 @@ const officialOrAdjustedText = {
     yellow: "#905300",
 };
 
+test("keeps Slidev image preloading disabled for imported fragments", async () => {
+    const packageMetadata = JSON.parse(
+        await readFile(new URL("../package.json", import.meta.url), "utf8"),
+    );
+
+    assert.equal(packageMetadata.slidev.defaults.preloadImages, false);
+});
+
 function relativeLuminance(hex) {
     const channels = [1, 3, 5]
         .map((index) => Number.parseInt(hex.slice(index, index + 2), 16) / 255)

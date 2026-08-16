@@ -101,12 +101,13 @@ withDefaults(
     border-radius: var(--it230-radius-md);
     box-shadow: var(--it230-shadow-raised);
     color: var(--it230-color-text);
+    margin-bottom: var(--it230-space-4);
     overflow: visible;
 }
 
 .it230-terminal__bar {
     align-items: center;
-    background: var(--it230-color-window-chrome);
+    background: var(--it230-color-raised);
     border-bottom: 1px solid var(--it230-color-line);
     border-radius: calc(var(--it230-radius-md) - 1px)
         calc(var(--it230-radius-md) - 1px) 0 0;
@@ -186,6 +187,7 @@ withDefaults(
 .it230-terminal__body {
     font-family: var(--it230-font-mono);
     font-size: 1.05rem;
+    font-weight: var(--it230-font-weight-code);
     line-height: 1.55;
 }
 

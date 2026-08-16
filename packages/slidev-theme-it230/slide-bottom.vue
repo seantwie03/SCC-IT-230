@@ -1,9 +1,16 @@
+<script setup lang="ts">
+import SequenceEndCue from "./components/SequenceEndCue.vue";
+</script>
+
 <template>
     <footer class="it230-footer" aria-label="Slide footer">
         <div class="it230-footer__rule" aria-hidden="true"></div>
         <div class="it230-footer__content">
             <span>IT-230 · Linux Administration</span>
-            <span><SlideCurrentNo /></span>
+            <span class="it230-footer__status">
+                <SequenceEndCue />
+                <SlideCurrentNo />
+            </span>
         </div>
     </footer>
 </template>
@@ -39,6 +46,12 @@
     display: flex;
     justify-content: space-between;
     padding-inline: 0.2rem;
+}
+
+.it230-footer__status {
+    align-items: center;
+    display: inline-flex;
+    gap: var(--it230-space-3);
 }
 
 .slidev-page:has(.it230-cover) .it230-footer,

@@ -23,7 +23,8 @@
         "colorSchema": "light",
         "defaults": {
             "aspectRatio": "16/9",
-            "lineNumbers": true
+            "lineNumbers": true,
+            "preloadImages": false
         }
     }
 }

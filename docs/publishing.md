@@ -36,6 +36,7 @@ pnpm dev
 pnpm dev -- course/w01.md
 pnpm run review
 pnpm run review -- course/w01.md
+pnpm run capture:course -- course/w01.md
 pnpm build
 pnpm run build:site
 pnpm run build:deck -- w01
@@ -49,6 +50,15 @@ exactly one argument, they start one Slidev development server for that
 validated Markdown entry beneath `course/`, whether or not it is already
 registered. Focused review does not publish the entry, add it to the landing
 page, or change `dist/`.
+
+[`capture-course.mjs`](../scripts/capture-course.mjs) exports the same kind
+of validated entry directly to deterministic PNG images under
+`exports/course-review-png/`, replacing that fixed directory on every run.
+With no page-range argument it captures every slide; with one validated
+range such as `1,4-7`, it captures only those slides. Use it for batch or
+scripted review when a live browser session is unnecessary; use `review` for
+interactive inspection. Like `dev`/`review`, it accepts a registered or
+unregistered entry and never touches `dist/` or the landing page.
 
 Production operations are registry-driven. `pnpm build` generates the theme
 gallery and then runs `build:site`, which validates the complete registry,
@@ -172,7 +182,7 @@ before publication.
 
 Before pushing, confirm that:
 
-- Commands, output, links, notes, demonstrations, and exercises are accurate.
+- Commands, output, links, notes, and exercises are accurate.
 - Presentation structure and the registry are valid.
 - Slides and terminal content remain readable through Zoom screen sharing.
 - Applicable accessibility review has passed for each student-facing format.

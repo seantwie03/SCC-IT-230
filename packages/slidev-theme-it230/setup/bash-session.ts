@@ -2,7 +2,7 @@ function createPromptPattern(symbol: "\\#" | "\\$", privileged = false) {
     const variant = privileged ? ".privileged" : "";
 
     return {
-        begin: `^([^@:\\s]+)(@)([^:\\s]+)(:)([^#$\\r\\n]+)(${symbol})([ \\t]+)`,
+        begin: `^([^@:\\s]+)(@)([^:\\s]+)(:)([^#$\\r\\n]+)(${symbol})([ \\t]*)`,
         beginCaptures: {
             1: { name: `meta.prompt.user${variant}.bash-session` },
             2: {

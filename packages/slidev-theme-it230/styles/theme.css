@@ -2,7 +2,6 @@
     --it230-color-canvas: #fafafb;
     --it230-color-surface: #ffffff;
     --it230-color-raised: #ebebed;
-    --it230-color-window-chrome: #f2f2f2;
     --it230-color-line: #b9b9bf;
     --it230-color-text: #25252b;
     --it230-color-muted: #55555b;
@@ -19,6 +18,7 @@
     --it230-font-mono:
         "Cascadia Code", "JetBrains Mono", "Noto Sans Mono", "DejaVu Sans Mono",
         monospace;
+    --it230-font-weight-code: 600;
     --slidev-code-font-family: var(--it230-font-mono);
     --it230-space-1: 0.25rem;
     --it230-space-2: 0.5rem;
@@ -88,7 +88,7 @@ body {
     font-weight: 750;
     line-height: 1.08;
     margin: 0 0 var(--it230-space-5);
-    text-wrap: balance;
+    text-wrap: pretty;
 }
 
 .slidev-layout h1 {
@@ -111,6 +111,16 @@ body {
     margin-block: 0 var(--it230-space-4);
 }
 
+.slidev-layout img {
+    background: linear-gradient(
+        to top right,
+        var(--it230-color-accent-fill),
+        var(--it230-color-accent-text)
+    );
+    border-radius: var(--it230-radius-lg);
+    min-width: 0;
+}
+
 .slidev-layout ul,
 .slidev-layout ol {
     padding-inline-start: 1em;
@@ -118,6 +128,10 @@ body {
 
 .slidev-layout ul {
     list-style-type: disc;
+}
+
+.slidev-layout ol {
+    list-style-type: decimal;
 }
 
 .slidev-layout ul ul {
@@ -158,11 +172,9 @@ body {
 
 .slidev-layout :not(pre) > code {
     background: var(--it230-color-surface);
-    border: 1px solid var(--it230-color-accent-fill);
-    border-radius: var(--it230-radius-sm);
-    color: var(--it230-color-text);
+    color: var(--it230-color-accent-text);
     font-family: var(--it230-font-mono);
-    padding: 0.3em 0.5em;
+    font-weight: var(--it230-font-weight-code);
 }
 
 .slidev-layout pre,
@@ -173,6 +185,7 @@ body {
     box-shadow: inset 0 1px 0 rgb(255 255 255 / 80%);
     font-family: var(--it230-font-mono);
     font-size: 1rem;
+    font-weight: var(--it230-font-weight-code);
     line-height: 1.5;
     margin-block: var(--it230-space-4);
     overflow: visible;
@@ -181,6 +194,11 @@ body {
 .slidev-layout pre code,
 .slidev-layout .slidev-code code {
     font-family: inherit;
+    font-weight: inherit;
+}
+
+.slidev-layout .it230-color-text--code {
+    font-weight: var(--it230-font-weight-code);
 }
 
 .slidev-code-line-numbers .slidev-code code .line {
@@ -193,6 +211,14 @@ body {
     margin: 0;
     position: absolute;
     top: 0;
+    width: 1.5rem;
+}
+
+.shiki-magic-move-line-number {
+    color: var(--it230-color-muted) !important;
+    display: inline-block;
+    left: -2.5rem;
+    position: relative;
     width: 1.5rem;
 }
 

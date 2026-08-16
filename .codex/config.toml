@@ -62,6 +62,9 @@ approval_mode = "approve"
 [mcp_servers.it230_browser.tools.browser_snapshot]
 approval_mode = "approve"
 
+[mcp_servers.it230_browser.tools.browser_find]
+approval_mode = "approve"
+
 [mcp_servers.it230_browser.tools.browser_take_screenshot]
 approval_mode = "approve"
 
@@ -75,4 +78,7 @@ approval_mode = "approve"
 approval_mode = "approve"
 
 [mcp_servers.it230_browser.tools.browser_wait_for]
+approval_mode = "approve"
+
+[mcp_servers.it230_browser.tools.browser_press_key]
 approval_mode = "approve"

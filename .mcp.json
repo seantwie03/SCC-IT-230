@@ -1,30 +1,30 @@
 {
-  "mcpServers": {
-    "it230_slidev": {
-      "command": "pnpm",
-      "args": [
-        "exec",
-        "slidev",
-        "mcp",
-        "packages/slidev-theme-it230/example.md"
-      ]
-    },
-    "it230_browser": {
-      "command": "pnpm",
-      "args": [
-        "exec",
-        "playwright-mcp",
-        "--browser",
-        "chrome",
-        "--headless",
-        "--isolated",
-        "--viewport-size",
-        "1920x1080",
-        "--allowed-origins",
-        "http://127.0.0.1:2121;http://localhost:2121;http://127.0.0.1:3131;http://localhost:3131",
-        "--output-dir",
-        "/tmp/it230-playwright-mcp"
-      ]
+    "mcpServers": {
+        "it230_slidev": {
+            "command": "pnpm",
+            "args": [
+                "exec",
+                "slidev",
+                "mcp",
+                "packages/slidev-theme-it230/example.md"
+            ]
+        },
+        "it230_browser": {
+            "command": "pnpm",
+            "args": [
+                "exec",
+                "playwright-mcp",
+                "--browser",
+                "chrome",
+                "--headless",
+                "--isolated",
+                "--viewport-size",
+                "1920x1080",
+                "--allowed-origins",
+                "http://127.0.0.1:2121;http://localhost:2121;http://127.0.0.1:3131;http://localhost:3131",
+                "--output-dir",
+                "/tmp/it230-playwright-mcp"
+            ]
+        }
     }
-  }
 }

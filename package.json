@@ -13,6 +13,7 @@
         "build:deck": "node scripts/build-deck.mjs",
         "build:site": "node scripts/build-site.mjs",
         "build:theme": "pnpm --filter slidev-theme-it230 build",
+        "capture:course": "node scripts/capture-course.mjs",
         "capture:theme": "pnpm --filter slidev-theme-it230 capture",
         "check": "pnpm run check:format && pnpm run check:toolchain && pnpm run test && pnpm run build && pnpm run check:links",
         "check:format": "prettier --check .",

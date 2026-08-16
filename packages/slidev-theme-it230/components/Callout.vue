@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 
-type CalloutTone = "note" | "tip" | "warning" | "danger";
+type CalloutTone = "accent" | "success" | "warning" | "danger";
 
 const props = withDefaults(
     defineProps<{
@@ -10,13 +10,13 @@ const props = withDefaults(
     }>(),
     {
         title: undefined,
-        type: "note",
+        type: "accent",
     },
 );
 
 const defaults: Record<CalloutTone, { title: string }> = {
-    note: { title: "Note" },
-    tip: { title: "Tip" },
+    accent: { title: "Note" },
+    success: { title: "Tip" },
     warning: { title: "Warning" },
     danger: { title: "Caution" },
 };
@@ -29,7 +29,7 @@ const label = computed(() => props.title ?? defaults[props.type].title);
         <div class="it230-callout__heading">
             <span class="it230-callout__mark" aria-hidden="true">
                 <svg
-                    v-if="type === 'note'"
+                    v-if="type === 'accent'"
                     class="it230-callout__icon"
                     viewBox="0 0 16 16"
                 >
@@ -43,7 +43,7 @@ const label = computed(() => props.title ?? defaults[props.type].title);
                     <path d="M8 6.75v5.5" />
                 </svg>
                 <svg
-                    v-else-if="type === 'tip'"
+                    v-else-if="type === 'success'"
                     class="it230-callout__icon"
                     viewBox="0 0 16 16"
                 >
@@ -85,10 +85,11 @@ const label = computed(() => props.title ?? defaults[props.type].title);
     border-left: 0.35rem solid var(--it230-callout-boundary);
     border-radius: var(--it230-radius-md);
     box-shadow: 0 0.5rem 1.5rem rgb(0 0 6 / 7%);
+    margin-bottom: var(--it230-space-4);
     padding: var(--it230-space-4) var(--it230-space-5);
 }
 
-.it230-callout[data-tone="tip"] {
+.it230-callout[data-tone="success"] {
     --it230-callout-boundary: var(--it230-color-success);
     --it230-callout-text: var(--it230-color-success);
 }

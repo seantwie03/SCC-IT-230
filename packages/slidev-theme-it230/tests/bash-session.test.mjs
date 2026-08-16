@@ -179,6 +179,32 @@ test("recognizes user, host, directory, and privilege prompt changes", async () 
     }
 });
 
+test("recognizes a bare prompt with no trailing command", async () => {
+    const source = ["student@lab:~$ sudo -i", "root@lab:~#"];
+    const lines = await tokenize(source.join("\n"));
+
+    assert.equal(
+        contentWithScope(lines[1], "meta.prompt.user.privileged.bash-session"),
+        "root",
+    );
+    assert.equal(
+        contentWithScope(
+            lines[1],
+            "meta.prompt.directory.privileged.bash-session",
+        ),
+        "~",
+    );
+    assert.equal(
+        contentWithScope(lines[1], "meta.prompt.symbol.bash-session"),
+        "#",
+    );
+    for (const segment of lines[1]) {
+        const scopes = scopeNames(segment);
+        if (scopes.some((scope) => privilegedPromptColorScopes.has(scope)))
+            assert.equal(segment.color, privilegedPromptColor);
+    }
+});
+
 test("uses accessible user and privileged prompt colors", () => {
     assert.ok(contrastRatio(promptColor, "#FFFFFF") >= 5.68);
     assert.ok(contrastRatio(privilegedPromptColor, "#FFFFFF") >= 5.68);
