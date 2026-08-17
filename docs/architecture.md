@@ -2,7 +2,7 @@
 
 ## Project boundary
 
-IT-230 is one root Node.js project with one pnpm lockfile. The root project
+SCC-IT-230 is one root Node.js project with one pnpm lockfile. The root project
 exposes repository-wide commands and owns dependency versions, validation,
 production builds, and the course site. Workspace packages own package-specific
 command implementations invoked by the root. Individual weeks and chapters do
@@ -14,7 +14,7 @@ presentations and theme changes to be validated together.
 
 ## Toolchain contract
 
-The project supports the Node.js 24 major line. `package.json` is the
+The project supports the Node.js. `package.json` is the
 authoritative runtime declaration, and `.nvmrc` is a convenience for local
 version managers. The exact pnpm release is declared by `packageManager` in
 `package.json`.

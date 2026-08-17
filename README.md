@@ -2,7 +2,7 @@
 
 This repository contains independently maintained course materials used for
 IT-230: Linux Administration at St. Charles Community College. The course
-builds on introductory Linux skills and develops practical system
+builds on introductory Linux skills to develop practical system
 administration skills associated with the Red Hat Certified System
 Administrator learning path.
 
@@ -10,18 +10,20 @@ Published course materials are available at
 [it230.systemsmetanow.tech](https://it230.systemsmetanow.tech).
 
 GitHub Actions validates pushes to `main` and pull-request changes targeting
-`main`. After a successful `main` validation, the workflow publishes only the
-reviewed root `dist/` artifact to the course site. The same workflow can be run
-manually on `main` to rebuild and redeploy the current reviewed commit.
+`main`. Commits to `main` publish the `dist/` artifact to the course site after
+a successful validation. The same workflow can be run manually on `main` to
+rebuild and redeploy the current reviewed commit.
 
 ## Course materials
 
 As each topic is published, the repository may provide:
 
+- A custom `it230` Slidev theme
 - Slide presentations and their source Markdown
-- Command-line exercise scripts
+- Command-line exercise scripts and html files
 - Presenter notes that are safe for public reading
 - Original diagrams, media, and student downloads
+- PDF exports of the slide presentations
 
 The course site lists only material that is ready for use. Repository source
 is available for readers who want to study, adapt, or help identify a problem
@@ -43,19 +45,19 @@ The root project provides the authoritative development, validation, and build
 commands. See [the publishing guide](docs/publishing.md) for the normal local
 workflow.
 
-Common root commands are:
+Common commands are:
 
 ```sh
 pnpm dev
+pnpm check
 pnpm build
 pnpm preview
-pnpm check
 ```
 
 `pnpm dev` serves the registry-driven landing page on localhost port 3030 and
 reloads the browser when the registry, landing-page template, renderer, or
 stylesheet changes. It does not start registered presentations. Presentations
-are added to the site through the `presentations` array in
+are registered to the site through the `presentations` array in
 `slides.config.mjs`. The `pnpm build` command validates that array, builds
 every registered presentation, and generates the corresponding landing-page
 links. A Markdown deck that is not registered does not appear on the site.

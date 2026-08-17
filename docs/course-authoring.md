@@ -109,12 +109,71 @@ Prefer layout props and ordinary block structure to spacing-only `<br />`
 elements or wrapper markup. Split content that remains crowded at the theme's
 intended type size.
 
+### Presenting commands and workflows
+
+Present command workflows in slides with `TerminalWindow`, using progressive disclosure
+when it helps students follow the sequence. When a workflow is too long, interactive, or
+cumbersome to present clearly in `TerminalWindow`, make it an in-class type-along
+exercise instead. See the 'Demonstrations and exercises' section for more details.
+
+Use an ordinary `bash` fence when showing command examples or a sequence of commands that
+are not part of a workflow. Use `TerminalWindow` when terminal context is itself
+instructional or when demonstrating a series of commands in a workflow. Its transcript
+uses `bash-session` and includes the complete prompt on each command line.
+
+A `bash-session` command line begins with a literal `user@host:directory$` or
+`user@host:directory#` prompt. Lines without that complete prompt are plain output.
+Do not remove or rewrite valid `#` or `$` characters merely to affect highlighting.
+The command region receives the theme's automatic Bash syntax highlighting. Do not
+add manual color markup to either region.
+
+### Simulate typing with magic-move
+
+A fixed prompt, command, or transcript may use one `bash-session` fence. Use an
+```` ```md magic-move ```` block when the instructor should reveal a terminal
+session step by step. Each nested fence repeats the complete transcript so far
+and adds the next visible state: an initial prompt when useful, a typed command,
+then its output or the prompt returned by a command with no output. A final
+state may stop after the relevant output when the next prompt is not part of
+the lesson.
+
+`````md
+<TerminalWindow title="student@lab:~">
+
+````md magic-move
+```bash-session
+student@lab:~$ systemctl is-active sshd
+```
+```bash-session
+student@lab:~$ systemctl is-active sshd
+active
+student@lab:~$
+```
+````
+
+</TerminalWindow>
+`````
+
+A bare prompt after a command means it completed and returned control without
+displayed output. Do not use that state when the command's real output has only
+been omitted; either show the output or stop at the typed command.
+
+Magic Move supports both line highlighting and visible line numbers. Add a
+click-based sequence such as `{1|2|4|5|all}` to a nested `bash-session` fence,
+and enable visible line numbers with `{lines:true}` on the `magic-move` wrapper
+or an individual nested fence. Highlight selectors count every physical line
+in that transcript state, including prompts, output, and blank lines. The same
+highlighting and line-number options also work on ordinary code fences outside
+`TerminalWindow`.
+
 ### Exercise slides
 
-Place an exercise at the **end of the section it belongs to**, not at the end
-of the whole presentation. It covers only what that section taught. Steps
-describe *what* to accomplish, not the commands to copy; a verification step
-may name its tool when verification is not the learning objective.
+Place exercise slides at the **end of the section it belongs to**, not at the end
+of the whole presentation. It covers only what that section taught.
+
+Each exercise has two slides. The first slide describes *what* to accomplish, not the
+commands to copy; a verification step may name its tool when verification is not the
+learning objective. An example is provided below:
 
 ```md
 # Exercise: Title
@@ -125,7 +184,7 @@ Host: `servera`
 
 ## Steps
 
-1. Vague step — describes the goal, not the command
+1. Vague step describes the goal, not the command
 2. Vague step
 3. Verify with `tool1` and `tool2`
 ```
@@ -134,12 +193,14 @@ This vagueness is what keeps a published exercise slide a learner-facing
 activity rather than an answer key; see "Demonstrations and exercises" below
 for the file-based counterpart under `exercises/`.
 
-Each Exercise slide should be followed up with a slide with the same title as the
-Exercise but only contains:
+The second slide has the same title. It includes:
 
-- A link to the exercise on Asciinema
-- A link to a long-form exercise explination
-- A `gif` showing the exercise being performed
+- A 'gif' of the exercise being performed. This gif is created from the Asciinema
+  recording using the `agg` tool.
+- A link to the Asciinema recording
+- A link to the site page containing the long form written exercise.
+
+See the 'Demonstrations and exercises' section for more details.
 
 ### Naming convention
 
@@ -153,15 +214,10 @@ pattern.
 
 Live command-line activities are always authored and stored as exercises.
 Normally, the instructor performs the exercise with `kitty-demo.sh` while students
-type along. When time is limited, the instructor may perform the same exercise solo;
+type along. When time is limited, the instructor may perform the exercise solo;
 this delivery mode is called a demonstration. A demonstration is not a separate content
 type: use the existing exercise file and do not create a demos/ directory or
 demonstration-specific copy.
-
-Present command workflows in slides with `TerminalWindow`, using progressive disclosure
-when it helps students follow the sequence. When a workflow is too long, interactive, or
-cumbersome to present clearly in `TerminalWindow`, make it an in-class type-along
-exercise instead.
 
 Store type-along exercises under the owning topic's `exercises/` directory.
 The instructor performs each exercise with
@@ -196,9 +252,10 @@ needed. Target the SCC Lab, defaulting to `servera` and `workstation` unless the
 topic explicitly needs more nodes. Nothing may depend on pre-staged student
 machines.
 
-Write a companion `.md` file that mirrors the command file but omit the keystrokes
-and transform the `#^` and `#!` into prose that would make sense when read as a
-student stepping through the exercise.
+Write a companion `html` file that mirrors the command file but convert the
+keystrokes, `#^` and `#!` lines into prose that would make sense when read
+as a student stepping through the exercise. This file is hosted on the site.
+It's intended audience is students performing the exercise outside of class.
 
 These exercises are public guided activities, not answer keys for graded work.
 Do not publish assessment solutions, grading records, restricted material, or
@@ -272,58 +329,6 @@ content borders, informational callouts, and recurring deck framing. Syntax,
 terminal prompts, success, warning, and danger colors intentionally remain
 independent. Authors must continue to pair meaning with labels, symbols,
 structure, or text.
-
-## Terminal transcripts
-
-Use an ordinary `bash` fence for commands without output. Use `TerminalWindow`
-when terminal context is itself instructional or when the slide shows command
-output. Its transcript uses `bash-session` and includes the complete prompt on
-each command line.
-
-A `bash-session` command line begins with a literal `user@host:directory$` or
-`user@host:directory#` prompt. Lines without that complete prompt are plain output.
-Do not remove or rewrite valid `#` or `$` characters merely to affect highlighting.
-The command region receives the theme's automatic Bash syntax highlighting. Do not
-add manual color markup to either region.
-
-### Simulate typing with magic-move
-
-A fixed prompt, command, or transcript may use one `bash-session` fence. Use an
-```` ```md magic-move ```` block when the instructor should reveal a terminal
-session step by step. Each nested fence repeats the complete transcript so far
-and adds the next visible state: an initial prompt when useful, a typed command,
-then its output or the prompt returned by a command with no output. A final
-state may stop after the relevant output when the next prompt is not part of
-the lesson.
-
-`````md
-<TerminalWindow title="student@lab:~">
-
-````md magic-move
-```bash-session
-student@lab:~$ systemctl is-active sshd
-```
-```bash-session
-student@lab:~$ systemctl is-active sshd
-active
-student@lab:~$
-```
-````
-
-</TerminalWindow>
-`````
-
-A bare prompt after a command means it completed and returned control without
-displayed output. Do not use that state when the command's real output has only
-been omitted; either show the output or stop at the typed command.
-
-Magic Move supports both line highlighting and visible line numbers. Add a
-click-based sequence such as `{1|2|4|5|all}` to a nested `bash-session` fence,
-and enable visible line numbers with `{lines:true}` on the `magic-move` wrapper
-or an individual nested fence. Highlight selectors count every physical line
-in that transcript state, including prompts, output, and blank lines. The same
-highlighting and line-number options also work on ordinary code fences outside
-`TerminalWindow`.
 
 ## Presenter notes
 
