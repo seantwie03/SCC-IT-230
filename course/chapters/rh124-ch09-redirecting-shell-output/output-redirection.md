@@ -334,6 +334,6 @@ The command produces nothing on the screen.
 ---
 ---
 
-# Demo: Output Redirection vs Append
+# Exercise: Output Redirection vs Append
 
 ![Screen recording of the instructor comparing the > and >> redirection operators in a terminal.](./assets/output_redirection.gif)

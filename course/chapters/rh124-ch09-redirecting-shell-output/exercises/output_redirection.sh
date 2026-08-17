@@ -4,14 +4,18 @@ clear
 
 #^ Create a very important file
 vim evil_plan.md
+#! This is the first exercise that uses `vim` this semester, so explain the modes a bit. Press i to enter 'insert' mode
 i
+#! Tell students they don't have to type all this, the important part is that some content is in the file.
 == Plan for World Domination! ==
 1. Make humanity reliant on AI by having students use AI to do their homework
 ...
 13. Poison the training data for all new AIs
 ...
 96. Become the supreme-leader of the world!
+#! Press Escape to go back to 'normal' mode
 jj
+#! Press colon to enter 'command' mode. Then type wq for write and quit
 :wq
 
 #^ Verify our important work
@@ -29,6 +33,7 @@ clear
 
 #^ Time for evil_plan-v2.md. It will be even evil-er!
 echo "== Eviler Plan for World Domination! ==" > evil_plan-v2.md
+#! Notice the switch to the append operator for the remaining lines
 echo "1. Invent a <Top Secret Information Redacted>" >> evil_plan-v2.md
 echo "2. Use the <Top Secret Information Redacted> to poison the minds of <Top Secret Information Redacted>" >> evil_plan-v2.md
 
