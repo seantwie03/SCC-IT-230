@@ -130,7 +130,6 @@ async function validateResource(value, index, context) {
     assertObjectKeys(value, label, [
         "id",
         "path",
-        "publicationBasis",
         "source",
         "summary",
         "title",
@@ -138,12 +137,6 @@ async function validateResource(value, index, context) {
     assertRequiredText(value, label);
     if (!RESOURCE_ID.test(value.id))
         throw new Error(`${label} has an unsupported ID: ${value.id}`);
-    if (
-        typeof value.publicationBasis !== "string" ||
-        value.publicationBasis.trim() !== value.publicationBasis ||
-        value.publicationBasis.length === 0
-    )
-        throw new Error(`${label} requires a public publicationBasis.`);
     if (typeof value.path !== "string" || !RESOURCE_ROUTE.test(value.path))
         throw new Error(
             `${label} path must identify one canonical lowercase file beneath /resources/.`,

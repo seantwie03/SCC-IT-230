@@ -83,11 +83,9 @@ validated by the theme package rather than duplicated in the registry. There
 is no `published` flag: presence in this registry is the publication decision.
 
 The registry also owns the explicit public-resource allowlist. Each resource
-has `id`, `title`, `summary`, `source`, `path`, and `publicationBasis`. Its
+has `id`, `title`, `summary`, `source`, and `path`. Its
 source must be an existing file inside the repository, and its destination is
-a canonical file route beneath `/resources/`. Standard Slidev PDFs are rejected
-because the supported exporter does not create the tagged document required by
-the repository accessibility standard. Ordinary deck assets remain owned and
+a canonical file route beneath `/resources/`. Ordinary deck assets remain owned and
 processed by their Slidev source rather than being copied through this list.
 
 Registry validation happens before generated output is removed. It rejects
@@ -119,7 +117,7 @@ routes are derived from IDs, and resource paths remain stable domain-relative
 paths. The build combines them with the site base when it generates links and
 invokes Slidev. Production uses `/` once the custom domain is configured.
 
-The root commands divide development and production responsibilities:
+The root `package.json` commands divide development and production responsibilities:
 
 - `pnpm dev` and `pnpm run review` accept either no argument for the
   live-reloading registry landing page or one validated Markdown entry beneath

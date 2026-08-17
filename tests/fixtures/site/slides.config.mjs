@@ -17,8 +17,6 @@ export default {
                 "An original text fixture copied by the resource pipeline.",
             source: "tests/fixtures/site/resource.txt",
             path: "/resources/integration-resource.txt",
-            publicationBasis:
-                "Original repository test fixture licensed as code.",
         },
     ],
 };
