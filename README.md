@@ -59,8 +59,11 @@ reloads the browser when the registry, landing-page template, renderer, or
 stylesheet changes. It does not start registered presentations. Presentations
 are registered to the site through the `presentations` array in
 `slides.config.mjs`. The `pnpm build` command validates that array, builds
-every registered presentation, and generates the corresponding landing-page
-links. A Markdown deck that is not registered does not appear on the site.
+every registered presentation, exports its supplemental
+`SCC-IT-230-<id>.pdf`, copies its declared resources, and generates the
+corresponding landing-page links. PDFs and additional resources are published
+beneath the owning presentation's `/<id>/resources/` directory. A Markdown
+deck that is not registered does not appear on the site.
 
 For focused authoring, pass one validated Markdown entry beneath `course/`. For
 example, this command runs only the Week 1 slides with hot reload on localhost:

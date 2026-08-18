@@ -70,37 +70,39 @@ and are not committed.
 `slides.config.mjs` is the public registry of presentations. It supplies the
 metadata used by development commands, production builds, validation, and the
 course site. A presentation is not published merely because a Markdown file
-exists; it must have a valid registry entry. The production registry remains
-empty until the first course presentation is reviewed for publication.
+exists; it must have a valid registry entry.
 
-Every presentation entry contains exactly `id`, `title`, `summary`, `entry`,
-and `topics`. Week IDs use `w01` through `w16`; durable topic IDs use an
-`it230-`, `rh124-`, or `rh134-` prefix. The build derives the canonical route
+Every presentation entry contains `id`, `title`, `summary`, `entry`, and
+`topics`, plus an optional `resources` array. Week IDs use `w01` through `w16`;
+durable topic IDs use an `it230-`, `rh124-`, or `rh134-` prefix. The build derives the canonical route
 from the ID as a domain-relative directory, such as `/w01/`. The entry is an
 existing Markdown file beneath `course/` whose headmatter selects `theme: it230` and
 `routerMode: hash`. Deck accent stays authoritative in headmatter and is
 validated by the theme package rather than duplicated in the registry. There
 is no `published` flag: presence in this registry is the publication decision.
 
-The registry also owns the explicit public-resource allowlist. Each resource
-has `id`, `title`, `summary`, `source`, and `path`. Its
-source must be an existing file inside the repository, and its destination is
-a canonical file route beneath `/resources/`. Ordinary deck assets remain owned and
-processed by their Slidev source rather than being copied through this list.
+A presentation resource has `title`, `summary`, and `source`. The source must
+be an existing file inside the repository with a canonical lowercase basename.
+The build publishes it under `/<id>/resources/` using that basename. Resource
+basenames must be unique within a presentation but may repeat across
+presentations. Ordinary deck assets remain owned and processed by Slidev under
+`/<id>/assets/` rather than being copied through this list.
 
 Registry validation happens before generated output is removed. It rejects
-unknown fields, duplicate IDs or resource routes, invalid identifiers, missing
-or escaping inputs, invalid deck configuration, unsafe resource destinations,
-and output paths outside the intended generated root.
+unknown fields, duplicate IDs or presentation-local resource basenames, invalid
+identifiers, missing or escaping inputs, invalid deck configuration, and output
+paths outside the intended generated root.
 
 ## Build boundary
 
 Production output is assembled in `dist/`. Each production build recreates
 dist/ from scratch, builds every presentation listed in `slides.config.mjs`,
-generates the course landing page, and copies only allowlisted public
-resources. Each deck receives an explicit base, output directory, and
-`--without-notes` option. Assets referenced by deck sources are processed by
-Slidev. Generated output is not committed.
+generates the course landing page, exports a supplemental PDF for each deck,
+and copies presentation-owned resources. Each deck receives an explicit base,
+output directory, and `--without-notes` option. Its PDF is published as
+`/<id>/resources/SCC-IT-230-<id>.pdf`; declared resources share that directory.
+Assets referenced by deck sources are processed by Slidev. Generated output is
+not committed.
 
 The landing page uses `site/index.html` as its static document template.
 `site/render-template.mjs` loads that template during a production build or
@@ -113,9 +115,9 @@ to reload the browser after a valid change. It starts no Slidev processes.
 
 `IT230_SITE_BASE` is the single deployment-base input. It defaults to `/` and
 also accepts a canonical project subpath such as `/SCC-IT-230/`. Presentation
-routes are derived from IDs, and resource paths remain stable domain-relative
-paths. The build combines them with the site base when it generates links and
-invokes Slidev. Production uses `/` once the custom domain is configured.
+and resource routes are derived from presentation IDs. The build combines them
+with the site base when it generates links and invokes Slidev. Production uses
+`/` once the custom domain is configured.
 
 The root `package.json` commands divide development and production responsibilities:
 
@@ -126,8 +128,9 @@ The root `package.json` commands divide development and production responsibilit
 - `pnpm build` generates the theme gallery and recreates the complete
   course-site production artifact. `pnpm run build:theme` and
   `pnpm run build:site` retain those focused operations.
-- `pnpm run build:deck -- <id>` and `pnpm run export:pdf -- <id>` resolve one
-  published deck through the registry and reject arbitrary paths.
+- `pnpm run build:deck -- <id>` builds one published web deck, its supplemental
+  PDF, and its declared resources. `pnpm run export:pdf -- <id>` creates a
+  separate review PDF under `exports/`; both reject arbitrary paths.
 - `pnpm preview` recreates and checks the complete course-site production
   artifact before serving it without live reload.
 - `pnpm run check:links` checks required generated files and internal HTML and

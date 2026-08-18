@@ -7,7 +7,11 @@ import {
     selectRegisteredPresentation,
     userArguments,
 } from "./lib/arguments.mjs";
-import { assertContained, assertSafeGeneratedRoot } from "./lib/paths.mjs";
+import {
+    assertContained,
+    assertSafeGeneratedRoot,
+    presentationPdfFilename,
+} from "./lib/paths.mjs";
 import { run } from "./lib/process.mjs";
 import { loadRegistry } from "./lib/registry.mjs";
 
@@ -27,7 +31,7 @@ const presentation = selectRegisteredPresentation(
 const exportsRoot = path.join(root, "exports");
 await assertSafeGeneratedRoot(exportsRoot, root);
 await mkdir(exportsRoot, { recursive: true });
-const output = path.join(exportsRoot, `${id}.pdf`);
+const output = path.join(exportsRoot, presentationPdfFilename(id));
 assertContained(exportsRoot, output, "PDF export");
 try {
     const info = await lstat(output);

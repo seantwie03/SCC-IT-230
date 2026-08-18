@@ -33,6 +33,14 @@ export function presentationRoute(id) {
     return `/${id}/`;
 }
 
+export function presentationPdfFilename(id) {
+    return `SCC-IT-230-${id}.pdf`;
+}
+
+export function presentationResourceRoute(id, filename) {
+    return `${presentationRoute(id)}resources/${filename}`;
+}
+
 export function withSiteBase(siteBase, domainRelativePath) {
     const base = validateSiteBase(siteBase);
     if (

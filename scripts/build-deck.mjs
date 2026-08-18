@@ -7,13 +7,8 @@ import {
     selectRegisteredPresentation,
     userArguments,
 } from "./lib/arguments.mjs";
-import { validateBuildOutputs } from "./lib/build-site.mjs";
-import {
-    assertSafeGeneratedRoot,
-    presentationRoute,
-    withSiteBase,
-} from "./lib/paths.mjs";
-import { run } from "./lib/process.mjs";
+import { buildPresentation, validateBuildOutputs } from "./lib/build-site.mjs";
+import { assertSafeGeneratedRoot } from "./lib/paths.mjs";
 import { loadRegistry } from "./lib/registry.mjs";
 
 const id = requireOneId(
@@ -34,19 +29,9 @@ const output = validateBuildOutputs(registry, distRoot).presentations.get(id);
 await mkdir(distRoot, { recursive: true });
 await assertSafeGeneratedRoot(output, distRoot);
 await rm(output, { force: true, recursive: true });
-await run(
-    "slidev",
-    [
-        "build",
-        presentation.entryAbsolute,
-        "--out",
-        output,
-        "--base",
-        withSiteBase(
-            process.env.IT230_SITE_BASE ?? "/",
-            presentationRoute(presentation.id),
-        ),
-        "--without-notes",
-    ],
-    { cwd: root },
-);
+await buildPresentation({
+    presentation,
+    root,
+    output,
+    siteBase: process.env.IT230_SITE_BASE ?? "/",
+});

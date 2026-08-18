@@ -48,7 +48,7 @@ Use `pnpm dev -- course/<entry>.md` for focused authoring and
 open an incomplete, unregistered deck without publishing it.
 
 Add a deck to `slides.config.mjs` only after it is ready to be public. A
-presentation registry entry contains exactly:
+presentation registry entry contains:
 
 - `id`: `w01` through `w16`, or a durable lowercase topic ID beginning with
   `it230-`, `rh124-`, or `rh134-`. The site derives its stable `/<id>/` route
@@ -56,6 +56,8 @@ presentation registry entry contains exactly:
 - `title` and `summary`: student-facing landing-page text.
 - `entry`: the canonical repository-relative Markdown path beneath `course/`.
 - `topics`: a non-empty list of concise student-facing topic labels.
+- `resources` (optional): files owned by this presentation. Each entry contains
+  student-facing `title` and `summary` text plus a repository-relative `source`.
 
 Do not add a `published` flag, semester-specific route, migration status,
 reviewer name, private source location, or private note. Registry membership
@@ -256,6 +258,10 @@ Write a companion `html` file that mirrors the command file but convert the
 keystrokes, `#^` and `#!` lines into prose that would make sense when read
 as a student stepping through the exercise. This file is hosted on the site.
 It's intended audience is students performing the exercise outside of class.
+The HTML file should have the same name as the Command file, but suffix
+`-exercise` and the file type will be `html` instead of `sh`. Describe the
+exercises as 'hands on' rather than "guided" to differentiate from the RHA
+"Guided Exercises."
 
 These exercises are public guided activities, not answer keys for graded work.
 Do not publish assessment solutions, grading records, restricted material, or
@@ -276,9 +282,13 @@ Asciinema recording with
 keeping the recording visually consistent with the theme's light terminal surface.
 
 Assets consumed only by a presentation stay with the owning topic and are
-processed by Slidev. A standalone downloadable resource must be explicitly
-listed in the registry with student-facing `title` and `summary`, a stable file
-route beneath `/resources/`. The source must remain inside this repository.
+processed by Slidev. A standalone downloadable resource must be listed in its
+presentation's optional `resources` array with student-facing `title`,
+`summary`, and `source` fields. Its source must remain inside this repository
+and have a unique canonical lowercase basename within that presentation. The
+build publishes it beneath `/<id>/resources/` using the source basename; authors
+do not specify a public path. The generated presentation PDF shares this
+directory but does not require a registry entry.
 
 ## Accessibility
 

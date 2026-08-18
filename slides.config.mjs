@@ -13,9 +13,15 @@ export const presentations = [
             "Pipelines",
             "sudo",
         ],
+        resources: [
+            {
+                title: "Output Redirection Exercise",
+                summary:
+                    "A hands-on exercise comparing the overwrite (>) and append (>>) redirection operators.",
+                source: "course/chapters/rh124-ch09-redirecting-shell-output/exercises/output-redirection-exercise.html",
+            },
+        ],
     },
 ];
 
-export const resources = [];
-
-export default { presentations, resources };
+export default { presentations };

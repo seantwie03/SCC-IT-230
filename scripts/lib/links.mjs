@@ -1,7 +1,13 @@
 import { readFile, readdir, stat } from "node:fs/promises";
 import path from "node:path";
 
-import { presentationRoute, validateSiteBase, withSiteBase } from "./paths.mjs";
+import {
+    presentationPdfFilename,
+    presentationResourceRoute,
+    presentationRoute,
+    validateSiteBase,
+    withSiteBase,
+} from "./paths.mjs";
 
 export async function checkGeneratedSite({
     distRoot,
@@ -17,7 +23,18 @@ export async function checkGeneratedSite({
         ...registry.presentations.map(
             ({ id }) => `${presentationRoute(id).slice(1)}index.html`,
         ),
-        ...registry.resources.map(({ path: route }) => route.slice(1)),
+        ...registry.presentations.flatMap((presentation) => [
+            presentationResourceRoute(
+                presentation.id,
+                presentationPdfFilename(presentation.id),
+            ).slice(1),
+            ...presentation.resources.map((resource) =>
+                presentationResourceRoute(
+                    presentation.id,
+                    resource.filename,
+                ).slice(1),
+            ),
+        ]),
     ];
 
     for (const relative of required) {
@@ -53,7 +70,7 @@ export async function checkGeneratedSite({
             `Generated-site link check failed:\n- ${errors.join("\n- ")}`,
         );
     console.log(
-        `Generated-site links verified: ${files.length} files, ${registry.presentations.length} presentations, ${registry.resources.length} resources.`,
+        `Generated-site links verified: ${files.length} files, ${registry.presentations.length} presentations.`,
     );
 }
 

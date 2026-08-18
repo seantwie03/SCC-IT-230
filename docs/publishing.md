@@ -62,12 +62,13 @@ unregistered entry and never touches `dist/` or the landing page.
 
 Production operations are registry-driven. `pnpm build` generates the theme
 gallery and then runs `build:site`, which validates the complete registry,
-recreates `dist/`, generates the landing page, copies allowlisted resources,
-and builds each registered deck without presenter notes. The `build:theme` and
-`build:site` commands retain those focused build operations. `build:deck`
-accepts one registered ID for a focused production build. `export:pdf` also
-accepts one registered ID, but its PDF is an optional review artifact under
-`exports/`, not student-facing production output.
+recreates `dist/`, generates the landing page, and builds each registered deck
+without presenter notes. Each deck build also exports
+`SCC-IT-230-<id>.pdf` and copies declared presentation resources beneath
+`/<id>/resources/`. The `build:theme` and `build:site` commands retain those
+focused build operations. `build:deck` accepts one registered ID and produces
+the same web deck, supplemental PDF, and resources. `export:pdf` also accepts
+one registered ID, but writes a separate review copy under `exports/`.
 
 `pnpm preview` accepts no arguments. It first recreates the complete course-site
 production artifact, checks its required files and internal links, and then
@@ -152,9 +153,9 @@ artifacts are not committed. Pass one range such as
 creating or converting a PDF. Inspect the optional PDF only for visual export
 regressions when PDF behavior is under review.
 
-The complete `pnpm check` command includes the production gallery build. PDF
-export remains an explicit, optional visual-review command rather than part of
-the standard validation path or a student publication target.
+The complete `pnpm check` command includes the production gallery and course
+site builds, including the supplemental PDFs. The explicit `export:pdf`
+command remains available for focused PDF review outside production output.
 
 For course changes, review a focused entry on port 3131 at the 1920x1080 Zoom
 viewport, then review the landing page at desktop and narrow widths. Inspect
@@ -173,10 +174,8 @@ contrast, and color-independent meaning.
 The hosted browser presentation is the primary student-facing slide format.
 Review it at the desktop viewport used for Zoom screen sharing, and review the
 course site as a separate artifact. The supported Slidev exporter produces
-untagged PDFs, so standard PDF exports must not be included in published course
-output or described as accessible. If a future requirement calls for PDFs,
-remediate and validate them through a separate document-accessibility workflow
-before publication.
+untagged PDFs. Production publishes them only as supplemental downloads beside
+the primary browser presentations; do not describe the PDFs as accessible.
 
 ## Publication gates
 

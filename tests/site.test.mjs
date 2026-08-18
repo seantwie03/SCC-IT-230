@@ -19,6 +19,8 @@ import { createLandingPageDevServer } from "../scripts/lib/development.mjs";
 import { checkGeneratedSite } from "../scripts/lib/links.mjs";
 import {
     assertSafeGeneratedRoot,
+    presentationPdfFilename,
+    presentationResourceRoute,
     presentationRoute,
     validateSiteBase,
     withSiteBase,
@@ -42,15 +44,39 @@ test("production registry contains the reviewed publications", async () => {
         registry.presentations.map(({ id }) => id),
         ["w01"],
     );
-    assert.deepEqual(registry.resources, []);
+    assert.deepEqual(
+        registry.presentations[0].resources.map((resource) => ({
+            title: resource.title,
+            summary: resource.summary,
+            source: resource.source,
+            filename: resource.filename,
+        })),
+        [
+            {
+                title: "Output Redirection Exercise",
+                summary:
+                    "A hands-on exercise comparing the overwrite (>) and append (>>) redirection operators.",
+                source: "course/chapters/rh124-ch09-redirecting-shell-output/exercises/output-redirection-exercise.html",
+                filename: "output-redirection-exercise.html",
+            },
+        ],
+    );
 });
 
 test("valid fixture registry resolves its deck and resource", async () => {
     const registry = await validateRegistry(cloneFixture(), fixtureOptions);
     assert.equal(registry.presentations[0].id, "it230-integration");
     assert.equal(registry.presentations[0].accent, undefined);
+    assert.equal(Object.isFrozen(registry.presentations[0].resources), true);
     assert.match(registry.presentations[0].entryAbsolute, /example\.md$/);
-    assert.match(registry.resources[0].sourceAbsolute, /resource\.txt$/);
+    assert.equal(
+        registry.presentations[0].resources[0].filename,
+        "resource.txt",
+    );
+    assert.match(
+        registry.presentations[0].resources[0].sourceAbsolute,
+        /resource\.txt$/,
+    );
 });
 
 test("registry rejects duplicates and unsupported fields", async () => {
@@ -63,7 +89,11 @@ test("registry rejects duplicates and unsupported fields", async () => {
             { presentations: [], resources: [], private: [] },
             fixtureOptions,
         ),
-        /only presentations and resources/,
+        /only presentations/,
+    );
+    await assert.rejects(
+        validateRegistry({ presentations: [], resources: [] }, fixtureOptions),
+        /only presentations/,
     );
 
     const duplicate = cloneFixture();
@@ -99,22 +129,37 @@ test("registry rejects invalid IDs, entries, and resources", async () => {
         ],
         [
             (registry) =>
-                (registry.resources[0].path = "/resources/slides.pdf"),
-            /cannot publish a standard Slidev PDF/,
+                (registry.presentations[0].resources = "resource.txt"),
+            /resources must be an array/,
         ],
         [
             (registry) =>
-                (registry.resources[0].path = "/resources/%2e%2e/private.txt"),
-            /canonical lowercase file/,
+                (registry.presentations[0].resources[0].path = "resource.txt"),
+            /unsupported or missing fields/,
         ],
         [
             (registry) =>
-                (registry.resources[0].path = "/resources/file.txt?download"),
-            /canonical lowercase file/,
+                (registry.presentations[0].resources[0].source =
+                    "tests/fixtures/site/Resource.txt"),
+            /canonical lowercase filename/,
         ],
         [
-            (registry) => (registry.resources[0].source = "../private.txt"),
+            (registry) =>
+                (registry.presentations[0].resources[0].source =
+                    "tests/fixtures/site/scc-it-230-it230-integration.pdf"),
+            /collides with the generated PDF filename/,
+        ],
+        [
+            (registry) =>
+                (registry.presentations[0].resources[0].source =
+                    "../private.txt"),
             /not canonical/,
+        ],
+        [
+            (registry) =>
+                (registry.presentations[0].resources[0].source =
+                    "tests/fixtures/site"),
+            /not a file/,
         ],
     ];
 
@@ -126,6 +171,25 @@ test("registry rejects invalid IDs, entries, and resources", async () => {
             expected,
         );
     }
+
+    const duplicateResource = cloneFixture();
+    duplicateResource.presentations[0].resources.push({
+        ...duplicateResource.presentations[0].resources[0],
+    });
+    await assert.rejects(
+        validateRegistry(duplicateResource, fixtureOptions),
+        /Duplicate presentation 1 resource filename: resource\.txt/,
+    );
+
+    const sharedBasename = cloneFixture();
+    sharedBasename.presentations.push({
+        ...structuredClone(sharedBasename.presentations[0]),
+        id: "it230-integration-two",
+        title: "Second integration fixture",
+    });
+    await assert.doesNotReject(
+        validateRegistry(sharedBasename, fixtureOptions),
+    );
 });
 
 test("registry invokes the central accent and deck configuration validation", async () => {
@@ -143,7 +207,6 @@ test("registry invokes the central accent and deck configuration validation", as
                     topics: ["configuration"],
                 },
             ],
-            resources: [],
         };
         await writeFile(
             entry,
@@ -180,6 +243,11 @@ test("site bases and derived presentation routes stay deployment-independent", (
     assert.equal(validateSiteBase("/"), "/");
     assert.equal(validateSiteBase("/SCC-IT-230/"), "/SCC-IT-230/");
     assert.equal(presentationRoute("w01"), "/w01/");
+    assert.equal(presentationPdfFilename("w01"), "SCC-IT-230-w01.pdf");
+    assert.equal(
+        presentationResourceRoute("w01", "SCC-IT-230-w01.pdf"),
+        "/w01/resources/SCC-IT-230-w01.pdf",
+    );
     assert.equal(withSiteBase("/", presentationRoute("w01")), "/w01/");
     assert.equal(
         withSiteBase("/SCC-IT-230/", presentationRoute("w01")),
@@ -203,24 +271,30 @@ test("supported identifiers distinguish weeks and durable topics", () => {
 });
 
 test("landing-page template omits empty sections and renders registry materials", async () => {
-    const empty = await renderLandingPage(
-        { presentations: [], resources: [] },
-        "/",
-    );
-    assert.doesNotMatch(empty, /material-card/);
+    const empty = await renderLandingPage({ presentations: [] }, "/");
+    assert.doesNotMatch(empty, /presentation-card/);
     assert.doesNotMatch(empty, /publication-status/);
     assert.match(empty, /href="\.\/site\.css"/);
 
     assert.match(empty, /<main id="main-content">/);
     assert.match(empty, /Skip to course information/);
 
-    const populated = await renderLandingPage(fixtureRegistry, "/project/");
+    const populatedRegistry = await validateRegistry(
+        cloneFixture(),
+        fixtureOptions,
+    );
+    const populated = await renderLandingPage(populatedRegistry, "/project/");
     assert.match(populated, /href="\.\/site\.css"/);
     assert.match(populated, /href="\/project\/it230-integration\/"/);
     assert.match(
         populated,
-        /href="\/project\/resources\/integration-resource\.txt"/,
+        /href="\/project\/it230-integration\/resources\/SCC-IT-230-it230-integration\.pdf" download="SCC-IT-230-it230-integration\.pdf"/,
     );
+    assert.match(
+        populated,
+        /href="\/project\/it230-integration\/resources\/resource\.txt"/,
+    );
+    assert.doesNotMatch(populated, /id="resources-heading"/);
     assert.doesNotMatch(populated, /publication-status/);
     assert.doesNotMatch(populated, /IT230_[A-Z_]+/);
 });
@@ -275,7 +349,6 @@ test("landing-page development reloads validated registry changes", async () => 
 test("build outputs reject paths outside the generated root", () => {
     const unsafe = {
         presentations: [{ id: "../outside" }],
-        resources: [],
     };
     assert.throws(
         () => validateBuildOutputs(unsafe, path.join(root, "dist")),
@@ -358,7 +431,7 @@ test("generated link checker reports missing internal files", async () => {
         await assert.rejects(
             checkGeneratedSite({
                 distRoot: temporaryRoot,
-                registry: { presentations: [], resources: [] },
+                registry: { presentations: [] },
             }),
             /missing generated file/,
         );
@@ -382,7 +455,6 @@ async function writeLandingDevRegistry(file, title) {
                 topics: ["live reload"],
             },
         ],
-        resources: [],
     };
     await writeFile(file, `export default ${JSON.stringify(registry)};\n`);
 }

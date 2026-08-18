@@ -1,0 +1,400 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Exercise: Output Redirection vs. Append</title>
+        <style>
+            :root {
+                color-scheme: light;
+                --it230-color-canvas: #fafafb;
+                --it230-color-surface: #ffffff;
+                --it230-color-raised: #ebebed;
+                --it230-color-line: #b9b9bf;
+                --it230-color-text: #25252b;
+                --it230-color-muted: #55555b;
+                --it230-color-accent-text: #0461be;
+                --it230-color-accent-fill: #3584e4;
+                --it230-color-accent-wash: rgb(53 132 228 / 14%);
+                --it230-color-warning: #905400;
+                --it230-font-sans:
+                    "Lato", "Segoe UI", "Noto Sans", "Liberation Sans",
+                    sans-serif;
+                --it230-font-mono:
+                    "Cascadia Code", "JetBrains Mono", "Noto Sans Mono",
+                    "DejaVu Sans Mono", monospace;
+                --it230-radius-sm: 0.5rem;
+                --it230-radius-md: 0.75rem;
+                line-height: 1.6;
+                color: var(--it230-color-text);
+                background: var(--it230-color-canvas);
+            }
+
+            * {
+                box-sizing: border-box;
+            }
+
+            body {
+                margin: 0;
+                color: var(--it230-color-text);
+                background: var(--it230-color-canvas);
+                font-family: var(--it230-font-sans);
+                font-feature-settings:
+                    "liga" 0,
+                    "calt" 0;
+                font-variant-ligatures: none;
+                text-rendering: optimizeLegibility;
+            }
+
+            ::selection {
+                color: var(--it230-color-text);
+                background: color-mix(
+                    in srgb,
+                    var(--it230-color-accent-fill) 22%,
+                    white
+                );
+            }
+
+            :focus-visible {
+                outline: 0.18rem solid var(--it230-color-accent-fill);
+                outline-offset: 0.16rem;
+            }
+
+            .skip-link {
+                position: absolute;
+                top: 0.75rem;
+                left: 0.75rem;
+                z-index: 1;
+                padding: 0.65rem 0.9rem;
+                color: var(--it230-color-surface);
+                background: var(--it230-color-accent-text);
+                border-radius: var(--it230-radius-sm);
+                transform: translateY(-200%);
+            }
+
+            .skip-link:focus {
+                transform: translateY(0);
+            }
+
+            header,
+            main,
+            footer {
+                width: min(100% - 2rem, 52rem);
+                margin-inline: auto;
+            }
+
+            header {
+                padding-block: 4rem 2rem;
+                border-bottom: 0.25rem solid var(--it230-color-accent-fill);
+            }
+
+            header p {
+                margin: 0 0 0.5rem;
+                color: var(--it230-color-muted);
+                font-weight: 700;
+                letter-spacing: 0.04em;
+                text-transform: uppercase;
+            }
+
+            h1,
+            h2 {
+                line-height: 1.2;
+            }
+
+            h1 {
+                max-width: 18ch;
+                margin: 0;
+                font-size: clamp(2rem, 7vw, 3.25rem);
+            }
+
+            main {
+                padding-bottom: 2rem;
+            }
+
+            .overview {
+                padding-block: 2.5rem;
+                border-bottom: 1px solid var(--it230-color-line);
+            }
+
+            .overview h2,
+            .step h2 {
+                margin-top: 0;
+            }
+
+            .step h2 {
+                font-size: 1.45rem;
+            }
+
+            .requirements {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+                margin: 1.5rem 0;
+                border-block: 1px solid var(--it230-color-line);
+            }
+
+            .requirements div {
+                padding-block: 0.75rem;
+            }
+
+            .requirements dt {
+                color: var(--it230-color-muted);
+                font-weight: 700;
+            }
+
+            .requirements dd {
+                margin: 0.25rem 0 0;
+            }
+
+            .steps {
+                margin: 0;
+                padding: 0;
+                list-style: none;
+                counter-reset: exercise-step;
+            }
+
+            .step {
+                counter-increment: exercise-step;
+                padding-block: 2rem;
+                border-bottom: 1px solid var(--it230-color-line);
+            }
+
+            .step h2::before {
+                content: "Step " counter(exercise-step) ": ";
+                color: var(--it230-color-accent-text);
+            }
+
+            code,
+            kbd {
+                font-family: var(--it230-font-mono);
+                font-weight: 600;
+            }
+
+            code:not(pre code) {
+                color: var(--it230-color-accent-text);
+            }
+
+            kbd {
+                padding: 0.1rem 0.3rem;
+                color: var(--it230-color-text);
+                background: var(--it230-color-raised);
+                border: 1px solid var(--it230-color-line);
+                border-radius: 0.25rem;
+                box-shadow: 0 1px 0 var(--it230-color-line);
+            }
+
+            pre {
+                max-width: 100%;
+                padding: 1rem;
+                overflow-x: auto;
+                overflow-wrap: anywhere;
+                color: var(--it230-color-text);
+                background: var(--it230-color-surface);
+                border: 1px solid var(--it230-color-accent-fill);
+                border-radius: var(--it230-radius-md);
+                box-shadow: inset 0 1px 0 rgb(255 255 255 / 80%);
+                tab-size: 4;
+                white-space: pre-wrap;
+            }
+
+            pre code {
+                font-size: 0.95rem;
+            }
+
+            .note,
+            .warning {
+                margin-block: 1.5rem;
+                padding: 0.75rem 1rem;
+                border-left: 0.3rem solid;
+            }
+
+            .note {
+                background: var(--it230-color-accent-wash);
+                border-color: var(--it230-color-accent-fill);
+            }
+
+            .note strong {
+                color: var(--it230-color-accent-text);
+            }
+
+            .warning {
+                background: color-mix(
+                    in srgb,
+                    var(--it230-color-warning) 9%,
+                    var(--it230-color-canvas)
+                );
+                border-color: var(--it230-color-warning);
+            }
+
+            .warning strong {
+                color: var(--it230-color-warning);
+            }
+
+            .note strong,
+            .warning strong {
+                display: block;
+            }
+
+            footer {
+                padding-block: 1.5rem 2.5rem;
+                color: var(--it230-color-muted);
+            }
+
+            @media print {
+                :root {
+                    background: #ffffff;
+                }
+
+                .skip-link {
+                    display: none;
+                }
+
+                .step {
+                    break-inside: avoid;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <a class="skip-link" href="#main-content">Skip to exercise</a>
+
+        <header>
+            <p>IT-230 · Linux Administration</p>
+            <h1>Exercise: Output Redirection vs. Append</h1>
+        </header>
+
+        <main id="main-content">
+            <section class="overview" aria-labelledby="overview-heading">
+                <h2 id="overview-heading">Overview</h2>
+                <p>
+                    In this hands-on exercise, you will compare the overwrite
+                    operator (<code>&gt;</code>) with the append operator
+                    (<code>&gt;&gt;</code>). You will deliberately overwrite one
+                    file, then create a second file and add lines without
+                    replacing its existing content.
+                </p>
+
+                <dl class="requirements">
+                    <div>
+                        <dt>Target host</dt>
+                        <dd><code>servera</code></dd>
+                    </div>
+                    <div>
+                        <dt>Starting point</dt>
+                        <dd>A terminal on your lab workstation</dd>
+                    </div>
+                </dl>
+
+                <aside class="warning">
+                    <strong>Before you begin</strong>
+                    This exercise intentionally overwrites
+                    <code>evil_plan.md</code> and later removes both exercise
+                    files. Work in a directory where files with these names do
+                    not contain anything you need to keep.
+                </aside>
+            </section>
+
+            <ol class="steps">
+                <li class="step">
+                    <h2>Connect to the lab host</h2>
+                    <p>
+                        From your lab workstation, connect to
+                        <code>servera</code> and clear the terminal.
+                    </p>
+                    <pre><code>ssh servera
+clear</code></pre>
+                </li>
+
+                <li class="step">
+                    <h2>Create an important file</h2>
+                    <p>Open a new file in Vim.</p>
+                    <pre><code>vim evil_plan.md</code></pre>
+                    <p>
+                        Press <kbd>i</kbd> to enter Insert mode, then enter the
+                        following text. The omitted steps represented by
+                        <code>...</code> are part of the file for this exercise.
+                    </p>
+                    <pre><code>== Plan for World Domination! ==
+1. Make humanity reliant on AI by having students use AI to do their homework
+...
+13. Poison the training data for all new AIs
+...
+96. Become the supreme-leader of the world!</code></pre>
+                    <p>
+                        Press <kbd>Esc</kbd> to return to Normal mode. Type
+                        <kbd>:</kbd>, enter <code>wq</code>, and press
+                        <kbd>Enter</kbd> to write the file and quit Vim.
+                    </p>
+                </li>
+
+                <li class="step">
+                    <h2>Verify the file</h2>
+                    <p>
+                        Display the file and confirm that it contains your plan.
+                    </p>
+                    <pre><code>cat evil_plan.md</code></pre>
+                </li>
+
+                <li class="step">
+                    <h2>Redirect output with the overwrite operator</h2>
+                    <p>
+                        Try to add one last step by redirecting the output from
+                        <code>echo</code> with a single greater-than sign.
+                    </p>
+                    <pre><code>echo "97. Call mom and tell her the good news about world domination" &gt; evil_plan.md</code></pre>
+                    <p>Display the file again.</p>
+                    <pre><code>cat evil_plan.md</code></pre>
+                    <aside class="warning">
+                        <strong>What happened?</strong>
+                        The <code>&gt;</code> operator opened the destination
+                        for writing and replaced its previous contents. The file
+                        now contains only the final line.
+                    </aside>
+                </li>
+
+                <li class="step">
+                    <h2>Create a new file and append content</h2>
+                    <p>
+                        Start a second plan. Use <code>&gt;</code> once to
+                        create the file, then use <code>&gt;&gt;</code> to
+                        append the next two lines.
+                    </p>
+                    <pre><code>echo "== Eviler Plan for World Domination! ==" &gt; evil_plan-v2.md
+echo "1. Invent a &lt;Top Secret Information Redacted&gt;" &gt;&gt; evil_plan-v2.md
+echo "2. Use the &lt;Top Secret Information Redacted&gt; to poison the minds of &lt;Top Secret Information Redacted&gt;" &gt;&gt; evil_plan-v2.md</code></pre>
+                    <p>
+                        Display the second file and confirm that all three lines
+                        remain.
+                    </p>
+                    <pre><code>cat evil_plan-v2.md</code></pre>
+                </li>
+
+                <li class="step">
+                    <h2>Append one more line</h2>
+                    <p>
+                        Use <code>&gt;&gt;</code> again to add another line
+                        without replacing the existing plan.
+                    </p>
+                    <pre><code>echo "3. Call mom and tell her the good news about world domination" &gt;&gt; evil_plan-v2.md</code></pre>
+                    <p>Verify the result.</p>
+                    <pre><code>cat evil_plan-v2.md</code></pre>
+                    <aside class="note">
+                        <strong>Key idea</strong>
+                        Use <code>&gt;</code> when you intend to replace a
+                        file's contents. Use <code>&gt;&gt;</code> when you
+                        intend to add output after the file's existing contents.
+                    </aside>
+                </li>
+
+                <li class="step">
+                    <h2>Clean up</h2>
+                    <p>Remove both files created during the exercise.</p>
+                    <pre><code>rm evil_plan.md evil_plan-v2.md</code></pre>
+                </li>
+            </ol>
+        </main>
+
+        <footer>
+            <p>IT-230 · Linux Administration</p>
+        </footer>
+    </body>
+</html>

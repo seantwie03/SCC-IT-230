@@ -7,16 +7,14 @@ export default {
                 "A synthetic presentation used only to verify the build pipeline.",
             entry: "tests/fixtures/course/example.md",
             topics: ["named fragments", "local assets"],
-        },
-    ],
-    resources: [
-        {
-            id: "integration-resource",
-            title: "Integration resource",
-            summary:
-                "An original text fixture copied by the resource pipeline.",
-            source: "tests/fixtures/site/resource.txt",
-            path: "/resources/integration-resource.txt",
+            resources: [
+                {
+                    title: "Integration resource",
+                    summary:
+                        "An original text fixture copied by the resource pipeline.",
+                    source: "tests/fixtures/site/resource.txt",
+                },
+            ],
         },
     ],
 };

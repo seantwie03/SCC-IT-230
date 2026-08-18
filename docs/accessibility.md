@@ -4,8 +4,8 @@
 
 This repository adopts [Web Content Accessibility Guidelines (WCAG) 2.1](https://www.w3.org/TR/WCAG21/) Level
 AA as its minimum accessibility target for web-delivered presentations,
-course-site content, and generated course documents. Apply the target to both
-source decisions and the artifacts students use.
+course-site content, and student-facing HTML resources. Apply the target to
+both source decisions and the primary artifacts students use.
 
 WCAG conformance is a technical baseline, not a complete guarantee of equitable
 access. Authoring and publication review must also consider Zoom screen
@@ -61,6 +61,10 @@ The hosted browser presentation is the primary student-facing slide format and
 must pass the applicable accessibility review. The standard Slidev PDF exporter
 in the supported toolchain produces untagged PDFs. Selectable text and visual
 similarity to the browser presentation do not make an untagged PDF accessible.
+The build may publish that PDF as a supplemental download because the same
+course material remains available through the primary browser presentation.
+Do not describe the supplemental PDF itself as accessible or treat it as a
+replacement for the browser presentation.
 
 ## Responsibility boundaries
 

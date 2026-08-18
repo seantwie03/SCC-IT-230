@@ -5,6 +5,7 @@ import { renderLandingPage } from "../../site/render-template.mjs";
 import {
     assertContained,
     assertSafeGeneratedRoot,
+    presentationPdfFilename,
     presentationRoute,
     validateSiteBase,
     withSiteBase,
@@ -35,28 +36,14 @@ export async function buildRegisteredSite({
         writeFile(path.join(absoluteDist, "site.css"), styles),
     ]);
 
-    for (const resource of registry.resources) {
-        const output = outputs.resources.get(resource.id);
-        await mkdir(path.dirname(output), { recursive: true });
-        await copyFile(resource.sourceAbsolute, output);
-    }
-
     for (const presentation of registry.presentations) {
         const output = outputs.presentations.get(presentation.id);
-        await mkdir(path.dirname(output), { recursive: true });
-        await run(
-            "slidev",
-            [
-                "build",
-                presentation.entryAbsolute,
-                "--out",
-                output,
-                "--base",
-                withSiteBase(base, presentationRoute(presentation.id)),
-                "--without-notes",
-            ],
-            { cwd: absoluteRoot },
-        );
+        await buildPresentation({
+            presentation,
+            root: absoluteRoot,
+            output,
+            siteBase: base,
+        });
     }
 
     return { distRoot: absoluteDist, siteBase: base };
@@ -64,18 +51,56 @@ export async function buildRegisteredSite({
 
 export function validateBuildOutputs(registry, distRoot) {
     const presentations = new Map();
-    const resources = new Map();
 
     for (const presentation of registry.presentations) {
         const output = path.resolve(distRoot, presentation.id);
         assertContained(distRoot, output, `output for ${presentation.id}`);
         presentations.set(presentation.id, output);
     }
-    for (const resource of registry.resources) {
-        const output = path.resolve(distRoot, resource.path.slice(1));
-        assertContained(distRoot, output, `output for ${resource.id}`);
-        resources.set(resource.id, output);
-    }
 
-    return { presentations, resources };
+    return { presentations };
+}
+
+export async function buildPresentation({
+    presentation,
+    root,
+    output,
+    siteBase = "/",
+}) {
+    const base = validateSiteBase(siteBase);
+    await mkdir(path.dirname(output), { recursive: true });
+    await run(
+        "slidev",
+        [
+            "build",
+            presentation.entryAbsolute,
+            "--out",
+            output,
+            "--base",
+            withSiteBase(base, presentationRoute(presentation.id)),
+            "--without-notes",
+        ],
+        { cwd: root },
+    );
+
+    const resourcesRoot = path.join(output, "resources");
+    await mkdir(resourcesRoot, { recursive: true });
+    await run(
+        "slidev",
+        [
+            "export",
+            presentation.entryAbsolute,
+            "--output",
+            path.join(resourcesRoot, presentationPdfFilename(presentation.id)),
+        ],
+        { cwd: root },
+    );
+    await Promise.all(
+        presentation.resources.map((resource) =>
+            copyFile(
+                resource.sourceAbsolute,
+                path.join(resourcesRoot, resource.filename),
+            ),
+        ),
+    );
 }

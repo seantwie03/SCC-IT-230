@@ -66,6 +66,9 @@ async function assertFixtureOutput(output, siteBase) {
         );
     if (!landing.includes("Integration resource"))
         throw new Error("Landing page omitted the registered resource.");
+    const pdfRoute = `${siteBase}it230-integration/resources/SCC-IT-230-it230-integration.pdf`;
+    if (!landing.includes(`href="${pdfRoute}"`))
+        throw new Error(`Landing page omitted the PDF route ${pdfRoute}.`);
 
     const generated = (await readGeneratedText(output)).toUpperCase();
     for (const expected of [
@@ -82,10 +85,20 @@ async function assertFixtureOutput(output, siteBase) {
         );
     if (
         !(await fileExists(
-            path.join(output, "resources", "integration-resource.txt"),
+            path.join(output, "it230-integration", "resources", "resource.txt"),
         ))
     )
-        throw new Error("The allowlisted resource was not copied.");
+        throw new Error("The presentation-owned resource was not copied.");
+    const pdf = await readFile(
+        path.join(
+            output,
+            "it230-integration",
+            "resources",
+            "SCC-IT-230-it230-integration.pdf",
+        ),
+    );
+    if (pdf.subarray(0, 5).toString() !== "%PDF-")
+        throw new Error("The generated presentation PDF is invalid.");
     if (
         !generated.includes(
             "THREE CONNECTED NODES LABELED SOURCE, BUILD, AND SITE",

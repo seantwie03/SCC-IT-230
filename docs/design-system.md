@@ -17,6 +17,11 @@ restrained depth into presentation-scale choices. It is an original
 presentation system, not an exact reproduction of a particular GNOME or RHEL
 release and not an SCC or Red Hat brand treatment.
 
+The course landing page in `site/` uses the same fixed light tokens and font
+stacks. It adapts libadwaita's header-bar, document-text, boxed-list, card, and
+view patterns to semantic HTML while remaining a course website rather than
+simulating an application window.
+
 ## Design principles
 
 - Prioritize classroom readability over decorative density.

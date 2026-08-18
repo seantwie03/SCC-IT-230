@@ -1,6 +1,11 @@
 import { readFile } from "node:fs/promises";
 
-import { presentationRoute, withSiteBase } from "../scripts/lib/paths.mjs";
+import {
+    presentationPdfFilename,
+    presentationResourceRoute,
+    presentationRoute,
+    withSiteBase,
+} from "../scripts/lib/paths.mjs";
 
 const templateUrl = new URL("./index.html", import.meta.url);
 const MATERIAL_SECTIONS = "<!-- IT230_MATERIAL_SECTIONS -->";
@@ -8,49 +13,43 @@ const MATERIAL_SECTIONS = "<!-- IT230_MATERIAL_SECTIONS -->";
 export async function renderLandingPage(registry, siteBase = "/") {
     const template = await readFile(templateUrl, "utf8");
     const presentations = registry.presentations
-        .map(
-            (presentation) => `
-                    <li class="material-card">
+        .map((presentation) => {
+            const pdfFilename = presentationPdfFilename(presentation.id);
+            const resources = presentation.resources
+                .map(
+                    (resource) => `
+                                <li>
+                                    <a href="${withSiteBase(siteBase, presentationResourceRoute(presentation.id, resource.filename))}">${escapeHtml(resource.title)}</a>
+                                    <p>${escapeHtml(resource.summary)}</p>
+                                </li>`,
+                )
+                .join("");
+            return `
+                    <li class="presentation-card">
                         <h3><a href="${withSiteBase(siteBase, presentationRoute(presentation.id))}">${escapeHtml(presentation.title)}</a></h3>
                         <p>${escapeHtml(presentation.summary)}</p>
                         <p class="topics"><span>Topics:</span> ${presentation.topics.map(escapeHtml).join(", ")}</p>
-                    </li>`,
-        )
-        .join("");
-    const resources = registry.resources
-        .map(
-            (resource) => `
-                    <li class="material-card">
-                        <h3><a href="${withSiteBase(siteBase, resource.path)}">${escapeHtml(resource.title)}</a></h3>
-                        <p>${escapeHtml(resource.summary)}</p>
-                    </li>`,
-        )
+                        <div class="presentation-resources">
+                            <h4>Resources</h4>
+                            <ul>
+                                <li><a href="${withSiteBase(siteBase, presentationResourceRoute(presentation.id, pdfFilename))}" download="${pdfFilename}">Download PDF</a></li>${resources}
+                            </ul>
+                        </div>
+                    </li>`;
+        })
         .join("");
 
-    const materialSections = [
+    const materialSections =
         registry.presentations.length > 0
             ? `<section aria-labelledby="presentations-heading">
                 <div class="section-heading">
                     <p class="eyebrow">Presentations</p>
                     <h2 id="presentations-heading">Course presentations</h2>
                 </div>
-                <ul class="material-grid">${presentations}
+                <ul class="presentation-list">${presentations}
                 </ul>
             </section>`
-            : "",
-        registry.resources.length > 0
-            ? `<section aria-labelledby="resources-heading">
-                <div class="section-heading">
-                    <p class="eyebrow">Resources</p>
-                    <h2 id="resources-heading">Course resources</h2>
-                </div>
-                <ul class="material-grid">${resources}
-                </ul>
-            </section>`
-            : "",
-    ]
-        .filter(Boolean)
-        .join("\n");
+            : "";
 
     return replacePlaceholder(template, MATERIAL_SECTIONS, materialSections);
 }
