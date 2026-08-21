@@ -157,7 +157,10 @@ export function renderWeekSummary(view) {
                         <p class="week-kicker">${escapeHtml(weekLabel(view.id))}</p>
                         <h3><a href="${escapeHtml(view.overviewHref)}">${escapeHtml(view.title)}</a></h3>
                         <p>${escapeHtml(view.summary)}</p>
-                        <p class="week-summary-action"><a href="${escapeHtml(view.overviewHref)}">View ${escapeHtml(weekLabel(view.id))}</a></p>
+                        <div class="week-summary-actions">
+                            <a class="primary-action" href="${escapeHtml(view.overviewHref)}">Week overview</a>
+                            <a class="secondary-action" href="${escapeHtml(view.inClass.presentationAction.href)}" target="_blank" rel="noopener noreferrer" aria-label="Open presentation in a new tab">Open presentation</a>
+                        </div>
                     </li>`;
 }
 
@@ -167,6 +170,7 @@ export function renderWeeklyOverview(view, navigation) {
         ? `<section class="week-phase" aria-labelledby="${view.id}-before">
                         <p class="phase-label">${escapeHtml(view.beforeClass.label)}</p>
                         <h2 id="${view.id}-before">${escapeHtml(view.beforeClass.heading)}</h2>
+                        <p class="phase-pretext">${escapeHtml(view.beforeClass.preText)}</p>
                         <ul class="curriculum-list">${view.beforeClass.items.map((item) => `<li>${escapeHtml(item.text)}</li>`).join("")}</ul>
                     </section>`
         : "";
@@ -174,6 +178,7 @@ export function renderWeeklyOverview(view, navigation) {
         ? `<section class="week-phase" aria-labelledby="${view.id}-after">
                         <p class="phase-label">${escapeHtml(view.optionalReading.label)}</p>
                         <h2 id="${view.id}-after">${escapeHtml(view.optionalReading.heading)}</h2>
+                        <p class="phase-pretext">${escapeHtml(view.optionalReading.preText)}</p>
                         <ul class="curriculum-list">${view.optionalReading.items.map((item) => `<li>${escapeHtml(item.text)}</li>`).join("")}</ul>
                     </section>`
         : "";
@@ -197,6 +202,7 @@ export function renderWeeklyOverview(view, navigation) {
                             <a class="primary-action" href="${escapeHtml(view.inClass.presentationAction.href)}" target="_blank" rel="noopener noreferrer" aria-label="${escapeHtml(view.inClass.presentationAction.text)} in a new tab">${escapeHtml(view.inClass.presentationAction.text)}</a>
                             <a class="secondary-action" href="${escapeHtml(view.inClass.pdfAction.href)}" download="${escapeHtml(view.inClass.pdfAction.filename)}">${escapeHtml(view.inClass.pdfAction.text)}</a>
                         </div>
+                        <p class="phase-pretext">${escapeHtml(view.inClass.preText)}</p>
                         <ol class="agenda-list">${view.inClass.topics.map(renderAgendaTopic).join("")}</ol>
                     </section>
                     ${labs}

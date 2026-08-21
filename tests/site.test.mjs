@@ -369,9 +369,21 @@ test("weekly view owns shared instructional text and absolute destinations", asy
         view.beforeClass.items.map(({ text }) => text),
         ["RH124, Chapter 09: Redirecting Shell Output"],
     );
+    assert.equal(
+        view.beforeClass.preText,
+        "Review the following Red Hat Academy chapters and complete the Guided Exercises prior to class.",
+    );
+    assert.equal(
+        view.inClass.preText,
+        "In class we will cover the following topics",
+    );
     assert.deepEqual(
         view.optionalReading.items.map(({ text }) => text),
         ["Chapter 02: Using Essential Tools"],
+    );
+    assert.equal(
+        view.optionalReading.preText,
+        "Work through the following chapters in the RHCSA Cert Guide. Utilize the 'Do I know this already?' quiz at the start of each chapter to ensure you are using your study time effectively.",
     );
     assert.equal(
         view.inClass.presentationAction.href,
@@ -420,7 +432,14 @@ test("landing page stays compact and links to the weekly detail page", async () 
     const html = await renderLandingPage(catalog, "/project/");
     assert.match(html, /class="week-summary-card"/);
     assert.match(html, /href="\/project\/weeks\/w16\/"/);
-    assert.match(html, /View Week 16/);
+    assert.match(
+        html,
+        /class="primary-action" href="\/project\/weeks\/w16\/">Week overview<\/a>/,
+    );
+    assert.match(
+        html,
+        /class="secondary-action" href="\/project\/weeks\/w16\/slides\/" target="_blank" rel="noopener noreferrer" aria-label="Open presentation in a new tab">Open presentation<\/a>/,
+    );
     assert.doesNotMatch(html, /Meeting Agenda/);
     assert.doesNotMatch(html, /Integration Exercise/);
     assert.match(html, /--it230-color-accent-fill: #9141AC/);
@@ -456,6 +475,18 @@ test("weekly detail page is vertical, linked home, and navigates published weeks
     assert.match(html, /class="week-overview"/);
     assert.match(html, /<h1 id="w08-title">Week 08/);
     assert.match(html, /<h2 id="w08-agenda">Meeting Agenda<\/h2>/);
+    assert.match(
+        html,
+        /<h2 id="w08-before">Red Hat Academy<\/h2>\s*<p class="phase-pretext">Review the following Red Hat Academy chapters[^<]*<\/p>\s*<ul class="curriculum-list">/,
+    );
+    assert.match(
+        html,
+        /<h2 id="w08-agenda">Meeting Agenda<\/h2>\s*<div class="week-actions">[\s\S]*?<\/div>\s*<p class="phase-pretext">In class we will cover the following topics<\/p>\s*<ol class="agenda-list">/,
+    );
+    assert.match(
+        html,
+        /<h2 id="w08-after">RHCSA Cert Guide<\/h2>\s*<p class="phase-pretext">Work through the following chapters[^<]*<\/p>\s*<ul class="curriculum-list">/,
+    );
     assert.match(html, /<h2 id="w08-labs">Lab Assignments<\/h2>/);
     assert.match(html, /this week’s Canvas module/);
     assert.match(
@@ -496,6 +527,18 @@ test("Canvas fragment is absolute, semantic, and script-free", async () => {
     const html = renderCanvasFragment(view);
     assert.match(html, /<h2[^>]*>Week 16/);
     assert.match(html, /<h3[^>]*>Meeting Agenda<\/h3>/);
+    assert.match(
+        html,
+        /<h3[^>]*>Red Hat Academy<\/h3>\s*<p[^>]*>Review the following Red Hat Academy chapters[^<]*<\/p>\s*<ul>/,
+    );
+    assert.match(
+        html,
+        /<h3[^>]*>Meeting Agenda<\/h3>\s*<p><a[\s\S]*?<\/p>\s*<p[^>]*>In class we will cover the following topics<\/p>\s*<ol>/,
+    );
+    assert.match(
+        html,
+        /<h3[^>]*>RHCSA Cert Guide<\/h3>\s*<p[^>]*>Work through the following chapters[^<]*<\/p>\s*<ul>/,
+    );
     assert.match(html, /<h3[^>]*>Lab Assignments<\/h3>/);
     assert.match(html, /After class · Required/);
     assert.match(

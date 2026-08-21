@@ -34,16 +34,22 @@ root.
 ### Weekly overview
 
 The landing page is a compact list of published weeks. Each item shows only the
-week title, summary, and a link to its detail page so a full semester remains
-easy to scan. The landing page and weekly detail pages use the same content
-width. The sticky course number and title both link back to that list.
+week title, summary, and a two-action footer so a full semester remains easy to
+scan. The title and primary Week overview action open the detail page; the
+secondary Open presentation action launches Slidev in a new tab. The action row
+wraps on narrow screens. The landing page and weekly detail pages use the same
+content width. The sticky course number and title both link back to that list.
 
 Each detail page is one document-like weekly overview with neutral Before
 class, In class, required After class labs, and optional After class reading
 sections stacked vertically. Labels and semantic headings establish that
-sequence; color is reinforcement only. The lab phase always directs students
-to complete that week's assignments in Canvas and never embeds the labs in this
-repository. Keep it separate from the optional RHCSA Cert Guide phase. The
+sequence; color is reinforcement only. Instructional pretext beneath the Red
+Hat Academy and RHCSA Cert Guide headings explains the expected student action
+before the corresponding lists. Meeting Agenda pretext follows the presentation
+actions because it introduces the topic list rather than those controls. The lab
+phase always directs students to complete that week's assignments in Canvas and
+never embeds the labs in this repository. Keep it separate from the optional
+RHCSA Cert Guide phase. The
 browser presentation is the prominent action and the supplemental PDF is
 visually secondary. Agenda exercises remain grouped beneath their owning topic.
 Each agenda topic title is the deep link to that topic's opening slide, so

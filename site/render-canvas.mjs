@@ -15,6 +15,7 @@ export function renderCanvasFragment(view) {
         ? `<div style="margin-top: 24px; padding-top: 16px; border-top: 1px solid ${colors.line};">
     <p style="margin: 0 0 4px; color: ${colors.muted}; font-size: 14px; font-weight: 700; text-transform: uppercase;">${escapeHtml(view.beforeClass.label)}</p>
     <h3 style="margin: 0 0 12px; color: ${colors.text};">${escapeHtml(view.beforeClass.heading)}</h3>
+    <p style="margin: 0 0 12px;">${escapeHtml(view.beforeClass.preText)}</p>
     <ul>${view.beforeClass.items.map((item) => `<li>${escapeHtml(item.text)}</li>`).join("")}</ul>
 </div>`
         : "";
@@ -22,6 +23,7 @@ export function renderCanvasFragment(view) {
         ? `<div style="margin-top: 24px; padding-top: 16px; border-top: 1px solid ${colors.line};">
     <p style="margin: 0 0 4px; color: ${colors.muted}; font-size: 14px; font-weight: 700; text-transform: uppercase;">${escapeHtml(view.optionalReading.label)}</p>
     <h3 style="margin: 0 0 12px; color: ${colors.text};">${escapeHtml(view.optionalReading.heading)}</h3>
+    <p style="margin: 0 0 12px;">${escapeHtml(view.optionalReading.preText)}</p>
     <ul>${view.optionalReading.items.map((item) => `<li>${escapeHtml(item.text)}</li>`).join("")}</ul>
 </div>`
         : "";
@@ -40,6 +42,7 @@ export function renderCanvasFragment(view) {
         <p style="margin: 0 0 4px; color: ${colors.muted}; font-size: 14px; font-weight: 700; text-transform: uppercase;">${escapeHtml(view.inClass.label)}</p>
         <h3 style="margin: 0 0 12px; color: ${colors.text};">${escapeHtml(view.inClass.heading)}</h3>
         <p><a href="${escapeHtml(view.inClass.presentationAction.href)}" target="_blank" rel="noopener noreferrer" style="display: inline-block; margin-right: 12px; padding: 10px 16px; border-radius: 8px; color: #ffffff; background: ${colors.link}; font-weight: 700;">${escapeHtml(view.inClass.presentationAction.text)}</a> <a href="${escapeHtml(view.inClass.pdfAction.href)}" target="_blank" rel="noopener noreferrer" style="color: ${colors.link};">${escapeHtml(view.inClass.pdfAction.text)}</a></p>
+        <p style="margin: 0 0 12px;">${escapeHtml(view.inClass.preText)}</p>
         <ol>${view.inClass.topics.map(renderCanvasTopic).join("")}</ol>
     </div>
     ${labs}

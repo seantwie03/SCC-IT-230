@@ -247,9 +247,12 @@ h3 {
     color: var(--it230-color-muted);
 }
 
-.week-summary-card .week-summary-action {
-    font-size: 0.95rem;
-    font-weight: 700;
+.week-summary-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--it230-space-3);
+    margin-top: var(--it230-space-4);
 }
 
 .week-overview {
@@ -315,6 +318,11 @@ h3 {
     padding-left: var(--it230-space-3);
     border-left: 0.22rem solid var(--it230-color-accent-fill);
     font-size: clamp(1.35rem, 3vw, 1.65rem);
+}
+
+.phase-pretext {
+    max-width: 48rem;
+    margin: 0 0 var(--it230-space-4);
 }
 
 .week-actions {

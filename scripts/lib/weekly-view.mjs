@@ -10,8 +10,11 @@ import {
 const WEEKLY_TEXT = Object.freeze({
     academyLabel: "Before class",
     academyHeading: "Red Hat Academy",
+    academyPreText:
+        "Review the following Red Hat Academy chapters and complete the Guided Exercises prior to class.",
     agendaLabel: "In class",
     agendaHeading: "Meeting Agenda",
+    agendaPreText: "In class we will cover the following topics",
     presentationAction: "Open presentation",
     pdfAction: "Download Slides (PDF)",
     labsLabel: "After class · Required",
@@ -19,6 +22,8 @@ const WEEKLY_TEXT = Object.freeze({
     labsBody: "Complete the lab assignments in this week’s Canvas module.",
     certGuideLabel: "After class · Optional",
     certGuideHeading: "RHCSA Cert Guide",
+    certGuidePreText:
+        "Work through the following chapters in the RHCSA Cert Guide. Utilize the 'Do I know this already?' quiz at the start of each chapter to ensure you are using your study time effectively.",
 });
 
 export function buildWeeklyView(
@@ -39,6 +44,7 @@ export function buildWeeklyView(
                 ? {
                       label: WEEKLY_TEXT.academyLabel,
                       heading: WEEKLY_TEXT.academyHeading,
+                      preText: WEEKLY_TEXT.academyPreText,
                       items: presentation.academyChapters.map((chapter) => ({
                           text: `${chapter.course}, Chapter ${chapter.chapter}: ${chapter.title}`,
                       })),
@@ -47,6 +53,7 @@ export function buildWeeklyView(
         inClass: {
             label: WEEKLY_TEXT.agendaLabel,
             heading: WEEKLY_TEXT.agendaHeading,
+            preText: WEEKLY_TEXT.agendaPreText,
             presentationAction: {
                 text: WEEKLY_TEXT.presentationAction,
                 href: presentationHref,
@@ -82,6 +89,7 @@ export function buildWeeklyView(
                 ? {
                       label: WEEKLY_TEXT.certGuideLabel,
                       heading: WEEKLY_TEXT.certGuideHeading,
+                      preText: WEEKLY_TEXT.certGuidePreText,
                       items: presentation.certGuideChapters.map((chapter) => ({
                           text: `Chapter ${chapter.chapter}: ${chapter.title}`,
                       })),

@@ -129,9 +129,13 @@ template; each full weekly overview uses `site/week.html`; and each Canvas
 source utility uses `site/canvas.html`. One normalized weekly-view builder owns
 the shared instructional labels, prose, and destinations. The site and Canvas
 renderers consume that model, load their respective templates, and escape its
-catalog-derived text. A shared artifact generator is used by both production
-builds and course-site development so the two paths publish the same artifact
-types and honor the same base and public-origin configuration. Week detail
+catalog-derived text. Curriculum pretext appears immediately after its phase
+heading and before the associated list. Meeting Agenda pretext instead follows
+the presentation actions and directly introduces the topic list. Both surfaces
+use this ordering. A
+shared artifact generator is used by both production builds and course-site
+development so the two paths publish the same artifact types and honor the same
+base and public-origin configuration. Week detail
 pages place Before class, In class, and After class vertically and link to
 adjacent published weeks. Canvas utilities encode the generated fragment inside
 a read-only text area so the browser displays source instead of interpreting
