@@ -22,6 +22,71 @@ stacks. It adapts libadwaita's header-bar, document-text, boxed-list, card, and
 view patterns to semantic HTML while remaining a course website rather than
 simulating an application window.
 
+### Weekly overview
+
+The landing page is a compact list of published weeks. Each item shows only the
+week title, summary, and a link to its detail page so a full semester remains
+easy to scan. The landing page and weekly detail pages use the same content
+width. The sticky course number and title both link back to that list.
+
+Each detail page is one document-like weekly overview with neutral Before
+class, In class, required After class labs, and optional After class reading
+sections stacked vertically. Labels and semantic headings establish that
+sequence; color is reinforcement only. The lab phase always directs students
+to complete that week's assignments in Canvas and never embeds the labs in this
+repository. Keep it separate from the optional RHCSA Cert Guide phase. The
+browser presentation is the prominent action and the supplemental PDF is
+visually secondary. Agenda exercises remain grouped beneath their owning topic.
+Each agenda topic title is the deep link to that topic's opening slide, so
+there is no separate “Slides” row. Slide and presentation links open in a new
+tab so the weekly overview remains available while students use Slidev; the
+accessible name carries that behavior, so do not add a manual external-link
+icon. Previous week, All weeks, and Next week navigation follows published
+catalog order and omits an unavailable adjacent-week link.
+
+This document owns the heading map that `docs/accessibility.md` requires. On
+the landing page, materials use `h2` and week cards use `h3`. On a detail page,
+the week uses `h1`, phases use `h2`, and agenda topics use `h3`. Canvas
+supplies its page title outside the exported fragment, so the fragment uses
+week `h2`, phase `h3`, and agenda topic `h4`. Exercises are list items rather
+than a deeper heading level, and no surface skips a level.
+
+Each site's week overview inherits the accent selected by its deck. The central
+resolver in `packages/slidev-theme-it230/setup/accent.ts` supplies those CSS
+variables and the global blue fallback; `site/styles.css` must not duplicate
+the named palette. Before/In/After surfaces stay neutral so multiple phase
+colors do not compete with deck identity.
+
+### Exercise documents
+
+Standalone HTML exercises visually continue the weekly detail page. They use
+the same fixed light tokens, textured canvas gradient, `64rem` content width,
+sticky course header, responsive gutters, raised white document surface, and
+accent-gradient document header. The exercise overview and ordered steps stack
+inside that single surface with separators. Step headings use the same accent
+left rule as weekly phase headings, with a small numbered step label. Do not
+turn individual steps into cards; reserve inset treatments for code blocks,
+warnings, and notes. A single `← Back to week overview` link appears beneath
+the document surface instead of competing with the course identity in the
+sticky header. The landing page, weekly detail pages, and exercise documents
+all repeat the slide footer's rounded two-part rule: neutral on the left and
+fading into the active accent on the right.
+
+Exercise source uses the global blue accent as a direct-open fallback. Each
+published week injects its resolved fill, text, and wash properties after the
+source styles, allowing a reused exercise to match every importing week.
+Warning colors remain fixed and labels or structure continue to carry meaning
+without color.
+
+The Canvas fragment uses conservative semantic HTML and inline styles from the
+fixed IT-230 light palette. It does not depend on site classes, custom
+properties, scripts, or a style element, and it must remain understandable if
+Canvas strips the optional inline presentation. Its links also omit a manual
+external-link icon because Canvas renders its own. Its unlinked authoring
+utility uses the ordinary course-site theme, presents the encoded fragment in a
+labeled read-only text area, and provides a copy button with a
+keyboard-selectable fallback.
+
 ## Design principles
 
 - Prioritize classroom readability over decorative density.

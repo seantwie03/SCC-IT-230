@@ -30,7 +30,15 @@ export function validateSiteBase(value = "/") {
 }
 
 export function presentationRoute(id) {
-    return `/${id}/`;
+    return `${weekOverviewRoute(id)}slides/`;
+}
+
+export function weekOverviewRoute(id) {
+    return `/weeks/${id}/`;
+}
+
+export function canvasAuthoringRoute(id) {
+    return `${weekOverviewRoute(id)}canvas/`;
 }
 
 export function presentationPdfFilename(id) {
@@ -38,7 +46,7 @@ export function presentationPdfFilename(id) {
 }
 
 export function presentationResourceRoute(id, filename) {
-    return `${presentationRoute(id)}resources/${filename}`;
+    return `${weekOverviewRoute(id)}resources/${filename}`;
 }
 
 export function withSiteBase(siteBase, domainRelativePath) {

@@ -4,25 +4,22 @@ import {
     readFile,
     readdir,
     rm,
+    stat,
     writeFile,
 } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { buildRegisteredSite } from "./lib/build-site.mjs";
+import { buildPublishedSite } from "./lib/build-site.mjs";
 import { checkGeneratedSite } from "./lib/links.mjs";
-import { loadRegistry } from "./lib/registry.mjs";
+import { loadPresentationCatalog } from "./lib/presentations.mjs";
 
 const root = fileURLToPath(new URL("../", import.meta.url));
-const fixtureRoot = path.join(root, "tests", "fixtures", "site");
-const registry = await loadRegistry(
-    path.join(fixtureRoot, "slides.config.mjs"),
-    {
-        root,
-        courseRoot: "tests/fixtures/course",
-    },
-);
+const catalog = await loadPresentationCatalog({
+    root,
+    courseRoot: "tests/fixtures/course",
+});
 const temporaryRoot = await mkdtemp(path.join(tmpdir(), "it230-site-"));
 
 try {
@@ -31,14 +28,14 @@ try {
         const output = path.join(temporaryRoot, name, "dist");
         await mkdir(output, { recursive: true });
         await writeFile(path.join(output, "stale.txt"), "stale");
-        await buildRegisteredSite({
-            registry,
+        await buildPublishedSite({
+            catalog,
             root,
             distRoot: output,
             safetyRoot: path.join(temporaryRoot, name),
             siteBase,
         });
-        await checkGeneratedSite({ distRoot: output, registry, siteBase });
+        await checkGeneratedSite({ distRoot: output, catalog, siteBase });
         await assertFixtureOutput(output, siteBase);
         if (await fileExists(path.join(output, "stale.txt")))
             throw new Error("The production build retained stale output.");
@@ -55,7 +52,7 @@ try {
 
 async function assertFixtureOutput(output, siteBase) {
     const landing = await readFile(path.join(output, "index.html"), "utf8");
-    const expectedRoute = `${siteBase}it230-integration/`;
+    const expectedRoute = `${siteBase}weeks/w16/`;
     if (!landing.includes(`href="${expectedRoute}"`))
         throw new Error(
             `Landing page did not use expected route ${expectedRoute}.`,
@@ -64,11 +61,30 @@ async function assertFixtureOutput(output, siteBase) {
         throw new Error(
             "Landing page did not retain its relative stylesheet reference.",
         );
-    if (!landing.includes("Integration resource"))
-        throw new Error("Landing page omitted the registered resource.");
-    const pdfRoute = `${siteBase}it230-integration/resources/SCC-IT-230-it230-integration.pdf`;
-    if (!landing.includes(`href="${pdfRoute}"`))
-        throw new Error(`Landing page omitted the PDF route ${pdfRoute}.`);
+    if (landing.includes("Integration Exercise"))
+        throw new Error("Landing page included week-detail content.");
+    const detail = await readFile(
+        path.join(output, "weeks", "w16", "index.html"),
+        "utf8",
+    );
+    if (!detail.includes("Integration Exercise"))
+        throw new Error("Week detail page omitted the topic-owned exercise.");
+    const pdfRoute = `${siteBase}weeks/w16/resources/SCC-IT-230-w16.pdf`;
+    if (!detail.includes(`href="${pdfRoute}"`))
+        throw new Error(`Week detail page omitted the PDF route ${pdfRoute}.`);
+    const canvasPage = await readFile(
+        path.join(output, "weeks", "w16", "canvas", "index.html"),
+        "utf8",
+    );
+    if (!canvasPage.includes("Canvas authoring utility"))
+        throw new Error("Generated site omitted the Canvas authoring page.");
+    if (!canvasPage.includes("&lt;div"))
+        throw new Error("Canvas authoring page did not expose escaped HTML.");
+    const canvasSlideUrl =
+        "https://it230.systemsmetanow.tech" +
+        `${siteBase}weeks/w16/slides/#/named-fragment`;
+    if (!canvasPage.includes(canvasSlideUrl))
+        throw new Error("Canvas source omitted its absolute presentation URL.");
 
     const generated = (await readGeneratedText(output)).toUpperCase();
     for (const expected of [
@@ -85,17 +101,35 @@ async function assertFixtureOutput(output, siteBase) {
         );
     if (
         !(await fileExists(
-            path.join(output, "it230-integration", "resources", "resource.txt"),
+            path.join(
+                output,
+                "weeks",
+                "w16",
+                "resources",
+                "integration-exercise.html",
+            ),
         ))
     )
-        throw new Error("The presentation-owned resource was not copied.");
-    const pdf = await readFile(
+        throw new Error("The week-owned exercise was not copied.");
+    const exercise = await readFile(
         path.join(
             output,
-            "it230-integration",
+            "weeks",
+            "w16",
             "resources",
-            "SCC-IT-230-it230-integration.pdf",
+            "integration-exercise.html",
         ),
+        "utf8",
+    );
+    if (!exercise.includes("IT230_EXERCISE_FIXTURE_SENTINEL"))
+        throw new Error("The copied exercise did not contain its sentinel.");
+    if (
+        !exercise.includes("data-it230-week-accent") ||
+        !exercise.includes("#9141AC")
+    )
+        throw new Error("The generated exercise omitted its week accent.");
+    const pdf = await readFile(
+        path.join(output, "weeks", "w16", "resources", "SCC-IT-230-w16.pdf"),
     );
     if (pdf.subarray(0, 5).toString() !== "%PDF-")
         throw new Error("The generated presentation PDF is invalid.");
@@ -127,8 +161,7 @@ async function containsGeneratedAsset(rootDirectory, stem, extension) {
 
 async function fileExists(file) {
     try {
-        await readFile(file);
-        return true;
+        return (await stat(file)).isFile();
     } catch {
         return false;
     }

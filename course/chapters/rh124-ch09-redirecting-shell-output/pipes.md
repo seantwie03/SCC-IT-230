@@ -1,5 +1,15 @@
 ---
 layout: section
+routeAlias: pipe-operator
+topicInfo:
+  alignments:
+    redHatAcademy:
+      - course: RH124
+        chapter: "09"
+        title: Redirecting Shell Output
+    rhcsaCertGuide:
+      - chapter: "02"
+        title: Using Essential Tools
 ---
 
 # Pipe Operator

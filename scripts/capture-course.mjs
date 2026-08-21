@@ -5,7 +5,7 @@
  * `exports/course-review-png/` with that deck's rendered slides. Pass one
  * optional Slidev page range, for example
  * `pnpm run capture:course -- course/w01.md 1,4-7`, to export only selected
- * slides. Accepts a registered or unregistered `course/` entry, matching
+ * slides. Accepts a published or draft `course/` entry, matching
  * `pnpm dev`/`pnpm run review`; this is a review artifact, not a production
  * or supplemental-PDF export.
  *

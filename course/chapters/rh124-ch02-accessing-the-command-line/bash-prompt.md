@@ -1,5 +1,15 @@
 ---
 layout: section
+routeAlias: bash-prompt
+topicInfo:
+  alignments:
+    redHatAcademy:
+      - course: RH124
+        chapter: "02"
+        title: Accessing the Command Line
+    rhcsaCertGuide:
+      - chapter: "02"
+        title: Using Essential Tools
 ---
 
 # Bash Prompt

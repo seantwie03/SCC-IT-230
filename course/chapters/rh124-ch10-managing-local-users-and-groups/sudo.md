@@ -1,5 +1,15 @@
 ---
 layout: center
+routeAlias: sudo
+topicInfo:
+  alignments:
+    redHatAcademy:
+      - course: RH124
+        chapter: "10"
+        title: Managing Local Users and Groups
+    rhcsaCertGuide:
+      - chapter: "06"
+        title: User and Group Management
 ---
 
 # Sudo
@@ -216,4 +226,3 @@ bob@workstation:~$
 ````
 
 </TerminalWindow>
-

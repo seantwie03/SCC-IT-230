@@ -57,6 +57,25 @@ The repository uses WCAG 2.1 Level AA as its minimum acceptance target.
 - Preserve the same instructional information when content is delivered in
   more than one format.
 
+The course-site detail page and Canvas weekly overview are two renderings of
+one normalized content model. They must preserve the same summary, curriculum
+references, agenda order, descriptive section links, exercise grouping,
+required Canvas lab instruction, and destinations. The course landing page is
+intentionally a shorter discovery view containing each week's title and
+summary. The three surfaces share one semantic hierarchy of week, then phase,
+then agenda topic, but their literal heading levels are offset because each
+sits in a different host document and Canvas supplies its page title outside
+the pasted fragment. No surface may skip a level. `docs/design-system.md` owns
+the level-by-level map; change it there and mirror the result in every
+renderer. Agenda topic headings link directly to their opening slides, and
+their accessible names identify both the slide destination and new-tab
+behavior.
+Automated tests compare the ordered `{text, href}` pairs produced by the site
+and Canvas renderers after removing the required Canvas origin prefix. This
+guards their shared information and destination order, but does not replace
+manual review of either rendered result. The Canvas renderer also rejects any
+rendered destination that is not an absolute credential-free HTTPS URL.
+
 The hosted browser presentation is the primary student-facing slide format and
 must pass the applicable accessibility review. The standard Slidev PDF exporter
 in the supported toolchain produces untagged PDFs. Selectable text and visual
@@ -93,6 +112,14 @@ manual review as a required gate. For each applicable change:
    used for Zoom screen sharing.
 6. Inspect the course site at desktop and narrow viewports for meaningful
    reflow, readable text, intact links, and absence of horizontal overflow.
+   Include a representative standalone HTML exercise, verify its ordered-step
+   reading sequence, and confirm that the sticky course links and bottom
+   week-overview return link remain keyboard operable and visible at both
+   widths.
+7. For Canvas content, copy the fragment from the published authoring utility,
+   paste it into the Rich Content Editor, save it, reopen HTML view, and review
+   the retained result at desktop and narrow widths. Verify descriptive deep
+   links and compare its instructional content with the course-site overview.
 
 Record and resolve failures before publication. If a criterion cannot yet be
 reliably validated, document the limitation without treating it as a pass.

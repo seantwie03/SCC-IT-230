@@ -1,42 +1,71 @@
-import { copyFile, mkdir, readFile, rm, writeFile } from "node:fs/promises";
+import { mkdir, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 
-import { renderLandingPage } from "../../site/render-template.mjs";
+import { DEFAULT_PUBLIC_ORIGIN } from "./config.mjs";
 import {
     assertContained,
     assertSafeGeneratedRoot,
+    canvasAuthoringRoute,
     presentationPdfFilename,
     presentationRoute,
+    weekOverviewRoute,
     validateSiteBase,
     withSiteBase,
 } from "./paths.mjs";
 import { run } from "./process.mjs";
+import { renderPublishedArtifacts } from "./site-artifacts.mjs";
 
-export async function buildRegisteredSite({
-    registry,
+export async function buildPublishedSite({
+    catalog,
     root,
     distRoot,
     safetyRoot = root,
     siteBase = "/",
+    publicOrigin = DEFAULT_PUBLIC_ORIGIN,
 }) {
     const absoluteRoot = path.resolve(root);
     const absoluteDist = await assertSafeGeneratedRoot(distRoot, safetyRoot);
     const base = validateSiteBase(siteBase);
-    const outputs = validateBuildOutputs(registry, absoluteDist);
+    const outputs = validateBuildOutputs(catalog, absoluteDist);
+    const artifacts = await renderPublishedArtifacts({
+        catalog,
+        siteBase: base,
+        publicOrigin,
+    });
 
     await rm(absoluteDist, { force: true, recursive: true });
     await mkdir(absoluteDist, { recursive: true });
-
-    const [styles, landingPage] = await Promise.all([
-        readFile(path.join(absoluteRoot, "site", "styles.css"), "utf8"),
-        renderLandingPage(registry, base),
-    ]);
     await Promise.all([
-        writeFile(path.join(absoluteDist, "index.html"), landingPage),
-        writeFile(path.join(absoluteDist, "site.css"), styles),
+        writeFile(path.join(absoluteDist, "index.html"), artifacts.landingPage),
+        writeFile(path.join(absoluteDist, "site.css"), artifacts.styles),
+        ...catalog.presentations.map((presentation, index) => {
+            const output = outputs.presentations.get(presentation.id);
+            const week = artifacts.weeks[index];
+            return Promise.all([
+                mkdir(output.week, { recursive: true }).then(() =>
+                    writeFile(path.join(output.week, "index.html"), week.page),
+                ),
+                mkdir(output.canvas, { recursive: true }).then(() =>
+                    writeFile(
+                        path.join(output.canvas, "index.html"),
+                        week.canvasPage,
+                    ),
+                ),
+                mkdir(output.resources, { recursive: true }).then(() =>
+                    Promise.all(
+                        week.resources.map((resource) =>
+                            writeFile(
+                                path.join(output.resources, resource.filename),
+                                resource.html,
+                            ),
+                        ),
+                    ),
+                ),
+            ]);
+        }),
     ]);
 
-    for (const presentation of registry.presentations) {
+    for (const presentation of catalog.presentations) {
         const output = outputs.presentations.get(presentation.id);
         await buildPresentation({
             presentation,
@@ -49,13 +78,36 @@ export async function buildRegisteredSite({
     return { distRoot: absoluteDist, siteBase: base };
 }
 
-export function validateBuildOutputs(registry, distRoot) {
+export function validateBuildOutputs(catalog, distRoot) {
     const presentations = new Map();
 
-    for (const presentation of registry.presentations) {
-        const output = path.resolve(distRoot, presentation.id);
-        assertContained(distRoot, output, `output for ${presentation.id}`);
-        presentations.set(presentation.id, output);
+    for (const presentation of catalog.presentations) {
+        const week = path.resolve(
+            distRoot,
+            weekOverviewRoute(presentation.id).slice(1),
+        );
+        const slides = path.join(week, "slides");
+        const resources = path.join(week, "resources");
+        const canvas = path.resolve(
+            distRoot,
+            canvasAuthoringRoute(presentation.id).slice(1),
+        );
+        assertContained(distRoot, week, `week output for ${presentation.id}`);
+        assertContained(week, slides, `slide output for ${presentation.id}`);
+        assertContained(
+            week,
+            resources,
+            `resource output for ${presentation.id}`,
+        );
+        assertContained(
+            week,
+            canvas,
+            `Canvas authoring output for ${presentation.id}`,
+        );
+        presentations.set(
+            presentation.id,
+            Object.freeze({ week, slides, resources, canvas }),
+        );
     }
 
     return { presentations };
@@ -68,14 +120,14 @@ export async function buildPresentation({
     siteBase = "/",
 }) {
     const base = validateSiteBase(siteBase);
-    await mkdir(path.dirname(output), { recursive: true });
+    await mkdir(output.week, { recursive: true });
     await run(
         "slidev",
         [
             "build",
             presentation.entryAbsolute,
             "--out",
-            output,
+            output.slides,
             "--base",
             withSiteBase(base, presentationRoute(presentation.id)),
             "--without-notes",
@@ -83,24 +135,18 @@ export async function buildPresentation({
         { cwd: root },
     );
 
-    const resourcesRoot = path.join(output, "resources");
-    await mkdir(resourcesRoot, { recursive: true });
+    await mkdir(output.resources, { recursive: true });
     await run(
         "slidev",
         [
             "export",
             presentation.entryAbsolute,
             "--output",
-            path.join(resourcesRoot, presentationPdfFilename(presentation.id)),
+            path.join(
+                output.resources,
+                presentationPdfFilename(presentation.id),
+            ),
         ],
         { cwd: root },
-    );
-    await Promise.all(
-        presentation.resources.map((resource) =>
-            copyFile(
-                resource.sourceAbsolute,
-                path.join(resourcesRoot, resource.filename),
-            ),
-        ),
     );
 }

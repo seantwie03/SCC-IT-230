@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Exercise: Output Redirection vs. Append</title>
+        <title>Output and Redirection Exercise</title>
         <style>
             :root {
                 color-scheme: light;
@@ -23,8 +23,19 @@
                 --it230-font-mono:
                     "Cascadia Code", "JetBrains Mono", "Noto Sans Mono",
                     "DejaVu Sans Mono", monospace;
+                --it230-space-1: 0.25rem;
+                --it230-space-2: 0.5rem;
+                --it230-space-3: 0.75rem;
+                --it230-space-4: 1rem;
+                --it230-space-5: 1.5rem;
+                --it230-space-6: 2rem;
+                --it230-space-7: 3rem;
                 --it230-radius-sm: 0.5rem;
                 --it230-radius-md: 0.75rem;
+                --it230-radius-lg: 0.9375rem;
+                --it230-shadow-raised:
+                    0 0.125rem 0.25rem rgb(0 0 6 / 10%),
+                    0 1.2rem 3rem rgb(0 0 6 / 10%);
                 line-height: 1.6;
                 color: var(--it230-color-text);
                 background: var(--it230-color-canvas);
@@ -35,9 +46,26 @@
             }
 
             body {
+                min-width: 20rem;
                 margin: 0;
                 color: var(--it230-color-text);
-                background: var(--it230-color-canvas);
+                background:
+                    radial-gradient(
+                        circle at 95% 5%,
+                        var(--it230-color-accent-wash),
+                        transparent 40%
+                    ),
+                    radial-gradient(
+                            circle,
+                            rgb(0 0 6 / 2%) 0 0.035rem,
+                            transparent 0.04rem
+                        )
+                        0 0 / 0.22rem 0.22rem,
+                    linear-gradient(
+                        145deg,
+                        var(--it230-color-surface),
+                        #f5f6f8 72%
+                    );
                 font-family: var(--it230-font-sans);
                 font-feature-settings:
                     "liga" 0,
@@ -56,19 +84,32 @@
             }
 
             :focus-visible {
+                border-radius: var(--it230-radius-sm);
                 outline: 0.18rem solid var(--it230-color-accent-fill);
                 outline-offset: 0.16rem;
             }
 
+            a {
+                color: var(--it230-color-accent-text);
+                text-decoration: underline;
+                text-decoration-thickness: 0.08em;
+                text-underline-offset: 0.16em;
+            }
+
+            a:hover {
+                text-decoration-thickness: 0.14em;
+            }
+
             .skip-link {
-                position: absolute;
-                top: 0.75rem;
-                left: 0.75rem;
-                z-index: 1;
-                padding: 0.65rem 0.9rem;
-                color: var(--it230-color-surface);
-                background: var(--it230-color-accent-text);
+                position: fixed;
+                z-index: 10;
+                top: var(--it230-space-3);
+                left: var(--it230-space-3);
+                padding: var(--it230-space-3) var(--it230-space-4);
+                border: 1px solid var(--it230-color-line);
                 border-radius: var(--it230-radius-sm);
+                background: var(--it230-color-surface);
+                box-shadow: var(--it230-shadow-raised);
                 transform: translateY(-200%);
             }
 
@@ -76,24 +117,66 @@
                 transform: translateY(0);
             }
 
-            header,
+            .site-header {
+                position: sticky;
+                z-index: 5;
+                top: 0;
+                border-bottom: 1px solid var(--it230-color-line);
+                background: color-mix(
+                    in srgb,
+                    var(--it230-color-surface) 92%,
+                    transparent
+                );
+                box-shadow: 0 0.125rem 0.35rem rgb(0 0 6 / 8%);
+                backdrop-filter: blur(0.75rem);
+            }
+
+            .header-inner,
             main,
             footer {
-                width: min(100% - 2rem, 52rem);
+                width: min(64rem, calc(100% - 2rem));
                 margin-inline: auto;
             }
 
-            header {
-                padding-block: 4rem 2rem;
-                border-bottom: 0.25rem solid var(--it230-color-accent-fill);
+            .header-inner {
+                display: flex;
+                min-height: 3.5rem;
+                align-items: center;
+                gap: var(--it230-space-3);
             }
 
-            header p {
-                margin: 0 0 0.5rem;
-                color: var(--it230-color-muted);
-                font-weight: 700;
+            .header-inner p {
+                margin: 0;
+            }
+
+            .header-inner a {
+                color: inherit;
+                text-decoration: none;
+            }
+
+            .header-inner a:hover {
+                text-decoration: underline;
+            }
+
+            .course-code,
+            .course-code a {
+                color: var(--it230-color-accent-text);
+                font-weight: 800;
                 letter-spacing: 0.04em;
-                text-transform: uppercase;
+            }
+
+            .course-code {
+                display: flex;
+                align-items: center;
+            }
+
+            .course-code::after {
+                content: "";
+                display: inline-block;
+                width: 1px;
+                height: 1.1em;
+                margin-left: var(--it230-space-3);
+                background: var(--it230-color-line);
             }
 
             h1,
@@ -102,38 +185,66 @@
             }
 
             h1 {
-                max-width: 18ch;
+                max-width: 30ch;
                 margin: 0;
-                font-size: clamp(2rem, 7vw, 3.25rem);
+                font-size: clamp(2rem, 6vw, 3rem);
             }
 
             main {
-                padding-bottom: 2rem;
+                padding-block: clamp(2.1rem, 5.6vw, 3.85rem)
+                    var(--it230-space-7);
+                scroll-margin-top: 4rem;
+            }
+
+            .exercise-document {
+                overflow: hidden;
+                border: 1px solid var(--it230-color-line);
+                border-radius: var(--it230-radius-lg);
+                background: var(--it230-color-surface);
+                box-shadow: var(--it230-shadow-raised);
+            }
+
+            .exercise-header {
+                padding: clamp(1.5rem, 4vw, 2.25rem);
+                border-bottom: 0.25rem solid var(--it230-color-accent-fill);
+                background: linear-gradient(
+                    135deg,
+                    var(--it230-color-accent-wash),
+                    var(--it230-color-surface) 75%
+                );
+            }
+
+            .exercise-kicker {
+                margin: 0 0 var(--it230-space-2);
+                color: var(--it230-color-accent-text);
+                font-size: 0.82rem;
+                font-weight: 800;
+                letter-spacing: 0.06em;
+                text-transform: uppercase;
             }
 
             .overview {
-                padding-block: 2.5rem;
+                padding: var(--it230-space-5);
                 border-bottom: 1px solid var(--it230-color-line);
             }
 
             .overview h2,
             .step h2 {
-                margin-top: 0;
-            }
-
-            .step h2 {
-                font-size: 1.45rem;
+                margin: 0 0 var(--it230-space-4);
+                padding-left: var(--it230-space-3);
+                border-left: 0.22rem solid var(--it230-color-accent-fill);
+                font-size: clamp(1.35rem, 3vw, 1.65rem);
             }
 
             .requirements {
                 display: grid;
                 grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
-                margin: 1.5rem 0;
+                margin: var(--it230-space-5) 0;
                 border-block: 1px solid var(--it230-color-line);
             }
 
             .requirements div {
-                padding-block: 0.75rem;
+                padding-block: var(--it230-space-3);
             }
 
             .requirements dt {
@@ -154,13 +265,23 @@
 
             .step {
                 counter-increment: exercise-step;
-                padding-block: 2rem;
+                padding: var(--it230-space-5);
                 border-bottom: 1px solid var(--it230-color-line);
             }
 
+            .step:last-child {
+                border-bottom: 0;
+            }
+
             .step h2::before {
-                content: "Step " counter(exercise-step) ": ";
+                content: "Step " counter(exercise-step);
+                display: block;
+                margin-bottom: var(--it230-space-1);
                 color: var(--it230-color-accent-text);
+                font-size: 0.72rem;
+                font-weight: 800;
+                letter-spacing: 0.06em;
+                text-transform: uppercase;
             }
 
             code,
@@ -184,13 +305,13 @@
 
             pre {
                 max-width: 100%;
-                padding: 1rem;
+                padding: var(--it230-space-4);
                 overflow-x: auto;
                 overflow-wrap: anywhere;
                 color: var(--it230-color-text);
-                background: var(--it230-color-surface);
-                border: 1px solid var(--it230-color-accent-fill);
+                border: 1px solid var(--it230-color-line);
                 border-radius: var(--it230-radius-md);
+                background: #f7f7f8;
                 box-shadow: inset 0 1px 0 rgb(255 255 255 / 80%);
                 tab-size: 4;
                 white-space: pre-wrap;
@@ -202,8 +323,8 @@
 
             .note,
             .warning {
-                margin-block: 1.5rem;
-                padding: 0.75rem 1rem;
+                margin-block: var(--it230-space-5);
+                padding: var(--it230-space-3) var(--it230-space-4);
                 border-left: 0.3rem solid;
             }
 
@@ -234,9 +355,62 @@
                 display: block;
             }
 
+            .exercise-navigation {
+                margin-top: var(--it230-space-6);
+                padding-top: var(--it230-space-4);
+            }
+
+            .exercise-navigation a {
+                font-weight: 700;
+            }
+
             footer {
-                padding-block: 1.5rem 2.5rem;
+                padding-block: 0 var(--it230-space-7);
                 color: var(--it230-color-muted);
+            }
+
+            footer::before {
+                display: block;
+                width: 100%;
+                height: 0.125rem;
+                margin-bottom: 0.35rem;
+                border-radius: 999px;
+                background: linear-gradient(
+                    90deg,
+                    var(--it230-color-line) 0 52%,
+                    color-mix(
+                            in srgb,
+                            var(--it230-color-accent-fill) 25%,
+                            transparent
+                        )
+                        100%
+                );
+                content: "";
+            }
+
+            footer p {
+                margin: 0;
+            }
+
+            @media (max-width: 32rem) {
+                .header-inner,
+                main,
+                footer {
+                    width: min(100% - 1.5rem, 64rem);
+                }
+
+                .header-inner {
+                    min-height: 3.25rem;
+                }
+
+                .overview,
+                .step {
+                    padding: var(--it230-space-4);
+                }
+
+                h1 {
+                    overflow-wrap: anywhere;
+                }
             }
 
             @media print {
@@ -244,8 +418,23 @@
                     background: #ffffff;
                 }
 
-                .skip-link {
+                body {
+                    background: #ffffff;
+                }
+
+                .skip-link,
+                .site-header {
                     display: none;
+                }
+
+                main {
+                    width: 100%;
+                    padding: 0;
+                }
+
+                .exercise-document {
+                    border: 0;
+                    box-shadow: none;
                 }
 
                 .step {
@@ -257,140 +446,143 @@
     <body>
         <a class="skip-link" href="#main-content">Skip to exercise</a>
 
-        <header>
-            <p>IT-230 · Linux Administration</p>
-            <h1>Exercise: Output Redirection vs. Append</h1>
+        <header class="site-header">
+            <div class="header-inner">
+                <p class="course-code"><a href="../../../">IT-230</a></p>
+                <p class="course-title">
+                    <a href="../../../">Linux Administration</a>
+                </p>
+            </div>
         </header>
 
         <main id="main-content">
-            <section class="overview" aria-labelledby="overview-heading">
-                <h2 id="overview-heading">Overview</h2>
-                <p>
-                    In this hands-on exercise, you will compare the overwrite
-                    operator (<code>&gt;</code>) with the append operator
-                    (<code>&gt;&gt;</code>). You will deliberately overwrite one
-                    file, then create a second file and add lines without
-                    replacing its existing content.
-                </p>
+            <article class="exercise-document">
+                <header class="exercise-header">
+                    <p class="exercise-kicker">Exercise</p>
+                    <h1>Output and Redirection Exercise</h1>
+                </header>
 
-                <dl class="requirements">
-                    <div>
-                        <dt>Target host</dt>
-                        <dd><code>servera</code></dd>
-                    </div>
-                    <div>
-                        <dt>Starting point</dt>
-                        <dd>A terminal on your lab workstation</dd>
-                    </div>
-                </dl>
-
-                <aside class="warning">
-                    <strong>Before you begin</strong>
-                    This exercise intentionally overwrites
-                    <code>evil_plan.md</code> and later removes both exercise
-                    files. Work in a directory where files with these names do
-                    not contain anything you need to keep.
-                </aside>
-            </section>
-
-            <ol class="steps">
-                <li class="step">
-                    <h2>Connect to the lab host</h2>
+                <section class="overview" aria-labelledby="overview-heading">
+                    <h2 id="overview-heading">Overview</h2>
                     <p>
-                        From your lab workstation, connect to
-                        <code>servera</code> and clear the terminal.
+                        In this hands-on exercise, you will compare the
+                        overwrite operator (<code>&gt;</code>) with the append
+                        operator (<code>&gt;&gt;</code>). You will deliberately
+                        overwrite one file, then create a second file and add
+                        lines without replacing its existing content.
                     </p>
-                    <pre><code>ssh servera
-clear</code></pre>
-                </li>
 
-                <li class="step">
-                    <h2>Create an important file</h2>
-                    <p>Open a new file in Vim.</p>
-                    <pre><code>vim evil_plan.md</code></pre>
-                    <p>
-                        Press <kbd>i</kbd> to enter Insert mode, then enter the
-                        following text. The omitted steps represented by
-                        <code>...</code> are part of the file for this exercise.
-                    </p>
-                    <pre><code>== Plan for World Domination! ==
+                    <dl class="requirements">
+                        <div>
+                            <dt>Target host</dt>
+                            <dd><code>servera</code></dd>
+                        </div>
+                    </dl>
+                </section>
+
+                <ol class="steps">
+                    <li class="step">
+                        <h2>Connect to the lab host</h2>
+                        <p>
+                            From your lab workstation, connect to
+                            <code>servera</code> and clear the terminal.
+                        </p>
+                        <pre><code>ssh student@servera</code></pre>
+                    </li>
+
+                    <li class="step">
+                        <h2>Create an important file</h2>
+                        <p>Open a new file in Vim.</p>
+                        <pre><code>vim evil_plan.md</code></pre>
+                        <p>
+                            Press <kbd>i</kbd> to enter Insert mode, then enter
+                            the following text.
+                        </p>
+                        <pre><code>== Plan for World Domination! ==
 1. Make humanity reliant on AI by having students use AI to do their homework
 ...
 13. Poison the training data for all new AIs
 ...
 96. Become the supreme-leader of the world!</code></pre>
-                    <p>
-                        Press <kbd>Esc</kbd> to return to Normal mode. Type
-                        <kbd>:</kbd>, enter <code>wq</code>, and press
-                        <kbd>Enter</kbd> to write the file and quit Vim.
-                    </p>
-                </li>
+                        <p>
+                            Press <kbd>Esc</kbd> to return to Normal mode. Type
+                            <kbd>:</kbd>, enter <code>wq</code>, and press
+                            <kbd>Enter</kbd> to write the file and quit Vim.
+                        </p>
+                    </li>
 
-                <li class="step">
-                    <h2>Verify the file</h2>
-                    <p>
-                        Display the file and confirm that it contains your plan.
-                    </p>
-                    <pre><code>cat evil_plan.md</code></pre>
-                </li>
+                    <li class="step">
+                        <h2>Verify the file</h2>
+                        <p>
+                            Display the file and confirm that it contains your
+                            plan.
+                        </p>
+                        <pre><code>cat evil_plan.md</code></pre>
+                    </li>
 
-                <li class="step">
-                    <h2>Redirect output with the overwrite operator</h2>
-                    <p>
-                        Try to add one last step by redirecting the output from
-                        <code>echo</code> with a single greater-than sign.
-                    </p>
-                    <pre><code>echo "97. Call mom and tell her the good news about world domination" &gt; evil_plan.md</code></pre>
-                    <p>Display the file again.</p>
-                    <pre><code>cat evil_plan.md</code></pre>
-                    <aside class="warning">
-                        <strong>What happened?</strong>
-                        The <code>&gt;</code> operator opened the destination
-                        for writing and replaced its previous contents. The file
-                        now contains only the final line.
-                    </aside>
-                </li>
+                    <li class="step">
+                        <h2>Redirect output with the overwrite operator</h2>
+                        <p>
+                            Try to add one last step by redirecting the output
+                            from
+                            <code>echo</code> with a single greater-than sign.
+                        </p>
+                        <pre><code>echo "97. Call mom and tell her the good news about world domination" &gt; evil_plan.md</code></pre>
+                        <p>Display the file again.</p>
+                        <pre><code>cat evil_plan.md</code></pre>
+                        <aside class="warning">
+                            <strong>What happened?</strong>
+                            The <code>&gt;</code> operator opened the
+                            destination for writing and replaced its previous
+                            contents. The file now contains only the final line.
+                        </aside>
+                    </li>
 
-                <li class="step">
-                    <h2>Create a new file and append content</h2>
-                    <p>
-                        Start a second plan. Use <code>&gt;</code> once to
-                        create the file, then use <code>&gt;&gt;</code> to
-                        append the next two lines.
-                    </p>
-                    <pre><code>echo "== Eviler Plan for World Domination! ==" &gt; evil_plan-v2.md
+                    <li class="step">
+                        <h2>Create a new file and append content</h2>
+                        <p>
+                            Start a second plan. Use <code>&gt;</code> once to
+                            create the file, then use <code>&gt;&gt;</code> to
+                            append the next two lines.
+                        </p>
+                        <pre><code>echo "== Eviler Plan for World Domination! ==" &gt; evil_plan-v2.md
 echo "1. Invent a &lt;Top Secret Information Redacted&gt;" &gt;&gt; evil_plan-v2.md
 echo "2. Use the &lt;Top Secret Information Redacted&gt; to poison the minds of &lt;Top Secret Information Redacted&gt;" &gt;&gt; evil_plan-v2.md</code></pre>
-                    <p>
-                        Display the second file and confirm that all three lines
-                        remain.
-                    </p>
-                    <pre><code>cat evil_plan-v2.md</code></pre>
-                </li>
+                        <p>
+                            Display the second file and confirm that all three
+                            lines remain.
+                        </p>
+                        <pre><code>cat evil_plan-v2.md</code></pre>
+                    </li>
 
-                <li class="step">
-                    <h2>Append one more line</h2>
-                    <p>
-                        Use <code>&gt;&gt;</code> again to add another line
-                        without replacing the existing plan.
-                    </p>
-                    <pre><code>echo "3. Call mom and tell her the good news about world domination" &gt;&gt; evil_plan-v2.md</code></pre>
-                    <p>Verify the result.</p>
-                    <pre><code>cat evil_plan-v2.md</code></pre>
-                    <aside class="note">
-                        <strong>Key idea</strong>
-                        Use <code>&gt;</code> when you intend to replace a
-                        file's contents. Use <code>&gt;&gt;</code> when you
-                        intend to add output after the file's existing contents.
-                    </aside>
-                </li>
+                    <li class="step">
+                        <h2>Append one more line</h2>
+                        <p>
+                            Use <code>&gt;&gt;</code> again to add another line
+                            without replacing the existing plan.
+                        </p>
+                        <pre><code>echo "3. Call mom and tell her the good news about world domination" &gt;&gt; evil_plan-v2.md</code></pre>
+                        <p>Verify the result.</p>
+                        <pre><code>cat evil_plan-v2.md</code></pre>
+                        <aside class="note">
+                            <strong>Key idea</strong>
+                            Use <code>&gt;</code> when you intend to replace a
+                            file's contents. Use <code>&gt;&gt;</code> when you
+                            intend to add output after the file's existing
+                            contents.
+                        </aside>
+                    </li>
 
-                <li class="step">
-                    <h2>Clean up</h2>
-                    <p>Remove both files created during the exercise.</p>
-                    <pre><code>rm evil_plan.md evil_plan-v2.md</code></pre>
-                </li>
-            </ol>
+                    <li class="step">
+                        <h2>Clean up</h2>
+                        <p>Remove both files created during the exercise.</p>
+                        <pre><code>rm evil_plan.md evil_plan-v2.md</code></pre>
+                    </li>
+                </ol>
+            </article>
+            <nav class="exercise-navigation" aria-label="Exercise navigation">
+                <a href="../">← Back to week overview</a>
+            </nav>
         </main>
 
         <footer>

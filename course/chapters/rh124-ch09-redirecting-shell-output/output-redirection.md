@@ -1,5 +1,18 @@
 ---
 layout: section
+routeAlias: output-redirection
+topicInfo:
+  alignments:
+    redHatAcademy:
+      - course: RH124
+        chapter: "09"
+        title: Redirecting Shell Output
+    rhcsaCertGuide:
+      - chapter: "02"
+        title: Using Essential Tools
+  exercises:
+    - title: Output and Redirection Exercise
+      source: ./exercises/output-redirection-exercise.html
 ---
 
 # Output Redirection

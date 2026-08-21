@@ -1,9 +1,10 @@
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { buildRegisteredSite } from "./lib/build-site.mjs";
+import { buildPublishedSite } from "./lib/build-site.mjs";
 import { requireNoArguments, userArguments } from "./lib/arguments.mjs";
-import { loadRegistry } from "./lib/registry.mjs";
+import { siteConfiguration } from "./lib/config.mjs";
+import { loadPresentationCatalog } from "./lib/presentations.mjs";
 
 requireNoArguments(
     userArguments(process.argv.slice(2)),
@@ -11,12 +12,10 @@ requireNoArguments(
 );
 
 const root = fileURLToPath(new URL("../", import.meta.url));
-const registry = await loadRegistry(path.join(root, "slides.config.mjs"), {
-    root,
-});
-await buildRegisteredSite({
-    registry,
+const catalog = await loadPresentationCatalog({ root });
+await buildPublishedSite({
+    catalog,
     root,
     distRoot: path.join(root, "dist"),
-    siteBase: process.env.IT230_SITE_BASE ?? "/",
+    ...siteConfiguration(),
 });

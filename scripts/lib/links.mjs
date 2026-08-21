@@ -2,16 +2,20 @@ import { readFile, readdir, stat } from "node:fs/promises";
 import path from "node:path";
 
 import {
+    canvasAuthoringRoute,
     presentationPdfFilename,
     presentationResourceRoute,
     presentationRoute,
+    weekOverviewRoute,
     validateSiteBase,
     withSiteBase,
 } from "./paths.mjs";
 
+const CHECKED_TEXT_EXTENSIONS = new Set([".css", ".html"]);
+
 export async function checkGeneratedSite({
     distRoot,
-    registry,
+    catalog,
     siteBase = "/",
 }) {
     const absoluteDist = path.resolve(distRoot);
@@ -20,10 +24,16 @@ export async function checkGeneratedSite({
     const required = [
         "index.html",
         "site.css",
-        ...registry.presentations.map(
+        ...catalog.presentations.map(
+            ({ id }) => `${weekOverviewRoute(id).slice(1)}index.html`,
+        ),
+        ...catalog.presentations.map(
+            ({ id }) => `${canvasAuthoringRoute(id).slice(1)}index.html`,
+        ),
+        ...catalog.presentations.map(
             ({ id }) => `${presentationRoute(id).slice(1)}index.html`,
         ),
-        ...registry.presentations.flatMap((presentation) => [
+        ...catalog.presentations.flatMap((presentation) => [
             presentationResourceRoute(
                 presentation.id,
                 presentationPdfFilename(presentation.id),
@@ -45,7 +55,7 @@ export async function checkGeneratedSite({
     const files = await listFiles(absoluteDist);
     for (const relative of files) {
         const extension = path.extname(relative).toLowerCase();
-        if (!new Set([".css", ".html"]).has(extension)) continue;
+        if (!CHECKED_TEXT_EXTENSIONS.has(extension)) continue;
         const source = await readFile(
             path.join(absoluteDist, relative),
             "utf8",
@@ -70,7 +80,7 @@ export async function checkGeneratedSite({
             `Generated-site link check failed:\n- ${errors.join("\n- ")}`,
         );
     console.log(
-        `Generated-site links verified: ${files.length} files, ${registry.presentations.length} presentations.`,
+        `Generated-site links verified: ${files.length} files, ${catalog.presentations.length} presentations.`,
     );
 }
 

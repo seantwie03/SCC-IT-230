@@ -39,29 +39,95 @@ theme: it230
 themeConfig:
   it230Accent: teal
 routerMode: hash
-title: IT-230 — Week 01
+title: Week 01 — Course Introduction and Command-Line Refresher
+courseInfo:
+  summary: >-
+    Hello! This week we will review the course and practice Linux fundamentals.
 ---
 ```
 
 Use `pnpm dev -- course/<entry>.md` for focused authoring and
 `pnpm run review -- course/<entry>.md` for agent review. These commands may
-open an incomplete, unregistered deck without publishing it.
+open an incomplete draft without publishing it.
 
-Add a deck to `slides.config.mjs` only after it is ready to be public. A
-presentation registry entry contains:
+A root-level filename from `course/w01.md` through `course/w16.md` publishes
+that week. Keep unfinished work under a noncanonical name such as
+`course/w02-draft.md`; rename it to `course/w02.md` only after publication
+review. The filename supplies the ID and stable route. Do not author an ID,
+public route, agenda, resource path, or publication flag.
 
-- `id`: `w01` through `w16`, or a durable lowercase topic ID beginning with
-  `it230-`, `rh124-`, or `rh134-`. The site derives its stable `/<id>/` route
-  from this value.
-- `title` and `summary`: student-facing landing-page text.
-- `entry`: the canonical repository-relative Markdown path beneath `course/`.
-- `topics`: a non-empty list of concise student-facing topic labels.
-- `resources` (optional): files owned by this presentation. Each entry contains
-  student-facing `title` and `summary` text plus a repository-relative `source`.
+Every canonical week requires a trimmed `title` and a namespaced `courseInfo`
+object containing only a trimmed student-facing `summary`. Keep the accent in
+deck headmatter. The weekly file remains a concise composition document: its
+resolved topic imports supply the rest of the weekly overview.
 
-Do not add a `published` flag, semester-specific route, migration status,
-reviewer name, private source location, or private note. Registry membership
-itself means the deck is publishable. Keep the accent in deck headmatter.
+The title becomes the deck document title, the landing-page card heading, and
+the detail page's `h1`, so write it as `Week NN — <descriptive topic>` rather
+than repeating the course code.
+
+### Topic publishing metadata
+
+Put `topicInfo` in the frontmatter of the slide that opens an agenda topic,
+normally its `layout: section` slide. Never put it on the weekly `src` import
+block because Slidev applies import-block frontmatter to every imported slide.
+Any slide layout is valid, but the slide needs a student-facing heading (or a
+frontmatter `title`) and a unique stable `routeAlias` such as
+`output-redirection`.
+
+```yaml
+---
+layout: section
+routeAlias: output-redirection
+topicInfo:
+  alignments:
+    redHatAcademy:
+      - course: RH124
+        chapter: "09"
+        title: Redirecting Shell Output
+    rhcsaCertGuide:
+      - chapter: "02"
+        title: Using Essential Tools
+  exercises:
+    - title: Output and Redirection Exercise
+      source: ./exercises/output-redirection-exercise.html
+---
+```
+
+Use `topicInfo: {}` for an agenda topic with no alignment or exercise. Declare
+curriculum explicitly rather than inferring it from a directory name. Academy
+courses are `RH124` or `RH134`; every chapter is a quoted two-digit string.
+Repeated identical alignments are de-duplicated across the week, while
+conflicting titles for the same course and chapter fail validation. Resolved
+topic order supplies the meeting agenda, independently of curriculum sorting.
+
+Exercise declarations contain only `title` and `source`. The source is relative
+to the declaring fragment, must be an existing nonsymlinked lowercase
+`-exercise.html` file inside that topic's `exercises/` directory, and is
+published beneath each importing week's `/weeks/<id>/resources/` directory. Do
+not specify a public path or rely on automatic directory scanning.
+
+By convention, end the title with `Exercise`, because the title becomes the
+complete student-facing link text with no surrounding words. Validation does
+not enforce this, so review it rather than relying on a failed build.
+
+Treat each HTML exercise as a standalone student document. Its document title
+and `h1` must match the declared exercise title. Use one semantic overview
+followed by an ordered sequence of steps; warnings and notes supplement that
+sequence instead of replacing it. Include the standard course header links
+to `../../../`, relative to the published `/weeks/<id>/resources/` location.
+After the exercise document, include a clearly labeled
+`← Back to week overview` link to `../`.
+
+Exercise documents must include a closing `</head>` tag because the publisher
+injects the importing week's accent variables immediately before it. Catalog
+validation reads and checks every declared exercise before a production build
+removes or replaces generated output, and the development server applies the
+same validation before publishing a reload.
+
+Exercise source defines the global blue accent as its fallback so it remains
+usable when opened directly. Do not select a week accent in the exercise. The
+site build injects the importing week's resolved accent variables into each
+published copy.
 
 ## Fragments
 
@@ -282,13 +348,9 @@ Asciinema recording with
 keeping the recording visually consistent with the theme's light terminal surface.
 
 Assets consumed only by a presentation stay with the owning topic and are
-processed by Slidev. A standalone downloadable resource must be listed in its
-presentation's optional `resources` array with student-facing `title`,
-`summary`, and `source` fields. Its source must remain inside this repository
-and have a unique canonical lowercase basename within that presentation. The
-build publishes it beneath `/<id>/resources/` using the source basename; authors
-do not specify a public path. The generated presentation PDF shares this
-directory but does not require a registry entry.
+processed by Slidev. Student-facing exercise documents use the `topicInfo`
+contract above and publish under the importing week's `resources/` directory.
+The generated presentation PDF shares that directory automatically.
 
 ## Accessibility
 

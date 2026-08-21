@@ -14,7 +14,7 @@ presentations and theme changes to be validated together.
 
 ## Toolchain contract
 
-The project supports the Node.js. `package.json` is the
+The project supports the Node.js 24 release line. `package.json` is the
 authoritative runtime declaration, and `.nvmrc` is a convenience for local
 version managers. The exact pnpm release is declared by `packageManager` in
 `package.json`.
@@ -60,77 +60,125 @@ and are not committed.
   project.
 - `packages/slidev-theme-it230/` contains shared presentation styling,
   layouts, components, its focused gallery, and theme-specific validation.
-- `site/` contains the student-facing course-index HTML template, its
-  build-time renderer, and its stylesheet.
+- `site/` contains the landing, weekly-detail, and Canvas-authoring HTML
+  templates, the site and Canvas build-time renderers, and the stylesheet.
 - `scripts/` contains deterministic repository-wide operations.
 - `docs/` contains enduring maintainer documentation.
 
-## Presentation registry
+## Presentation discovery and catalog
 
-`slides.config.mjs` is the public registry of presentations. It supplies the
-metadata used by development commands, production builds, validation, and the
-course site. A presentation is not published merely because a Markdown file
-exists; it must have a valid registry entry.
+A root-level file named `course/w01.md` through `course/w16.md` is a published
+week. Discovery is nonrecursive and matches only that canonical form;
+`course/w02-draft.md` and Markdown beneath `course/chapters/` remain
+unpublished. The week ID is derived from the filename and supplies the stable
+`/weeks/<id>/` overview route. Its presentation, resources, and Canvas
+authoring utility are siblings at `/weeks/<id>/slides/`,
+`/weeks/<id>/resources/`, and `/weeks/<id>/canvas/`. Renaming a reviewed draft
+to its canonical filename is the publication decision, and removing that
+canonical file unpublishes it on the next complete build.
 
-Every presentation entry contains `id`, `title`, `summary`, `entry`, and
-`topics`, plus an optional `resources` array. Week IDs use `w01` through `w16`;
-durable topic IDs use an `it230-`, `rh124-`, or `rh134-` prefix. The build derives the canonical route
-from the ID as a domain-relative directory, such as `/w01/`. The entry is an
-existing Markdown file beneath `course/` whose headmatter selects `theme: it230` and
-`routerMode: hash`. Deck accent stays authoritative in headmatter and is
-validated by the theme package rather than duplicated in the registry. There
-is no `published` flag: presence in this registry is the publication decision.
+`scripts/lib/presentations.mjs` uses Slidev's parser to resolve imports in
+presentation order, validates custom metadata, and produces one frozen computed
+catalog for builds, rendering, link checking, exports, and development. Parser
+errors are fatal so a missing, circular, ranged, or escaping import cannot
+silently remove course content. The catalog retains every resolved Markdown
+source for live reload. Catalog construction also reads and validates every
+declared exercise document, including its required closing `head` tag. All of
+this validation and the static HTML rendering preflight happen before generated
+output is removed.
 
-A presentation resource has `title`, `summary`, and `source`. The source must
-be an existing file inside the repository with a canonical lowercase basename.
-The build publishes it under `/<id>/resources/` using that basename. Resource
-basenames must be unique within a presentation but may repeat across
-presentations. Ordinary deck assets remain owned and processed by Slidev under
-`/<id>/assets/` rather than being copied through this list.
+Week title, summary, and accent come from the canonical deck headmatter. Agenda
+topics, stable section aliases, curriculum alignments, and exercise declarations
+come from `topicInfo` on resolved topic slides. Curriculum identities are
+de-duplicated for the weekly overview while the agenda remains in resolved
+presentation order.
 
-Registry validation happens before generated output is removed. It rejects
-unknown fields, duplicate IDs or presentation-local resource basenames, invalid
-identifiers, missing or escaping inputs, invalid deck configuration, and output
-paths outside the intended generated root.
+Canonical exercise source files are owned by their topic and can be reused by
+multiple weeks. Each generated copy and public URL is week-owned: HTML
+exercises and the supplemental PDF publish beneath
+`/weeks/<id>/resources/`. Ordinary deck assets remain processed by Slidev
+beneath `/weeks/<id>/slides/assets/` so the two namespaces do not collide.
+Production builds render, rather than byte-copy, each week-owned exercise and
+inject the three resolved accent custom properties from its importing
+presentation. The exercise source keeps the global blue accent as its
+direct-open fallback, so one canonical exercise may take on different accents
+when reused by different weeks. The course-site development server performs the
+same rendering at the public resource route.
 
 ## Build boundary
 
-Production output is assembled in `dist/`. Each production build recreates
-dist/ from scratch, builds every presentation listed in `slides.config.mjs`,
-generates the course landing page, exports a supplemental PDF for each deck,
-and copies presentation-owned resources. Each deck receives an explicit base,
-output directory, and `--without-notes` option. Its PDF is published as
-`/<id>/resources/SCC-IT-230-<id>.pdf`; declared resources share that directory.
-Assets referenced by deck sources are processed by Slidev. Generated output is
-not committed.
+Production output is assembled in `dist/`. Each production build discovers and
+validates canonical weeks and renders every static artifact in memory before
+recreating `dist/`. It then writes the course landing page, a detail page and an
+unlinked Canvas-authoring page for every published week, builds every discovered
+presentation, exports a supplemental PDF for each deck, and writes its rendered
+exercises. Each deck receives an explicit base, output directory, and
+`--without-notes` option. Its PDF is published as
+`/weeks/<id>/resources/SCC-IT-230-<id>.pdf`; declared resources share that
+directory. Assets referenced by deck sources are processed by Slidev.
+Generated output is not committed.
 
-The landing page uses `site/index.html` as its static document template.
-`site/render-template.mjs` loads that template during a production build or
-landing-page development, escapes registry text, and replaces the materials
-placeholder with sections derived from the validated registry. Production
-browsers receive the resulting static HTML and do not execute landing-page
-rendering code. The development server watches the registry, template,
-renderer, and stylesheet and injects only the small event-stream client needed
-to reload the browser after a valid change. It starts no Slidev processes.
+The compact landing page uses `site/index.html` as its static document
+template; each full weekly overview uses `site/week.html`; and each Canvas
+source utility uses `site/canvas.html`. One normalized weekly-view builder owns
+the shared instructional labels, prose, and destinations. The site and Canvas
+renderers consume that model, load their respective templates, and escape its
+catalog-derived text. A shared artifact generator is used by both production
+builds and course-site development so the two paths publish the same artifact
+types and honor the same base and public-origin configuration. Week detail
+pages place Before class, In class, and After class vertically and link to
+adjacent published weeks. Canvas utilities encode the generated fragment inside
+a read-only text area so the browser displays source instead of interpreting
+it. Production browsers receive the resulting static HTML and do not execute
+catalog rendering code.
 
-`IT230_SITE_BASE` is the single deployment-base input. It defaults to `/` and
-also accepts a canonical project subpath such as `/SCC-IT-230/`. Presentation
-and resource routes are derived from presentation IDs. The build combines them
-with the site base when it generates links and invokes Slidev. Production uses
-`/` once the custom domain is configured.
+On every development reload, a short-lived worker loads a fresh module graph
+and rebuilds the catalog and artifacts. Workers have a bounded rendering time
+and are explicitly terminated after success, failure, timeout, or server
+disposal. The server watches canonical week discovery, resolved Markdown
+imports, declared exercise sources, and relevant source files beneath
+`scripts/lib/`, `site/`, and `packages/slidev-theme-it230/setup/`. Defining
+implementation watch roots instead of enumerating individual modules ensures
+new rendering dependencies and accent-palette changes participate in reloads.
+The server injects only the small event-stream client needed to reload the
+browser after a valid change and keeps serving the last valid artifact set
+after an invalid edit. It starts no Slidev processes.
 
-The root `package.json` commands divide development and production responsibilities:
+`IT230_SITE_BASE` and `IT230_PUBLIC_ORIGIN` are the two deployment inputs.
+`IT230_SITE_BASE` defaults to `/` and also accepts a canonical project subpath
+such as `/SCC-IT-230/`. Presentation and resource routes are derived from
+presentation IDs; the build combines them with the site base when it generates
+links and invokes Slidev. Those routes use derived week identifiers without
+semester or implementation details, so the site and presentations work with
+both the base path used by GitHub Pages and the configured custom domain.
+Production uses `/` once the custom domain is configured.
+
+`IT230_PUBLIC_ORIGIN` defaults to `https://it230.systemsmetanow.tech` and must
+be an HTTPS origin without credentials, path, query, or fragment. Canvas page
+generation combines this origin with `IT230_SITE_BASE` and the same derived
+routes used by the site, producing absolute public URLs without embedding
+deployment details in instructional metadata. The Canvas renderer independently
+rejects destinations that are not absolute credential-free HTTPS URLs, so
+callers cannot accidentally weaken this output contract by omitting the public
+origin.
+
+The root `package.json` commands divide development and production
+responsibilities:
 
 - `pnpm dev` and `pnpm run review` accept either no argument for the
-  live-reloading registry landing page or one validated Markdown entry beneath
+  live-reloading catalog landing page or one validated Markdown entry beneath
   `course/` for one focused Slidev server. They do not change `dist/`, and the
-  focused entry need not be registered.
+  focused entry need not be a canonical published week.
 - `pnpm build` generates the theme gallery and recreates the complete
   course-site production artifact. `pnpm run build:theme` and
   `pnpm run build:site` retain those focused operations.
 - `pnpm run build:deck -- <id>` builds one published web deck, its supplemental
-  PDF, and its declared resources. `pnpm run export:pdf -- <id>` creates a
-  separate review PDF under `exports/`; both reject arbitrary paths.
+  PDF, and its exercises. `pnpm run export:pdf -- <id>` creates a separate
+  review PDF under `exports/`; both accept only a canonical published week ID.
+- The complete site build generates `/weeks/<id>/canvas/` for every published
+  week. This public but unlinked authoring page exposes the Canvas-safe fragment
+  as copyable source; no command writes Canvas HTML outside `dist/`, and no
+  process sends content to Canvas automatically.
 - `pnpm preview` recreates and checks the complete course-site production
   artifact before serving it without live reload.
 - `pnpm run check:links` checks required generated files and internal HTML and
@@ -141,22 +189,24 @@ The focused theme gallery is generated inside
 repository-level `dist/`; each workspace package keeps its generated review
 artifacts within its own boundary.
 
-Stable presentation routes use week or topic identifiers without semester or
-implementation details. The site and presentations must work with the base
-path used by GitHub Pages and with the configured custom domain.
-
 ## Validation fixtures and automation
 
-The synthetic presentation beneath `tests/fixtures/course/` and the fixture
-registry and resource beneath `tests/fixtures/site/` are test inputs only. The
-fixture consumes the local theme, imports a named fragment, uses a local asset
-and named accent, and contains a presenter note so the integration test
-exercises the multi-deck pipeline. It never appears in the production registry
-or production landing page.
+The synthetic canonical week beneath `tests/fixtures/course/` is test input
+only. It consumes the local theme, imports a named fragment, declares a
+topic-owned HTML exercise, uses a local asset and named accent, and contains a
+presenter note so the integration test exercises the complete pipeline. The
+same tree holds a noncanonical `w02-draft.md` that discovery must ignore and
+focused review must still accept. The canonical fixture week is discovered only
+when the catalog is pointed at the fixture course root, and neither file
+appears on the production landing page.
 
 `pnpm check` is the non-server proof of the production boundary. It checks
 formatting and the supported toolchain, runs theme and site tests, runs the
-aggregate production build, and checks generated links. The validation-only
-GitHub Actions workflow runs the same command after a frozen root install on
-each push to `main`. It has read-only repository permission and no deployment,
-Pages, artifact-upload, or identity-token authority.
+aggregate production build, and checks generated links.
+`.github/workflows/validate.yml` runs the same command after a frozen root
+install for pushes to `main`, pull requests targeting `main`, and manual
+dispatch. The workflow grants only `contents: read` by default. Pages
+configuration, artifact upload, and the dependent deployment job are each
+conditioned on `refs/heads/main`, and only that deployment job receives
+`pages: write` and `id-token: write`. `docs/publishing.md` owns the deployment
+and correction workflow this automation implements.

@@ -1,8 +1,8 @@
-import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { userArguments, validateFocusedEntry } from "./lib/arguments.mjs";
-import { serveFocusedDeck, serveLandingPage } from "./lib/development.mjs";
+import { siteConfiguration } from "./lib/config.mjs";
+import { serveCourseSite, serveFocusedDeck } from "./lib/development.mjs";
 
 const root = fileURLToPath(new URL("../", import.meta.url));
 const [mode, ...rawArgs] = process.argv.slice(2);
@@ -23,9 +23,9 @@ if (args.length === 1) {
     const entry = await validateFocusedEntry(root, args[0]);
     await serveFocusedDeck({ entry, root, port: settings.port });
 } else {
-    await serveLandingPage({
-        registryPath: path.join(root, "slides.config.mjs"),
+    await serveCourseSite({
         root,
+        ...siteConfiguration(),
         ...settings,
     });
 }

@@ -1,7 +1,7 @@
 import path from "node:path";
 
 import { assertExistingFileInside, resolveContainedPath } from "./paths.mjs";
-import { validateDeck } from "./registry.mjs";
+import { isCanonicalWeekId, validateDeck } from "./presentations.mjs";
 
 export function userArguments(args) {
     return args[0] === "--" ? args.slice(1) : args;
@@ -13,8 +13,8 @@ export function requireNoArguments(args, label) {
 }
 
 export function requireOneId(args, label) {
-    if (args.length !== 1 || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(args[0]))
-        throw new Error(`${label} requires exactly one registered deck ID.`);
+    if (args.length !== 1 || !isCanonicalWeekId(args[0]))
+        throw new Error(`${label} requires exactly one canonical week ID.`);
     return args[0];
 }
 
@@ -53,9 +53,9 @@ export async function validateFocusedEntry(
     return entry;
 }
 
-export function selectRegisteredPresentation(registry, id, label) {
-    const presentation = registry.presentations.find((item) => item.id === id);
+export function selectPublishedWeek(catalog, id, label) {
+    const presentation = catalog.presentations.find((item) => item.id === id);
     if (!presentation)
-        throw new Error(`${label} received unknown deck ID: ${id}`);
+        throw new Error(`${label} received an unpublished week ID: ${id}`);
     return presentation;
 }

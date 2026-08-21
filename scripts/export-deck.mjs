@@ -4,7 +4,7 @@ import { fileURLToPath } from "node:url";
 
 import {
     requireOneId,
-    selectRegisteredPresentation,
+    selectPublishedWeek,
     userArguments,
 } from "./lib/arguments.mjs";
 import {
@@ -13,21 +13,15 @@ import {
     presentationPdfFilename,
 } from "./lib/paths.mjs";
 import { run } from "./lib/process.mjs";
-import { loadRegistry } from "./lib/registry.mjs";
+import { loadPresentationCatalog } from "./lib/presentations.mjs";
 
 const id = requireOneId(
     userArguments(process.argv.slice(2)),
     "Deck PDF export",
 );
 const root = fileURLToPath(new URL("../", import.meta.url));
-const registry = await loadRegistry(path.join(root, "slides.config.mjs"), {
-    root,
-});
-const presentation = selectRegisteredPresentation(
-    registry,
-    id,
-    "Deck PDF export",
-);
+const catalog = await loadPresentationCatalog({ root });
+const presentation = selectPublishedWeek(catalog, id, "Deck PDF export");
 const exportsRoot = path.join(root, "exports");
 await assertSafeGeneratedRoot(exportsRoot, root);
 await mkdir(exportsRoot, { recursive: true });

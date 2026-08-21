@@ -23,7 +23,9 @@
 - Install dependencies from the repository root with
   `pnpm install --frozen-lockfile`; do not create nested installations.
 - When updating the pinned Slidev dependencies, refresh
-  `.agents/skills/slidev/` from the matching `@slidev/cli` release.
+  `.agents/skills/slidev/` from the matching `@slidev/cli` release and verify
+  that Slidev still preserves the custom `courseInfo` and `topicInfo`
+  frontmatter used by the publishing pipeline.
 - This repository is worked on with both Codex and Claude Code. Their
   configurations mirror each other: `.codex/config.toml` and `.mcp.json` both
   define the MCP servers; `.codex/rules/default.rules`
@@ -40,9 +42,9 @@
   command form when one exists.
 - Run the current validation suite with `pnpm check`.
 - Run the relevant local validation before committing and pushing.
-- Treat registration in `slides.config.mjs` as publication approval. Keep
-  incomplete presentations out of the registry instead of adding a publication
-  flag.
+- Treat the existence of a canonical `course/w01.md` through `course/w16.md`
+  file as publication approval. Keep incomplete weeks in noncanonical files
+  such as `course/w02-draft.md`; do not add a publication flag.
 - Treat WCAG 2.1 Level AA as the minimum accessibility target. Do not claim an
   artifact is accessible based only on a successful build, automated check, or
   contrast measurement.
@@ -62,7 +64,7 @@ Read the relevant document before changing files in its area:
 | Work                                                                                       | Required document          |
 | ------------------------------------------------------------------------------------------ | -------------------------- |
 | Slides, presenter notes, demonstrations, exercises, topic assets, or other course material | `docs/course-authoring.md` |
-| Project structure, workspace boundaries, presentation registry, routes, or build output    | `docs/architecture.md`     |
+| Project structure, workspace boundaries, presentation catalog, routes, or build output     | `docs/architecture.md`     |
 | Theme tokens, global styles, layouts, shared components, or the theme gallery              | `docs/design-system.md`    |
 | Accessibility standards, audits, remediation, or cross-cutting accessibility work          | `docs/accessibility.md`    |
 | Staging, committing, pushing, deployment, publication checks, or production corrections    | `docs/publishing.md`       |

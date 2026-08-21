@@ -1,5 +1,12 @@
 ---
 layout: section
+routeAlias: lab-environments
+topicInfo:
+  alignments:
+    redHatAcademy:
+      - course: RH134
+        chapter: "00"
+        title: Preface
 ---
 
 # Accessing the Lab Environments

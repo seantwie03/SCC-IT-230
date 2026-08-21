@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta
+            name="description"
+            content="Copyable Canvas HTML for <!-- IT230_CANVAS_WEEK_TITLE -->."
+        />
+        <title><!-- IT230_CANVAS_DOCUMENT_TITLE --></title>
+        <link rel="icon" href="data:," />
+        <link rel="stylesheet" href="<!-- IT230_CANVAS_STYLESHEET_HREF -->" />
+    </head>
+    <body>
+        <a class="skip-link" href="#main-content">Skip to Canvas HTML</a>
+        <header class="site-header">
+            <div class="header-inner">
+                <p class="course-code">
+                    <a href="<!-- IT230_CANVAS_HOME_HREF -->">IT-230</a>
+                </p>
+                <p>
+                    <a href="<!-- IT230_CANVAS_HOME_HREF -->"
+                        >Linux Administration</a
+                    >
+                </p>
+            </div>
+        </header>
+        <main id="main-content" class="canvas-authoring-page">
+            <header class="canvas-authoring-header">
+                <p class="eyebrow">Canvas authoring utility</p>
+                <h1>Copy weekly HTML</h1>
+                <p class="lede"><!-- IT230_CANVAS_WEEK_TITLE --></p>
+                <p>
+                    Copy the complete source below and paste it into the Canvas
+                    Rich Content Editor&rsquo;s HTML view. This public utility
+                    page is intentionally absent from student navigation.
+                </p>
+            </header>
+            <section
+                class="canvas-source-panel"
+                aria-labelledby="source-heading"
+            >
+                <div class="canvas-source-heading">
+                    <h2 id="source-heading">Canvas HTML source</h2>
+                    <button id="copy-canvas-source" type="button">
+                        Copy HTML
+                    </button>
+                </div>
+                <textarea
+                    id="canvas-source"
+                    aria-describedby="copy-status"
+                    readonly
+                    rows="28"
+                    wrap="off"
+                    spellcheck="false"
+                >
+<!-- IT230_CANVAS_SOURCE --></textarea>
+                <p id="copy-status" class="copy-status" role="status"></p>
+            </section>
+        </main>
+        <footer>
+            <p>IT-230 · Linux Administration</p>
+        </footer>
+        <script>
+            const copyButton = document.querySelector("#copy-canvas-source");
+            const canvasSource = document.querySelector("#canvas-source");
+            const copyStatus = document.querySelector("#copy-status");
+
+            copyButton.addEventListener("click", async () => {
+                try {
+                    await navigator.clipboard.writeText(canvasSource.value);
+                    copyStatus.textContent = "Canvas HTML copied.";
+                } catch {
+                    canvasSource.focus();
+                    canvasSource.select();
+                    copyStatus.textContent =
+                        "The HTML is selected. Copy it with your browser or keyboard command.";
+                }
+            });
+        </script>
+    </body>
+</html>

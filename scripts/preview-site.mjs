@@ -2,20 +2,25 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { requireNoArguments, userArguments } from "./lib/arguments.mjs";
-import { buildRegisteredSite } from "./lib/build-site.mjs";
+import { buildPublishedSite } from "./lib/build-site.mjs";
+import { siteConfiguration } from "./lib/config.mjs";
 import { checkGeneratedSite } from "./lib/links.mjs";
-import { loadRegistry } from "./lib/registry.mjs";
+import { loadPresentationCatalog } from "./lib/presentations.mjs";
 import { createStaticServer, listen } from "./lib/server.mjs";
 
 requireNoArguments(userArguments(process.argv.slice(2)), "Production preview");
 const root = fileURLToPath(new URL("../", import.meta.url));
 const distRoot = path.join(root, "dist");
-const registry = await loadRegistry(path.join(root, "slides.config.mjs"), {
+const catalog = await loadPresentationCatalog({ root });
+const configuration = siteConfiguration();
+const { siteBase } = configuration;
+await buildPublishedSite({
+    catalog,
     root,
+    distRoot,
+    ...configuration,
 });
-const siteBase = process.env.IT230_SITE_BASE ?? "/";
-await buildRegisteredSite({ registry, root, distRoot, siteBase });
-await checkGeneratedSite({ distRoot, registry, siteBase });
+await checkGeneratedSite({ distRoot, catalog, siteBase });
 
 const server = createStaticServer(distRoot, { siteBase });
 const stop = () => server.close();

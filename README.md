@@ -35,8 +35,8 @@ in the material.
   material.
 - `packages/slidev-theme-it230/` contains the shared Slidev theme, its focused
   gallery, and theme-specific validation.
-- `site/` contains the course landing-page HTML template, its build-time
-  renderer, and its stylesheet.
+- `site/` contains the landing, weekly-detail, and Canvas-authoring HTML
+  templates, the build-time site and Canvas renderers, and the stylesheet.
 - `docs/` explains the project architecture, course-authoring conventions, and
   publishing workflow.
 - `scripts/` supports repository-wide validation and publication.
@@ -54,16 +54,18 @@ pnpm build
 pnpm preview
 ```
 
-`pnpm dev` serves the registry-driven landing page on localhost port 3030 and
-reloads the browser when the registry, landing-page template, renderer, or
-stylesheet changes. It does not start registered presentations. Presentations
-are registered to the site through the `presentations` array in
-`slides.config.mjs`. The `pnpm build` command validates that array, builds
-every registered presentation, exports its supplemental
-`SCC-IT-230-<id>.pdf`, copies its declared resources, and generates the
-corresponding landing-page links. PDFs and additional resources are published
-beneath the owning presentation's `/<id>/resources/` directory. A Markdown
-deck that is not registered does not appear on the site.
+`pnpm dev` serves the metadata-driven course site on localhost port 3030 and
+reloads the browser when a published week, imported topic, exercise, template,
+renderer, or stylesheet changes. The landing page lists each published week's
+title and summary; its detail page contains the complete weekly overview. A
+root-level `course/w01.md` through `course/w16.md` file is a published week; a
+noncanonical name such as `course/w02-draft.md` remains available for focused
+review without appearing on the site. The `pnpm build` command discovers and
+validates every published week, builds its presentation, exports its
+supplemental `SCC-IT-230-<id>.pdf`, renders its topic-declared HTML exercises
+in the week's accent, and generates the corresponding weekly overview. A week
+is published at `/weeks/<id>/`, its slides at `/weeks/<id>/slides/`, and its
+PDF and exercises beneath `/weeks/<id>/resources/`.
 
 For focused authoring, pass one validated Markdown entry beneath `course/`. For
 example, this command runs only the Week 1 slides with hot reload on localhost:
@@ -71,6 +73,12 @@ example, this command runs only the Week 1 slides with hot reload on localhost:
 ```sh
 pnpm dev -- course/w01.md
 ```
+
+Topic frontmatter supplies the meeting agenda, curriculum references, named
+slide routes, and exercises. Each production build also publishes an unlinked
+Canvas-authoring utility at `/weeks/<id>/canvas/`. It displays the Canvas-safe
+weekly fragment as copyable HTML source; the utility is public even though it
+does not appear in student navigation.
 
 ## Licensing
 

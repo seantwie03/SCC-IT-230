@@ -43,13 +43,18 @@ pnpm run build:deck -- w01
 pnpm preview
 ```
 
-With no argument, `dev` and `review` serve only the registry-driven landing
-page. They reload the browser after a valid change to the registry,
-landing-page template, renderer, or stylesheet and do not start Slidev. With
-exactly one argument, they start one Slidev development server for that
-validated Markdown entry beneath `course/`, whether or not it is already
-registered. Focused review does not publish the entry, add it to the landing
-page, or change `dist/`.
+With no argument, `dev` and `review` serve the metadata-driven course site,
+including its landing page, weekly details, Canvas-authoring utilities, and
+exercise resources. They reload the browser after a valid change to canonical
+week discovery, an imported topic, an exercise, shared catalog or view-model
+code, a site template, a renderer, or the stylesheet. Each reload uses a fresh
+module graph, includes accent-palette changes, keeps serving the last valid
+artifact set if an edit is invalid, and does not start Slidev. Render workers
+have a fixed timeout and are terminated when rendering settles or the server
+stops. With exactly one argument, they start one Slidev development server for
+that validated Markdown entry beneath `course/`, whether it is a canonical week
+or a noncanonical draft. Focused review does not publish the entry, add it to
+the landing page, or change `dist/`.
 
 [`capture-course.mjs`](../scripts/capture-course.mjs) exports the same kind
 of validated entry directly to deterministic PNG images under
@@ -57,18 +62,36 @@ of validated entry directly to deterministic PNG images under
 With no page-range argument it captures every slide; with one validated
 range such as `1,4-7`, it captures only those slides. Use it for batch or
 scripted review when a live browser session is unnecessary; use `review` for
-interactive inspection. Like `dev`/`review`, it accepts a registered or
-unregistered entry and never touches `dist/` or the landing page.
+interactive inspection. Like `dev`/`review`, it accepts a published or draft
+entry and never touches `dist/` or the landing page.
 
-Production operations are registry-driven. `pnpm build` generates the theme
-gallery and then runs `build:site`, which validates the complete registry,
-recreates `dist/`, generates the landing page, and builds each registered deck
-without presenter notes. Each deck build also exports
-`SCC-IT-230-<id>.pdf` and copies declared presentation resources beneath
-`/<id>/resources/`. The `build:theme` and `build:site` commands retain those
-focused build operations. `build:deck` accepts one registered ID and produces
-the same web deck, supplemental PDF, and resources. `export:pdf` also accepts
-one registered ID, but writes a separate review copy under `exports/`.
+Production operations discover root-level `course/w01.md` through
+`course/w16.md`. A canonical filename is publication approval; keep incomplete
+weeks under names such as `course/w02-draft.md`. `pnpm build` generates the
+theme gallery and then runs `build:site`, which validates the complete computed
+catalog and pre-renders its static artifacts before recreating `dist/`. It then
+generates the compact landing page and weekly detail pages and builds each
+published deck without presenter notes. A malformed week, template, Canvas
+fragment, or exercise therefore cannot erase the previous complete build. A
+detail page is published at `/weeks/<id>/`, its slides at
+`/weeks/<id>/slides/`, and its PDF and topic-declared HTML exercises beneath
+`/weeks/<id>/resources/`.
+`build:theme` and `build:site` retain those focused build operations.
+`build:deck` accepts one published week ID and produces the same web deck,
+supplemental PDF, and exercises without replacing the existing week detail
+page. `export:pdf` also accepts one published week ID, but writes a separate
+review copy under `exports/`.
+
+The complete site build publishes a Canvas-authoring utility at
+`/weeks/<id>/canvas/` for every published week. It is intentionally absent from
+student navigation but remains public and discoverable; do not place private or
+instructor-only material in it. Open the known URL, use **Copy HTML**, and paste
+the fragment manually into the Canvas Rich Content Editor's HTML view. The
+build does not use the Canvas API. After saving, reopen HTML view to inspect
+what Canvas retained, compare the text and links with the course-site overview,
+and review the saved page at desktop and narrow widths.
+`IT230_PUBLIC_ORIGIN` controls the HTTPS origin used for absolute links and
+`IT230_SITE_BASE` supplies any deployment subpath.
 
 `pnpm preview` accepts no arguments. It first recreates the complete course-site
 production artifact, checks its required files and internal links, and then
@@ -158,11 +181,13 @@ site builds, including the supplemental PDFs. The explicit `export:pdf`
 command remains available for focused PDF review outside production output.
 
 For course changes, review a focused entry on port 3131 at the 1920x1080 Zoom
-viewport, then review the landing page at desktop and narrow widths. Inspect
-source structure, semantics, reading and focus order, keyboard operation,
-visible focus, console output, text alternatives, rendering, reflow, links,
-overflow, and color-independent meaning. Use `pnpm preview` to review working
-landing-page links and the final exact production artifact.
+viewport, then review the landing page, a representative weekly detail page,
+and its Canvas-authoring utility at desktop and narrow widths. Inspect source
+structure, semantics, reading and focus order, keyboard operation, visible
+focus, console output, text alternatives, rendering, reflow, links, overflow,
+and color-independent meaning. Confirm that the copied Canvas source matches
+the generated fragment. Use `pnpm preview` to review working site links and the
+final exact production artifact.
 
 ## Accessibility review
 
@@ -182,13 +207,13 @@ the primary browser presentations; do not describe the PDFs as accessible.
 Before pushing, confirm that:
 
 - Commands, output, links, notes, and exercises are accurate.
-- Presentation structure and the registry are valid.
+- Presentation structure and the computed metadata catalog are valid.
 - Slides and terminal content remain readable through Zoom screen sharing.
 - Applicable accessibility review has passed for each student-facing format.
 - No student information, secrets, solutions, restricted curriculum source,
   or unapproved assets are present.
 - Third-party material has a known publication basis and required attribution.
-- The theme gallery, every registered presentation, and the course site build.
+- The theme gallery, every published presentation, and the course site build.
 - `dist/` contains only intended public output.
 
 The workflow in `.github/workflows/validate.yml` repeats a frozen install and
@@ -214,8 +239,9 @@ validation, Pages artifact, and dependent deployment for the current reviewed
 commit. It does not provide an input for selecting an arbitrary historical
 commit.
 
-After deployment, verify the landing page, every changed presentation, linked
-downloads, and a representative nested hash route in production.
+After deployment, verify the landing page, every changed weekly detail page and
+presentation, linked downloads, and a representative nested hash route in
+production.
 
 ## Corrections
 

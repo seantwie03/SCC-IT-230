@@ -1,6 +1,6 @@
 kitten @ set-font-size 30.0 && ssh servera
 clear
-#^ In-Class Exercise: Linux Commandline Refresher
+#^ Exercise: Linux Commandline Refresher
 
 #^ Create a file using redirection
 echo "Space... The final frontier." > /home/student/tng-monologue.txt

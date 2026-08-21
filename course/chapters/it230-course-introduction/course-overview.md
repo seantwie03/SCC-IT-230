@@ -1,5 +1,8 @@
 ---
 layout: section
+title: Course Introduction
+routeAlias: course-introduction
+topicInfo: {}
 ---
 
 # IT-230
