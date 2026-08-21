@@ -15,13 +15,14 @@ export function renderExerciseResource(source, accentCssVariables) {
     });
     const closingHead = source.match(/<\/head\s*>/i);
 
-    const accentStyle = `        <style data-it230-week-accent>
+    const headAdditions = `        <link rel="icon" href="../../../favicon.svg" type="image/svg+xml" />
+        <style data-it230-week-accent>
             :root {
 ${declarations.join("\n")}
             }
         </style>
 `;
-    return `${source.slice(0, closingHead.index)}${accentStyle}${source.slice(closingHead.index)}`;
+    return `${source.slice(0, closingHead.index)}${headAdditions}${source.slice(closingHead.index)}`;
 }
 
 export function validateExerciseResourceSource(

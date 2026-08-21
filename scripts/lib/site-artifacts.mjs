@@ -1,5 +1,6 @@
 import {
     renderCanvasAuthoringPage,
+    renderSiteFavicon,
     renderLandingPage,
     renderSiteStyles,
     renderWeekPage,
@@ -16,7 +17,8 @@ export async function renderPublishedArtifacts({
     publicOrigin = DEFAULT_PUBLIC_ORIGIN,
 }) {
     const base = validateSiteBase(siteBase);
-    const [styles, landingPage, weeks] = await Promise.all([
+    const [favicon, styles, landingPage, weeks] = await Promise.all([
+        renderSiteFavicon(),
         renderSiteStyles(),
         renderLandingPage(catalog, base),
         Promise.all(
@@ -38,7 +40,7 @@ export async function renderPublishedArtifacts({
             }),
         ),
     ]);
-    return { landingPage, siteBase: base, styles, weeks };
+    return { favicon, landingPage, siteBase: base, styles, weeks };
 }
 
 export function renderPresentationResources(presentation) {

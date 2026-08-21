@@ -23,6 +23,7 @@
         "colorSchema": "light",
         "defaults": {
             "aspectRatio": "16/9",
+            "favicon": "./favicon.svg",
             "lineNumbers": true,
             "preloadImages": false
         }

@@ -55,6 +55,7 @@ import { renderCanvasFragment } from "../site/render-canvas.mjs";
 import {
     renderCanvasAuthoringPage,
     renderLandingPage,
+    renderSiteFavicon,
     renderSiteStyles,
     renderWeekPage,
     renderWeeklyOverview,
@@ -238,6 +239,7 @@ test("exercise resources inherit the publishing week's accent", () => {
         "--it230-color-accent-wash": "rgb(145 65 172 / 14%)",
     });
     assert.match(rendered, /data-it230-week-accent/);
+    assert.match(rendered, /rel="icon" href="\.\.\/\.\.\/\.\.\/favicon\.svg"/);
     assert.ok(rendered.lastIndexOf("#9141AC") > rendered.indexOf("#3584e4"));
     assert.throws(
         () => renderExerciseResource("<html></html>", {}),
@@ -422,6 +424,10 @@ test("landing page stays compact and links to the weekly detail page", async () 
     assert.doesNotMatch(html, /Meeting Agenda/);
     assert.doesNotMatch(html, /Integration Exercise/);
     assert.match(html, /--it230-color-accent-fill: #9141AC/);
+    assert.match(html, /rel="icon" href="\.\/favicon\.svg"/);
+    const favicon = await renderSiteFavicon();
+    assert.match(favicon, /fill="#3584e4"/);
+    assert.match(favicon, /stroke="#fff"/);
     const styles = await renderSiteStyles();
     assert.match(styles, /^:root \{[\s\S]*#3584E4/);
     assert.match(
@@ -468,6 +474,7 @@ test("weekly detail page is vertical, linked home, and navigates published weeks
     assert.match(html, />Integration Exercise<\/a><\/li>/);
     assert.doesNotMatch(html, /Start the Integration Exercise exercise/);
     assert.match(html, /href="\/project\/"[^>]*>IT-230<\/a>/);
+    assert.match(html, /href="\/project\/favicon\.svg"/);
     assert.match(html, /Previous week: Week 01 — First/);
     assert.match(html, /href="\/project\/weeks\/w16\/"/);
     assert.match(html, /Next week: Week 16 — Last/);
@@ -529,6 +536,7 @@ test("Canvas authoring page exposes exact copyable source without rendering it",
     assert.match(html, /id="copy-canvas-source"/);
     assert.match(html, /navigator\.clipboard\.writeText/);
     assert.match(html, /href="\/project\/"[^>]*>IT-230<\/a>/);
+    assert.match(html, /href="\/project\/favicon\.svg"/);
     const encodedSource = html.match(
         /<textarea[\s\S]*?>([\s\S]*?)<\/textarea>/,
     )?.[1];
@@ -593,11 +601,16 @@ test(
             const origin = `http://127.0.0.1:${address.port}`;
             const weekUrl = `${origin}/dev/weeks/w01/`;
             const canvasUrl = `${origin}/dev/weeks/w01/canvas/`;
+            const faviconUrl = `${origin}/dev/favicon.svg`;
             const resourceUrl = `${origin}/dev/weeks/w01/resources/reload-exercise.html`;
             reloadObserver = await observeReloads(`${origin}/__it230_reload`);
             assert.match(
                 await fetch(canvasUrl).then((response) => response.text()),
                 /https:\/\/development\.it230\.example\/dev\/weeks\/w01\/slides\//,
+            );
+            assert.match(
+                await fetch(faviconUrl).then((response) => response.text()),
+                /fill="#3584e4"/,
             );
 
             const weekFile = path.join(temporaryRoot, "course", "w01.md");

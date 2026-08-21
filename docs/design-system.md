@@ -22,6 +22,15 @@ stacks. It adapts libadwaita's header-bar, document-text, boxed-list, card, and
 view patterns to semantic HTML while remaining a course website rather than
 simulating an application window.
 
+The theme owns one original terminal favicon used across Slidev presentations,
+the landing page, weekly details, Canvas-authoring utilities, and standalone
+exercises. Its blue rounded frame, dark terminal surface, and white `>_` prompt
+use the theme's global blue accent and fixed neutral colors. Keep the geometry
+simple and free of institutional or vendor marks so it remains recognizable at
+browser-tab sizes. Slidev serves and copies it from the theme's `public/`
+directory; the site artifact generator publishes that same source at the site
+root.
+
 ### Weekly overview
 
 The landing page is a compact list of published weeks. Each item shows only the

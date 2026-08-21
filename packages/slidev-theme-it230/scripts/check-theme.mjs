@@ -75,6 +75,16 @@ try {
             throw new Error(`Slidev did not render expected color ${color}.`);
     }
 
+    const [builtIndex, sourceFavicon, builtFavicon] = await Promise.all([
+        readFile(path.join(bashBuildRoot, "index.html"), "utf8"),
+        readFile(path.join(themeRoot, "public", "favicon.svg"), "utf8"),
+        readFile(path.join(bashBuildRoot, "favicon.svg"), "utf8"),
+    ]);
+    if (!builtIndex.includes('href="./favicon.svg"'))
+        throw new Error("Slidev did not use the shared theme favicon.");
+    if (builtFavicon !== sourceFavicon)
+        throw new Error("Slidev did not copy the shared theme favicon intact.");
+
     const accentFixture = await readFile(
         path.join(fixtureRoot, "accent.md"),
         "utf8",

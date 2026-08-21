@@ -36,6 +36,7 @@ export async function buildPublishedSite({
     await rm(absoluteDist, { force: true, recursive: true });
     await mkdir(absoluteDist, { recursive: true });
     await Promise.all([
+        writeFile(path.join(absoluteDist, "favicon.svg"), artifacts.favicon),
         writeFile(path.join(absoluteDist, "index.html"), artifacts.landingPage),
         writeFile(path.join(absoluteDist, "site.css"), artifacts.styles),
         ...catalog.presentations.map((presentation, index) => {

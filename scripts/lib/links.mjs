@@ -22,6 +22,7 @@ export async function checkGeneratedSite({
     const base = validateSiteBase(siteBase);
     const errors = [];
     const required = [
+        "favicon.svg",
         "index.html",
         "site.css",
         ...catalog.presentations.map(

@@ -36,11 +36,12 @@ const officialOrAdjustedText = {
     yellow: "#905300",
 };
 
-test("keeps Slidev image preloading disabled for imported fragments", async () => {
+test("provides shared Slidev presentation defaults", async () => {
     const packageMetadata = JSON.parse(
         await readFile(new URL("../package.json", import.meta.url), "utf8"),
     );
 
+    assert.equal(packageMetadata.slidev.defaults.favicon, "./favicon.svg");
     assert.equal(packageMetadata.slidev.defaults.preloadImages, false);
 });
 

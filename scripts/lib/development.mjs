@@ -191,6 +191,16 @@ export async function createCourseSiteDevServer({
             );
             return;
         }
+        if (pathname === `${current.siteBase}favicon.svg`) {
+            respond(
+                response,
+                200,
+                "image/svg+xml; charset=utf-8",
+                current.favicon,
+                request.method,
+            );
+            return;
+        }
         const weekPage = current.weekPages.get(pathname);
         if (weekPage) {
             respond(
@@ -301,6 +311,7 @@ async function loadCourseSite(options, renderOptions) {
             );
     }
     return {
+        favicon: artifacts.favicon,
         landingPage: addLiveReload(artifacts.landingPage),
         implementationDirectories,
         resourcePages,

@@ -61,7 +61,8 @@ and are not committed.
 - `packages/slidev-theme-it230/` contains shared presentation styling,
   layouts, components, its focused gallery, and theme-specific validation.
 - `site/` contains the landing, weekly-detail, and Canvas-authoring HTML
-  templates, the site and Canvas build-time renderers, and the stylesheet.
+  templates, the site and Canvas build-time renderers, and the stylesheet. The
+  shared site-and-presentation favicon is owned by the theme package.
 - `scripts/` contains deterministic repository-wide operations.
 - `docs/` contains enduring maintainer documentation.
 
@@ -112,7 +113,12 @@ validates canonical weeks and renders every static artifact in memory before
 recreating `dist/`. It then writes the course landing page, a detail page and an
 unlinked Canvas-authoring page for every published week, builds every discovered
 presentation, exports a supplemental PDF for each deck, and writes its rendered
-exercises. Each deck receives an explicit base, output directory, and
+exercises. The theme's shared SVG favicon is published at `/favicon.svg`; site
+pages use deployment-base-aware references and exercises use a relative
+reference from their stable resource directory. A theme Vite plugin also serves
+it during focused deck development and emits it at each presentation root
+without replacing a deck's own public assets. Each deck receives an explicit
+base, output directory, and
 `--without-notes` option. Its PDF is published as
 `/weeks/<id>/resources/SCC-IT-230-<id>.pdf`; declared resources share that
 directory. Assets referenced by deck sources are processed by Slidev.

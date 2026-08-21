@@ -51,6 +51,9 @@ try {
 }
 
 async function assertFixtureOutput(output, siteBase) {
+    const favicon = await readFile(path.join(output, "favicon.svg"), "utf8");
+    if (!favicon.includes('fill="#3584e4"'))
+        throw new Error("Generated site omitted the blue favicon.");
     const landing = await readFile(path.join(output, "index.html"), "utf8");
     const expectedRoute = `${siteBase}weeks/w16/`;
     if (!landing.includes(`href="${expectedRoute}"`))
@@ -123,6 +126,8 @@ async function assertFixtureOutput(output, siteBase) {
     );
     if (!exercise.includes("IT230_EXERCISE_FIXTURE_SENTINEL"))
         throw new Error("The copied exercise did not contain its sentinel.");
+    if (!exercise.includes('href="../../../favicon.svg"'))
+        throw new Error("The generated exercise omitted the shared favicon.");
     if (
         !exercise.includes("data-it230-week-accent") ||
         !exercise.includes("#9141AC")

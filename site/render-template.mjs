@@ -11,6 +11,10 @@ import { escapeHtml } from "./html.mjs";
 const landingTemplateUrl = new URL("./index.html", import.meta.url);
 const weekTemplateUrl = new URL("./week.html", import.meta.url);
 const canvasTemplateUrl = new URL("./canvas.html", import.meta.url);
+const faviconUrl = new URL(
+    "../packages/slidev-theme-it230/public/favicon.svg",
+    import.meta.url,
+);
 const stylesUrl = new URL("./styles.css", import.meta.url);
 const MATERIAL_SECTIONS = "<!-- IT230_MATERIAL_SECTIONS -->";
 
@@ -60,6 +64,10 @@ export async function renderWeekPage(
             withSiteBase(siteBase, "/site.css"),
         ],
         ["<!-- IT230_WEEK_HOME_HREF -->", homeHref],
+        [
+            "<!-- IT230_WEEK_FAVICON_HREF -->",
+            withSiteBase(siteBase, "/favicon.svg"),
+        ],
         [
             "<!-- IT230_WEEK_CONTENT -->",
             renderWeeklyOverview(view, {
@@ -114,6 +122,10 @@ export async function renderCanvasAuthoringPage(
             withSiteBase(siteBase, "/site.css"),
         ],
         ["<!-- IT230_CANVAS_HOME_HREF -->", homeHref],
+        [
+            "<!-- IT230_CANVAS_FAVICON_HREF -->",
+            withSiteBase(siteBase, "/favicon.svg"),
+        ],
     ]);
     let result = replaceTextareaPlaceholder(
         template,
@@ -133,6 +145,10 @@ export async function renderCanvasAuthoringPage(
 export async function renderSiteStyles() {
     const styles = await readFile(stylesUrl, "utf8");
     return `${renderCssVariables(accentCssVariables(resolveIt230Accent()))}\n${styles}`;
+}
+
+export async function renderSiteFavicon() {
+    return readFile(faviconUrl, "utf8");
 }
 
 export function renderWeekSummary(view) {
