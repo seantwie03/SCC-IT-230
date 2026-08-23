@@ -1,0 +1,21 @@
+{
+    "permissions": {
+        "allow": [
+            "command(pnpm check*)",
+            "command(pnpm run check*)",
+            "command(pnpm format*)",
+            "command(pnpm run format*)",
+            "command(pnpm build*)",
+            "command(pnpm run build*)",
+            "command(pnpm test*)",
+            "command(pnpm run test*)",
+            "command(pnpm review*)",
+            "command(pnpm run review*)",
+            "command(pnpm capture*)",
+            "command(pnpm run capture*)",
+            "command(pnpm export*)",
+            "command(pnpm run export*)",
+            "command(pnpm install --frozen-lockfile*)"
+        ]
+    }
+}

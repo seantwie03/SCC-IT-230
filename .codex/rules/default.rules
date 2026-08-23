@@ -5,6 +5,7 @@ prefix_rule(
         "pnpm",
         "run",
         [
+            "build",
             "build:theme",
             "capture:course",
             "capture:theme",
@@ -23,6 +24,7 @@ prefix_rule(
     decision = "allow",
     justification = "The maintainer approved these validation, local-review, generated-output, and formatting scripts.",
     match = [
+        "pnpm run build",
         "pnpm run build:theme",
         "pnpm run capture:course -- course/w01.md",
         "pnpm run capture:course -- course/w01.md 1,4-7",
@@ -52,6 +54,7 @@ prefix_rule(
     pattern = [
         "pnpm",
         [
+            "build",
             "build:theme",
             "capture:course",
             "capture:theme",
@@ -70,6 +73,7 @@ prefix_rule(
     decision = "allow",
     justification = "The maintainer approved these validation, local-review, generated-output, and formatting scripts.",
     match = [
+        "pnpm build",
         "pnpm build:theme",
         "pnpm capture:course -- course/w01.md",
         "pnpm capture:course -- course/w01.md 1,4-7",

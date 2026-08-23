@@ -26,20 +26,21 @@
   `.agents/skills/slidev/` from the matching `@slidev/cli` release and verify
   that Slidev still preserves the custom `courseInfo` and `topicInfo`
   frontmatter used by the publishing pipeline.
-- This repository is worked on with both Codex and Claude Code. Their
-  configurations mirror each other: `.codex/config.toml` and `.mcp.json` both
-  define the MCP servers; `.codex/rules/default.rules`
-  and `.claude/settings.json` both define which commands run without an approval
-  prompt; skills live in `.agents/skills/` for both tools, but Claude Code only
-  discovers a skill if `.claude/skills/<name>` exists as a symlink to it (e.g.
-  `.claude/skills/slidev -> ../../.agents/skills/slidev`). When you add,
-  remove, or change an MCP server, a command-approval rule, a tool permission,
-  or a skill under `.agents/skills/`, make the equivalent change (including
-  adding or removing its `.claude/skills/` symlink) for both harnesses in the
-  same commit — do not let one drift ahead of the other.
-- Before running a command, consult `.codex/rules/default.rules` (Codex) or
-  `.claude/settings.json` (Claude Code) and prefer an approved equivalent
-  command form when one exists.
+- This repository is worked on with Codex, Claude Code, and Google
+  Antigravity. Their configurations mirror each other: `.mcp.json`
+  (shared with Antigravity via `.agents/mcp_config.json`) and
+  `.codex/config.toml` both define the MCP servers; `.codex/rules/default.rules`,
+  `.claude/settings.json`, and `.agents/settings.json` define which commands
+  run without an approval prompt; skills live in `.agents/skills/` for all
+  tools, but Claude Code only discovers a skill if `.claude/skills/<name>`
+  exists as a symlink to it (e.g. `.claude/skills/slidev -> ../../.agents/skills/slidev`).
+  When you add, remove, or change an MCP server, a command-approval rule, a
+  tool permission, or a skill under `.agents/skills/`, make the equivalent
+  change (including adding or removing its `.claude/skills/` symlink) for all
+  harnesses in the same commit — do not let them drift ahead of each other.
+- Before running a command, consult `.codex/rules/default.rules` (Codex),
+  `.claude/settings.json` (Claude Code), or `.agents/settings.json`
+  (Antigravity) and prefer an approved equivalent command form when one exists.
 - Run the current validation suite with `pnpm check`.
 - Run the relevant local validation before committing and pushing.
 - Treat the existence of a canonical `course/w01.md` through `course/w16.md`
