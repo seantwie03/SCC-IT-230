@@ -66,15 +66,17 @@ export async function buildPublishedSite({
         }),
     ]);
 
-    for (const presentation of catalog.presentations) {
-        const output = outputs.presentations.get(presentation.id);
-        await buildPresentation({
-            presentation,
-            root: absoluteRoot,
-            output,
-            siteBase: base,
-        });
-    }
+    await Promise.all(
+        catalog.presentations.map((presentation) => {
+            const output = outputs.presentations.get(presentation.id);
+            return buildPresentation({
+                presentation,
+                root: absoluteRoot,
+                output,
+                siteBase: base,
+            });
+        }),
+    );
 
     return { distRoot: absoluteDist, siteBase: base };
 }
@@ -121,33 +123,37 @@ export async function buildPresentation({
     siteBase = "/",
 }) {
     const base = validateSiteBase(siteBase);
-    await mkdir(output.week, { recursive: true });
-    await run(
-        "slidev",
-        [
-            "build",
-            presentation.entryAbsolute,
-            "--out",
-            output.slides,
-            "--base",
-            withSiteBase(base, presentationRoute(presentation.id)),
-            "--without-notes",
-        ],
-        { cwd: root },
-    );
+    await Promise.all([
+        mkdir(output.week, { recursive: true }),
+        mkdir(output.resources, { recursive: true }),
+    ]);
 
-    await mkdir(output.resources, { recursive: true });
-    await run(
-        "slidev",
-        [
-            "export",
-            presentation.entryAbsolute,
-            "--output",
-            path.join(
-                output.resources,
-                presentationPdfFilename(presentation.id),
-            ),
-        ],
-        { cwd: root },
-    );
+    await Promise.all([
+        run(
+            "slidev",
+            [
+                "build",
+                presentation.entryAbsolute,
+                "--out",
+                output.slides,
+                "--base",
+                withSiteBase(base, presentationRoute(presentation.id)),
+                "--without-notes",
+            ],
+            { cwd: root },
+        ),
+        run(
+            "slidev",
+            [
+                "export",
+                presentation.entryAbsolute,
+                "--output",
+                path.join(
+                    output.resources,
+                    presentationPdfFilename(presentation.id),
+                ),
+            ],
+            { cwd: root },
+        ),
+    ]);
 }

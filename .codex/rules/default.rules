@@ -19,6 +19,7 @@ prefix_rule(
             "test",
             "test:site",
             "test:theme",
+            "test:theme:all",
         ],
     ],
     decision = "allow",
@@ -41,6 +42,7 @@ prefix_rule(
         "pnpm run test",
         "pnpm run test:site",
         "pnpm run test:theme",
+        "pnpm run test:theme:all",
     ],
     not_match = [
         "pnpm run dev:theme",
@@ -68,6 +70,7 @@ prefix_rule(
             "test",
             "test:site",
             "test:theme",
+            "test:theme:all",
         ],
     ],
     decision = "allow",
@@ -90,6 +93,7 @@ prefix_rule(
         "pnpm test",
         "pnpm test:site",
         "pnpm test:theme",
+        "pnpm test:theme:all",
     ],
     not_match = [
         "pnpm dev:theme",
@@ -110,3 +114,15 @@ prefix_rule(
         "pnpm update",
     ],
 )
+
+# Allow Playwright browser installation for PDF export testing.
+prefix_rule(
+    pattern = ["pnpm", "exec", "playwright", "install"],
+    decision = "allow",
+    justification = "The maintainer approved Playwright browser installation.",
+    match = [
+        "pnpm exec playwright install",
+        "pnpm exec playwright install chromium",
+    ],
+)
+

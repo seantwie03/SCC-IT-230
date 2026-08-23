@@ -29,7 +29,8 @@
         "review:theme": "pnpm --filter slidev-theme-it230 review",
         "test": "pnpm run test:theme && pnpm run test:site",
         "test:site": "node --test tests/site.test.mjs && node scripts/check-site.mjs",
-        "test:theme": "pnpm --filter slidev-theme-it230 test"
+        "test:theme": "pnpm --filter slidev-theme-it230 test",
+        "test:theme:all": "pnpm --filter slidev-theme-it230 test:accents"
     },
     "devDependencies": {
         "@playwright/mcp": "0.0.78",

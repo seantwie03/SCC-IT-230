@@ -506,9 +506,11 @@ terminal output, and the visual foundations.
 
 The root theme review commands and their artifacts are documented in
 `docs/publishing.md`. `pnpm check` verifies formatting, the toolchain, palette
-and contrast tests, every accent build, and the production gallery build. The
-deck validator rejects unsupported accents. Automated checks do not replace
-browser and Zoom review at the intended 1920x1080 viewport.
+and contrast tests, the default accent build, and the production gallery build.
+Building and testing all nine accents is available via
+`pnpm run test:theme:all`. The deck validator rejects unsupported accents.
+Automated checks do not replace browser and Zoom review at the intended
+1920x1080 viewport.
 
 When a theme contract changes, update the gallery and this document in the
 same reviewed change. Check every published deck for regressions once real

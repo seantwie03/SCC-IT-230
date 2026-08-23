@@ -1,6 +1,26 @@
 {
     "permissions": {
         "allow": [
+            "run_command(pnpm check*)",
+            "run_command(pnpm run check*)",
+            "run_command(pnpm format*)",
+            "run_command(pnpm run format*)",
+            "run_command(pnpm build*)",
+            "run_command(pnpm run build*)",
+            "run_command(pnpm test*)",
+            "run_command(pnpm run test*)",
+            "run_command(pnpm run test:site*)",
+            "run_command(pnpm run test:theme*)",
+            "run_command(pnpm run test:theme:all*)",
+            "run_command(pnpm test:theme:all*)",
+            "run_command(pnpm review*)",
+            "run_command(pnpm run review*)",
+            "run_command(pnpm capture*)",
+            "run_command(pnpm run capture*)",
+            "run_command(pnpm export*)",
+            "run_command(pnpm run export*)",
+            "run_command(pnpm install --frozen-lockfile*)",
+            "run_command(pnpm exec playwright install*)",
             "command(pnpm check*)",
             "command(pnpm run check*)",
             "command(pnpm format*)",
@@ -15,7 +35,25 @@
             "command(pnpm run capture*)",
             "command(pnpm export*)",
             "command(pnpm run export*)",
-            "command(pnpm install --frozen-lockfile*)"
+            "command(pnpm install --frozen-lockfile*)",
+            "command(pnpm exec playwright install*)",
+            "mcp__it230_slidev__slidev-get-info",
+            "mcp__it230_slidev__slidev-list-slides",
+            "mcp__it230_slidev__slidev-get-slide",
+            "mcp__it230_slidev__slidev-update-slide",
+            "mcp__it230_slidev__slidev-insert-slide",
+            "mcp__it230_slidev__slidev-remove-slide",
+            "mcp__it230_slidev__slidev-move-slide",
+            "mcp__it230_browser__browser_navigate",
+            "mcp__it230_browser__browser_resize",
+            "mcp__it230_browser__browser_snapshot",
+            "mcp__it230_browser__browser_find",
+            "mcp__it230_browser__browser_take_screenshot",
+            "mcp__it230_browser__browser_console_messages",
+            "mcp__it230_browser__browser_evaluate",
+            "mcp__it230_browser__browser_close",
+            "mcp__it230_browser__browser_wait_for",
+            "mcp__it230_browser__browser_press_key"
         ]
     }
 }

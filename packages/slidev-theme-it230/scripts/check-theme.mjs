@@ -91,6 +91,9 @@ try {
     );
     const absoluteTheme = themeRoot.replaceAll("\\", "/");
 
+    const allAccents = process.argv.slice(2).includes("--all-accents");
+    const buildsToRun = [];
+
     for (const name of IT230_ACCENT_NAMES) {
         const deckSource = accentFixture
             .replace("theme: ../..", `theme: \"${absoluteTheme}\"`)
@@ -103,14 +106,20 @@ try {
         if (accent.name !== name)
             throw new Error(`Validated ${accent.name} instead of ${name}.`);
 
-        await run("slidev", [
-            "build",
-            deckEntry,
-            "--out",
-            buildRoot,
-            "--without-notes",
-        ]);
+        if (allAccents || name === "blue") {
+            buildsToRun.push(
+                run("slidev", [
+                    "build",
+                    deckEntry,
+                    "--out",
+                    buildRoot,
+                    "--without-notes",
+                ]),
+            );
+        }
     }
+
+    await Promise.all(buildsToRun);
 
     const invalidEntry = path.join(temporaryRoot, "invalid.md");
     await writeFile(

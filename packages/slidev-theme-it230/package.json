@@ -10,7 +10,8 @@
         "dev": "slidev example.md --port 2020",
         "export": "slidev export example.md --output dist/gallery.pdf",
         "review": "node scripts/review-theme.mjs",
-        "test": "node scripts/check-theme.mjs"
+        "test": "node scripts/check-theme.mjs",
+        "test:accents": "node scripts/check-theme.mjs --all-accents"
     },
     "keywords": [
         "slidev-theme",

@@ -1,5 +1,7 @@
 import { spawnSync } from "node:child_process";
+import { existsSync } from "node:fs";
 import { readFile } from "node:fs/promises";
+import { chromium } from "playwright-chromium";
 
 const manifest = JSON.parse(
     await readFile(new URL("../package.json", import.meta.url), "utf8"),
@@ -17,6 +19,14 @@ const chromeResult = spawnSync("google-chrome", ["--version"], {
 });
 const actualChrome =
     chromeResult.status === 0 ? chromeResult.stdout.trim() : undefined;
+
+let playwrightExecutable;
+try {
+    playwrightExecutable = chromium.executablePath();
+} catch {}
+
+const hasPlaywrightBrowser =
+    playwrightExecutable && existsSync(playwrightExecutable);
 
 const errors = [];
 
@@ -36,11 +46,17 @@ if (!actualChrome) {
     );
 }
 
+if (!hasPlaywrightBrowser) {
+    errors.push(
+        `Playwright browser executable is missing at ${playwrightExecutable ?? "unknown path"}. Run "pnpm exec playwright install chromium" to install it.`,
+    );
+}
+
 if (errors.length > 0) {
     for (const error of errors) console.error(error);
     process.exitCode = 1;
 } else {
     console.log(
-        `Toolchain verified: Node.js ${actualNode}, pnpm ${actualPnpm}, ${actualChrome}`,
+        `Toolchain verified: Node.js ${actualNode}, pnpm ${actualPnpm}, ${actualChrome}, Playwright Chromium`,
     );
 }
