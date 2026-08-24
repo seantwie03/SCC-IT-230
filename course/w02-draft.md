@@ -3,7 +3,7 @@ theme: it230
 themeConfig:
   it230Accent: purple
 routerMode: hash
-title: Week 02 — Special Characters, Transferring Files, and Regular Expressions
+title: Shell Expansions, Quoting, Transferring Files, and Regular Expressions
 layout: cover
 courseInfo:
   summary: >-
@@ -19,12 +19,17 @@ Week 02
 
 # IT-230
 
-- Special Characters in the Shell
+- Shell Expansions
+- Quoting
 - Transferring Files
 - Using Regular Expressions
 
 ---
-src: ./chapters/rh134-ch02-using-regular-expressions-for-practical-applications/special-characters.md
+src: ./chapters/rh124-ch07-managing-files-from-the-command-line/shell-expansions.md
+---
+
+---
+src: ./chapters/rh124-ch07-managing-files-from-the-command-line/quoting.md
 ---
 
 ---

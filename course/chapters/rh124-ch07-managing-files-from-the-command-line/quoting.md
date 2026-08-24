@@ -1,108 +1,23 @@
 ---
 layout: section
-routeAlias: special-characters
+routeAlias: quoting
 topicInfo:
   alignments:
     redHatAcademy:
-      - course: RH134
-        chapter: "02"
-        title: Using Regular Expressions for Practical Applications
+      - course: RH124
+        chapter: "07"
+        title: Managing Files from the Command Line
     rhcsaCertGuide:
       - chapter: "04"
         title: Working with Text Files
   exercises:
-    - title: Special Characters in the Shell Exercise
-      source: ./exercises/special-characters-exercise.html
+    - title: Quoting Exercise
+      source: ./exercises/quoting-exercise.html
 ---
 
-# Special Characters in the Shell
+# Quoting
 
-## What Bash does to your command before the command ever sees it
-
----
-vertical: center
----
-
-# Bash Reads Your Command First
-
-You type a command. <AccentText>Bash reads it before anything runs.</AccentText>
-
-Characters such as `*`, `?`, `[`, `$`, and `\` mean something <DangerText>to Bash</DangerText>.
-
-Tonight we will do two things with them:
-
-- Use them deliberately, to name groups of files
-- Hide them from Bash, so another program receives them intact
-
----
-vertical: start
----
-
-# Pathname Expansion
-
-Bash replaces a pattern with the names of the files that match it, <AccentText>before</AccentText> running the command.
-
-<TerminalWindow title="student@servera:~">
-
-````md magic-move
-```bash-session
-student@servera:~$ ls
-filea.txt  fileb.md  filec.sh
-student@servera:~$ echo *
-```
-```bash-session
-student@servera:~$ ls
-filea.txt  fileb.md  filec.sh
-student@servera:~$ echo *
-filea.txt fileb.md filec.sh
-student@servera:~$
-```
-````
-
-</TerminalWindow>
-
-<v-click>
-
-`echo` never received a `*`. It received three file names.
-
-This is called <AccentText>globbing</AccentText>.
-
-</v-click>
-
----
-layout: two-cols-header
-vertical: start
----
-
-# The Three Glob Patterns
-
-::left::
-
-| Pattern | Matches                          |
-| ------- | -------------------------------- |
-| `*`     | any run of characters, including none |
-| `?`     | exactly one character            |
-| `[ab]`  | one character from the set       |
-
-A glob matches <AccentText>whole file names</AccentText>, so `*.txt` means "anything, then `.txt`".
-
-::right::
-
-<TerminalWindow title="student@servera:~">
-
-```bash-session
-student@servera:~$ ls
-filea.txt  fileb.md  filec.sh
-student@servera:~$ ls *.txt
-filea.txt
-student@servera:~$ ls file?.md
-fileb.md
-student@servera:~$ ls file[ac].*
-filea.txt  filec.sh
-student@servera:~$
-```
-
-</TerminalWindow>
+## Protecting characters and arguments from Bash expansion
 
 ---
 layout: two-cols-header
@@ -313,29 +228,24 @@ Bash reads your command first. Unquoted, it expands the pattern into file names,
 
 ---
 
-# Exercise: Special Characters in the Shell
+# Exercise: Quoting
 
 ## Requirements
 
 Host: `servera`
 
-Create three files with different names and extensions to match against.
-
 ## Steps
 
-1. List your files using a pattern that matches only one of the extensions
-2. List them again using a pattern that matches exactly one character in the name
-3. List them a third time using a pattern that matches a set of characters
-4. Show what Bash does to an unquoted `*`, then protect it three different ways
-5. Assign a variable, then print it inside single quotes and inside double quotes
-6. Print a dollar sign inside double quotes without expanding the variable
-7. Create a directory whose name contains a space — twice, using a different technique each time
-8. Verify with `ls -l`, then remove everything you created
+1. Protect an asterisk from shell expansion using single quotes, double quotes, and a backslash
+2. Assign a variable with `name=value`, then print it inside single quotes and inside double quotes
+3. Print a dollar sign inside double quotes without expanding the variable
+4. Create a directory whose name contains a space — twice, using a different quoting/escaping technique each time
+5. Verify with `ls -l`, then remove the directories and test files you created
 
 ---
 
-# Exercise: Special Characters in the Shell
+# Exercise: Quoting
 
-![Screen recording of the instructor working with shell special characters: an unquoted asterisk expands to file names, quoted and backslash-escaped asterisks print literally, a variable prints its name inside single quotes and its value inside double quotes, and directory names containing spaces are created with quotes and with escapes.](./assets/special-characters.gif)
+![Screen recording of the instructor demonstrating quoting and escaping: protecting asterisks, comparing single and double quotes with variables, and creating directories containing spaces.](./assets/globbing-and-quoting.gif)
 
-<a href="https://asciinema.org/a/772135" target="_blank" rel="noopener noreferrer" aria-label="Watch the Special Characters in the Shell recording in a new tab">Watch the recording</a> · <a href="../resources/special-characters-exercise.html" target="_blank" rel="noopener noreferrer" aria-label="Read the written Special Characters in the Shell exercise in a new tab">Read the written exercise</a>
+<a href="https://asciinema.org/a/772135" target="_blank" rel="noopener noreferrer" aria-label="Watch the Quoting recording in a new tab">Watch the recording</a> · <a href="../resources/quoting-exercise.html" target="_blank" rel="noopener noreferrer" aria-label="Read the written Quoting exercise in a new tab">Read the written exercise</a>

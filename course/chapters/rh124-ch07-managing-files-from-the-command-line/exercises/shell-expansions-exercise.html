@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Special Characters in the Shell Exercise</title>
+        <title>Shell Expansions Exercise</title>
         <style>
             :root {
                 color-scheme: light;
@@ -460,24 +460,23 @@
             <article class="exercise-document">
                 <header class="exercise-header">
                     <p class="exercise-kicker">Exercise</p>
-                    <h1>Special Characters in the Shell Exercise</h1>
+                    <h1>Shell Expansions Exercise</h1>
                 </header>
 
                 <section class="overview" aria-labelledby="overview-heading">
                     <h2 id="overview-heading">Overview</h2>
                     <p>
                         Bash inspects your command line before the command runs,
-                        and it acts on characters such as <code>*</code>,
-                        <code>?</code>, <code>[</code>, and <code>$</code>.
-                        Whoever reads them first wins, so a pattern meant for
-                        another program has to be hidden from Bash.
+                        and it replaces pattern characters such as
+                        <code>*</code>, <code>?</code>, and
+                        <code>[...]</code> with matching file names.
                     </p>
                     <p>
-                        In this hands-on exercise you will match file names with
-                        each of the three glob patterns, watch Bash expand an
-                        unquoted character, protect that character with single
-                        quotes, double quotes, and a backslash, and finally use
-                        quoting to pass a directory name that contains a space.
+                        In this hands-on exercise you will create sample files
+                        on
+                        <code>servera</code>, match them using each of the three
+                        glob patterns, and observe pathname expansion directly
+                        with <code>echo *</code>.
                     </p>
 
                     <dl class="requirements">
@@ -490,10 +489,10 @@
 
                 <ol class="steps">
                     <li class="step">
-                        <h2>Connect to the lab host and create some files</h2>
+                        <h2>Connect to the lab host and create test files</h2>
                         <p>
                             Connect to <code>servera</code> and create three
-                            empty files in your home directory to experiment on.
+                            empty files in your home directory.
                         </p>
                         <pre><code>ssh student@servera
 touch filea.txt fileb.md filec.sh
@@ -531,79 +530,6 @@ ls file[ac].*</code></pre>
                             directory and then ran <code>echo</code> with those
                             names.
                         </aside>
-                    </li>
-                    <li class="step">
-                        <h2>Protect the asterisk</h2>
-                        <p>
-                            Each of the following passes a literal asterisk
-                            through to <code>echo</code>.
-                        </p>
-                        <pre><code>echo '*'
-echo "*"
-echo \*</code></pre>
-                        <p>
-                            Single quotes protect everything inside them. A
-                            backslash protects exactly the one character that
-                            follows it.
-                        </p>
-                    </li>
-                    <li class="step">
-                        <h2>Assign a variable</h2>
-                        <p>
-                            Assign a value with <code>name=value</code>. Do not
-                            put spaces around the equals sign. Read the value
-                            back by prefixing the name with a dollar sign.
-                        </p>
-                        <pre><code>linux=awesome
-echo To print the value, prefix the variable name with a dollar sign: $linux</code></pre>
-                    </li>
-                    <li class="step">
-                        <h2>Compare single quotes with double quotes</h2>
-                        <p>
-                            Run all three commands and read the output of each.
-                        </p>
-                        <pre><code>echo "Double quotes allow variable expansion: $linux"
-echo 'Single quotes do not. They treat everything literally: $linux'
-echo 'Single quotes are best when another program must receive the pattern'</code></pre>
-                        <aside class="note">
-                            <strong>Key idea</strong>
-                            Double quotes still let Bash expand variables and
-                            command substitutions. Single quotes let nothing
-                            through, which is why they are the right choice when
-                            a pattern must reach another program untouched.
-                        </aside>
-                    </li>
-                    <li class="step">
-                        <h2>Escape a dollar sign inside double quotes</h2>
-                        <p>
-                            A backslash works inside double quotes, so you can
-                            keep expansion available and still print one literal
-                            character.
-                        </p>
-                        <pre><code>echo "This prints the dollar sign even though it is in double quotes: \$linux"</code></pre>
-                    </li>
-                    <li class="step">
-                        <h2>Group words into a single argument</h2>
-                        <p>
-                            Commands split their arguments on spaces. The
-                            following creates two directories, not one.
-                        </p>
-                        <pre><code>mkdir My Files
-ls -l</code></pre>
-                        <p>
-                            Quote the whole name, or escape each space, to pass
-                            one argument instead of two.
-                        </p>
-                        <pre><code>mkdir 'My Files'
-mkdir This\ Is\ One\ Argument
-ls -l</code></pre>
-                    </li>
-                    <li class="step">
-                        <h2>Clean up</h2>
-                        <p>Remove the directories and files you created.</p>
-                        <pre><code>rmdir My Files 'My Files' 'This Is One Argument'
-rm filea.txt fileb.md filec.sh
-ls -l</code></pre>
                     </li>
                 </ol>
             </article>
