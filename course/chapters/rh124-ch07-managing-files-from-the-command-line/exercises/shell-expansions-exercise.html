@@ -472,11 +472,11 @@
                         <code>[...]</code> with matching file names.
                     </p>
                     <p>
-                        In this hands-on exercise you will create sample files
-                        on
-                        <code>servera</code>, match them using each of the three
-                        glob patterns, and observe pathname expansion directly
-                        with <code>echo *</code>.
+                        In this hands-on exercise you will navigate to
+                        <code>/etc/ssh</code> on <code>servera</code>, match
+                        real configuration files and host keys using each glob
+                        pattern, and observe pathname expansion directly with
+                        <code>echo</code>.
                     </p>
 
                     <dl class="requirements">
@@ -489,46 +489,102 @@
 
                 <ol class="steps">
                     <li class="step">
-                        <h2>Connect to the lab host and create test files</h2>
+                        <h2>Match file names with an asterisk (*)</h2>
                         <p>
-                            Connect to <code>servera</code> and create three
-                            empty files in your home directory.
+                            Connect to <code>servera</code>, change to the
+                            <code>/etc/ssh</code> directory, and list all files.
+                            Then list all public host key files ending in
+                            <code>.pub</code>, followed by all configuration
+                            files ending with <code>config</code>.
                         </p>
                         <pre><code>ssh student@servera
-touch filea.txt fileb.md filec.sh
-ls</code></pre>
-                    </li>
-                    <li class="step">
-                        <h2>Match file names with a glob</h2>
-                        <p>
-                            A glob matches whole file names. Run each of the
-                            three patterns and compare which files come back.
-                        </p>
-                        <pre><code>ls *.txt
-ls file?.md
-ls file[ac].*</code></pre>
+cd /etc/ssh
+ls
+ls *.pub
+ls *config</code></pre>
                         <aside class="note">
-                            <strong>The three patterns</strong>
-                            <code>*</code> matches any run of characters,
-                            including none. <code>?</code> matches exactly one
-                            character. <code>[ac]</code> matches one character
-                            from the set.
+                            <strong>What matched?</strong>
+                            <code>/etc/ssh</code> contains configuration files
+                            and host key pairs. <code>*.pub</code> matched all
+                            three public keys
+                            (<code>ssh_host_ecdsa_key.pub</code>,
+                            <code>ssh_host_ed25519_key.pub</code>, and
+                            <code>ssh_host_rsa_key.pub</code>).
+                            <code>*config</code> matched both
+                            <code>ssh_config</code> (client configuration) and
+                            <code>sshd_config</code> (SSH daemon configuration).
                         </aside>
                     </li>
 
                     <li class="step">
-                        <h2>Watch Bash expand an unquoted asterisk</h2>
+                        <h2>
+                            Match single characters with a question mark (?)
+                        </h2>
                         <p>
-                            Run <code>echo</code> with a bare asterisk as its
-                            argument.
+                            The question mark (<code>?</code>) matches exactly
+                            one character. Run <code>ls</code> to review the
+                            directory, then use <code>?</code> to match files
+                            with specific character lengths.
                         </p>
-                        <pre><code>echo *</code></pre>
+                        <pre><code>ls
+ls ssh?_config
+ls ssh_host_???_key.pub</code></pre>
+                        <aside class="note">
+                            <strong>Single character matching</strong>
+                            <code>ssh?_config</code> matched
+                            <code>sshd_config</code> because of the single
+                            <code>d</code>, but did not match
+                            <code>ssh_config</code> (which has no character
+                            between <code>ssh</code> and <code>_config</code>).
+                            <code>ssh_host_???_key.pub</code> matched only
+                            <code>ssh_host_rsa_key.pub</code> because
+                            <code>rsa</code> is exactly three characters, while
+                            <code>ecdsa</code> (5) and <code>ed25519</code> (7)
+                            do not match three question marks.
+                        </aside>
+                    </li>
+
+                    <li class="step">
+                        <h2>Match character sets with brackets ([...])</h2>
+                        <p>
+                            Brackets (<code>[...]</code>) match any single
+                            character from the specified set or range. Compare
+                            matching specific algorithm prefixes with matching
+                            numeric digits.
+                        </p>
+                        <pre><code>ls ssh_host_[e]*.pub
+ls ssh_host_[r]*.pub
+ls ssh_host_[re]*.pub
+ls *[0-9]*</code></pre>
+                        <aside class="note">
+                            <strong>Character sets and ranges</strong>
+                            <code>ssh_host_[e]*.pub</code> matches keys starting
+                            with <code>e</code> (ECDSA and ED25519).
+                            <code>ssh_host_[r]*.pub</code> matches RSA.
+                            <code>ssh_host_[re]*.pub</code> matches keys
+                            starting with either <code>r</code> or
+                            <code>e</code>. Finally, <code>*[0-9]*</code> uses
+                            the range <code>0-9</code> to match any file
+                            containing digits, selecting only the
+                            <code>ed25519</code> keys.
+                        </aside>
+                    </li>
+
+                    <li class="step">
+                        <h2>Observe pathname expansion directly with echo</h2>
+                        <p>
+                            Run <code>echo</code> with unquoted patterns to see
+                            how Bash expands globs into arguments before the
+                            command runs.
+                        </p>
+                        <pre><code>echo *
+echo *.pub</code></pre>
                         <aside class="warning">
                             <strong>What happened?</strong>
                             <code>echo</code> never received an asterisk. Bash
-                            replaced it with the names of the files in the
-                            directory and then ran <code>echo</code> with those
-                            names.
+                            expanded the pattern into the list of matching file
+                            names and passed those file names as arguments to
+                            <code>echo</code>.
                         </aside>
                     </li>
                 </ol>

@@ -1,21 +1,35 @@
 kitten @ set-font-size 30.0 && ssh servera
 clear
 
-#^ Task: Control What Bash Expands
-touch filea.txt fileb.md filec.sh
+#^ Task: Match Files with Glob Patterns in /etc/ssh
+# Requirements
+#   Host: servera
+# Tasks
+#   1. Match file names with an asterisk (*)
+#   2. Match single characters with a question mark (?)
+#   3. Match character sets with brackets ([...])
+#   4. Observe pathname expansion directly with echo
+clear
+
+#^ 1. Match file names with an asterisk (*)
+cd /etc/ssh
 ls
+ls *.pub
+ls *config
 clear
 
-#^ Match file names with a glob
-#! * matches any run of characters, including none.
-ls *.txt
-#! ? matches exactly one character.
-ls file?.md
-#! Square brackets match one character from the set.
-ls file[ac].*
+#^ 2. Match single characters with a question mark (?)
+ls
+ls ssh?_config
+ls ssh_host_???_key.pub
+
+#^ 3. Match character sets with brackets ([...])
+ls ssh_host_[e]*.pub
+ls ssh_host_[r]*.pub
+ls ssh_host_[re]*.pub
+ls *[0-9]*
 clear
 
-#^ Watch Bash expand an unquoted asterisk
-#! echo never receives a *. Bash replaces it with the file names before echo runs.
+#^ 4. Observe pathname expansion directly with echo
 echo *
-clear
+echo *.pub
