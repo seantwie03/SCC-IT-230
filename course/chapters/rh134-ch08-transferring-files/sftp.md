@@ -250,3 +250,4 @@ Remote host: `servera`, in `/etc`
 4. Confirm the `group` file exists on the remote side, then download it
 5. List the local directory from inside the session to verify the download
 6. Leave the session and read the downloaded file with `cat`
+7. Remove the downloaded file

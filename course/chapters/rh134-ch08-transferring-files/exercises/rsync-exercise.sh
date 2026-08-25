@@ -2,8 +2,21 @@ kitten @ set-font-size 30.0 && ssh workstation
 clear
 
 #^ Task: Synchronize servera's Log Directory Into /tmp
-#!   Local:  workstation, /tmp
-#!   Remote: servera, /var/log
+# Requirements
+#   Local host: workstation
+#   Local directory: /tmp
+#   Remote host: servera
+#   Remote directory: /var/log
+#   Privileges: sudo access on both hosts
+# Tasks
+#   1. Install rsync on both machines
+#   2. Preview the transfer
+#   3. Run the transfer
+#   4. Generate new log entries on servera
+#   5. Synchronize a second time
+#   6. Verify the new entries locally
+#   7. Clean up
+clear
 
 #^ 1. Install rsync on both machines
 #! rsync must be present on BOTH ends. It is not in a minimal installation.

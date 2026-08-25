@@ -2,6 +2,20 @@ kitten @ set-font-size 30.0 && ssh workstation
 clear
 
 #^ Task: Copy a File to servera and Back Again
+# Requirements
+#   Student hosts: Windows VDI session and servera
+#   Demonstration hosts: workstation and servera
+# Tasks
+#   1. Create a small file to send
+#   2. Upload it to servera
+#   3. Confirm it arrived
+#   4. Edit the file on servera
+#   5. Download the edited file back
+#   6. Send several files with one pattern
+#   7. Match the pattern on the far end instead
+#   8. Clean up
+clear
+
 #! Students run the scp half of this from Windows Terminal on the VDI. The steps are
 #! identical on the Linux workstation, so demonstrate them here and read the list aloud.
 echo '  1. Open Windows Terminal on the VDI'

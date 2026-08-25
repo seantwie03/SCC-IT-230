@@ -290,8 +290,9 @@ The system log `/var/log/messages` is only readable by `root`.
 ## Steps
 
 1. Find every line in the system log that mentions the SSH service
-2. Show the surrounding lines so you can read what happened before and after a boot message
-3. Narrow a noisy search by removing the lines you do not care about
-4. Search for two different services in a single command
-5. Repeat one search so that capitalization no longer matters
-6. Verify each result by reading the printed lines
+2. Show the neighborhood around a boot message
+3. Show only the lines that follow a system target message
+4. Show only the lines that precede a boot message
+5. Narrow a noisy search by removing the lines you do not care about
+6. Search for two different services in a single command
+7. Repeat one search so that capitalization no longer matters

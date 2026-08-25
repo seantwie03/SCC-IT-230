@@ -173,3 +173,4 @@ Windows 10 and later ship with `scp` in Windows Terminal.
 5. Log out, download the edited file back, and confirm your addition survived
 6. Create several files with different extensions, then upload only the text files with one command
 7. From an empty directory, download those files back with a pattern matched on `servera`
+8. Remove the files you created on both hosts

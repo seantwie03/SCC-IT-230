@@ -29,7 +29,7 @@ src: ./chapters/rh124-ch07-managing-files-from-the-command-line/shell-expansions
 ---
 
 ---
-src: ./chapters/rh124-ch07-managing-files-from-the-command-line/quoting.md
+src: ./chapters/rh134-ch02-using-regular-expressions-for-practical-applications/quoting.md
 ---
 
 ---

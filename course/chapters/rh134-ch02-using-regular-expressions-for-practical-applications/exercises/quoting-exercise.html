@@ -471,10 +471,10 @@
                         text with single quotes, double quotes, or backslashes.
                     </p>
                     <p>
-                        In this hands-on exercise you will protect an asterisk
-                        from expansion, compare variable expansion in single vs.
-                        double quotes, escape a literal dollar sign, and create
-                        directories containing spaces using quotes and escapes.
+                        In this hands-on exercise you will print a literal
+                        asterisk in three ways, assign and expand a variable,
+                        compare single and double quotes, and group words into
+                        arguments with quotes and backslashes.
                     </p>
 
                     <dl class="requirements">
@@ -487,13 +487,16 @@
 
                 <ol class="steps">
                     <li class="step">
-                        <h2>Protect the asterisk from expansion</h2>
+                        <h2>Print a literal asterisk</h2>
                         <p>
-                            Connect to <code>servera</code>. Compare unquoted
-                            <code>echo *</code> with three ways to protect the
-                            asterisk so it reaches the command literally.
+                            Connect to <code>servera</code> and work from
+                            <code>/tmp</code>. First observe the unquoted
+                            result, then protect the asterisk with single
+                            quotes, double quotes, and a backslash so it reaches
+                            <code>echo</code> literally.
                         </p>
                         <pre><code>ssh student@servera
+cd /tmp
 echo *
 echo '*'
 echo "*"
@@ -506,53 +509,44 @@ echo \*</code></pre>
                         </aside>
                     </li>
                     <li class="step">
-                        <h2>Assign and expand a variable</h2>
+                        <h2>Assign a value to a variable</h2>
                         <p>
                             Assign a value with <code>name=value</code> (no
                             spaces around <code>=</code>). Read the value back
                             with <code>$linux</code>.
                         </p>
                         <pre><code>linux=awesome
-echo To print the value, prefix the variable name with a dollar sign: $linux</code></pre>
+echo See the value with: $linux</code></pre>
                     </li>
                     <li class="step">
-                        <h2>Compare single quotes with double quotes</h2>
-                        <p>Run all three commands and compare their outputs.</p>
+                        <h2>Use single and double quotes</h2>
+                        <p>Run both commands and compare their outputs.</p>
                         <pre><code>echo "Double quotes allow variable expansion: $linux"
-echo 'Single quotes do not. They treat everything literally: $linux'
-echo 'Single quotes are best when another program must receive the pattern'</code></pre>
+echo 'Single quotes treat everything literally: $linux'</code></pre>
                         <aside class="note">
                             <strong>Key difference</strong>
                             Double quotes still let Bash expand variables and
-                            command substitutions. Single quotes let nothing
-                            through, which is why single quotes are the right
-                            choice when handing patterns to tools like
-                            <code>grep</code>.
+                            command substitutions. Single quotes treat
+                            everything inside them literally.
                         </aside>
                     </li>
                     <li class="step">
-                        <h2>Escape a dollar sign inside double quotes</h2>
+                        <h2>Include spaces in arguments</h2>
                         <p>
-                            A backslash works inside double quotes to print a
-                            literal dollar sign without variable expansion.
-                        </p>
-                        <pre><code>echo "This prints the dollar sign even though it is in double quotes: \$linux"</code></pre>
-                    </li>
-                    <li class="step">
-                        <h2>Group words into a single argument</h2>
-                        <p>
-                            Commands split arguments on spaces. Create
-                            directories with spaces using quotes and escapes,
-                            then clean up.
+                            First observe how unquoted spaces split words into
+                            separate arguments. Then group words into directory
+                            names with single quotes and backslashes. Verify
+                            each result with <code>ls -l</code>, then clean up
+                            and unset the variable.
                         </p>
                         <pre><code>mkdir My Files
 ls -l
-mkdir 'My Files'
+mkdir 'Linux Files'
+ls -l
 mkdir This\ Is\ One\ Argument
 ls -l
-rmdir My Files 'My Files' 'This Is One Argument'
-rm filea.txt fileb.md filec.sh
-ls -l</code></pre>
+rmdir My Files 'Linux Files' 'This Is One Argument'
+unset linux</code></pre>
                     </li>
                 </ol>
             </article>

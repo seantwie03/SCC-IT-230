@@ -228,7 +228,7 @@ A slash on the source changes what gets created. Use `-n` when you are unsure.
 
 ---
 
-# Exercise: Synchronizing Directories with `rsync`
+# Exercise: Synchronizing with `rsync`
 
 ## Requirements
 
@@ -239,8 +239,9 @@ Remote host: `servera`, using `/var/log`
 ## Steps
 
 1. Make sure the tool is installed on <AccentText>both</AccentText> machines
-2. Preview what a synchronization of the remote log directory into `/tmp` would transfer, without transferring it
-3. Run it for real and note how long the first pass takes
-4. Cause `servera` to write some new log entries
-5. Synchronize a second time and compare how much data moved
-6. Verify that the new entries are present in your local copy
+2. Preview the remote log synchronization without transferring anything
+3. Run the synchronization and note how long the first pass takes
+4. Write new log entries on `servera`
+5. Synchronize again and compare how much data moved
+6. Verify the new entries in your local copy
+7. Remove the synchronized copy from `/tmp`
