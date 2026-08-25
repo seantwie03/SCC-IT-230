@@ -1,53 +1,35 @@
 kitten @ set-font-size 30.0 && ssh workstation
 clear
 
-#^ Task: Download /etc/group From servera With sftp
+#^ Task: Download /etc/group from servera with sftp
 # Requirements
 #   Local host: workstation
-#   Local directory: /home/student/Downloads
 #   Remote host: servera
-#   Remote directory: /etc
 # Tasks
-#   1. Open an interactive transfer session
-#   2. Point the local side at Downloads
-#   3. Point the remote side at /etc
-#   4. Download the group file
-#   5. Verify from inside the session
-#   6. Leave and read the file
-#   7. Clean up
+#   1. Open a transfer session and inspect both sides
+#   2. Navigate the local and remote filesystems
+#   3. Download and verify the group file
+#   4. Leave the session and clean up
 clear
 
-mkdir -p /home/student/Downloads
-clear
-
-#^ 1. Open an interactive transfer session
+#^ 1. Open a transfer session and inspect both sides
 sftp student@servera
-#! The sftp> prompt has replaced the shell prompt. Bash is not running here.
-
-#^ 2. Point the local side at Downloads
-#! Commands prefixed with l act on the LOCAL host.
 lpwd
+pwd
+
+#^ 2. Navigate the local and remote filesystems
 lcd /home/student/Downloads
 lpwd
-
-#^ 3. Point the remote side at /etc
-#! Commands with no prefix act on the REMOTE host.
 cd /etc
 pwd
 
-#^ 4. Download the group file
+#^ 3. Download and verify the group file
 ls group
 get group
-
-#^ 5. Verify from inside the session
 lls
 
-#^ 6. Leave and read the file
+#^ 4. Leave the session and clean up
 bye
 ls -l /home/student/Downloads
 cat /home/student/Downloads/group
-clear
-
-#^ 7. Clean up
 rm /home/student/Downloads/group
-clear

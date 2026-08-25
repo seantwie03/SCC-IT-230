@@ -25,7 +25,7 @@ vertical: center
 
 # `Ctrl + F` on Steroids
 
-A regular expression describes a <AccentText>pattern</AccentText> instead of one exact string.
+A regular expression describes a <AccentText>pattern</AccentText> instead of one exact string
 
 - Find the error messages buried in a log file
 - Pull every IP address out of that log file
@@ -34,7 +34,7 @@ A regular expression describes a <AccentText>pattern</AccentText> instead of one
 
 <Callout>
 
-If you have ever run `grep`, you have already used a regular expression.
+If you have ever run `grep`, you have already used a regular expression
 
 </Callout>
 
@@ -44,7 +44,7 @@ vertical: start
 
 # A Real-World Scenario
 
-**The task:** your manager wants every unique address that failed to log in over SSH.
+**The task:** your manager wants every unique address that failed to log in over SSH
 
 **The evidence:** `/var/log/secure`
 
@@ -55,30 +55,30 @@ Jan 12 10:30:15 servera sshd[1204]: Failed password for root from 203.0.113.55
 Jan 12 10:30:20 servera sshd[1209]: Failed password for root from 203.0.113.55
 ```
 
-**The report:** one line per address, with a count.
+**The report:** one line per address, with a count
 
 ```text {*}{lines:false}
       1 10.0.2.2
       2 203.0.113.55
 ```
 
-By the end of this chapter you will be able to write that one-liner yourself.
+By the end of this chapter you will be able to write that one-liner yourself
 
 ---
 vertical: center
 ---
 
-# `grep` — Global · Regular Expression · Print
+# `grep`: Global · Regular Expression · Print
 
-Written by <AccentText>Ken Thompson</AccentText> at Bell Labs and first released in <AccentText>1973</AccentText>.
+Written by <AccentText>Ken Thompson</AccentText> at Bell Labs and first released in <AccentText>1973</AccentText>
 
-Prints every <AccentText>line</AccentText> of its input that matches a pattern.
+Prints every <AccentText>line</AccentText> of its input that matches a pattern
 
 <CommandExplainer
   command="grep PATH ~/.bashrc"
   :steps="[
     { active: 'grep', explanation: 'Print matching lines' },
-    { active: 'PATH', explanation: 'The pattern — here, the simplest possible regular expression: an exact string' },
+    { active: 'PATH', explanation: 'The pattern: here, the simplest possible regular expression, an exact string' },
     { active: '~/.bashrc', explanation: 'The file to search' },
   ]"
 />
@@ -110,7 +110,7 @@ student@servera:~$
 
 <v-click>
 
-It prints every line of `/etc/passwd` that contains the string `student`.
+It prints every line of `/etc/passwd` that contains the string `student`
 
 </v-click>
 
@@ -118,7 +118,7 @@ It prints every line of `/etc/passwd` that contains the string `student`.
 
 # Searching a Pipe
 
-`grep` reads standard input when you give it no file.
+`grep` reads standard input when you give it no file
 
 <TerminalWindow title="student@servera:~">
 
@@ -141,7 +141,7 @@ student@servera:~$
 
 <v-click>
 
-The output of `ps -aux` becomes the input to `grep`.
+The output of `ps -aux` becomes the input to `grep`
 
 </v-click>
 
@@ -151,9 +151,9 @@ vertical: start
 
 # `grep` Finds Itself
 
-<WarningText>The last line is the `grep` command you just ran.</WarningText>
+<WarningText>The last line is the `grep` command you just ran</WarningText>
 
-It was in the process table when `ps` looked, and it contains the word `systemd`.
+It was in the process table when `ps` looked, and it contains the word `systemd`
 
 <TerminalWindow title="student@servera:~">
 
@@ -175,7 +175,7 @@ vertical: start
 
 # Invert the Match with `-v`
 
-`-v` prints every line that <DangerText>does not</DangerText> match.
+`-v` prints every line that <DangerText>does not</DangerText> match
 
 <TerminalWindow title="student@servera:~">
 
@@ -195,7 +195,7 @@ student@servera:~$
 
 </TerminalWindow>
 
-The stray `grep --color=auto systemd` line is gone.
+The stray `grep --color=auto systemd` line is gone
 
 ---
 vertical: start
@@ -203,7 +203,7 @@ vertical: start
 
 # Several Patterns with `-e`
 
-Match `systemd` <AccentText>or</AccentText> `sshd` — give `-e` once per pattern.
+Match `systemd` <AccentText>or</AccentText> `sshd`; give `-e` once per pattern
 
 <TerminalWindow title="student@servera:~">
 
@@ -232,7 +232,7 @@ vertical: start
 
 # Ignore Case with `-i`
 
-Without `-i`, `Finished` and `finished` are different patterns.
+Without `-i`, `Finished` and `finished` are different patterns
 
 <TerminalWindow title="student@servera:~">
 
@@ -248,7 +248,7 @@ Aug 26 00:47:59 servera systemd[1]: Startup finished in 1.299s (kernel) + 1.274s
 
 </TerminalWindow>
 
-Capital `Finished` on the first click; lowercase `finished` on the second. Only `-i` returns both.
+Capital `Finished` on the first click, lowercase `finished` on the second; only `-i` returns both
 
 ---
 layout: two-cols-header
@@ -257,7 +257,7 @@ vertical: start
 
 # Context Around the Match
 
-A matching line is rarely the whole story. Three options print its neighbors.
+A matching line is rarely the whole story; three options print its neighbors
 
 ::left::
 
@@ -267,7 +267,7 @@ A matching line is rarely the whole story. Three options print its neighbors.
 | `-A3`  | 3 lines after the match   |
 | `-C3`  | 3 lines on both sides     |
 
-Each has a long form: `--before-context=3`, `--after-context=3`, `--context=3`.
+Each has a long form: `--before-context=3`, `--after-context=3`, `--context=3`
 
 ::right::
 
@@ -277,6 +277,7 @@ Each has a long form: `--before-context=3`, `--after-context=3`, `--context=3`.
 - You have a <AccentText>symptom</AccentText> and want what led to it: use `-B`
 - You want the <AccentText>whole neighborhood</AccentText>: use `-C`
 
+
 ---
 
 # Exercise: Searching Log Files with `grep`
@@ -285,14 +286,8 @@ Each has a long form: `--before-context=3`, `--after-context=3`, `--context=3`.
 
 Host: `servera`
 
-The system log `/var/log/messages` is only readable by `root`.
-
 ## Steps
 
-1. Find every line in the system log that mentions the SSH service
-2. Show the neighborhood around a boot message
-3. Show only the lines that follow a system target message
-4. Show only the lines that precede a boot message
-5. Narrow a noisy search by removing the lines you do not care about
-6. Search for two different services in a single command
-7. Repeat one search so that capitalization no longer matters
+1. Find matching log entries
+2. Show context around matches
+3. Refine results with grep options

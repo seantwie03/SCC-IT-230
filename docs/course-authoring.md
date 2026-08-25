@@ -155,6 +155,12 @@ of a short command or prompt, and `Callout` for a genuinely supplemental
 caveat. Use a click sequence only when progressive disclosure helps explain a
 procedure; do not hide unrelated commands in one sequence.
 
+Prefer the fewest words that communicate the point. Use short phrases and
+fragments instead of full sentences when the meaning remains clear, and omit
+sentence-ending punctuation from ordinary slide copy. Keep full sentences and
+punctuation when they improve clarity, preserve technical meaning, or reproduce
+commands, output, quotations, or other source material accurately.
+
 Try to make the slides visually interesting by adding color, components, tables,
 charts, images, etc. Pure text slides are very borring. Keep slides short, fewer
 words is generally better.

@@ -464,35 +464,30 @@
                 </header>
 
                 <section class="overview" aria-labelledby="overview-heading">
-                    <h2 id="overview-heading">Overview</h2>
+                    <h2 id="overview-heading">Task</h2>
                     <p>
-                        <code>scp</code> copies every byte every time.
-                        <code>rsync</code> compares the two sides first and
-                        sends only what differs, so the second and every later
-                        run are dramatically faster.
-                    </p>
-                    <p>
-                        In this hands-on exercise you will synchronize the log
-                        directory from <code>servera</code> into
-                        <code>/tmp</code> on <code>workstation</code>, generate
-                        new log entries on <code>servera</code>, and synchronize
-                        again to see how little data moves the second time.
+                        In this hands-on exercise, synchronize
+                        <code>servera</code>'s log directory into
+                        <code>/tmp</code>, generate changes, and compare the
+                        first and second transfers.
                     </p>
 
                     <dl class="requirements">
                         <div>
                             <dt>Local host</dt>
                             <dd>
-                                <code>workstation</code>, using
-                                <code>/tmp</code>
+                                <code>workstation</code>
                             </dd>
                         </div>
                         <div>
                             <dt>Remote host</dt>
                             <dd>
-                                <code>servera</code>, using
-                                <code>/var/log</code>
+                                <code>servera</code>
                             </dd>
+                        </div>
+                        <div>
+                            <dt>Privileges</dt>
+                            <dd><code>sudo</code> access on both hosts</dd>
                         </div>
                     </dl>
                 </section>
@@ -506,10 +501,12 @@
                             installation.
                         </p>
                         <pre><code>sudo dnf install -y rsync
-ssh student@servera sudo dnf install -y rsync</code></pre>
+ssh student@servera
+sudo dnf install -y rsync
+exit</code></pre>
                     </li>
                     <li class="step">
-                        <h2>Preview the transfer</h2>
+                        <h2>Preview and run the first synchronization</h2>
                         <p>
                             <code>-n</code> is a dry run: it reports what would
                             move and changes nothing. <code>-a</code> is archive
@@ -521,9 +518,6 @@ ssh student@servera sudo dnf install -y rsync</code></pre>
                             Run the command with <code>-n</code> first, read the
                             list, then run it again without <code>-n</code>.
                         </aside>
-                    </li>
-                    <li class="step">
-                        <h2>Run the synchronization for real</h2>
                         <p>
                             The first pass copies everything, exactly as
                             <code>scp</code> would. Note the byte counts printed
@@ -532,7 +526,7 @@ ssh student@servera sudo dnf install -y rsync</code></pre>
                         <pre><code>rsync -av root@servera:/var/log /tmp</code></pre>
                     </li>
                     <li class="step">
-                        <h2>Generate new log entries on servera</h2>
+                        <h2>Generate changes and synchronize again</h2>
                         <p>
                             <code>logger</code> writes a message into the system
                             log.
@@ -542,9 +536,6 @@ logger -t rsync-exercise "Generating a new log entry for the transfer exercise"
 logger -t rsync-exercise "And one more"
 tail -n 2 /var/log/messages
 exit</code></pre>
-                    </li>
-                    <li class="step">
-                        <h2>Synchronize a second time</h2>
                         <p>
                             Run exactly the same command again and compare the
                             byte counts with the first run.
@@ -557,15 +548,12 @@ exit</code></pre>
                         </aside>
                     </li>
                     <li class="step">
-                        <h2>Verify the new entries arrived</h2>
+                        <h2>Verify the changes and clean up</h2>
                         <p>
                             Search your local copy for the messages you
                             generated.
                         </p>
                         <pre><code>grep 'rsync-exercise' /tmp/log/messages</code></pre>
-                    </li>
-                    <li class="step">
-                        <h2>Clean up</h2>
                         <p>Remove the local copy of the log directory.</p>
                         <pre><code>sudo rm -rf /tmp/log
 ls /tmp</code></pre>

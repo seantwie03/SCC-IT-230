@@ -23,11 +23,12 @@ topicInfo:
 vertical: center
 ---
 
-# One Command You Already Know, Plus a Hostname
+# `cp` over `ssh`
 
-`scp` is part of the **OpenSSH** suite and rides on top of `ssh`.
+`scp` is used to upload and download files from a remote machine
 
-- Installed by default on RHEL, macOS, and Windows 10 and later
+- `scp` is part of the **OpenSSH** suite and rides on top of `ssh`
+- Installed by default on RHEL, macOS, and Windows and later
 - Available anywhere SSH is available — nothing extra to configure
 - Authenticates exactly the way `ssh` does
 
@@ -39,18 +40,17 @@ If you can `ssh` to a host, you can `scp` to it.
 
 ---
 layout: two-cols-header
-vertical: start
+leftWidth: 45
+vertical: center
 ---
 
 # `cp` and `scp`
-
-The difference is one letter in the command and one colon in the argument.
 
 ::left::
 
 ## Local copy
 
-Copy `file.txt` into `/tmp` on this machine.
+Copy `file.txt` into `/tmp`
 
 <TerminalWindow title="student@workstation:~">
 
@@ -63,9 +63,11 @@ student@workstation:~$
 
 ::right::
 
+<v-click>
+
 ## Remote copy
 
-Copy `file.txt` into `/tmp` on `servera`.
+Copy `file.txt` into `/tmp` on `servera`
 
 <TerminalWindow title="student@workstation:~">
 
@@ -77,50 +79,74 @@ student@workstation:~$
 
 </TerminalWindow>
 
+</v-click>
+
 ---
 layout: center
 ---
 
-# Reading a Remote Path
+# Uploading a File
 
 <CommandExplainer
   command="scp file.txt student@servera:/tmp"
   :steps="[
+    { active: 'scp', explanation: 'Securely Copy Files' },
     { active: 'file.txt', explanation: 'The source — an ordinary local path' },
-    { active: 'student', explanation: 'The user to log in as on the far end' },
-    { active: 'servera', explanation: 'The host to connect to' },
-    { active: ':', explanation: 'The colon is what makes this a remote path' },
+    { active: 'student@servera', explanation: 'The remote user and host (same syntax as ssh)' },
+    { active: ':', explanation: 'The colon separates hostname and path' },
     { active: '/tmp', explanation: 'The destination directory on that host' },
   ]"
 />
 
 ---
-vertical: start
+layout: center
 ---
 
-# Direction Is Just Argument Order
+# Download a File
 
-Source first, destination second — same as `cp`.
+<CommandExplainer
+  command="scp student@servera:/tmp/notes.txt ~"
+  :steps="[
+    { active: 'scp', explanation: 'Securely Copy Files' },
+    { active: 'student@servera', explanation: 'The user and host on the remote machine' },
+    { active: ':', explanation: 'The colon separates hostname and path' },
+    { active: '/tmp/notes.txt', explanation: 'The source path on the remote host' },
+    { active: '~', explanation: 'The destination local path (your home directory)' }
+  ]"
+/>
+
+
+---
+---
+
+# Upload or Download
+
+## <AccentText>Upload</AccentText> a File
+
+Local path in first argument, remote host in second argument
 
 <TerminalWindow title="student@workstation:~">
 
 ````md magic-move
 ```bash-session
 student@workstation:~$ scp file.txt student@servera:/tmp
-```
-```bash-session
-student@workstation:~$ scp file.txt student@servera:/tmp
 file.txt          100%  227     0.2KB/s   00:00
 student@workstation:~$
 ```
+````
+
+</TerminalWindow>
+
+<br />
+
+## <AccentText>Download</AccentText> a File
+
+Remote host in first argument, local path in second argument
+
+<TerminalWindow title="student@workstation:~">
+
+````md magic-move
 ```bash-session
-student@workstation:~$ scp file.txt student@servera:/tmp
-file.txt          100%  227     0.2KB/s   00:00
-student@workstation:~$ scp student@servera:/tmp/notes.txt ~
-```
-```bash-session
-student@workstation:~$ scp file.txt student@servera:/tmp
-file.txt          100%  227     0.2KB/s   00:00
 student@workstation:~$ scp student@servera:/tmp/notes.txt ~
 notes.txt         100%   84     0.1KB/s   00:00
 student@workstation:~$
@@ -129,15 +155,13 @@ student@workstation:~$
 
 </TerminalWindow>
 
-The first command <AccentText>uploads</AccentText>. The second <AccentText>downloads</AccentText>. Whichever argument carries the colon is the remote one.
-
 ---
 vertical: center
 ---
 
 # Copying a Whole Directory
 
-`-r` walks into subdirectories, exactly as it does for `cp`.
+`-r` recursively copies entire directories, exactly as it does for `cp`
 
 <TerminalWindow title="student@workstation:~">
 
@@ -160,17 +184,20 @@ student@workstation:~$
 
 ## Requirements
 
-Hosts: your Windows VDI session and `servera`
-
-Windows 10 and later ship with `scp` in Windows Terminal.
+Hosts: your Windows VDI, `workstation` and `servera`
 
 ## Steps
 
-1. Create a text file named after yourself and write your favorite text editor into it
-2. Upload it to your home directory on `servera`
-3. Connect to `servera` and confirm it arrived
-4. Edit it there to add the last game, book, or movie you finished
-5. Log out, download the edited file back, and confirm your addition survived
-6. Create several files with different extensions, then upload only the text files with one command
-7. From an empty directory, download those files back with a pattern matched on `servera`
-8. Remove the files you created on both hosts
+1. Send/Receive a File from VDI to servera
+2. Upload several files using globbing
+3. Download several files using globbing
+
+---
+horizontal: center
+---
+
+# Exercise: Copying Files with `scp`
+
+![Screen recording of the instructor demonstrating scp.](./assets/scp-exercise.gif)
+
+<a href="https://asciinema.org/a/1263865" target="_blank" rel="noopener noreferrer" aria-label="Watch the scp recording in a new tab">Asciinema recording</a> · <a href="../resources/scp-exercise.html" target="_blank" rel="noopener noreferrer" aria-label="Read the written scp exercise in a new tab">Written exercise</a>

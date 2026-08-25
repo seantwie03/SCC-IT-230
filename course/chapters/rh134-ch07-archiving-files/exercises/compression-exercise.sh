@@ -48,4 +48,3 @@ cd /tmp
 rm -rf /tmp/etc-backup.tar* /tmp/etc-extract /tmp/etc-one /tmp/etc-xz-extract
 ls /tmp
 exit
-clear

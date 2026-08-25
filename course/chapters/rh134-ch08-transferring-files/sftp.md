@@ -25,18 +25,27 @@ vertical: center
 
 # An Interactive Session Instead of One Command
 
-`sftp` is also part of the **OpenSSH** suite and also rides on `ssh`.
 
-Where `scp` runs once and exits, `sftp` drops you into its own prompt so you can look around before deciding what to move.
+`sftp` drops you into its own prompt so you can look around before deciding what to move
 
+- `sftp` is also part of the **OpenSSH** suite and also rides on `ssh`
 - Browse the remote directory tree
 - Change directories on <AccentText>both</AccentText> ends
 - Upload and download repeatedly in one connection
 
-Graphical file managers and cross-platform clients speak this same protocol, so what you learn at the prompt applies there too.
+---
+vertical: center
+---
+
+# Filezilla
+
+Local on the Left - Remote on the Right
+
+![FileZilla connected to servera over SFTP, showing the local Downloads directory on workstation in the left pane and the remote filesystem on servera in the right pane](./assets/filezilla.png)
+
 
 ---
-vertical: start
+vertical: center
 ---
 
 # Connecting
@@ -56,10 +65,12 @@ sftp>
 
 </TerminalWindow>
 
-The `sftp>` prompt replaces your shell prompt. Bash is not running here — only the commands `sftp` implements.
+The `sftp>` prompt replaces your shell prompt
+
+Bash is not running here, only the commands `sftp` implements
 
 ---
-vertical: start
+vertical: center
 ---
 
 # `help` Lists Everything Available
@@ -95,13 +106,13 @@ vertical: start
 
 # Two Machines, One Prompt
 
-Look carefully at that list: several commands appear twice.
+Look carefully at that list: several commands appear twice
 
 ::left::
 
 ## Remote by default
 
-Plain commands act on `servera`.
+Plain commands act on <AccentText>remote</AccentText>
 
 | Command | Acts on the remote |
 | ------- | ------------------ |
@@ -114,7 +125,7 @@ Plain commands act on `servera`.
 
 ## Local with a leading `l`
 
-Prefix with `l` to act on `workstation`.
+Prefix with `l` to act on <AccentText>local</AccentText>
 
 | Command  | Acts on the local |
 | -------- | ----------------- |
@@ -127,43 +138,44 @@ Prefix with `l` to act on `workstation`.
 layout: center
 ---
 
-# `get` and `put` Are Named From Your Side
+# `get` is Named From Your Side
 
 <CommandExplainer
-  command="sftp> get passwd"
+  command="sftp> get /etc/passwd"
   :steps="[
-    { active: 'get', explanation: 'Download: bring the file from the remote host to the local one' },
-    { active: 'passwd', explanation: 'Read from the remote working directory, written into the local working directory' },
+    { active: 'sftp>', explanation: 'Secure File Transfer Protocol prompt' },
+    { active: 'get', explanation: 'Download the file from the remote host to the local host' },
+    { active: '/etc/passwd', explanation: 'Read from the remote working directory, written into the local working directory' },
   ]"
 />
 
-<v-click>
+---
+layout: center
+---
 
-`put` is the mirror image: it uploads from local to remote.
+# `put` is Named From Your Side
 
-</v-click>
+<CommandExplainer
+  command="sftp> put /etc/passwd"
+  :steps="[
+    { active: 'sftp>', explanation: 'Secure File Transfer Protocol prompt' },
+    { active: 'put', explanation: 'Upload the file from the local host to the remote host' },
+    { active: '/etc/passwd', explanation: 'Read from the local working directory, written into the remote working directory' },
+  ]"
+/>
+
 
 ---
-vertical: start
 ---
 
 # Downloading
 
-Set the directory on each side, then `get`.
+Set the directory on each side, then `get`
 
 <TerminalWindow title="student@workstation:~">
 
-````md magic-move
 ```bash-session
-sftp> lcd /home/student/Downloads
-sftp> cd /etc
-```
-```bash-session
-sftp> lcd /home/student/Downloads
-sftp> cd /etc
-sftp> get passwd
-```
-```bash-session
+student@workstation:~$ sftp student@servera
 sftp> lcd /home/student/Downloads
 sftp> cd /etc
 sftp> get passwd
@@ -171,11 +183,12 @@ Fetching /etc/passwd to passwd
 passwd                                     100% 2374     2.3MB/s   00:00
 sftp>
 ```
-````
 
 </TerminalWindow>
 
-`lcd` chose where it landed. `cd` chose where it came from.
+`lcd` chose where it landed (Destination)
+
+`cd` chose where it came from (Source)
 
 ---
 vertical: start
@@ -183,20 +196,10 @@ vertical: start
 
 # Uploading
 
-The same two commands, in the other direction.
+The same two commands, in the other direction
 
 <TerminalWindow title="student@workstation:~">
 
-````md magic-move
-```bash-session
-sftp> mkdir hostbackup
-sftp> cd hostbackup
-```
-```bash-session
-sftp> mkdir hostbackup
-sftp> cd hostbackup
-sftp> put /etc/hosts
-```
 ```bash-session
 sftp> mkdir hostbackup
 sftp> cd hostbackup
@@ -205,13 +208,12 @@ Uploading /etc/hosts to /home/student/hostbackup/hosts
 /etc/hosts                                 100%  227     0.2KB/s   00:00
 sftp>
 ```
-````
 
 </TerminalWindow>
 
 <Callout>
 
-`mkdir` created the directory on `servera`, because it has no leading `l`.
+`mkdir` created the directory on `servera`, because it has no leading `l`
 
 </Callout>
 
@@ -220,6 +222,8 @@ vertical: center
 ---
 
 # Leaving
+
+`bye`, `exit`, and `quit` all close the session and return you to your shell
 
 <TerminalWindow title="student@workstation:~">
 
@@ -230,7 +234,29 @@ student@workstation:~$
 
 </TerminalWindow>
 
-`bye`, `exit`, and `quit` all close the session and return you to your shell.
+---
+listSpacing: padded
+---
+
+# `sftp` Without an Interactive Session
+
+`sftp` can be used non-interactively similar to `scp`
+
+<TerminalWindow title="student@workstation:~/Downloads">
+
+```bash-session
+student@workstation:~/Downloads$ sftp student@servera:/etc/group
+Connected to servera.
+Fetching /etc/group to group
+group                                      100% 1118     1.1MB/s   00:00
+student@workstation:~/Downloads$
+```
+
+</TerminalWindow>
+
+- Same `user@host:path` shape as `scp`
+- No `sftp>` prompt when the remote path names a file
+- File lands in the current local directory
 
 ---
 
@@ -244,10 +270,7 @@ Remote host: `servera`, in `/etc`
 
 ## Steps
 
-1. From `workstation`, open an interactive transfer session to `servera`
-2. Point the <AccentText>local</AccentText> side at your `Downloads` directory and confirm where you are
-3. Point the <AccentText>remote</AccentText> side at `/etc` and confirm where you are
-4. Confirm the `group` file exists on the remote side, then download it
-5. List the local directory from inside the session to verify the download
-6. Leave the session and read the downloaded file with `cat`
-7. Remove the downloaded file
+1. Open a transfer session and inspect both sides
+2. Navigate the local side to `Downloads` and the remote side to `/etc`
+3. Download and verify the `group` file
+4. Leave the session, read the file and clean up

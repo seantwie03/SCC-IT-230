@@ -17,11 +17,11 @@ topicInfo:
 
 # `rsync`
 
-## A fast, versatile, remote (and local) file-copying tool
+## Fast, versatile, remote (and local) file-synchronization
 
 ---
 layout: two-cols-header
-vertical: start
+vertical: evenly
 ---
 
 # Copying Versus Synchronizing
@@ -30,21 +30,37 @@ vertical: start
 
 ## `scp` copies
 
-Every byte crosses the network, every time you run it.
+Every byte crosses the network, every time
 
-Copy a 4 GB directory twice and you have moved 8 GB.
+Copy a 4 GB directory; 4 GB is sent
+
+Copy the same 4 GB directory; 4 GB is sent
+
+<Callout type="success">
+
+`scp` is installed with `ssh`
+
+Nearly all linux machiens will have it
+
+</Callout>
 
 ::right::
 
 ## `rsync` synchronizes
 
-It compares the two sides first and sends only what differs.
+It compares the two sides
 
-The first run costs the same as `scp`. Every run after that is <SuccessText>dramatically faster</SuccessText>.
+Sends only what differs
+
+The first run costs the same as `scp`
+
+Every run after that is <SuccessText>dramatically faster</SuccessText>
 
 <Callout type="warning">
 
-`rsync` must be installed on <DangerText>both</DangerText> machines. It is not part of a minimal installation.
+`rsync` must be installed on <DangerText>both</DangerText> machines
+
+It is not part of a minimal installation
 
 </Callout>
 
@@ -74,7 +90,7 @@ SYNOPSIS
 
 </TerminalWindow>
 
-Same shape as `scp`: source first, destination second, a colon marks the remote side.
+Same shape as `scp`: source first, destination second, a colon marks the remote side
 
 ---
 layout: two-cols-header
@@ -84,29 +100,34 @@ vertical: start
 
 # Three Options Worth Knowing
 
-`man rsync` lists dozens. These three cover nearly everything you will do.
+`rsync` has **many** options. These three are the most important
 
 ::left::
 
-| Option | Meaning                                    |
-| ------ | ------------------------------------------ |
-| `-a`   | **a**rchive mode — recurse and preserve permissions, ownership, and timestamps |
-| `-v`   | **v**erbose — name each file as it transfers |
-| `-n`   | dry ru**n** — report what would happen, change nothing |
+| Option | Meaning                                                                       |
+|--------|-------------------------------------------------------------------------------|
+| `-a`   | **a**rchive mode: recurse and preserve permissions, ownership, and timestamps |
+| `-v`   | **v**erbose: name each file as it transfers                                   |
+| `-n`   | dry ru**n**: change nothing, report what would happen                         |
 
 ::right::
 
-## The habit to build
+## Typical Usage
 
 <TerminalWindow title="student@workstation:~">
 
 ```bash-session
 student@workstation:~$ rsync -avn servera:/etc/ /tmp/etc/
+student@workstation:~$ rsync -av servera:/etc/ /tmp/etc/
 ```
 
 </TerminalWindow>
 
-Run it with `-n` first. Read the list. Then run it again without `-n`.
+Run it with `-n` first
+
+Read the list
+
+Then run it again without `-n`
 
 ---
 layout: center
@@ -117,10 +138,11 @@ layout: center
 <CommandExplainer
   command="rsync -av servera:/var/log /tmp"
   :steps="[
-    { active: '-av', explanation: 'Archive mode, and name each file as it goes' },
-    { active: 'servera:', explanation: 'Pull from this host — the colon marks the remote side, exactly as in scp' },
+    { active: 'rsync', explanation: 'File Synchronization tool' },
+    { active: '-av', explanation: 'Archive mode,  with verbose output' },
+    { active: 'servera:', explanation: 'Pull from this host. The colon marks the remote side, same as scp' },
     { active: '/var/log', explanation: 'The source directory on servera' },
-    { active: '/tmp', explanation: 'The destination directory on workstation' },
+    { active: '/tmp', explanation: 'The destination directory on local' },
   ]"
 />
 
@@ -158,7 +180,7 @@ vertical: start
 
 # The Second Run Sends Almost Nothing
 
-Change one file, then synchronize again.
+Change one file, then synchronize again
 
 <TerminalWindow title="student@workstation:~">
 
@@ -183,7 +205,9 @@ student@workstation:~$
 
 <v-click>
 
-Only `notes.txt` moved. The other files were already identical on both sides.
+Only `notes.txt` moved.
+
+The other files were already identical on both sides
 
 </v-click>
 
@@ -194,7 +218,7 @@ vertical: start
 
 # Mind the Trailing Slash
 
-This is the mistake everyone makes exactly once.
+This is the mistake everyone makes exactly once
 
 ::left::
 
@@ -204,7 +228,7 @@ This is the mistake everyone makes exactly once.
 rsync -av ~/Documents/ servera:/tmp/backup/
 ```
 
-Copies the **contents** of `Documents` into `backup`.
+Copies the **contents** of `Documents`
 
 Result: `/tmp/backup/notes.txt`
 
@@ -216,13 +240,15 @@ Result: `/tmp/backup/notes.txt`
 rsync -av ~/Documents servera:/tmp/backup/
 ```
 
-Copies the **directory itself** into `backup`.
+Copies the **directory itself**
 
 Result: `/tmp/backup/Documents/notes.txt`
 
 <Callout type="danger">
 
-A slash on the source changes what gets created. Use `-n` when you are unsure.
+A slash on the source changes what gets created
+
+Use `-n` when you are unsure
 
 </Callout>
 
@@ -232,16 +258,13 @@ A slash on the source changes what gets created. Use `-n` when you are unsure.
 
 ## Requirements
 
-Local host: `workstation`, using `/tmp`
+Local host: `workstation`
 
-Remote host: `servera`, using `/var/log`
+Remote host: `servera`
 
 ## Steps
 
-1. Make sure the tool is installed on <AccentText>both</AccentText> machines
-2. Preview the remote log synchronization without transferring anything
-3. Run the synchronization and note how long the first pass takes
-4. Write new log entries on `servera`
-5. Synchronize again and compare how much data moved
-6. Verify the new entries in your local copy
-7. Remove the synchronized copy from `/tmp`
+1. Install rsync on both machines
+2. Preview and run the first synchronization
+3. Generate changes and synchronize again
+4. Verify the changes and clean up

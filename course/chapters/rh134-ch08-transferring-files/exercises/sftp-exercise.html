@@ -464,115 +464,95 @@
                 </header>
 
                 <section class="overview" aria-labelledby="overview-heading">
-                    <h2 id="overview-heading">Overview</h2>
+                    <h2 id="overview-heading">Task</h2>
                     <p>
-                        Where <code>scp</code> runs once and exits,
-                        <code>sftp</code> opens an interactive session so you
-                        can look around both machines before deciding what to
-                        move.
-                    </p>
-                    <p>
-                        In this hands-on exercise you will connect to
-                        <code>servera</code>, set the working directory on each
-                        side independently, download <code>/etc/group</code>,
-                        and verify the result without leaving the session.
+                        Download <code>/etc/group</code> from
+                        <code>servera</code> with an interactive
+                        <code>sftp</code> session.
                     </p>
 
                     <dl class="requirements">
                         <div>
                             <dt>Local host</dt>
-                            <dd>
-                                <code>workstation</code>, in
-                                <code>/home/student/Downloads</code>
-                            </dd>
+                            <dd><code>workstation</code></dd>
                         </div>
                         <div>
                             <dt>Remote host</dt>
-                            <dd><code>servera</code>, in <code>/etc</code></dd>
+                            <dd><code>servera</code></dd>
                         </div>
                     </dl>
                 </section>
 
                 <ol class="steps">
                     <li class="step">
-                        <h2>Prepare the local directory</h2>
+                        <h2>Open a transfer session and inspect both sides</h2>
                         <p>
-                            On <code>workstation</code>, make sure the
-                            destination directory exists.
+                            On <code>workstation</code>, prepare the local
+                            destination and connect to <code>servera</code>.
                         </p>
-                        <pre><code>mkdir -p /home/student/Downloads</code></pre>
-                    </li>
-                    <li class="step">
-                        <h2>Open an interactive transfer session</h2>
-                        <p>Connect to <code>servera</code>.</p>
-                        <pre><code>sftp student@servera</code></pre>
+                        <pre><code>mkdir -p /home/student/Downloads
+sftp student@servera
+lpwd
+pwd</code></pre>
                         <aside class="note">
-                            <strong>A different prompt</strong>
+                            <strong>Two working directories</strong>
                             The <code>sftp&gt;</code> prompt has replaced your
-                            shell prompt. Bash is not running here — only the
-                            commands <code>sftp</code> implements. Type
-                            <code>help</code> to see the full list.
+                            shell prompt. <code>lpwd</code> shows the local
+                            directory on <code>workstation</code>;
+                            <code>pwd</code> shows the remote directory on
+                            <code>servera</code>.
                         </aside>
                     </li>
                     <li class="step">
-                        <h2>
-                            Point the local side at your Downloads directory
-                        </h2>
+                        <h2>Navigate the local and remote filesystems</h2>
                         <p>
-                            Commands prefixed with <code>l</code> act on the
-                            <em>local</em> host.
+                            Point the local side at the destination directory,
+                            then point the remote side at the source directory.
                         </p>
-                        <pre><code>lpwd
-lcd /home/student/Downloads
-lpwd</code></pre>
-                    </li>
-                    <li class="step">
-                        <h2>Point the remote side at /etc</h2>
-                        <p>
-                            Commands with no prefix act on the
-                            <em>remote</em> host.
-                        </p>
-                        <pre><code>cd /etc
+                        <pre><code>lcd /home/student/Downloads
+lpwd
+cd /etc
 pwd</code></pre>
+                        <aside class="note">
+                            <strong>Local or remote?</strong>
+                            Commands prefixed with <code>l</code> act on
+                            <code>workstation</code>. Commands without that
+                            prefix act on <code>servera</code>.
+                        </aside>
                     </li>
                     <li class="step">
-                        <h2>Download the group file</h2>
+                        <h2>Download and verify the group file</h2>
                         <p>
                             Confirm the file exists on the remote side, then
-                            fetch it. <code>get</code> is named from your point
-                            of view: it brings a file to you.
+                            download it and list the local directory from inside
+                            the session.
                         </p>
                         <pre><code>ls group
-get group</code></pre>
+get group
+lls</code></pre>
+                        <aside class="note">
+                            <strong>Get the remote file</strong>
+                            <code>get</code> reads from the current remote
+                            directory and writes into the current local
+                            directory.
+                        </aside>
                     </li>
                     <li class="step">
-                        <h2>Verify from inside the session</h2>
+                        <h2>Leave the session and clean up</h2>
                         <p>
-                            List the local directory without leaving
-                            <code>sftp</code>.
-                        </p>
-                        <pre><code>lls</code></pre>
-                    </li>
-                    <li class="step">
-                        <h2>Leave the session and read the file</h2>
-                        <p>
-                            <code>bye</code>, <code>exit</code>, and
-                            <code>quit</code> all close the session.
+                            Return to the shell, verify and read the downloaded
+                            file, then remove it.
                         </p>
                         <pre><code>bye
 ls -l /home/student/Downloads
-cat /home/student/Downloads/group</code></pre>
+cat /home/student/Downloads/group
+rm /home/student/Downloads/group</code></pre>
                         <aside class="note">
                             <strong>Key idea</strong>
                             <code>lcd</code> chose where the file landed.
                             <code>cd</code> chose where it came from. The two
                             sides are independent.
                         </aside>
-                    </li>
-                    <li class="step">
-                        <h2>Clean up</h2>
-                        <p>Remove the downloaded file.</p>
-                        <pre><code>rm /home/student/Downloads/group</code></pre>
                     </li>
                 </ol>
             </article>

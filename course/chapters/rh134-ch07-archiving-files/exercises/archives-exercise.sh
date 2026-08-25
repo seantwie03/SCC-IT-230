@@ -39,4 +39,3 @@ mkdir -p /tmp/etc-one
 cd /tmp/etc-one
 tar -xf /tmp/etc-backup.tar etc/hosts
 ls -R /tmp/etc-one
-clear

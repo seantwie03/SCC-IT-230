@@ -42,4 +42,3 @@ clear
 #^ Clean up
 rmdir My Files 'Linux Files' 'This Is One Argument'
 unset linux
-clear

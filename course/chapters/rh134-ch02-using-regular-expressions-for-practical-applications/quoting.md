@@ -365,7 +365,7 @@ Host: `servera`
 ## Steps
 
 1. Print a literal asterisk (*)
-2. Assing a value to a variable
+2. Assign a value to a variable
 3. Use single and double quotes
 4. Include spaces in arguments
 

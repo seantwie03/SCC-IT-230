@@ -464,18 +464,11 @@
                 </header>
 
                 <section class="overview" aria-labelledby="overview-heading">
-                    <h2 id="overview-heading">Overview</h2>
+                    <h2 id="overview-heading">Task</h2>
                     <p>
-                        In this hands-on exercise you will search the system log
-                        with <code>grep</code>. You will match a plain string,
-                        print the lines surrounding a match, remove lines you do
-                        not care about, search for two patterns at once, and
-                        make a search ignore capitalization.
-                    </p>
-                    <p>
-                        Every command reads <code>/var/log/messages</code>,
-                        which is readable only by <code>root</code>, so each one
-                        is run with <code>sudo</code>.
+                        In this hands-on exercise, investigate the SSH service
+                        with <code>grep</code> by searching authentication logs,
+                        checking service status, and refining command output.
                     </p>
 
                     <dl class="requirements">
@@ -483,85 +476,72 @@
                             <dt>Target host</dt>
                             <dd><code>servera</code></dd>
                         </div>
+                        <div>
+                            <dt>Privileges</dt>
+                            <dd>
+                                <code>sudo</code> access to read
+                                <code>/var/log/secure</code> and inspect
+                                <code>sshd</code>
+                            </dd>
+                        </div>
                     </dl>
                 </section>
 
                 <ol class="steps">
                     <li class="step">
-                        <h2>Connect to the lab host</h2>
+                        <h2>Find matching log entries</h2>
                         <p>
-                            From your lab workstation, connect to
-                            <code>servera</code>.
+                            Connect to <code>servera</code> and find SSH events
+                            in the root-only authentication log.
                         </p>
-                        <pre><code>ssh student@servera</code></pre>
+                        <pre><code>ssh student@servera
+sudo grep 'sshd' /var/log/secure</code></pre>
+                        <p>Limit the results to successful authentication.</p>
+                        <pre><code>sudo grep 'Accepted' /var/log/secure</code></pre>
                     </li>
                     <li class="step">
-                        <h2>Find every line that mentions the SSH service</h2>
+                        <h2>Show context around matches</h2>
                         <p>
-                            The simplest regular expression is an exact string.
-                            <code>grep</code> prints every line of the file that
-                            contains it.
+                            Check the SSH service status, then use
+                            <code>-B2</code> and <code>-A3</code> to keep the
+                            service identity, load state, and details around the
+                            active state.
                         </p>
-                        <pre><code>sudo grep 'sshd' /var/log/messages</code></pre>
-                    </li>
-                    <li class="step">
-                        <h2>Read the neighborhood around a match</h2>
-                        <p>
-                            A matching line is rarely the whole story.
-                            <code>-C3</code> prints three lines on each side of
-                            the match.
-                        </p>
-                        <pre><code>sudo grep -C3 'Startup finished' /var/log/messages</code></pre>
-                    </li>
-                    <li class="step">
-                        <h2>Read forward and backward from a match</h2>
-                        <p>
-                            Use <code>-A</code> when you have an event and want
-                            to know what happened next.
-                        </p>
-                        <pre><code>sudo grep -A2 'Reached target' /var/log/messages</code></pre>
-                        <p>
-                            Use <code>-B</code> when you have a symptom and want
-                            to know what led to it.
-                        </p>
-                        <pre><code>sudo grep -B2 'Startup finished' /var/log/messages</code></pre>
+                        <pre><code>systemctl status sshd | grep -B2 -A3 'Active:'</code></pre>
                         <aside class="note">
                             <strong>Counting lines</strong>
-                            <code>-C3</code>, <code>-A3</code>, and
-                            <code>-B3</code> are short forms of
-                            <code>--context=3</code>,
-                            <code>--after-context=3</code>, and
-                            <code>--before-context=3</code>.
+                            <code>-A3</code> and <code>-B2</code> are short
+                            forms of <code>--after-context=3</code> and
+                            <code>--before-context=2</code>.
                         </aside>
                     </li>
                     <li class="step">
-                        <h2>Remove the noise with an inverted match</h2>
-                        <p>Start with a search that returns far too much.</p>
-                        <pre><code>sudo grep 'systemd' /var/log/messages</code></pre>
+                        <h2>Refine results with grep options</h2>
+                        <p>
+                            Confirm that SSH processes are running. Notice that
+                            <code>grep</code> also finds its own process.
+                        </p>
+                        <pre><code>ps ax | grep 'sshd'</code></pre>
                         <p>
                             Pipe it into a second <code>grep</code> with
                             <code>-v</code>, which prints every line that does
                             <em>not</em> match.
                         </p>
-                        <pre><code>sudo grep 'systemd' /var/log/messages | grep -v 'systemd --user'</code></pre>
-                    </li>
-                    <li class="step">
-                        <h2>Search for two services in one command</h2>
+                        <pre><code>ps ax | grep 'sshd' | grep -v 'grep'</code></pre>
                         <p>
-                            Give <code>-e</code> once per pattern. A line
-                            matching either pattern is printed.
+                            Ask <code>sshd</code> for its effective
+                            configuration, then give <code>-e</code> once for
+                            each setting to display.
                         </p>
-                        <pre><code>sudo grep -e 'sshd' -e 'chronyd' /var/log/messages</code></pre>
-                    </li>
-                    <li class="step">
-                        <h2>Ignore capitalization</h2>
+                        <pre><code>sudo sshd -T | grep -e '^port ' -e '^permitrootlogin '</code></pre>
                         <p>
                             Run the search twice and compare the results.
                             Without <code>-i</code>, the pattern misses every
-                            line that spells the word with a capital letter.
+                            line that uses <code>Accepted</code> with a capital
+                            letter.
                         </p>
-                        <pre><code>sudo grep 'finished' /var/log/messages
-sudo grep -i 'finished' /var/log/messages</code></pre>
+                        <pre><code>sudo grep 'accepted' /var/log/secure
+sudo grep -i 'accepted' /var/log/secure</code></pre>
                         <aside class="note">
                             <strong>Key idea</strong>
                             Options change how the pattern is applied. The

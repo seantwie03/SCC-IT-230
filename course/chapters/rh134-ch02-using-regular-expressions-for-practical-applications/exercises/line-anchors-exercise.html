@@ -464,17 +464,11 @@
                 </header>
 
                 <section class="overview" aria-labelledby="overview-heading">
-                    <h2 id="overview-heading">Overview</h2>
+                    <h2 id="overview-heading">Task</h2>
                     <p>
-                        An anchor does not match a character. It matches a
-                        position: <code>^</code> is the beginning of a line and
-                        <code>$</code> is the end of one.
-                    </p>
-                    <p>
-                        In this hands-on exercise you will search the system
-                        dictionary with no anchor, then with each anchor, then
-                        with both at once, and finish by using an anchor to read
-                        a long directory listing.
+                        In this hands-on exercise, anchor patterns to the start
+                        or end of a line, then use those positions to filter a
+                        directory listing.
                     </p>
 
                     <dl class="requirements">
@@ -482,13 +476,20 @@
                             <dt>Target host</dt>
                             <dd><code>servera</code></dd>
                         </div>
+                        <div>
+                            <dt>Privileges</dt>
+                            <dd>
+                                <code>sudo</code> access to install the
+                                <code>words</code> package
+                            </dd>
+                        </div>
                     </dl>
                 </section>
 
                 <ol class="steps">
                     <li class="step">
                         <h2>
-                            Connect to the lab host and install the dictionary
+                            Install the dictionary and search without anchors
                         </h2>
                         <p>
                             The file <code>/usr/share/dict/words</code> comes
@@ -498,9 +499,6 @@
                         <pre><code>ssh student@servera
 sudo dnf install -y words
 ls -l /usr/share/dict/words</code></pre>
-                    </li>
-                    <li class="step">
-                        <h2>Search with no anchor</h2>
                         <p>
                             Search the dictionary for a short word and note how
                             many unrelated results appear, such as
@@ -509,23 +507,17 @@ ls -l /usr/share/dict/words</code></pre>
                         <pre><code>grep 'cat' /usr/share/dict/words</code></pre>
                     </li>
                     <li class="step">
-                        <h2>Anchor to the beginning of the line</h2>
+                        <h2>Compare start, end, and exact-line anchors</h2>
                         <p>
                             Add <code>^</code> to require that the match start
                             at the beginning of the line.
                         </p>
                         <pre><code>grep '^cat' /usr/share/dict/words</code></pre>
-                    </li>
-                    <li class="step">
-                        <h2>Anchor to the end of the line</h2>
                         <p>
                             Add <code>$</code> instead, to require that the
                             match run to the end of the line.
                         </p>
                         <pre><code>grep 'cat$' /usr/share/dict/words</code></pre>
-                    </li>
-                    <li class="step">
-                        <h2>Use both anchors together</h2>
                         <p>
                             With both anchors the line must contain exactly this
                             word and nothing else.
@@ -540,7 +532,7 @@ ls -l /usr/share/dict/words</code></pre>
                         </aside>
                     </li>
                     <li class="step">
-                        <h2>Filter a long listing down to directories</h2>
+                        <h2>Use a start anchor to identify directories</h2>
                         <p>
                             The first character of each line of
                             <code>ls -l</code> output is the file type. Without
@@ -555,7 +547,9 @@ ls -l /usr/share/dict/words</code></pre>
                         <pre><code>ls -l /etc | grep '^d'</code></pre>
                     </li>
                     <li class="step">
-                        <h2>Find the configuration files</h2>
+                        <h2>
+                            Use an end anchor to identify configuration files
+                        </h2>
                         <p>
                             A dot is a wildcard to <code>grep</code>, so escape
                             it with a backslash to match a literal period.

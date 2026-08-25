@@ -464,163 +464,115 @@
                 </header>
 
                 <section class="overview" aria-labelledby="overview-heading">
-                    <h2 id="overview-heading">Overview</h2>
+                    <h2 id="overview-heading">Task</h2>
                     <p>
-                        <code>scp</code> is part of the OpenSSH suite and rides
-                        on top of <code>ssh</code>, so it works anywhere
-                        <code>ssh</code> works — including Windows Terminal on
-                        the VDI. Its syntax is <code>cp</code> plus a colon.
-                    </p>
-                    <p>
-                        In this hands-on exercise you will create a file on your
-                        own machine, upload it to <code>servera</code>, edit it
-                        there, and download the edited copy back. Then you will
-                        move several files at once with a pattern, in both
-                        directions.
+                        Copy a file to <code>servera</code> and back again, then
+                        upload and download several files using globbing.
                     </p>
 
                     <dl class="requirements">
                         <div>
-                            <dt>Local host</dt>
+                            <dt>Student hosts</dt>
                             <dd>
-                                Your VDI session or <code>workstation</code>
+                                Windows VDI session and <code>servera</code>
                             </dd>
                         </div>
                         <div>
-                            <dt>Remote host</dt>
-                            <dd><code>servera</code></dd>
+                            <dt>Demonstration hosts</dt>
+                            <dd>
+                                <code>workstation</code> and
+                                <code>servera</code>
+                            </dd>
                         </div>
                     </dl>
                 </section>
 
                 <ol class="steps">
                     <li class="step">
-                        <h2>Create a small file locally</h2>
+                        <h2>Send and receive a file between VDI and servera</h2>
                         <p>
-                            Open Windows Terminal on the VDI. Create a text file
-                            named after yourself and write your favorite text
-                            editor into it.
+                            Open Windows Terminal on the VDI and create a file
+                            named after yourself. Write your favorite text
+                            editor into the file and save it.
                         </p>
-                        <pre><code>notepad YOURNAME.txt</code></pre>
-                        <aside class="note">
-                            <strong>On the Linux workstation</strong>
-                            If you are working from
-                            <code>workstation</code> instead, use
-                            <code>vim YOURNAME.txt</code>. Everything after this
-                            step is identical on both systems.
-                        </aside>
-                    </li>
-                    <li class="step">
-                        <h2>Upload the file to servera</h2>
+                        <pre><code>notepad {YOUR_NAME}.txt</code></pre>
                         <p>
-                            Source first, destination second, exactly like
-                            <code>cp</code>. The colon is what makes the second
-                            path remote.
+                            Upload the file to <code>servera</code>, connect to
+                            the server, and confirm that the file arrived.
                         </p>
-                        <pre><code>scp YOURNAME.txt student@servera:~</code></pre>
-                    </li>
-                    <li class="step">
-                        <h2>Confirm the file arrived</h2>
+                        <pre><code>scp {YOUR_NAME}.txt student@servera:~
+ssh student@servera
+ls -l</code></pre>
                         <p>
-                            Connect to <code>servera</code> and look for your
-                            file.
+                            Add the last game, book, or movie you finished to
+                            the file, then return to the VDI.
                         </p>
-                        <pre><code>ssh student@servera
-ls -l YOURNAME.txt
-cat YOURNAME.txt</code></pre>
-                    </li>
-                    <li class="step">
-                        <h2>Edit the file on servera</h2>
-                        <p>
-                            Open the file in Vim and add the last game, book, or
-                            movie you finished.
-                        </p>
-                        <pre><code>vim YOURNAME.txt</code></pre>
-                        <p>
-                            Press <kbd>A</kbd> to append at the end of the
-                            current line, type your addition, press
-                            <kbd>Esc</kbd>, then type <code>:wq</code> and press
-                            <kbd>Enter</kbd>.
-                        </p>
-                        <pre><code>cat YOURNAME.txt
+                        <pre><code>vim {YOUR_NAME}.txt
 exit</code></pre>
+                        <p>
+                            Download the edited file into the current directory
+                            and verify that it returned.
+                        </p>
+                        <pre><code>scp student@servera:~/{YOUR_NAME}.txt .
+Get-ChildItem</code></pre>
                     </li>
                     <li class="step">
-                        <h2>Download the edited file</h2>
+                        <h2>Upload several files using globbing</h2>
                         <p>
-                            Now the colon is on the source, so this is a
-                            download. The dot means the current directory.
+                            Connect to <code>workstation</code>, create three
+                            files, and list them.
                         </p>
-                        <pre><code>scp student@servera:~/YOURNAME.txt .</code></pre>
-                        <p>
-                            Read the file and confirm your addition made the
-                            round trip.
-                        </p>
-                        <aside class="note">
-                            <strong>Key idea</strong>
-                            Direction is nothing more than argument order.
-                            Whichever argument carries the colon is the remote
-                            one.
-                        </aside>
-                    </li>
-                    <li class="step">
-                        <h2>Send several files with one pattern</h2>
-                        <p>
-                            Create a few files so a pattern has something to
-                            choose between.
-                        </p>
-                        <pre><code>touch notes.txt report.txt photo.png
+                        <pre><code>ssh student@workstation
+touch notes.txt report.txt photo.png
 ls</code></pre>
                         <p>
-                            Before running the copy, use <code>echo</code> to
-                            see what <code>scp</code> is actually going to
-                            receive.
+                            Preview what Bash passes to <code>scp</code>, upload
+                            the matching files, and list the files on
+                            <code>servera</code>.
                         </p>
-                        <pre><code>echo scp *.txt student@servera:~</code></pre>
-                        <p>Now run it for real.</p>
-                        <pre><code>scp *.txt student@servera:~
+                        <pre><code>echo scp *.txt student@servera:~
+scp *.txt student@servera:~
 ssh student@servera ls</code></pre>
                         <aside class="note">
                             <strong>Who did the matching?</strong>
-                            Bash expanded <code>*.txt</code> on your own
-                            machine, before <code>scp</code> started.
+                            Bash expanded <code>*.txt</code> on
+                            <code>workstation</code> before <code>scp</code>
+                            started.
                             <code>scp</code> received two file names and never
-                            saw a pattern at all — which is why
-                            <code>photo.png</code> never left
-                            <code>workstation</code>.
+                            received the pattern.
                         </aside>
                     </li>
 
                     <li class="step">
-                        <h2>Match the pattern on the far end instead</h2>
+                        <h2>Download several files using globbing</h2>
                         <p>
-                            Move into an empty directory so it is obvious what
-                            arrives.
+                            Create a destination directory on
+                            <code>workstation</code> and move into it.
                         </p>
                         <pre><code>mkdir -p ~/from-servera
 cd ~/from-servera</code></pre>
                         <p>
-                            This time the pattern belongs to the remote path, so
-                            wrap it in single quotes.
+                            Keep the remote pattern intact with single quotes,
+                            download the matching files, and verify the result.
                         </p>
                         <pre><code>scp 'student@servera:*.txt' .
 ls -l</code></pre>
                         <aside class="note">
-                            <strong>Key idea</strong>
+                            <strong>Who did the matching?</strong>
                             The quotes keep the pattern intact so it travels to
-                            <code>servera</code> and is matched against
-                            <code>servera</code>'s files. Quoting is how you say
-                            which machine does the matching.
+                            <code>servera</code> and is matched against files
+                            there. The quotes determine which machine performs
+                            the matching.
                         </aside>
-                    </li>
-
-                    <li class="step">
-                        <h2>Clean up</h2>
-                        <p>Remove the files from both machines.</p>
+                        <h3>Clean up</h3>
+                        <p>
+                            Return to your home directory and remove the
+                            exercise files from both Linux hosts.
+                        </p>
                         <pre><code>cd ~
-rm YOURNAME.txt notes.txt report.txt photo.png
+rm notes.txt report.txt photo.png
 rm -rf ~/from-servera
-ssh student@servera rm YOURNAME.txt notes.txt report.txt</code></pre>
+ssh student@servera rm notes.txt report.txt</code></pre>
                     </li>
                 </ol>
             </article>
