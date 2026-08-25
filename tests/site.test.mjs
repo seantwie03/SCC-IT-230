@@ -64,13 +64,13 @@ import {
 const root = fileURLToPath(new URL("../", import.meta.url));
 const fixtureOptions = { root, courseRoot: "tests/fixtures/course" };
 
-test("production metadata publishes Week 01 with reviewed agenda and curriculum", async () => {
+test("production metadata publishes canonical weeks with reviewed Week 01 details", async () => {
     const catalog = await loadPresentationCatalog({ root });
     assert.deepEqual(
         catalog.presentations.map(({ id }) => id),
-        ["w01"],
+        ["w01", "w02"],
     );
-    const [week] = catalog.presentations;
+    const week = catalog.presentations.find(({ id }) => id === "w01");
     assert.equal(
         week.accentCssVariables["--it230-color-accent-fill"],
         "#2190A4",
