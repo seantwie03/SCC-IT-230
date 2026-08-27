@@ -121,6 +121,50 @@ Read the current unit status, identify the desired state, and make one
 deliberate change.
 
 ---
+layout: exercise
+---
+
+# Ranges and Quantifiers
+
+::goal::
+
+Search realistic data with regular-expression ranges and quantifiers
+
+::environment::
+
+**Host:** `servera`
+
+**Prerequisite exercise:** Searching Log Files with `grep`
+
+::workflow::
+
+1. Seed and inspect failed-login entries
+2. Extract and count the matching IP addresses
+3. Create a sample directory tree
+4. Match numbered site directories
+5. Compare basic and extended expressions
+6. Refine the expression with a quantified range
+7. Verify the final matches
+8. Protect a wildcard from pathname expansion
+9. Compare variable handling in single and double quotes
+10. Create a directory whose name contains spaces
+
+---
+layout: exercise
+variant: recording
+---
+
+# Ranges and Quantifiers
+
+::recording::
+
+![Screen recording of the instructor extracting IP addresses from authentication logs and matching a sample directory tree with regular-expression ranges and quantifiers](./assets/ranges-and-quantifiers.gif)
+
+::resources::
+
+<a href="https://asciinema.org/a/BLokJ1ZIVOfAMXA6" target="_blank" rel="noopener noreferrer" aria-label="Watch the Asciinema recording in a new tab">Asciinema recording</a><a href="https://example.com/written-exercise" target="_blank" rel="noopener noreferrer" aria-label="Open the written exercise in a new tab">Written exercise</a>
+
+---
 
 # Commands and terminal output
 

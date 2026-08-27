@@ -245,34 +245,83 @@ highlighting and line-number options also work on ordinary code fences outside
 Place exercise slides at the **end of the section it belongs to**, not at the end
 of the whole presentation. It covers only what that section taught.
 
-Each exercise has two slides. The first slide describes *what* to accomplish, not the
-commands to copy; a verification step may name its tool when verification is not the
-learning objective. An example is provided below:
+Each exercise has two slides that use the `exercise` layout. The first slide uses
+the default workflow variant and describes *what* to accomplish, not the commands
+to copy. Keep the goal to one short sentence so that the workflow has as much room
+as possible:
 
 ```md
-# Exercise: Title
+---
+layout: exercise
+---
 
-## Requirements
+# Title
 
-Host: `servera`
+::goal::
 
-## Steps
+One short sentence describing what the learner will accomplish
 
-1. Vague step describes the goal, not the command
-2. Vague step
+::environment::
+
+**Host:** `servera`
+
+**Prerequisite exercise:** Installing the Apache HTTP Server
+
+::workflow::
+
+1. Perform a concise subtask
+2. Complete another subtask
 3. Verify with `tool1` and `tool2`
 ```
 
-This vagueness is what keeps a published exercise slide a learner-facing
-activity rather than an answer key; see "Demonstrations and exercises" below
-for the file-based counterpart under `exercises/`.
+The Environment section always identifies the host or hosts. List any earlier
+exercise that must be completed before starting this exercise. List other
+requirements only when they are not provided by the standard RHEL lab or by a
+listed prerequisite exercise. Do not list standard lab capabilities such as
+`sudo` access, baseline tools, student accounts, or network connectivity. Do
+not list a starting directory; the detailed exercise must change to any required
+directory explicitly.
 
-The second slide has the same title. It includes:
+Write workflow steps as concise subtask actions rather than commands. Begin each
+step with an action verb, use sentence case, and omit ending punctuation. Include
+a verification step when necessary. Do not list cleanup in the slide workflow;
+when no later exercise depends on the resulting state, include cleanup
+instructions in the command and HTML exercise files. If the full workflow does
+not fit legibly on one slide, combine related actions into fewer, broader steps.
 
-- A 'gif' of the exercise being performed. This gif is created from the Asciinema
-  recording using the `agg` tool.
-- A link to the Asciinema recording
-- A link to the site page containing the long form written exercise.
+The layout supplies the visible `HANDS-ON EXERCISE`, `Exercise:`, `GOAL`,
+`ENVIRONMENT`, and `WORKFLOW` labels. Do not repeat them in slide content. The
+named slots preserve a logical title, goal, environment, and ordered-workflow
+reading sequence.
+
+These subtask-level descriptions keep a published exercise slide learner-facing
+rather than turning it into an answer key; see "Demonstrations and exercises"
+below for the file-based counterpart under `exercises/`.
+
+The second slide uses the `recording` variant and the same source title. Put the
+exercise GIF in the `recording` slot and its two links in the `resources` slot:
+
+```md
+---
+layout: exercise
+variant: recording
+---
+
+# Title
+
+::recording::
+
+![Specific description of the demonstrated workflow](./assets/example.gif)
+
+::resources::
+
+<a href="https://asciinema.org/a/example" target="_blank" rel="noopener noreferrer" aria-label="Watch the Asciinema recording in a new tab">Asciinema recording</a><a href="../resources/example-exercise.html" target="_blank" rel="noopener noreferrer" aria-label="Open the written exercise in a new tab">Written exercise</a>
+```
+
+Create the GIF from the Asciinema recording using `agg`. Use the exact visible
+link labels `Asciinema recording` and `Written exercise`; the layout presents
+them as one compact segmented resource group. Keep the links adjacent in source
+without separator text so the layout can supply their visual division.
 
 See the 'Demonstrations and exercises' section for more details.
 

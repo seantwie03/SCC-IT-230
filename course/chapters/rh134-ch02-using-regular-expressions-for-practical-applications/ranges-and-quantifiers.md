@@ -368,8 +368,6 @@ That is the report from the beginning of the chapter
 
 Host: `servera`
 
-Privileges: `sudo` access to write and read authentication log entries
-
 ## Steps
 
 1. Seed and verify failed-login entries

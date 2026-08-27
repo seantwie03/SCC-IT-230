@@ -320,6 +320,63 @@ Use at a meaningful instructional boundary. The default slot holds a concise
 section title and orientation sentence. The optional `kicker` slot supplies a
 section number or short context label.
 
+### `exercise`
+
+Use for the two-slide hands-on exercise pattern at the end of an instructional
+section. The layout provides a recurring accent rail and keeps the normal slide
+footer. Its default `workflow` variant identifies the slide as a hands-on
+exercise, adds a visible `Exercise:` prefix to the source `h1`, and generates
+semantic Goal, Environment, and Workflow section headings from named slots.
+
+| Slot          | Workflow content                                      |
+| ------------- | ----------------------------------------------------- |
+| `default`     | One task-oriented `h1`                                |
+| `goal`        | One short sentence describing the intended outcome   |
+| `environment` | Hosts, prerequisite exercises, and exceptional needs |
+| `workflow`    | One ordered list of concise subtasks                   |
+
+```md
+---
+layout: exercise
+---
+
+# Configure the Firewall
+
+::goal::
+
+Allow web traffic to reach the previously configured server
+
+::environment::
+
+**Host:** `servera`
+
+**Prerequisite exercise:** Installing the Apache HTTP Server
+
+::workflow::
+
+1. Inspect the current firewall configuration
+2. Add the required service to the active zone
+3. Verify access to the web server
+```
+
+Set `variant: recording` for the companion slide. This variant centers the
+exercise title, gives the `recording` slot the available body region, and fits
+its lone image without changing its aspect ratio. The `resources` slot is a
+navigation region for exactly two adjacent links. It presents them as equal,
+nonwrapping segments in one compact group rather than a full-width action bar.
+
+| Slot        | Recording content                                  |
+| ----------- | -------------------------------------------------- |
+| `default`   | The same task-oriented `h1` as the workflow slide |
+| `recording` | One exercise GIF with a useful text alternative   |
+| `resources` | Asciinema and written-exercise links              |
+
+The recording variant omits the hands-on eyebrow so the GIF can use more of the
+canvas. Both variants retain the visible `Exercise:` title prefix and accent
+rail. Use the exact source structure and link labels documented in
+`docs/course-authoring.md`; do not add wrappers, separators, or slide-scoped
+styles.
+
 ### `center`
 
 Use for a short statement or compact composition that should be centered as one

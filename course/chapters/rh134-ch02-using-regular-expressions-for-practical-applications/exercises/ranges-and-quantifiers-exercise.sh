@@ -4,7 +4,6 @@ clear
 #^ Task: Apply Ranges and Quantifiers to Logs and Paths
 # Requirements
 #   Host: servera
-#   Privileges: sudo access to write and read authentication log entries
 # Tasks
 #   1. Seed and verify failed-login entries
 #   2. Extract and count the IP addresses
