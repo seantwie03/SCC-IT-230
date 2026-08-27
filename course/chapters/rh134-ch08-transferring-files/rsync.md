@@ -253,18 +253,22 @@ Use `-n` when you are unsure
 </Callout>
 
 ---
+layout: exercise
+---
 
-# Exercise: Synchronizing with `rsync`
+# Synchronizing with `rsync`
 
-## Requirements
+::goal::
 
-Local host: `workstation`
+Preview and synchronize directory changes between two systems
 
-Remote host: `servera`
+::environment::
 
-## Steps
+**Hosts:** `workstation` and `servera`
+
+::workflow::
 
 1. Install rsync on both machines
 2. Preview and run the first synchronization
 3. Generate changes and synchronize again
-4. Verify the changes and clean up
+4. Verify the synchronized changes

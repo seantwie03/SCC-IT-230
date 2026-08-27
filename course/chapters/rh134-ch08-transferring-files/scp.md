@@ -179,25 +179,36 @@ student@workstation:~$
 </Callout>
 
 ---
+layout: exercise
+---
 
-# Exercise: Copying Files with `scp`
+# Copying Files with `scp`
 
-## Requirements
+::goal::
 
-Hosts: your Windows VDI, `workstation` and `servera`
+Transfer individual files and wildcard-selected groups among three systems
 
-## Steps
+::environment::
 
-1. Send/Receive a File from VDI to servera
+**Hosts:** your Windows VDI, `workstation`, and `servera`
+
+::workflow::
+
+1. Transfer a file between the Windows VDI and `servera`
 2. Upload several files using globbing
 3. Download several files using globbing
 
 ---
-horizontal: center
+layout: exercise
+variant: recording
 ---
 
-# Exercise: Copying Files with `scp`
+# Copying Files with `scp`
+
+::recording::
 
 ![Screen recording of the instructor demonstrating scp.](./assets/scp-exercise.gif)
 
-<a href="https://asciinema.org/a/1263865" target="_blank" rel="noopener noreferrer" aria-label="Watch the scp recording in a new tab">Asciinema recording</a> · <a href="../resources/scp-exercise.html" target="_blank" rel="noopener noreferrer" aria-label="Read the written scp exercise in a new tab">Written exercise</a>
+::resources::
+
+<a href="https://asciinema.org/a/1263865" target="_blank" rel="noopener noreferrer" aria-label="Watch the scp recording in a new tab">Asciinema recording</a><a href="../resources/scp-exercise.html" target="_blank" rel="noopener noreferrer" aria-label="Read the written scp exercise in a new tab">Written exercise</a>

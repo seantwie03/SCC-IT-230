@@ -279,14 +279,20 @@ Each has a long form: `--before-context=3`, `--after-context=3`, `--context=3`
 
 
 ---
+layout: exercise
+---
 
-# Exercise: Searching Log Files with `grep`
+# Searching Log Files with `grep`
 
-## Requirements
+::goal::
 
-Host: `servera`
+Search log data and refine the surrounding context of each match
 
-## Steps
+::environment::
+
+**Host:** `servera`
+
+::workflow::
 
 1. Find matching log entries
 2. Show context around matches

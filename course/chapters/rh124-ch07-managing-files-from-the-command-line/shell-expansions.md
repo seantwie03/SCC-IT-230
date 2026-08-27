@@ -299,14 +299,20 @@ student@servera:~$
 </TerminalWindow>
 
 ---
+layout: exercise
+---
 
-# Exercise: Shell Expansions
+# Shell Expansions
 
-## Requirements
+::goal::
 
-Host: `servera`
+Match pathnames with Bash wildcard patterns and observe the resulting expansion
 
-## Steps
+::environment::
+
+**Host:** `servera`
+
+::workflow::
 
 1. Match file names with an asterisk (`*`)
 2. Match single characters with a question mark (`?`)
@@ -314,11 +320,16 @@ Host: `servera`
 4. Observe pathname expansion directly with `echo`
 
 ---
-horizontal: center
+layout: exercise
+variant: recording
 ---
 
-# Exercise: Shell Expansions
+# Shell Expansions
+
+::recording::
 
 ![Screen recording of the instructor demonstrating shell expansions: matching files with glob patterns and showing unquoted asterisk expansion.](./assets/shell-expansions-exercise.gif)
 
-<a href="https://asciinema.org/a/1263845" target="_blank" rel="noopener noreferrer" aria-label="Watch the Shell Expansions recording in a new tab">Asciinema recording</a> · <a href="../resources/shell-expansions-exercise.html" target="_blank" rel="noopener noreferrer" aria-label="Read the written Shell Expansions exercise in a new tab">Written exercise</a>
+::resources::
+
+<a href="https://asciinema.org/a/1263845" target="_blank" rel="noopener noreferrer" aria-label="Watch the Shell Expansions recording in a new tab">Asciinema recording</a><a href="../resources/shell-expansions-exercise.html" target="_blank" rel="noopener noreferrer" aria-label="Read the written Shell Expansions exercise in a new tab">Written exercise</a>

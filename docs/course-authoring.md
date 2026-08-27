@@ -24,6 +24,15 @@ that follows it. Delay edge cases until the primary concept is solidly
 understood; introduce them on a later slide or in a later week rather than
 complicating the first pass.
 
+Slides and exercises serve different instructional purposes. Teach a concept on
+the slides with the simplest example that makes it clear, minimizing unrelated
+names, setup, commands, and output. Then ask learners to apply that concept in a
+distinct, realistic exercise scenario. Do not make an exercise a command-for-command
+repetition of the preceding slides. Preserve the concept and core workflow while
+changing the context, inputs, names, or desired outcome enough that learners must
+recognize and apply what they learned. Keep the scenario plausible without adding
+incidental complexity that competes with the concept being practiced.
+
 Verify commands and output against RHEL 10.0, the version this course
 targets.
 
@@ -387,6 +396,14 @@ exercises as 'hands on' rather than "guided" to differentiate from the RHA
 These exercises are public guided activities, not answer keys for graded work.
 Do not publish assessment solutions, grading records, restricted material, or
 student information.
+
+An exercise should apply the section's concept in a realistic administrative
+task rather than replaying the slide example. Slides isolate and explain the
+concept with minimal examples; exercises provide the context in which a Linux
+administrator might use it. Reuse the same core workflow, but choose meaningful
+resources, filenames, data, or outcomes that require learners to transfer the
+idea to a new situation. Avoid realism that introduces tools or troubleshooting
+unrelated to the learning goal.
 
 ## Assets
 

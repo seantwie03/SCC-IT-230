@@ -361,24 +361,36 @@ student@servera:~$
 That is the report from the beginning of the chapter
 
 ---
+layout: exercise
+---
 
-# Exercise: Ranges and Quantifiers
+# Ranges and Quantifiers
 
-## Requirements
+::goal::
 
-Host: `servera`
+Find structured values with regular-expression ranges and quantifiers
 
-## Steps
+::environment::
+
+**Host:** `servera`
+
+::workflow::
 
 1. Seed and verify failed-login entries
 2. Extract and count the IP addresses
 3. Create and match a sample directory tree
-4. Clean up
 
 ---
+layout: exercise
+variant: recording
+---
 
-# Exercise: Ranges and Quantifiers
+# Ranges and Quantifiers
+
+::recording::
 
 ![Screen recording of the instructor seeding failed-password entries with logger, extracting IP addresses from the authentication log with a quantified digit range, counting the unique addresses, then creating a website directory tree and filtering it with an extended group pattern](./assets/ranges-and-quantifiers.gif)
 
-<a href="https://asciinema.org/a/BLokJ1ZIVOfAMXA6" target="_blank" rel="noopener noreferrer" aria-label="Watch the Ranges and Quantifiers recording in a new tab">Watch the recording</a> · <a href="../resources/ranges-and-quantifiers-exercise.html" target="_blank" rel="noopener noreferrer" aria-label="Read the written Ranges and Quantifiers exercise in a new tab">Read the written exercise</a>
+::resources::
+
+<a href="https://asciinema.org/a/BLokJ1ZIVOfAMXA6" target="_blank" rel="noopener noreferrer" aria-label="Watch the Ranges and Quantifiers recording in a new tab">Asciinema recording</a><a href="../resources/ranges-and-quantifiers-exercise.html" target="_blank" rel="noopener noreferrer" aria-label="Read the written Ranges and Quantifiers exercise in a new tab">Written exercise</a>

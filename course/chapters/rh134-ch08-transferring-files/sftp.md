@@ -259,18 +259,22 @@ student@workstation:~/Downloads$
 - File lands in the current local directory
 
 ---
+layout: exercise
+---
 
-# Exercise: Downloading Files with `sftp`
+# Downloading Files with `sftp`
 
-## Requirements
+::goal::
 
-Local host: `workstation`, in `/home/student/Downloads`
+Download and verify a remote file through an interactive transfer session
 
-Remote host: `servera`, in `/etc`
+::environment::
 
-## Steps
+**Hosts:** `workstation` and `servera`
+
+::workflow::
 
 1. Open a transfer session and inspect both sides
 2. Navigate the local side to `Downloads` and the remote side to `/etc`
 3. Download and verify the `group` file
-4. Leave the session, read the file and clean up
+4. Exit the session and inspect the downloaded file

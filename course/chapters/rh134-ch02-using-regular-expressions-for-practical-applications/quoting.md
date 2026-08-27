@@ -354,15 +354,20 @@ student@servera:~$
 </TerminalWindow>
 
 ---
+layout: exercise
 ---
 
-# Exercise: Quoting
+# Quoting
 
-## Requirements
+::goal::
 
-Host: `servera`
+Control how Bash interprets variables, wildcards, and spaces
 
-## Steps
+::environment::
+
+**Host:** `servera`
+
+::workflow::
 
 1. Print a literal asterisk (*)
 2. Assign a value to a variable
@@ -370,11 +375,16 @@ Host: `servera`
 4. Include spaces in arguments
 
 ---
-horizontal: center
+layout: exercise
+variant: recording
 ---
 
-# Exercise: Quoting
+# Quoting
+
+::recording::
 
 ![Screen recording of the instructor demonstrating quoting and escaping: protecting asterisks, comparing single and double quotes with variables, and creating directories containing spaces.](./assets/quoting-exercise.gif)
 
-<a href="https://asciinema.org/a/1263848" target="_blank" rel="noopener noreferrer" aria-label="Watch the Quoting recording in a new tab">Asciinema recording</a> · <a href="../resources/quoting-exercise.html" target="_blank" rel="noopener noreferrer" aria-label="Read the written Quoting exercise in a new tab">Written exercise</a>
+::resources::
+
+<a href="https://asciinema.org/a/1263848" target="_blank" rel="noopener noreferrer" aria-label="Watch the Quoting recording in a new tab">Asciinema recording</a><a href="../resources/quoting-exercise.html" target="_blank" rel="noopener noreferrer" aria-label="Read the written Quoting exercise in a new tab">Written exercise</a>

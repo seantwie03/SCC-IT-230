@@ -269,16 +269,20 @@ The single quotes protect the backslash from Bash so that `grep` receives `\.` i
 </Callout>
 
 ---
+layout: exercise
+---
 
-# Exercise: Line Anchors
+# Line Anchors
 
-## Requirements
+::goal::
 
-Host: `servera`
+Use line anchors to distinguish complete values from partial matches
 
-Privileges: `sudo` access to install the `words` package
+::environment::
 
-## Steps
+**Host:** `servera`
+
+::workflow::
 
 1. Install the dictionary and search without anchors
 2. Compare start, end, and exact-line anchors
@@ -286,9 +290,16 @@ Privileges: `sudo` access to install the `words` package
 4. Use an end anchor to identify configuration files
 
 ---
+layout: exercise
+variant: recording
+---
 
-# Exercise: Line Anchors
+# Line Anchors
+
+::recording::
 
 ![Screen recording of the instructor anchoring grep patterns: searching the system dictionary for a word with no anchors, then with a leading caret, then with a trailing dollar sign, then with both; and filtering a long listing of /etc down to directories and then to .conf file names](./assets/line-anchors.gif)
 
-<a href="https://asciinema.org/a/773029" target="_blank" rel="noopener noreferrer" aria-label="Watch the Line Anchors recording in a new tab">Asciinema recording</a> · <a href="../resources/line-anchors-exercise.html" target="_blank" rel="noopener noreferrer" aria-label="Read the written Line Anchors exercise in a new tab">Written exercise</a>
+::resources::
+
+<a href="https://asciinema.org/a/773029" target="_blank" rel="noopener noreferrer" aria-label="Watch the Line Anchors recording in a new tab">Asciinema recording</a><a href="../resources/line-anchors-exercise.html" target="_blank" rel="noopener noreferrer" aria-label="Read the written Line Anchors exercise in a new tab">Written exercise</a>
