@@ -68,7 +68,7 @@ test("production metadata publishes canonical weeks with reviewed Week 01 detail
     const catalog = await loadPresentationCatalog({ root });
     assert.deepEqual(
         catalog.presentations.map(({ id }) => id),
-        ["w01", "w02"],
+        ["w01", "w02", "w03"],
     );
     const week = catalog.presentations.find(({ id }) => id === "w01");
     assert.equal(
