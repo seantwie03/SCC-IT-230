@@ -22,11 +22,21 @@ import { userArguments, validateFocusedEntry } from "./lib/arguments.mjs";
 import { assertSafeGeneratedRoot } from "./lib/paths.mjs";
 import { run } from "./lib/process.mjs";
 
-const rawArguments = userArguments(process.argv.slice(2));
+const allArguments = userArguments(process.argv.slice(2));
+
+/**
+ * Export one image per click state instead of one per slide.
+ *
+ * Without it a slide's intermediate states cannot be reviewed at all, because
+ * the exporter stops at each slide's final state. Any slide built from clicks
+ * is therefore invisible to review exactly where it is most likely to be wrong.
+ */
+const withClicks = allArguments.includes("--with-clicks");
+const rawArguments = allArguments.filter((value) => value !== "--with-clicks");
 
 if (rawArguments.length < 1 || rawArguments.length > 2)
     throw new Error(
-        "Capture requires one course entry and accepts at most one page-range argument.",
+        "Capture requires one course entry and accepts at most one page-range argument, plus an optional --with-clicks.",
     );
 
 const [entryArgument, pageRange] = rawArguments;
@@ -59,5 +69,6 @@ const slidevArguments = [
 ];
 
 if (pageRange) slidevArguments.push("--range", pageRange);
+if (withClicks) slidevArguments.push("--with-clicks");
 
 await run("slidev", slidevArguments, { cwd: root });

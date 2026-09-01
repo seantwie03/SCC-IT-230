@@ -1,0 +1,580 @@
+<div
+    style="
+        max-width: 800px;
+        color: #25252b;
+        background: #ffffff;
+        line-height: 1.5;
+    "
+>
+    <div
+        style="
+            padding: 20px;
+            border: 1px solid #b9b9bf;
+            border-radius: 12px;
+            background: #eaf4fb;
+        "
+    >
+        <h2 style="margin: 0 0 12px; color: #25252b">Bash Script Examples</h2>
+        <p style="margin: 0">
+            Short, self-contained scripts covering everything we wrote in class,
+            in roughly the order we built up to it. Read them, run them, and
+            change them. Each one is small enough to retype from memory, which
+            is the point.
+        </p>
+    </div>
+
+    <div
+        style="
+            margin-top: 24px;
+            padding-top: 16px;
+            border-top: 1px solid #b9b9bf;
+        "
+    >
+        <p
+            style="
+                margin: 0 0 4px;
+                color: #55555b;
+                font-size: 14px;
+                font-weight: 700;
+                text-transform: uppercase;
+            "
+        >
+            How to use these
+        </p>
+        <h3 style="margin: 0 0 12px; color: #25252b">Running a script</h3>
+        <p style="margin: 0 0 12px">
+            Save a script to a file, make it executable, then run it by path.
+            Scripts that take arguments show the expected usage in a comment.
+        </p>
+        <pre
+            style="
+                padding: 12px;
+                overflow-x: auto;
+                border: 1px solid #b9b9bf;
+                border-radius: 8px;
+                background: #f7f7f8;
+                white-space: pre-wrap;
+            "
+        ><code>vim greeter.sh
+chmod a+x greeter.sh
+./greeter.sh</code></pre>
+    </div>
+
+    <div
+        style="
+            margin-top: 24px;
+            padding-top: 16px;
+            border-top: 1px solid #b9b9bf;
+        "
+    >
+        <p
+            style="
+                margin: 0 0 4px;
+                color: #55555b;
+                font-size: 14px;
+                font-weight: 700;
+                text-transform: uppercase;
+            "
+        >
+            Getting started
+        </p>
+
+        <h3 style="margin: 0 0 12px; color: #25252b">1. Hello, world</h3>
+        <p style="margin: 0 0 12px">
+            The smallest useful script. Line 1 is the hashbang, which names the
+            interpreter that will read the rest of the file.
+        </p>
+        <pre
+            style="
+                padding: 12px;
+                overflow-x: auto;
+                border: 1px solid #b9b9bf;
+                border-radius: 8px;
+                background: #f7f7f8;
+                white-space: pre-wrap;
+            "
+        ><code>#!/usr/bin/bash
+#
+# This script greets the world
+
+echo "Hello, World"
+
+exit 0</code></pre>
+
+        <h3 style="margin: 24px 0 12px; color: #25252b">
+            2. Prompting for input
+        </h3>
+        <p style="margin: 0 0 12px">
+            <code>read</code> pauses the script and waits for a line from
+            standard input. Try running it normally, then try feeding it a file
+            with <code>./prompting_greeter.sh &lt; name.txt</code>.
+        </p>
+        <pre
+            style="
+                padding: 12px;
+                overflow-x: auto;
+                border: 1px solid #b9b9bf;
+                border-radius: 8px;
+                background: #f7f7f8;
+                white-space: pre-wrap;
+            "
+        ><code>#!/bin/bash
+
+echo "Enter Name:"
+read -r my_name
+echo "Hello $my_name"</code></pre>
+
+        <h3 style="margin: 24px 0 12px; color: #25252b">
+            3. Positional parameters
+        </h3>
+        <p style="margin: 0 0 12px">
+            Arguments arrive as <code>$1</code>, <code>$2</code>, and so on.
+            <code>$0</code> is the script's own name. Run it with a few
+            arguments and watch which one lands where.
+        </p>
+        <pre
+            style="
+                padding: 12px;
+                overflow-x: auto;
+                border: 1px solid #b9b9bf;
+                border-radius: 8px;
+                background: #f7f7f8;
+                white-space: pre-wrap;
+            "
+        ><code>#!/usr/bin/bash
+#
+# This script processes 3 arguments
+
+echo "Starting $0"
+echo "The first argument is: $1"
+echo "The second argument is: $2"
+echo "The third argument is: $3"</code></pre>
+    </div>
+
+    <div
+        style="
+            margin-top: 24px;
+            padding-top: 16px;
+            border-top: 1px solid #b9b9bf;
+        "
+    >
+        <p
+            style="
+                margin: 0 0 4px;
+                color: #55555b;
+                font-size: 14px;
+                font-weight: 700;
+                text-transform: uppercase;
+            "
+        >
+            Loops
+        </p>
+
+        <h3 style="margin: 0 0 12px; color: #25252b">
+            4. Looping over every argument
+        </h3>
+        <p style="margin: 0 0 12px">
+            <code>$#</code> is how many arguments arrived and <code>$@</code> is
+            all of them. Looping over <code>$@</code> lets one script handle any
+            number of inputs.
+        </p>
+        <pre
+            style="
+                padding: 12px;
+                overflow-x: auto;
+                border: 1px solid #b9b9bf;
+                border-radius: 8px;
+                background: #f7f7f8;
+                white-space: pre-wrap;
+            "
+        ><code>#!/usr/bin/bash
+#
+# This script processes any number of arguments
+
+echo "You supplied $# arguments"
+
+for arg in $@ ; do
+	echo "Argument: $arg"
+done
+
+exit 0</code></pre>
+        <p style="margin: 12px 0 0">
+            In your own scripts, quote it as <code>for arg in "$@"</code> so
+            that arguments containing spaces stay in one piece.
+        </p>
+
+        <h3 style="margin: 24px 0 12px; color: #25252b">
+            5. Counting with a C-style for loop
+        </h3>
+        <p style="margin: 0 0 12px">
+            When you need a counter rather than a list, Bash offers the
+            three-part form.
+        </p>
+        <pre
+            style="
+                padding: 12px;
+                overflow-x: auto;
+                border: 1px solid #b9b9bf;
+                border-radius: 8px;
+                background: #f7f7f8;
+                white-space: pre-wrap;
+            "
+        ><code>#!/usr/bin/bash
+#
+# This script loops 5 times
+
+for (( COUNTER=0 ; COUNTER&lt;5 ; COUNTER++ )) ; do
+	echo "COUNTER $COUNTER"
+done
+
+exit 0</code></pre>
+
+        <h3 style="margin: 24px 0 12px; color: #25252b">
+            6. Reading a file line by line
+        </h3>
+        <p style="margin: 0 0 12px">
+            The most common loop an administrator writes. The redirection at the
+            end of the loop feeds the file into <code>read</code>.
+        </p>
+        <pre
+            style="
+                padding: 12px;
+                overflow-x: auto;
+                border: 1px solid #b9b9bf;
+                border-radius: 8px;
+                background: #f7f7f8;
+                white-space: pre-wrap;
+            "
+        ><code>#!/usr/bin/bash
+#
+# This script reads every line in ./6_while.txt
+
+while read -r line; do
+    echo "Processing line: $line"
+done &lt; 6_while.txt
+
+exit 0</code></pre>
+        <p style="margin: 12px 0 4px">
+            Save this alongside it as <code>6_while.txt</code>:
+        </p>
+        <pre
+            style="
+                padding: 12px;
+                overflow-x: auto;
+                border: 1px solid #b9b9bf;
+                border-radius: 8px;
+                background: #f7f7f8;
+                white-space: pre-wrap;
+            "
+        ><code>This is line one.
+This is line two.
+This is line three.
+This is line four.</code></pre>
+
+        <h3 style="margin: 24px 0 12px; color: #25252b">
+            7. Waiting with until
+        </h3>
+        <p style="margin: 0 0 12px">
+            <code>until</code> is <code>while</code> with the condition
+            reversed: it repeats until the condition succeeds. Run this, then
+            create the file from a second terminal and watch the loop end.
+        </p>
+        <pre
+            style="
+                padding: 12px;
+                overflow-x: auto;
+                border: 1px solid #b9b9bf;
+                border-radius: 8px;
+                background: #f7f7f8;
+                white-space: pre-wrap;
+            "
+        ><code>#!/usr/bin/bash
+#
+# This script will wait until 07_until.txt exists
+
+until [[ -f "07_until.txt" ]]
+do
+    echo "Waiting for 07_until.txt to exist..."
+    sleep 2
+done
+
+echo "07_until.txt exists!"
+
+exit 0</code></pre>
+    </div>
+
+    <div
+        style="
+            margin-top: 24px;
+            padding-top: 16px;
+            border-top: 1px solid #b9b9bf;
+        "
+    >
+        <p
+            style="
+                margin: 0 0 4px;
+                color: #55555b;
+                font-size: 14px;
+                font-weight: 700;
+                text-transform: uppercase;
+            "
+        >
+            Making decisions
+        </p>
+
+        <h3 style="margin: 0 0 12px; color: #25252b">
+            8. Falling back to a prompt
+        </h3>
+        <p style="margin: 0 0 12px">
+            <code>-z</code> is true when a string is empty. This script uses an
+            argument when it gets one and asks for a name when it does not.
+        </p>
+        <pre
+            style="
+                padding: 12px;
+                overflow-x: auto;
+                border: 1px solid #b9b9bf;
+                border-radius: 8px;
+                background: #f7f7f8;
+                white-space: pre-wrap;
+            "
+        ><code>#!/usr/bin/bash
+
+if [[ -z "$1" ]] ; then
+	echo "Enter a name"
+	read NAME
+else
+	NAME="$1"
+fi
+
+echo "Name is $NAME"
+
+exit 0</code></pre>
+
+        <h3 style="margin: 24px 0 12px; color: #25252b">
+            9. Choosing among several options with case
+        </h3>
+        <p style="margin: 0 0 12px">
+            When one value has several known possibilities,
+            <code>case</code> reads better than a stack of
+            <code>elif</code> branches. The <code>*)</code> branch catches
+            everything else, which is where a usage message belongs.
+        </p>
+        <pre
+            style="
+                padding: 12px;
+                overflow-x: auto;
+                border: 1px solid #b9b9bf;
+                border-radius: 8px;
+                background: #f7f7f8;
+                white-space: pre-wrap;
+            "
+        ><code>#!/usr/bin/bash
+#
+# This script manages a service
+
+case "$1" in
+	start)
+		echo "Starting...."
+		;;
+	stop)
+		echo "Stopping..."
+		;;
+	restart)
+		echo "Restarting..."
+		;;
+	*)
+		echo "Usage: $0 (start|stop|restart)"
+esac</code></pre>
+    </div>
+
+    <div
+        style="
+            margin-top: 24px;
+            padding-top: 16px;
+            border-top: 1px solid #b9b9bf;
+        "
+    >
+        <p
+            style="
+                margin: 0 0 4px;
+                color: #55555b;
+                font-size: 14px;
+                font-weight: 700;
+                text-transform: uppercase;
+            "
+        >
+            Putting it together
+        </p>
+
+        <h3 style="margin: 0 0 12px; color: #25252b">
+            10. Creating users from a list
+        </h3>
+        <p style="margin: 0 0 12px">
+            A privilege check, a file read line by line, and a test that makes
+            the script safe to run twice. <code>getent passwd</code> asks
+            whether an account already exists, and <code>continue</code> skips
+            to the next line when it does.
+        </p>
+        <pre
+            style="
+                padding: 12px;
+                overflow-x: auto;
+                border: 1px solid #b9b9bf;
+                border-radius: 8px;
+                background: #f7f7f8;
+                white-space: pre-wrap;
+            "
+        ><code>#!/usr/bin/bash
+
+if [[ $EUID -ne 0 ]] ; then
+	echo "You must be root to run this script!"
+	exit 9
+fi
+
+while read -r listed_user; do
+	if getent passwd $listed_user &gt;/dev/null ; then
+	       echo "User $listed_user already exists"
+	       continue
+	fi
+	echo "Creating user: $listed_user"
+	useradd $listed_user
+	echo "$listed_user created with user id $(id -u $listed_user)"
+done &lt; 10_users.txt
+
+exit 0</code></pre>
+        <p style="margin: 12px 0 4px">
+            Save this alongside it as <code>10_users.txt</code>:
+        </p>
+        <pre
+            style="
+                padding: 12px;
+                overflow-x: auto;
+                border: 1px solid #b9b9bf;
+                border-radius: 8px;
+                background: #f7f7f8;
+                white-space: pre-wrap;
+            "
+        ><code>billy
+molly
+emily
+jerry
+charley
+franky
+lucy</code></pre>
+
+        <h3 style="margin: 24px 0 12px; color: #25252b">
+            11. Undoing it again
+        </h3>
+        <p style="margin: 0 0 12px">
+            The companion to the script above. Anything that creates accounts
+            should come with something that removes them, so you can rerun your
+            work from a clean state.
+        </p>
+        <pre
+            style="
+                padding: 12px;
+                overflow-x: auto;
+                border: 1px solid #b9b9bf;
+                border-radius: 8px;
+                background: #f7f7f8;
+                white-space: pre-wrap;
+            "
+        ><code>#!/usr/bin/bash
+
+if [[ $EUID -ne 0 ]] ; then
+	echo "You must be root to run this script!"
+	exit 9
+fi
+
+while read -r listed_user; do
+	if ! getent passwd $listed_user &gt;/dev/null ; then
+	       echo "User $listed_user does NOT exist"
+	       continue
+	fi
+	echo "Deleting user: $listed_user"
+	userdel -r $listed_user
+	echo "$listed_user has been deleted"
+done &lt; 10_users.txt</code></pre>
+        <p
+            style="
+                margin: 12px 0 0;
+                padding: 12px;
+                border-left: 4px solid #905400;
+                background: #fdf6ec;
+            "
+        >
+            <strong style="display: block; color: #905400"
+                >userdel -r removes the home directory</strong
+            >
+            That is what you want for accounts you just created for practice.
+            Never run it against a real account without checking what lives in
+            that home directory first.
+        </p>
+    </div>
+
+    <div
+        style="
+            margin-top: 24px;
+            padding-top: 16px;
+            border-top: 1px solid #b9b9bf;
+        "
+    >
+        <p
+            style="
+                margin: 0 0 4px;
+                color: #55555b;
+                font-size: 14px;
+                font-weight: 700;
+                text-transform: uppercase;
+            "
+        >
+            Practice on your own
+        </p>
+        <h3 style="margin: 0 0 12px; color: #25252b">
+            Inspecting a list of paths
+        </h3>
+        <p style="margin: 0 0 12px">
+            Try this one before you look at anything else. Write a script that
+            inspects each item in the list below:
+        </p>
+        <ul style="margin: 0 0 12px">
+            <li>
+                If the item is a regular file, say whether the current user can
+                write to it.
+            </li>
+            <li>
+                If the item is a directory, say whether the current user can
+                search it.
+            </li>
+            <li>
+                Otherwise, say that the item is neither a file nor a directory.
+            </li>
+            <li>
+                Every item must produce at least one message, and every message
+                must name the item.
+            </li>
+        </ul>
+        <pre
+            style="
+                padding: 12px;
+                overflow-x: auto;
+                border: 1px solid #b9b9bf;
+                border-radius: 8px;
+                background: #f7f7f8;
+                white-space: pre-wrap;
+            "
+        ><code>/nonexistant
+/home/$USER/.bashrc
+/etc/hosts
+/tmp
+/root
+/dev/null</code></pre>
+        <p style="margin: 12px 0 0">
+            Everything you need is in the examples above: a
+            <code>for</code> loop, <code>if</code> and <code>elif</code>, and
+            the <code>-f</code>, <code>-d</code>, <code>-w</code>, and
+            <code>-x</code> tests.
+        </p>
+    </div>
+</div>

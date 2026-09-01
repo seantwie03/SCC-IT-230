@@ -31,7 +31,7 @@ custom Vue markup.
 
 > Prefer the smallest command that proves the system state you need to inspect.
 
-### Search unit files with `-k`
+<p class="h3">Search unit files with <code>-k</code></p>
 
 Inline code carries no background or border, in prose or in a heading; accent
 color and the monospace face are the only emphasis.
@@ -169,14 +169,15 @@ variant: recording
 # Commands and terminal output
 
 Fenced code and terminal commands share accessible Bash syntax colors on light
-surfaces; prompts remain distinct and output stays neutral.
+surfaces; prompts remain distinct and output stays neutral. `rows` reserves the
+final transcript height so a growing sequence does not move the frame.
 
 ```bash
 systemctl status sshd --no-pager
 sudo systemctl enable --now sshd
 ```
 
-<TerminalWindow title="student@lab:~">
+<TerminalWindow title="student@lab:~" :rows="7">
 
 ````md magic-move {lines:true}
 ```bash-session
@@ -200,6 +201,23 @@ active
 ````
 
 </TerminalWindow>
+
+---
+vertical: center
+---
+
+# Naming the file a snippet belongs in
+
+A fence may carry a title after the language. The theme attaches it to the top
+of the block as a compact header, so the file name and its contents read as one
+object.
+
+```bash [~/.bashrc]
+PS1='\u@\h:\W\$ '
+PATH=$PATH:~/scripts
+```
+
+Leave the title off for a command a student types at a prompt.
 
 ---
 layout: center

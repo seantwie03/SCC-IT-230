@@ -39,7 +39,8 @@ in the material.
   templates, the build-time site and Canvas renderers, and the stylesheet.
 - `docs/` explains the project architecture, course-authoring conventions, and
   publishing workflow.
-- `scripts/` supports repository-wide validation and publication.
+- `scripts/` supports repository-wide validation, rendered review, and
+  publication.
 
 The root project provides the authoritative development, validation, and build
 commands. See [the publishing guide](docs/publishing.md) for the normal local
@@ -52,6 +53,32 @@ pnpm dev
 pnpm check
 pnpm build
 pnpm preview
+```
+
+`pnpm check` runs formatting, tests, a production build, link checking, and a
+rendered review of every published deck and exercise. The rendered review opens
+a browser, so it is slower than a source-only check. While authoring one week,
+the focused commands take a single `course/` entry, including a draft:
+
+```sh
+pnpm run check:entry -- course/w03-draft.md
+pnpm run check:slides -- course/w03-draft.md
+pnpm run check:exercises -- course/w03-draft.md
+```
+
+`check:entry` validates a draft's topic metadata and declared exercises under
+the week ID it will publish as. `check:slides` measures every slide and click
+state for content that overflows the slide or collides with the footer.
+`check:exercises` runs accessibility rules and reflow checks over the standalone
+exercise documents. Pass `--all` to the last two to review every published week,
+which is worth doing after changing a shared layout, component, or theme token,
+and `--verbose` to `check:slides` to see every slide's remaining clearance.
+
+To review a slide built from clicks, export every click state rather than only
+the final one:
+
+```sh
+pnpm run capture:course -- course/w03-draft.md 7 --with-clicks
 ```
 
 `pnpm dev` serves the metadata-driven course site on localhost port 3030 and

@@ -90,6 +90,12 @@ fading into the active accent on the right.
 Exercise source uses the global blue accent as a direct-open fallback. Each
 published week injects its resolved fill, text, and wash properties after the
 source styles, allowing a reused exercise to match every importing week.
+
+The exercise document surface hides its overflow, so content wider than the
+viewport is clipped rather than scrolled. Inline code therefore wraps anywhere,
+because a long unbreakable path or assignment would otherwise be cut off at a
+320 CSS pixel viewport. Keep wide content such as tables and transcripts inside
+a container that scrolls on its own.
 Warning colors remain fixed and labels or structure continue to carry meaning
 without color.
 
@@ -164,6 +170,10 @@ an original low-opacity procedural texture. The texture creates quiet
 desktop-like depth; it is not a copied GNOME asset and must remain visually
 secondary. Keep cards, code, terminals, and any surface where texture could
 impair reading flat and high contrast.
+
+Mermaid diagrams do not scale themselves to fit a slide. Set an explicit
+`{scale: n}` on the fence when a diagram is taller than its region, and verify
+with `pnpm run check:slides` rather than by eye.
 
 ### Deck accent selection
 
@@ -248,8 +258,13 @@ provides one and gives projected technical text more presence than the normal
 weight without making every token bold.
 
 Headings use strong weight, compact line height, and readable wrapping.
-Technical text uses a classroom-readable monospace size and line height. Do not
-reduce type merely to fit overcrowded content; simplify or split the slide.
+Visual heading utility classes (`.h1` through `.h6`, and `.it230-h1` through
+`.it230-h6`) apply the typography and spacing of corresponding heading levels to
+non-heading elements such as `<p>` or `<div>`. Use these when visual hierarchy
+requires heading styling without introducing skipped heading levels into the
+accessible document outline. Technical text uses a classroom-readable monospace
+size and line height. Do not reduce type merely to fit overcrowded content;
+simplify or split the slide.
 
 ### Spacing and shape
 
@@ -265,6 +280,17 @@ theme code.
 Ordinary block elements and shared components use these tokens for consistent
 spacing. Do not add `<br />` merely to create a gap; use the layout controls or
 fix a recurring gap in the shared theme.
+
+### The slide content box
+
+`.slidev-layout` padding defines the usable content box, and its bottom padding
+is reserved for the footer, which is positioned absolutely over that band.
+Content may therefore collide with the footer while still sitting inside the
+slide, which is why `pnpm run check:slides` measures the content box rather than
+the slide edge. The reserved band is only slightly taller than the footer it
+protects, less than one line of body text of slack, so it is not spare room to
+reclaim, and shrinking it would not let a crowded slide fit. Split a crowded
+slide instead.
 
 ## Ordinary Markdown and technical content
 
@@ -293,6 +319,14 @@ Use ordinary fenced code for source and short commands. Use `TerminalWindow`
 when a terminal frame clarifies that the content is an interactive session or
 captured command output. Use a `bash-session` fence inside `TerminalWindow`
 when the transcript includes Bash prompts, commands, and output.
+
+A fence may carry a title, written after the language as `bash [~/.bashrc]`.
+The theme renders it as a header attached to the top of the code block: the
+raised surface, compact monospace label, and single dividing line of the
+`TerminalWindow` bar, with the block's top border, top corner radius, and top
+margin removed so the two read as one object. Use a title to name the file a
+snippet was taken from or belongs in, and leave it off for a command a student
+types at a prompt.
 
 Images receive `min-width: 0` so they can shrink inside grid and flex tracks.
 The `default` and `two-cols-header` layouts additionally fit a lone Markdown
@@ -474,9 +508,27 @@ reference nearby when several parts are introduced.
 `TerminalWindow` frames selectable terminal input and output on a light surface.
 Its neutral desktop-terminal chrome uses one centered title bar with decorative
 window controls and no tab strip. Its optional `title` prop labels the terminal
-region and defaults to `Terminal`. Terminal transcripts omit Slidev's copy
+region and defaults to `Terminal`.
+
+Its optional `rows` prop reserves that many rendered lines of transcript height.
+A frame without it is only as tall as the current click state, so a centered
+layout re-centers on every click and the whole transcript drifts upward as it
+grows. Setting `rows` to the final state's line count holds the frame still and
+lets content fill into it, which is also how a real terminal behaves. The
+reservation uses `lh` units, so one row is exactly one rendered line whatever
+size that block resolves to. Use it on any `TerminalWindow` whose transcript
+grows across clicks; leave it off for a fixed transcript, where it would only
+add empty space. Terminal transcripts omit Slidev's copy
 control because the transcript can contain output that is not valid command
 input. Ordinary command-only fences retain the copy control.
+
+A line beginning with `#^` is a step banner: a boundary marker inside one
+transcript, rendered in bold blue with a muted marker. The color matches the
+header `kitty-demo.sh` prints for the same marker, so a step boundary reads the
+same in the live demonstration and on the slide. It is a fixed syntax color and
+does not follow the deck accent. A filled band is not available: Shiki's
+TextMate tokenizer never emits a token background, and Magic Move renders
+precompiled tokens that a hast transformer cannot reach.
 
 `bash-session` recognizes a prompt only when a line begins with a complete
 `user@host:directory$` or `user@host:directory#` prompt. A command may follow
@@ -485,8 +537,9 @@ privileged prompts use danger red, commands use the Bash grammar, and unmatched
 output uses the normal foreground. Literal prompt text preserves user,
 location, and privilege meaning without color.
 
-`TerminalWindow` accepts either a fixed `bash-session` fence or a `md
-magic-move` sequence. See "Terminal transcripts" in
+`TerminalWindow` accepts a fixed `bash-session` fence, a `md magic-move`
+sequence, or one plain fence per `v-switch` template when a single terminal
+carries several concepts. See "Terminal transcripts" in
 `docs/course-authoring.md` for the authoring rule. On a sequence's final state,
 the footer cue indicates that the next click advances to another slide. Line
 numbers count every physical transcript line, including output and blank lines.

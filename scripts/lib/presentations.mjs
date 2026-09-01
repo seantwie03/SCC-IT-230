@@ -69,10 +69,10 @@ export async function discoverCanonicalWeeks(courseRoot) {
     return discovered;
 }
 
-async function loadPresentation(entryAbsolute, context) {
+async function loadPresentation(entryAbsolute, context, overrides = {}) {
     const filename = path.basename(entryAbsolute);
-    const id = filename.slice(0, -3);
-    const label = `canonical week ${filename}`;
+    const id = overrides.id ?? filename.slice(0, -3);
+    const label = overrides.label ?? `canonical week ${filename}`;
     const data = await loadResolvedDeck(entryAbsolute, context, label);
     const headmatter = validateWeekHeadmatter(data, id, entryAbsolute, label);
     validateRouteAliases(data, context);
@@ -413,6 +413,54 @@ function deepFreeze(value) {
         for (const child of Object.values(value)) deepFreeze(child);
     }
     return value;
+}
+
+/**
+ * Derive the week ID a course entry will publish under.
+ *
+ * A canonical `w03.md` publishes as `w03`. The documented draft convention
+ * `w03-draft.md` publishes as `w03` once it is renamed, so a draft validates
+ * against the same ID, resource paths, and route aliases it will use in
+ * production. An entry whose name carries no week number returns undefined,
+ * because its published paths cannot be known.
+ */
+export function entryWeekId(entryFilename) {
+    const base = entryFilename.replace(/\.md$/, "");
+    if (WEEK_ID.test(base)) return base;
+    const match = /^(w(?:0[1-9]|1[0-6]))-/.exec(base);
+    return match?.[1];
+}
+
+/**
+ * Run the complete catalog validation for one course entry, canonical or draft.
+ *
+ * Canonical discovery is nonrecursive and matches only `w01.md` through
+ * `w16.md`, so a draft's topic metadata, route aliases, curriculum alignments,
+ * and declared exercises are otherwise unvalidated until the moment it is
+ * renamed for publication. Returns the validated presentation.
+ */
+export async function validatePresentationEntry(
+    entryAbsolute,
+    { root = process.cwd(), courseRoot = "course" } = {},
+) {
+    const absoluteRoot = path.resolve(root);
+    const absoluteCourseRoot = resolveContainedPath(
+        absoluteRoot,
+        courseRoot,
+        "course root",
+    );
+    const filename = path.basename(entryAbsolute);
+    const id = entryWeekId(filename);
+    if (!id)
+        throw new Error(
+            `${filename} carries no week number, so its published paths are unknown. ` +
+                `Name a draft for the week it will publish as, such as w03-draft.md.`,
+        );
+    return loadPresentation(
+        entryAbsolute,
+        { root: absoluteRoot, courseRoot: absoluteCourseRoot },
+        { id, label: `course entry ${filename}` },
+    );
 }
 
 export function isCanonicalWeekId(value) {

@@ -82,7 +82,21 @@ body {
 .slidev-layout h1,
 .slidev-layout h2,
 .slidev-layout h3,
-.slidev-layout h4 {
+.slidev-layout h4,
+.slidev-layout h5,
+.slidev-layout h6,
+.slidev-layout .h1,
+.slidev-layout .h2,
+.slidev-layout .h3,
+.slidev-layout .h4,
+.slidev-layout .h5,
+.slidev-layout .h6,
+.slidev-layout .it230-h1,
+.slidev-layout .it230-h2,
+.slidev-layout .it230-h3,
+.slidev-layout .it230-h4,
+.slidev-layout .it230-h5,
+.slidev-layout .it230-h6 {
     color: var(--it230-color-text);
     font-family: var(--it230-font-sans);
     font-weight: 750;
@@ -91,16 +105,40 @@ body {
     text-wrap: pretty;
 }
 
-.slidev-layout h1 {
+.slidev-layout h1,
+.slidev-layout .h1,
+.slidev-layout .it230-h1 {
     font-size: 2.75rem;
 }
 
-.slidev-layout h2 {
+.slidev-layout h2,
+.slidev-layout .h2,
+.slidev-layout .it230-h2 {
     font-size: 2rem;
 }
 
-.slidev-layout h3 {
+.slidev-layout h3,
+.slidev-layout .h3,
+.slidev-layout .it230-h3 {
     font-size: 1.45rem;
+}
+
+.slidev-layout h4,
+.slidev-layout .h4,
+.slidev-layout .it230-h4 {
+    font-size: 1.25rem;
+}
+
+.slidev-layout h5,
+.slidev-layout .h5,
+.slidev-layout .it230-h5 {
+    font-size: 1.1rem;
+}
+
+.slidev-layout h6,
+.slidev-layout .h6,
+.slidev-layout .it230-h6 {
+    font-size: 1rem;
 }
 
 .slidev-layout p,
@@ -195,6 +233,26 @@ body {
 .slidev-layout .slidev-code code {
     font-family: inherit;
     font-weight: inherit;
+}
+
+.slidev-layout .slidev-code-block-title {
+    background: var(--it230-color-raised);
+    border: 1px solid var(--it230-color-accent-fill);
+    border-bottom: 1px solid var(--it230-color-line);
+    border-radius: var(--it230-radius-md) var(--it230-radius-md) 0 0;
+    box-shadow: none;
+    color: var(--it230-color-text);
+    font-family: var(--it230-font-mono);
+    font-size: 0.8rem;
+    font-weight: 750;
+    margin-block-start: var(--it230-space-4);
+    padding: var(--it230-space-1) var(--it230-space-3);
+}
+
+.slidev-layout .slidev-code-block-title + .slidev-code {
+    border-top: 0;
+    box-shadow: none;
+    margin-block-start: 0;
 }
 
 .slidev-layout .it230-color-text--code {

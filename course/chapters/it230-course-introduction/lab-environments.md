@@ -23,15 +23,15 @@ layout: two-cols-header
 
 ::left::
 
-## RHA Lab
+### RHA Lab
 
-- Used for Guided Exercises and RHA Labs
-- Hosted on the <AccentText>Red Hat Academy</AccentText> website
+- For Guided Exercises and RHA Labs
+- Hosted on <AccentText>Red Hat Academy</AccentText>
 - Uses Linux virtualization
 
-## SCC Lab
+### SCC Lab
 
-- Used for in-class exercises and SCC labs
+- For in-class exercises and SCC labs
 - Hosted on the <AccentText>SCC VDI</AccentText>
 - Uses VirtualBox
 
@@ -44,11 +44,11 @@ layout: two-cols-header
 
 # IT-230 Lab Environments
 
-<div class="flex justify-around py-2">
+<div class="flex justify-around">
 
 <div>
 
-## Admin user
+### Admin user
 
 - **User**: `student`
 - **Password**: `student`
@@ -58,7 +58,7 @@ layout: two-cols-header
 
 <div>
 
-## Super user
+### Super user
 
 - **User**: `root`
 - **Password**: `redhat`

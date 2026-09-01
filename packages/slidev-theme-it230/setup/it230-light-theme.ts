@@ -21,6 +21,30 @@ export async function loadIt230LightTheme() {
         displayName: "IT 230 Adwaita Light",
         name: "it230-light",
         tokenColors: [
+            /*
+             * A step banner marks a boundary inside one transcript. It is bold
+             * blue to match the header color `kitty-demo.sh` prints for the same
+             * `#^` marker, so a step boundary looks the same whether the class
+             * sees it in the live demonstration or on the slide. This is a fixed
+             * syntax color, independent of the selected deck accent. The marker
+             * itself uses the comment color, which is what it actually is: the
+             * line stays a valid shell comment in copied text.
+             *
+             * A filled band is not available here: Shiki's TextMate tokenizer
+             * never emits a token background, and Magic Move renders precompiled
+             * tokens that a hast transformer cannot reach.
+             */
+            {
+                scope: "meta.banner",
+                settings: {
+                    fontStyle: "bold",
+                    foreground: colors.blue,
+                },
+            },
+            {
+                scope: "punctuation.definition.banner",
+                settings: { foreground: colors.slate },
+            },
             {
                 scope: [
                     "comment",

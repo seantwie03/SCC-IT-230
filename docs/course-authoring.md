@@ -33,8 +33,10 @@ changing the context, inputs, names, or desired outcome enough that learners mus
 recognize and apply what they learned. Keep the scenario plausible without adding
 incidental complexity that competes with the concept being practiced.
 
-Verify commands and output against RHEL 10.0, the version this course
-targets.
+Verify commands and output against RHEL 10.0, the version this course targets.
+Run them on the lab through `pnpm lab` rather than trusting a source deck; the
+`lab-verification` skill records how to reach the lab, the prompt form the theme
+requires, and the RHEL 9 to 10 differences that make ported material wrong.
 
 ## Presentation entries and publication
 
@@ -48,16 +50,44 @@ theme: it230
 themeConfig:
   it230Accent: teal
 routerMode: hash
-title: Week 01 — Course Introduction and Command-Line Refresher
+title: Course Introduction and Command-Line Refresher
+layout: cover
 courseInfo:
   summary: >-
     Hello! This week we will review the course and practice Linux fundamentals.
 ---
+
+::kicker::
+
+Week 01
+
+::default::
+
+# IT-230
+
+- Course Introduction
+- Accessing the Lab Environments
+- Linux Command-Line Refresher
 ```
 
 Use `pnpm dev -- course/<entry>.md` for focused authoring and
 `pnpm run review -- course/<entry>.md` for agent review. These commands may
-open an incomplete draft without publishing it.
+open an incomplete draft without publishing it, and they validate only deck
+headmatter so that a draft without a title or summary still opens.
+
+Validate the rest with the focused review commands, each of which accepts a
+draft:
+
+```sh
+pnpm run check:entry -- course/w03-draft.md
+pnpm run check:slides -- course/w03-draft.md
+pnpm run check:exercises -- course/w03-draft.md
+```
+
+`check:entry` applies the full catalog validation (topic metadata, route
+aliases, curriculum alignments, and declared exercises) under the week ID the
+draft will publish as. Name a draft for the week it becomes, such as
+`w03-draft.md`, so that ID can be derived.
 
 A root-level filename from `course/w01.md` through `course/w16.md` publishes
 that week. Keep unfinished work under a noncanonical name such as
@@ -71,8 +101,10 @@ deck headmatter. The weekly file remains a concise composition document: its
 resolved topic imports supply the rest of the weekly overview.
 
 The title becomes the deck document title, the landing-page card heading, and
-the detail page's `h1`, so write it as `Week NN — <descriptive topic>` rather
-than repeating the course code.
+the detail page's `h1`, so write it as a descriptive topic phrase alone. Do not
+repeat the course code and do not prefix it with the week number: the week is
+already established by the surrounding surface. The cover slide's `kicker` slot
+carries the visible `Week NN` label for the deck itself.
 
 ### Topic publishing metadata
 
@@ -192,6 +224,12 @@ Prefer layout props and ordinary block structure to spacing-only `<br />`
 elements or wrapper markup. Split content that remains crowded at the theme's
 intended type size.
 
+A slide that fits in the browser can still overlap the footer, and a diagram or
+a later click state can overflow when the first state does not. Run
+`pnpm run check:slides` instead of judging by eye; it reports overflow, the
+slides closest to overflowing, and rendering errors that would otherwise ship a
+blank diagram.
+
 ### Presenting commands and workflows
 
 Present command workflows in slides with `TerminalWindow`, using progressive disclosure
@@ -212,13 +250,26 @@ add manual color markup to either region.
 
 ### Simulate typing with magic-move
 
-A fixed prompt, command, or transcript may use one `bash-session` fence. Use an
-```` ```md magic-move ```` block when the instructor should reveal a terminal
-session step by step. Each nested fence repeats the complete transcript so far
+A terminal reveals its transcript in one of three ways, in rising order of
+machinery. Use the simplest one the content allows.
+
+1. **One `bash-session` fence** for a fixed prompt, command, or transcript that
+   does not change as the slide advances.
+2. **A ```` ```md magic-move ```` block** when the instructor should reveal one
+   transcript step by step.
+3. **`v-switch` templates** when one terminal carries several concepts, each
+   template holding a plain fence and, where a concept has its own steps, a
+   nested Magic Move. See "One terminal, several concepts" below.
+
+In a Magic Move block, each nested fence repeats the complete transcript so far
 and adds the next visible state: an initial prompt when useful, a typed command,
 then its output or the prompt returned by a command with no output. A final
 state may stop after the relevant output when the next prompt is not part of
 the lesson.
+
+Magic Move earns its place when content reorders or transforms between states.
+An append-only transcript has nothing to animate, so it gains nothing from Magic
+Move beyond what a `v-switch` template already provides.
 
 `````md
 <TerminalWindow title="student@lab:~">
@@ -240,6 +291,101 @@ student@lab:~$
 A bare prompt after a command means it completed and returned control without
 displayed output. Do not use that state when the command's real output has only
 been omitted; either show the output or stop at the typed command.
+
+Give a growing transcript a `rows` value equal to its final line count. The
+frame then reserves that height from the first state instead of resizing on
+every click, which otherwise makes the whole block drift as the layout
+re-centers. `pnpm run check:slides --verbose` prints each terminal's height per
+click state, so a frame that still changes size is visible as a changing number.
+
+When one transcript carries two or three related ideas, mark the boundaries with
+a step banner in the transcript itself rather than with prose beside it. Use the
+same `#^` marker that `kitty-demo.sh` uses for a visible step header:
+
+```
+#^ 2. Bypass it once with a backslash
+```
+
+The theme renders the heading in bold blue, matching the color `kitty-demo.sh`
+prints, so a step boundary looks the same in the live demonstration and on the
+slide. The marker is muted, and the line stays a valid shell comment in copied
+text. Do not pad the line: the banner is colored text, not a filled band, so
+padding only adds trailing whitespace.
+
+Banners are appended in transcript order, so earlier lines never move. Keep them
+to a single line; the three-line form `kitty-demo.sh` draws costs vertical budget
+that the transcript usually needs.
+
+### One terminal, several concepts
+
+A transcript that teaches two or three related ideas uses `v-switch` for the
+concepts and Magic Move for the steps inside one concept. Each template carries
+its own sentence above the terminal and repeats the whole transcript so far, with
+the lines for the current concept highlighted and the earlier ones dimmed:
+
+`````md
+<v-switch at="0">
+
+<template #0-2>
+
+An alias may <AccentText>shadow</AccentText> a real command of the same name
+
+<TerminalWindow title="student@servera:/tmp/at" :rows="12">
+
+````md magic-move
+```bash-session
+#^ 1. An alias may shadow a real command of the same name
+student@servera:/tmp/at$ alias grep='grep -i'
+```
+```bash-session {3,4,5}
+#^ 1. An alias may shadow a real command of the same name
+student@servera:/tmp/at$ alias grep='grep -i'
+student@servera:/tmp/at$ grep alpha notes.txt
+Alpha
+alpha
+```
+````
+
+</TerminalWindow>
+
+</template>
+
+<template #2>
+...
+</v-switch>
+`````
+
+A Magic Move nested in a `v-switch` template still opens with four backticks and
+its states with three, exactly as it would on its own. Nesting inside the
+template does not add a level. Five backticks make the parser treat the whole
+block as literal text, and the slide renders the raw markup inside the terminal
+frame.
+
+The sentence above the frame and the banner inside it say the same thing on
+purpose: the sentence is the slide's claim, and the banner marks where in the
+transcript that claim is demonstrated.
+
+Four details make the clicks line up, and all four are load-bearing:
+
+- **`at="0"`** so the first template appears on slide entry. A nested Magic Move
+  registers its clicks first, so without this the switch starts one click late
+  and the slide opens empty.
+- **A range such as `#0-2`** for any template holding a Magic Move, giving it a
+  click for each of its own transitions. A plain `#0` makes the switch and the
+  Magic Move share one click, and a state disappears.
+- **Numbered siblings that account for that range**: `#0-2` is followed by `#2`,
+  not `#1`.
+- **Highlight ranges that count the banner lines**, since a banner occupies a
+  real line.
+
+Verify with `pnpm run capture:course -- <entry> <slide> --with-clicks`, which
+writes one image per click state. Without it the exporter stops at each slide's
+final state, so the intermediate states are invisible. Check that the click
+count matches the number of concepts and steps you intended, because nothing
+fails when it does not: the states simply merge or a blank one appears.
+
+Reserve this shape for a transcript that genuinely carries several concepts. A
+single workflow reads better as one Magic Move with a sentence beneath it.
 
 Magic Move supports both line highlighting and visible line numbers. Add a
 click-based sequence such as `{1|2|4|5|all}` to a nested `bash-session` fence,

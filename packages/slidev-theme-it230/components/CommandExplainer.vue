@@ -300,5 +300,6 @@ function splitAtHighlightableRanges(
     line-height: 1.35;
     padding: var(--it230-space-2) var(--it230-space-3);
     text-align: center;
+    white-space: pre-line;
 }
 </style>

@@ -18,6 +18,25 @@ pnpm install --frozen-lockfile
 pnpm check
 ```
 
+`pnpm check` renders every published deck and exercise in a browser, so it is
+slower than a source-only check and requires the pinned `playwright-chromium`
+package. While authoring one week, use the focused commands instead and save the
+full suite for the pre-commit gate:
+
+```sh
+pnpm run check:entry -- course/w03-draft.md
+pnpm run check:slides -- course/w03-draft.md
+pnpm run check:exercises -- course/w03-draft.md
+```
+
+`check:entry` applies the complete catalog validation to a draft under the week
+ID it will publish as, so a rename is never the first time a metadata error
+appears. `check:slides` and `check:exercises` accept the same argument or
+`--all`. Add `--verbose` to `check:slides` to print every slide's clearance
+rather than only the ones at or past the boundary, which is useful when judging
+how much room a slide really has. Run `--all` after changing a shared layout, component, or theme token,
+because those changes can push content past the content box on any week.
+
 If the format check reports a supported file, apply the configured formatter
 and validate again:
 
@@ -60,8 +79,13 @@ the landing page, or change `dist/`.
 of validated entry directly to deterministic PNG images under
 `exports/course-review-png/`, replacing that fixed directory on every run.
 With no page-range argument it captures every slide; with one validated
-range such as `1,4-7`, it captures only those slides. Use it for batch or
-scripted review when a live browser session is unnecessary; use `review` for
+range such as `1,4-7`, it captures only those slides. Add `--with-clicks` to
+export one image per click state instead of one per slide, named
+`007-01.png` and so on. The exporter otherwise stops at each slide's final
+state, which leaves every intermediate state of a click-built slide
+unreviewable, exactly where such a slide is most likely to be wrong. Use it
+for batch or scripted review when a live browser session is unnecessary; use
+`review` for
 interactive inspection. Like `dev`/`review`, it accepts a published or draft
 entry and never touches `dist/` or the landing page.
 

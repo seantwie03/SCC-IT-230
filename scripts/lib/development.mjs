@@ -12,6 +12,7 @@ import {
     weekOverviewRoute,
     withSiteBase,
 } from "./paths.mjs";
+import { waitForServer } from "./browser.mjs";
 import { assertPortAvailable, listen } from "./server.mjs";
 
 const LIVE_RELOAD_PATH = "/__it230_reload";
@@ -256,6 +257,56 @@ export async function serveCourseSite(options) {
         process.off("SIGTERM", stop);
         dispose();
     }
+}
+
+/**
+ * Start one Slidev development server and return once it answers.
+ *
+ * `serveFocusedDeck` runs a deck for a human and blocks until they stop it.
+ * Review commands instead need the server running in the background while they
+ * drive a browser against it, so this variant resolves as soon as the deck is
+ * reachable and hands back a stop function.
+ */
+export async function startFocusedDeckServer({ entry, root, port }) {
+    await assertPortAvailable(port);
+    const child = spawn("slidev", [entry, "--port", String(port)], {
+        cwd: root,
+        shell: process.platform === "win32",
+        stdio: "ignore",
+    });
+    const url = `http://localhost:${port}/`;
+    const stop = async () => {
+        if (child.killed || child.exitCode !== null) return;
+        child.kill("SIGTERM");
+        await new Promise((resolve) => {
+            const timer = setTimeout(() => {
+                child.kill("SIGKILL");
+                resolve();
+            }, 5000);
+            child.once("exit", () => {
+                clearTimeout(timer);
+                resolve();
+            });
+        });
+    };
+    try {
+        await Promise.race([
+            waitForServer(url),
+            new Promise((_, reject) =>
+                child.once("exit", (code) =>
+                    reject(
+                        new Error(
+                            `Slidev exited with code ${code ?? 1} before serving ${entry}.`,
+                        ),
+                    ),
+                ),
+            ),
+        ]);
+    } catch (error) {
+        await stop();
+        throw error;
+    }
+    return { stop, url };
 }
 
 export async function serveFocusedDeck({ entry, root, port }) {

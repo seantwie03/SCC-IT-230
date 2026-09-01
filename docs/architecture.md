@@ -19,6 +19,11 @@ authoritative runtime declaration, and `.nvmrc` is a convenience for local
 version managers. The exact pnpm release is declared by `packageManager` in
 `package.json`.
 
+Rendered review commands use the pinned `playwright-chromium` package directly
+through `scripts/lib/browser.mjs`, which owns launching the browser and
+collecting page diagnostics for both slide and exercise review. `axe-core`
+supplies the accessibility rule catalogue those commands evaluate.
+
 AI-assisted visual review uses Playwright MCP with the locally installed Google
 Chrome channel. Google Chrome is therefore a system-level development
 prerequisite and is verified by `pnpm run check:toolchain`; its release is not
@@ -63,8 +68,43 @@ and are not committed.
 - `site/` contains the landing, weekly-detail, and Canvas-authoring HTML
   templates, the site and Canvas build-time renderers, and the stylesheet. The
   shared site-and-presentation favicon is owned by the theme package.
-- `scripts/` contains deterministic repository-wide operations.
+- `scripts/` contains deterministic repository-wide operations, including the
+  rendered review commands and the lab-access wrapper.
 - `docs/` contains enduring maintainer documentation.
+
+## Rendered review
+
+Building a deck proves it compiles, not that it reads. Two commands render the
+published artifacts and measure them.
+
+`check-slides.mjs` drives a Slidev development server for one entry, walks every
+slide and every click state through `window.__slidev__.nav`, and compares each
+visible element against the layout's computed content box. The content box is
+the boundary rather than the slide edge because the theme reserves its bottom
+padding for the footer, so content that reaches into that band collides with the
+footer while still sitting inside the slide. Measurements are converted to
+canvas pixels, so a threshold means the same thing at any viewport. Decorative
+elements, code line-number gutters, hidden click states, and content inside a
+scrolling ancestor are excluded. The command also fails on page errors and on
+console messages that indicate broken rendering, because a failed Mermaid
+diagram reports a warning rather than an error and would otherwise ship blank.
+
+Its `--verbose` output adds two measurements that are useful while authoring
+rather than as pass or fail conditions: each slide's remaining clearance, and
+the height of every terminal frame. A terminal whose height changes between
+click states moves the surrounding block on every click, so a constant number
+across states is the signal that `TerminalWindow`'s `rows` reservation is doing
+its job.
+
+`check-exercises.mjs` loads each declared exercise document, runs `axe-core`
+against the WCAG 2.1 A and AA rules, verifies this repository's document
+contract, and checks reflow at 320 and 1920 CSS pixels. Reflow is checked in two
+ways because the exercise surface hides its overflow: content wider than the
+viewport either scrolls the page or is silently clipped by an ancestor, and only
+the first is visible to a scroll-width measurement.
+
+Both commands accept one `course/` entry or `--all`, and both run inside
+`pnpm check`.
 
 ## Presentation discovery and catalog
 
@@ -77,6 +117,16 @@ authoring utility are siblings at `/weeks/<id>/slides/`,
 `/weeks/<id>/resources/`, and `/weeks/<id>/canvas/`. Renaming a reviewed draft
 to its canonical filename is the publication decision, and removing that
 canonical file unpublishes it on the next complete build.
+
+Canonical discovery is the production path, but a draft resolves through the
+same code: `validatePresentationEntry` loads any entry under an explicit week
+ID, which `entryWeekId` derives from the filename (`w03.md` and the documented
+`w03-draft.md` convention both resolve to `w03`). This lets a draft's topic
+metadata, route aliases, curriculum alignments, and declared exercises be
+validated against the identity they will publish under, so renaming a reviewed
+draft is never the first time those errors appear. Deck-level headmatter
+validation stays separate and lighter, so `pnpm dev` and `pnpm run review`
+remain usable on an incomplete draft that has no title or summary yet.
 
 `scripts/lib/presentations.mjs` uses Slidev's parser to resolve imports in
 presentation order, validates custom metadata, and produces one frozen computed

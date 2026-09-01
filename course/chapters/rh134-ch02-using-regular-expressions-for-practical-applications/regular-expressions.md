@@ -31,7 +31,7 @@ We will borrow names from **INTERCAL**, a parody programming language from 1972
 
 - It was designed to be as unlike every other language as possible
 - Its compiler wants you to write `PLEASE`, but gets annoyed if you overdo it
-- Its reference manual has **Tonsils** instead of Appendices, because they wanted a different removable organ
+- Its reference manual has **Tonsils** instead of Appendices, another removable organ
 - It renamed "asterisk" to **Splat**
 
 <Callout>

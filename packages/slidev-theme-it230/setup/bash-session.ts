@@ -20,10 +20,32 @@ function createPromptPattern(symbol: "\\#" | "\\$", privileged = false) {
     };
 }
 
+/**
+ * A step banner marks a boundary inside one transcript, so that a single
+ * terminal can carry two or three related ideas without prose beside it.
+ *
+ * The `#^` marker is the one `kitty-demo.sh` already uses for a visible step
+ * header, so an exercise command file and a slide transcript are marked the
+ * same way. It stays a shell comment, so a copied transcript still runs.
+ */
+const stepBannerPattern = {
+    begin: "^(#\\^)([ \\t]*)",
+    beginCaptures: {
+        1: { name: "punctuation.definition.banner.bash-session" },
+        2: { name: "punctuation.definition.banner.bash-session" },
+    },
+    end: "$",
+    name: "meta.banner.bash-session",
+};
+
 const bashSessionLanguage = {
     displayName: "Bash Session",
     name: "bash-session",
-    patterns: [createPromptPattern("\\#", true), createPromptPattern("\\$")],
+    patterns: [
+        stepBannerPattern,
+        createPromptPattern("\\#", true),
+        createPromptPattern("\\$"),
+    ],
     scopeName: "source.bash-session",
 };
 

@@ -10,8 +10,11 @@ prefix_rule(
             "capture:course",
             "capture:theme",
             "check",
+            "check:entry",
+            "check:exercises",
             "check:format",
             "check:links",
+            "check:slides",
             "check:toolchain",
             "export:theme",
             "format",
@@ -33,7 +36,10 @@ prefix_rule(
         "pnpm run capture:theme",
         "pnpm run capture:theme -- 1,4-7",
         "pnpm run check",
+        "pnpm run check:entry -- course/w01.md",
+        "pnpm run check:exercises -- --all",
         "pnpm run check:format",
+        "pnpm run check:slides -- course/w01.md",
         "pnpm run check:toolchain",
         "pnpm run export:theme",
         "pnpm run format",
@@ -62,8 +68,11 @@ prefix_rule(
             "capture:course",
             "capture:theme",
             "check",
+            "check:entry",
+            "check:exercises",
             "check:format",
             "check:links",
+            "check:slides",
             "check:toolchain",
             "export:theme",
             "format",
@@ -85,7 +94,10 @@ prefix_rule(
         "pnpm capture:theme",
         "pnpm capture:theme -- 1,4-7",
         "pnpm check",
+        "pnpm check:entry -- course/w01.md",
+        "pnpm check:exercises -- --all",
         "pnpm check:format",
+        "pnpm check:slides -- course/w01.md",
         "pnpm check:toolchain",
         "pnpm export:theme",
         "pnpm format",
@@ -128,3 +140,34 @@ prefix_rule(
     ],
 )
 
+# Allow lab access only through the wrapper that enforces the host allowlist.
+# Raw `ssh` stays unapproved: options such as `-o ProxyCommand=...` and `-J`
+# can redirect a connection to a host outside the IT-230 lab.
+prefix_rule(
+    pattern = ["pnpm", "run", "lab"],
+    decision = "allow",
+    justification = "The maintainer approved lab access through scripts/lab-ssh.mjs, which rejects every host outside the IT-230 lab.",
+    match = [
+        "pnpm run lab -- servera hostname -f",
+        "pnpm run lab -- --tty servera set -o",
+    ],
+    not_match = [
+        "ssh servera",
+        "pnpm run dev",
+    ],
+)
+
+# Allow the same wrapper through pnpm's shorthand form.
+prefix_rule(
+    pattern = ["pnpm", "lab"],
+    decision = "allow",
+    justification = "The maintainer approved lab access through scripts/lab-ssh.mjs, which rejects every host outside the IT-230 lab.",
+    match = [
+        "pnpm lab -- servera hostname -f",
+        "pnpm lab -- --tty servera set -o",
+    ],
+    not_match = [
+        "ssh servera",
+        "pnpm dev",
+    ],
+)

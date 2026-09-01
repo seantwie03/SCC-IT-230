@@ -112,6 +112,7 @@ manual review as a required gate. For each applicable change:
    used for Zoom screen sharing.
 6. Inspect the course site at desktop and narrow viewports for meaningful
    reflow, readable text, intact links, and absence of horizontal overflow.
+   Use 320 CSS pixels as the narrow width, matching SC 1.4.10.
    Include a representative standalone HTML exercise, verify its ordered-step
    reading sequence, and confirm that the sticky course links and bottom
    week-overview return link remain keyboard operable and visible at both
@@ -128,6 +129,23 @@ The automated build and validation checks verify deterministic structure around
 accessibility: the landing page is generated from a semantic HTML template,
 required generated files and internal links exist and production decks omit
 presenter notes. The responsive stylesheet provides visible focus treatment and
-narrow-screen reflow. These checks reduce known failure modes; they do not test
-assistive-technology behavior, keyboard use, reading order, visual quality, or
-WCAG conformance. The manual publication review remains required.
+narrow-screen reflow.
+
+Two rendered checks extend that coverage, and `pnpm check` runs both:
+
+- `pnpm run check:slides` measures every slide and click state against the
+  layout's content box. It catches content that overflows the slide or collides
+  with the footer, and it fails on rendering errors that would otherwise ship a
+  blank diagram.
+- `pnpm run check:exercises` runs `axe-core` against the WCAG 2.1 A and AA rules
+  it can evaluate, verifies the exercise document contract, and checks reflow at
+  320 CSS pixels for SC 1.4.10. Because the exercise surface hides its overflow,
+  it reports both horizontal page scrolling and content clipped inside an
+  ancestor; either is a loss of information at that width.
+
+These checks reduce known failure modes; they do not test assistive-technology
+behavior, keyboard use, reading order, visual quality, or WCAG conformance. In
+particular, no automated rule judges whether reflowed content remains usable,
+whether a text alternative is accurate, or whether a slide is legible when
+projected. The manual publication review remains required, and a passing check
+is not a conformance claim.

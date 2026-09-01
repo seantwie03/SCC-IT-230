@@ -38,11 +38,21 @@
   tool permission, or a skill under `.agents/skills/`, make the equivalent
   change (including adding or removing its `.claude/skills/` symlink) for all
   harnesses in the same commit — do not let them drift ahead of each other.
-- Before running a command, consult `.codex/rules/default.rules` (Codex),
-  `.claude/settings.json` (Claude Code), or `.agents/settings.json`
-  (Antigravity) and prefer an approved equivalent command form when one exists.
-- Run the current validation suite with `pnpm check`.
+- Before running a command, consult `.codex/rules/default.rules` (Codex) or
+  `.claude/settings.json` (Claude Code) and prefer an approved equivalent command form when one exists.
+- Run the current validation suite with `pnpm check`. It includes rendered
+  review of every published deck and exercise, so it needs a browser and takes
+  longer than a source-only check.
+- While authoring one week, prefer the focused commands over the full suite:
+  `pnpm run check:entry`, `pnpm run check:slides`, and
+  `pnpm run check:exercises` each accept a single `course/` entry, including a
+  draft.
 - Run the relevant local validation before committing and pushing.
+- Reach the RHEL lab only through `pnpm lab`. Raw `ssh` is intentionally
+  unapproved: options such as `-o ProxyCommand=...` and `-J` can redirect a
+  connection to a host outside the lab, which the wrapper's allowlist exists to
+  prevent. Verify course commands and output against the lab rather than
+  trusting a source deck; see the `lab-verification` skill.
 - Treat the existence of a canonical `course/w01.md` through `course/w16.md`
   file as publication approval. Keep incomplete weeks in noncanonical files
   such as `course/w02-draft.md`; do not add a publication flag.

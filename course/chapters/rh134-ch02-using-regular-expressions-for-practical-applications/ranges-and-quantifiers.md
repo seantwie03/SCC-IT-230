@@ -120,13 +120,13 @@ student@servera:~$
 
 ::right::
 
-| Candidate | Result | Why                       |
-| --------- | ------ | ------------------------- |
-| `cat`     | match  | one character in the middle |
-| `c@t`     | match  | a symbol is a character   |
-| `c t`     | match  | a space is a character    |
-| `coat`    | no match | two characters in the middle |
-| `ct`      | no match | zero characters in the middle |
+| Candidate | Result   | Why                    |
+| --------- | -------- | ---------------------- |
+| `cat`     | match    | one character between  |
+| `c@t`     | match    | a symbol is a character |
+| `c t`     | match    | a space is a character |
+| `coat`    | no match | two characters between |
+| `ct`      | no match | no characters between  |
 
 ---
 vertical: center
@@ -288,10 +288,6 @@ vertical: start
 # Groups: A Real SELinux Pattern
 
 This is how you label a directory <AccentText>and everything inside it</AccentText>
-
-```bash
-/website(/.*)?
-```
 
 <CommandExplainer
   command="/website(/.*)?"

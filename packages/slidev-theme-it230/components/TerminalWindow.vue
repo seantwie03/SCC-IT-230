@@ -1,16 +1,23 @@
 <script setup lang="ts">
 withDefaults(
     defineProps<{
+        rows?: number;
         title?: string;
     }>(),
     {
+        rows: 0,
         title: "Terminal",
     },
 );
 </script>
 
 <template>
-    <div class="it230-terminal" role="region" :aria-label="title">
+    <div
+        class="it230-terminal"
+        role="region"
+        :aria-label="title"
+        :style="rows > 0 ? { '--it230-terminal-rows': rows } : undefined"
+    >
         <div class="it230-terminal__bar" aria-hidden="true">
             <span
                 class="it230-terminal__controls it230-terminal__controls--start"
@@ -191,6 +198,25 @@ withDefaults(
     line-height: 1.55;
 }
 
+/*
+ * `rows` reserves the height of a transcript that grows across click states.
+ * Without it the frame is only as tall as the current state, so a centred
+ * layout re-centres on every click and the whole transcript drifts. Reserving
+ * the final line count keeps the frame still and lets content fill into it,
+ * which is also how a real terminal behaves.
+ *
+ * The reservation is applied to the code block in `lh` units so that one row
+ * is exactly one rendered line of that block, whatever font size and line
+ * height it resolves to.
+ */
+.it230-terminal__body :deep(pre),
+.it230-terminal__body :deep(.slidev-code) {
+    min-block-size: calc(
+        var(--it230-terminal-rows, 0) * 1lh + 2 *
+            var(--slidev-code-padding, 0px)
+    );
+}
+
 .it230-terminal__body :deep(pre),
 .it230-terminal__body :deep(.slidev-code) {
     background: transparent !important;
@@ -204,6 +230,49 @@ withDefaults(
 
 .it230-terminal__body :deep(.slidev-code-copy) {
     display: none;
+}
+
+/*
+ * Line numbers reach the page two different ways, and neither is stable on its
+ * own. An ordinary code block draws them with a `::before` counter in a fixed
+ * 1rem box, while Magic Move emits them as real tokens whose text is padded to
+ * the digit count of that state. A transcript that grows past nine lines
+ * therefore widens its own gutter partway through the sequence, shifting every
+ * line sideways.
+ *
+ * Both are normalized to one fixed two-digit gutter so the code starts at the
+ * same place in every state and in both renderers.
+ */
+.it230-terminal__body :deep(.slidev-code code .line::before),
+.it230-terminal__body :deep(.shiki-magic-move-line-number) {
+    color: var(--it230-color-muted);
+    opacity: 1;
+}
+
+/*
+ * Only the ordinary code block needs a box: its counter has no width of its
+ * own. Magic Move already pads each number to the digit count of its state and
+ * follows it with two spaces, and it positions the rest of the line from that
+ * text, so adding a width or margin here would indent the code twice.
+ */
+.it230-terminal__body :deep(.slidev-code code .line::before) {
+    width: 2ch;
+    margin-right: 1.25rem;
+    text-align: right;
+}
+
+/*
+ * Magic Move writes its number as text (the digit padded to that state's digit
+ * count, then two spaces) and lays the line out from that text. It therefore
+ * indents further than the counter above, which draws into a fixed box. Pulling
+ * the following token back by those three characters lines the two renderers up.
+ *
+ * Giving this token a width instead does not work: a fixed box leaves the text
+ * to set the indent anyway, and the block formatting context it creates also
+ * changes the line height.
+ */
+.it230-terminal__body :deep(.shiki-magic-move-line-number) {
+    margin-right: -3ch;
 }
 
 .it230-terminal__body :deep(p:last-child) {

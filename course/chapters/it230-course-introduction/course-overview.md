@@ -19,7 +19,7 @@ vertical: center
 
 ::left::
 
-<div class="w-[350px]">
+<div class="w-[300px]">
 
 ![Photo of Sean Twiehaus](./assets/headshot.jpg)
 
@@ -306,7 +306,7 @@ pie
 
 ---
 layout: two-cols-header
-vertical: evenly
+vertical: start
 ---
 
 # IT-230 Exams
@@ -321,10 +321,8 @@ Essentially shortened RHCSA practice exams
 
 
 - Taken in the <AccentText>SCC Lab</AccentText> environment
-- <AccentText>Open "book"</AccentText>
-  - Red Hat Academy website
-- <AccentText>Open notes</AccentText>
-  - Hand-written or hand-typed notes only
+- <AccentText>Open "book"</AccentText>: Red Hat Academy website
+- <AccentText>Open notes</AccentText>: hand-written or hand-typed only
 
 <Callout type="danger">
 

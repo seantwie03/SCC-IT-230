@@ -246,9 +246,7 @@ Result: `/tmp/backup/Documents/notes.txt`
 
 <Callout type="danger">
 
-A slash on the source changes what gets created
-
-Use `-n` when you are unsure
+A slash on the source changes what gets created, so use `-n` when you are unsure
 
 </Callout>
 
