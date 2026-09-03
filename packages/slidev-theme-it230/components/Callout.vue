@@ -109,7 +109,7 @@ const label = computed(() => props.title ?? defaults[props.type].title);
     color: var(--it230-callout-text);
     display: flex;
     font-size: 0.9rem;
-    font-weight: 800;
+    font-weight: var(--it230-font-weight-black);
     gap: var(--it230-space-3);
     letter-spacing: 0;
     margin-bottom: var(--it230-space-2);

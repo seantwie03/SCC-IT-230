@@ -172,7 +172,7 @@ withDefaults(
     color: var(--it230-color-text);
     font-family: var(--it230-font-sans);
     font-size: 0.68rem;
-    font-weight: 750;
+    font-weight: var(--it230-font-weight-bold);
     justify-self: center;
     letter-spacing: 0;
 }

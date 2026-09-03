@@ -238,13 +238,59 @@ runtime component to slide content.
 
 ### Typography
 
-The sans-serif stack prefers Lato, then Segoe UI, Noto Sans, and Liberation
-Sans. The monospace stack prefers Cascadia Code, then JetBrains Mono, Noto Sans
-Mono, and DejaVu Sans Mono. Both stacks use local system fonts and require no
-font CDN or network request. The theme remains deterministic and legible
-without downloading fonts. It disables font ligatures and contextual
-alternates globally so adjacent source characters remain visibly distinct
-throughout slides and match selectable text.
+The theme self-hosts its typefaces. Lato and Cascadia Mono are bundled in
+`packages/slidev-theme-it230/fonts/` and declared with `@font-face`, so no CDN
+or network request is involved and the deck renders identically wherever it is
+measured or read. Determinism is a correctness requirement, not a preference:
+line breaking depends on font metrics, so relying on whichever families a
+machine happened to have installed made a slide fit on the authoring machine
+and overflow in CI, in the exported PDF, or for a student.
+
+Each stack is the bundled family followed only by the generic keyword:
+`"Lato", sans-serif` and `"Cascadia Mono", monospace`. Naming further system
+fonts would not add safety, because none of them is guaranteed on any given
+machine either; it would only add ways for a deck to render differently
+somewhere. The generic keyword covers the two cases the bundled files cannot: a
+glyph outside the bundled subsets, and a font that fails to load.
+`packages/slidev-theme-it230/fonts/PROVENANCE.md` records versions, sources,
+and licenses.
+
+The bundled Lato carries Google's `latin` and `latin-ext` subsets, which do not
+include every character the theme might draw. Chrome that needs a symbol
+outside them uses an inline SVG rather than a character, so it does not depend
+on the reader's platform: `SequenceEndCue` draws its arrow this way, because
+U+2192 falls outside both subsets. Icons follow the `TerminalWindow` control
+convention, a `0 0 16 16` viewBox with `fill: none`, `stroke: currentColor`,
+round caps and joins, sized in `em` so they scale with surrounding text and
+inherit its color, and marked `aria-hidden` when a text label already carries
+the meaning.
+
+Ordinary punctuation inside the subsets stays as text. The middle dot `·`
+(U+00B7) used in the course identity across the `cover` and `section` layouts
+and the slide footer is covered by `latin`, and keeping it as a character
+leaves it selectable and available to assistive technology. Before adding a
+character that is not plain Latin text, check it against the subsets and reach
+for an SVG only when it falls outside.
+
+The bundled Lato provides exactly four weights, and the theme exposes them as
+the only sans weights it supports:
+
+| Token                          | Weight | Lato face |
+| ------------------------------ | -----: | --------- |
+| `--it230-font-weight-light`    |    300 | Light     |
+| `--it230-font-weight-regular`  |    400 | Regular   |
+| `--it230-font-weight-bold`     |    700 | Bold      |
+| `--it230-font-weight-black`    |    900 | Black     |
+
+Set `font-weight` from these tokens rather than from a literal. A literal the
+family does not ship is not an error: the browser silently remaps it to the
+nearest available face, so a rule asking for `750` or `800` renders as Black
+while reading in source as though it were a distinct step. The theme also sets
+`font-synthesis: none`, so no intermediate weight is faked.
+
+It disables font ligatures and contextual alternates globally so adjacent
+source characters remain visibly distinct throughout slides and match
+selectable text.
 
 Slidev's optional image-preload pass is disabled by the theme. Images in
 imported topic fragments are still processed, bundled, and displayed normally;
@@ -253,9 +299,10 @@ fragment-relative URLs in production output.
 
 Inline code, fenced code, terminal transcripts, and semantic text using a
 color-text component's `code` prop use `--it230-font-weight-code` at weight
-`600`. This selects a real semibold face when the installed monospace font
-provides one and gives projected technical text more presence than the normal
-weight without making every token bold.
+`600`. Cascadia Mono is a variable font covering 200 to 700, so this is an
+exact face rather than a remapped approximation, and it gives projected
+technical text more presence than the normal weight without making every token
+bold.
 
 Headings use strong weight, compact line height, and readable wrapping.
 Visual heading utility classes (`.h1` through `.h6`, and `.it230-h1` through

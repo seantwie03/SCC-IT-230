@@ -213,6 +213,7 @@ The other files were already identical on both sides
 
 ---
 layout: two-cols-header
+leftWidth: 44
 vertical: start
 ---
 

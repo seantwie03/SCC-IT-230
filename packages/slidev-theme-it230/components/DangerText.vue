@@ -30,11 +30,11 @@ withDefaults(
 <style scoped>
 .it230-color-text {
     color: var(--it230-color-danger);
-    font-weight: 750;
+    font-weight: var(--it230-font-weight-bold);
 }
 
 .it230-color-text.it230-color-text--normal {
-    font-weight: 400;
+    font-weight: var(--it230-font-weight-regular);
 }
 
 .it230-color-text--italic {

@@ -286,7 +286,7 @@ function splitAtHighlightableRanges(
     background: var(--it230-color-surface);
     border-color: var(--it230-color-accent-fill);
     color: var(--it230-color-accent-text);
-    font-weight: 800;
+    font-weight: var(--it230-font-weight-black);
 }
 
 .it230-command-explainer__explanation {
@@ -295,7 +295,7 @@ function splitAtHighlightableRanges(
     border-radius: var(--it230-radius-sm);
     color: var(--it230-color-accent-text);
     font-size: 1.75rem;
-    font-weight: 800;
+    font-weight: var(--it230-font-weight-black);
     justify-self: center;
     line-height: 1.35;
     padding: var(--it230-space-2) var(--it230-space-3);

@@ -94,7 +94,7 @@ withDefaults(
 .it230-exercise h2 {
     color: var(--it230-color-accent-text);
     font-size: 0.78rem;
-    font-weight: 800;
+    font-weight: var(--it230-font-weight-black);
     letter-spacing: 0.08em;
     text-transform: uppercase;
 }
@@ -139,7 +139,7 @@ withDefaults(
 .it230-exercise__goal-content :deep(p) {
     color: var(--it230-color-text);
     font-size: 1.3rem;
-    font-weight: 700;
+    font-weight: var(--it230-font-weight-bold);
     margin: 0;
 }
 
@@ -190,7 +190,7 @@ withDefaults(
 .it230-exercise__workflow-content :deep(li::marker) {
     color: var(--it230-color-accent-text);
     font-size: 1.08em;
-    font-weight: 800;
+    font-weight: var(--it230-font-weight-black);
 }
 
 .it230-exercise[data-variant="recording"] {
