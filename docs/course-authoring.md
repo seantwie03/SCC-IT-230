@@ -191,9 +191,11 @@ section for the concept it covers ("Physical Volumes"), not one procedure
 4. An exercise slide when the topic includes a "We Do" activity
 
 Keep a slide focused on one concept or tightly related procedure. Use
-`TerminalWindow` for terminal interaction, `CommandExplainer` for the anatomy
-of a short command or prompt, and `Callout` for a genuinely supplemental
-caveat. Use a click sequence only when progressive disclosure helps explain a
+`TerminalWindow` for terminal interaction, `TextExplainer` for the anatomy of a
+command, configuration line, or captured output, and `Callout` for a genuinely
+supplemental caveat. `CommandExplainer` is deprecated: it is still rendered for
+the decks that use it, but write new slides with `TextExplainer`, which covers
+the same single-line case and also handles multiple lines and repeated tokens. Use a click sequence only when progressive disclosure helps explain a
 procedure; do not hide unrelated commands in one sequence.
 
 Prefer the fewest words that communicate the point. Use short phrases and

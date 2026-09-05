@@ -523,12 +523,76 @@ non-empty click sequence without shifting slide content. It appears in main and
 presenter rendering, not overview or next-slide preview. Authors never add it;
 the footer owns the instance, and layouts that hide the footer hide the cue.
 
+### `TextExplainer`
+
+`TextExplainer` reveals parts of any fixed text one step at a time without
+moving it: a command a student types, a crontab line they write by hand, a
+configuration file excerpt, or captured command output. It supersedes
+`CommandExplainer`, which remains only for the slides that already use it.
+
+`lines` supplies the text verbatim, one array entry per rendered line. Each
+ordered `steps` entry marks one range and supplies its `explanation`. Every line
+renders identically; the marked range is the only embellishment, so nothing is
+dimmed, hidden, or treated as chrome.
+
+```md
+<TextExplainer
+  :lines="[
+    'student@servera:~$ atq',
+    '1\tFri Sep  4 11:46:00 2026 a student',
+  ]"
+  :steps="[
+    { line: 2, text: '1', occurrence: 1, explanation: 'The job number' },
+    { line: 2, text: 'a', explanation: 'The queue it sits on' },
+  ]"
+/>
+```
+
+A step selects its range in one of three ways:
+
+| Step form                  | Marks                                          |
+| -------------------------- | ---------------------------------------------- |
+| `text`                     | one literal substring, which must be unique    |
+| `text` with `occurrence`   | the Nth match, one-based, for a repeated token |
+| neither, with `line`       | that whole line                                |
+
+`line` counts from 1, matching `occurrence` and the line numbers a reader sees
+in an editor. It narrows a search across lines; `occurrence` narrows within one,
+which is what a crontab entry needs when the same `*` appears five times. Omit
+`line` to search the whole text.
+
+Ambiguity is an authoring error rather than a guess: a literal that matches more
+than once without an `occurrence` fails and names the count, as do a missing
+match, an out-of-range `occurrence` or `line`, a whole-line step without a
+`line`, overlapping ranges on one line, and a missing explanation. Ranges may
+not overlap even when one is a whole line, so a line marked whole cannot also
+have a token marked inside it.
+
+Size is chosen from the content, so the same input renders at the same scale in
+the browser, in CI, and in the exported PDF: `lg` for one line up to 44 columns,
+`md` for up to four lines of up to 64 columns, and `sm` for anything larger,
+such as `systemctl status` output. Columns count a tab as its advance to the
+next tab stop. Set `size` explicitly to override. There is no auto-fitting to
+arbitrary content, because shrinking type to fit hides overcrowding rather than
+reporting it; content that will not fit at `sm` overflows and
+`pnpm run check:slides` reports it, and the fix is to shorten or split it.
+
+Explanations appear beneath the text, so keep a block short enough that the
+caption stays near what it describes.
+
 ### `CommandExplainer`
 
-`CommandExplainer` reveals parts of one selectable prompt or command without
-moving the text. `command` supplies the base string; each ordered `steps` entry
-supplies `active`, `explanation`, and optionally a replacement `command` or
-one-based `occurrence` for repeated text.
+**Deprecated. Use `TextExplainer` instead.** `TextExplainer` covers everything
+this component does and also handles multiple lines and repeated tokens.
+`CommandExplainer` remains only so the decks that already use it keep
+rendering, and it is intentionally absent from the theme gallery. Do not add
+new usages; convert the remaining ones when their week is next revised. The
+rest of this section documents the existing call sites.
+
+It reveals parts of one selectable prompt or command without moving the text.
+`command` supplies the base string; each ordered `steps` entry supplies
+`active`, `explanation`, and optionally a replacement `command` or one-based
+`occurrence` for repeated text.
 
 ```md
 <CommandExplainer
@@ -546,9 +610,7 @@ or ambiguous matches produce an authoring error. The low-level `segments` plus
 `explanation` form handles one unusual explicit state and requires exactly one
 active segment.
 
-The component owns the slide's click progression. Use it for short command,
-prompt, or path anatomy, not multiline procedures or output. Keep a complete
-reference nearby when several parts are introduced.
+The component owns the slide's click progression, as `TextExplainer` does.
 
 ### `TerminalWindow`
 
@@ -659,7 +721,9 @@ When a shared pattern is justified:
 
 The focused gallery is `packages/slidev-theme-it230/example.md`. It covers every
 layout and component the theme supports, ordinary Markdown, fenced code,
-terminal output, and the visual foundations.
+terminal output, and the visual foundations. A deprecated component is not in
+the gallery: the gallery shows what to reach for, and a deprecated component
+still renders only for the decks that already use it.
 
 The root theme review commands and their artifacts are documented in
 `docs/publishing.md`. `pnpm check` verifies formatting, the toolchain, palette

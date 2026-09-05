@@ -223,16 +223,23 @@ Leave the title off for a command a student types at a prompt.
 layout: center
 ---
 
-# Explain a command sequence
+# Explain text of any shape
 
-<CommandExplainer
-  command="student@workstation:/etc$ ls -l"
+<TextExplainer
+  :lines="[
+    'student@workstation:~$ crontab -l',
+    '*/2 * * * * /usr/local/bin/collect_stats',
+  ]"
   :steps="[
-    { active: 'student', explanation: 'The user you are logged in as' },
-    { active: 'workstation', explanation: 'The host you are logged into' },
-    { active: '/etc', explanation: 'Your current working directory' },
+    { line: 2, text: '*/2', explanation: 'Minutes, every second minute' },
+    { line: 2, text: '*', occurrence: 2, explanation: 'Hours, 0 through 23' },
+    { line: 2, text: '*', occurrence: 5, explanation: 'Day of week, 0 through 7' },
+    { line: 2, text: '/usr/local/bin/collect_stats', explanation: 'The command to run' },
   ]"
 />
+
+Every line renders the same. Only the marked range is embellished, and `line`
+says which line a step searches.
 
 ---
 

@@ -1,4 +1,13 @@
 <script setup lang="ts">
+/**
+ * @deprecated Use TextExplainer instead.
+ *
+ * TextExplainer covers this component's single-line case and also handles
+ * multiple lines and repeated tokens. This component stays only so the decks
+ * that already use it keep rendering; do not add new usages, and convert the
+ * remaining ones when their week is next revised. It is intentionally absent
+ * from the theme gallery.
+ */
 import {
     computed,
     defineComponent,
