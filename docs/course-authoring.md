@@ -198,6 +198,13 @@ the decks that use it, but write new slides with `TextExplainer`, which covers
 the same single-line case and also handles multiple lines and repeated tokens. Use a click sequence only when progressive disclosure helps explain a
 procedure; do not hide unrelated commands in one sequence.
 
+Do not begin a line with `AccentText` or another color-text component when more
+text follows it on that line. The line loses its paragraph and breaks into
+several body items that the layout spreads down the slide. Reword so a word
+comes first, or open the line with `**`; `docs/design-system.md` explains the
+behavior and the trade-off between the two. A component that fills an entire
+line is unaffected.
+
 Prefer the fewest words that communicate the point. Use short phrases and
 fragments instead of full sentences when the meaning remains clear, and omit
 sentence-ending punctuation from ordinary slide copy. Keep full sentences and

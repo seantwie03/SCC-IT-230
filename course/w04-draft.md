@@ -28,3 +28,11 @@ Week 04
 ---
 src: ./chapters/rh134-ch03-scheduling-user-tasks/at.md
 ---
+
+---
+src: ./chapters/rh134-ch03-scheduling-user-tasks/user-cron-jobs.md
+---
+
+---
+src: ./chapters/rh134-ch04-scheduling-system-tasks/system-cron-jobs.md
+---

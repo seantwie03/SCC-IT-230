@@ -701,6 +701,37 @@ reads correctly even without color. Do not use these as a substitute for
 `Callout`, which pairs its color with a label and symbol specifically because
 a supplemental note needs to survive without color.
 
+#### A line that begins with one of these loses its paragraph
+
+Markdown produces a `<p>` for such a line, but it does not survive rendering, so
+the component and everything after it on that line arrive as separate top-level
+elements. The `default` and `two-cols-header` layouts treat every top-level
+element as one body item and space them apart, so trailing prose and inline code
+become body items of their own and drift down the slide.
+
+The paragraph is lost whenever a line starts with one of these components, but
+it is only visible when something follows the closing tag. A component that
+fills the whole line is one element either way, which is why the common case
+looks correct.
+
+```md
+<AccentText>(root)</AccentText> instead of `(student)`, because ...  <!-- breaks -->
+<SuccessText>Awake at 2 a.m.</SuccessText>                           <!-- fine, whole line -->
+```
+
+Two ways to keep the paragraph, either of which is acceptable:
+
+- **Put text first**, so the line no longer begins with a tag. Preferred,
+  because it adds no markup and leaves nothing for a later author to delete by
+  mistake.
+- **Open the line with two asterisks**, wrapping the component in `**` so the
+  line starts with a markdown character instead of `<`. Several published
+  fragments use it, but it emits a real `<strong>` these components do not need,
+  so reach for it only when the wording has to lead with the colored run.
+
+Wrapping the line in literal `<p>` tags does not work: the line then parses as
+raw HTML, and inline markdown such as backtick code is left untouched.
+
 ## Adding shared patterns
 
 Solve a new instructional need in course content first. Promote it into the

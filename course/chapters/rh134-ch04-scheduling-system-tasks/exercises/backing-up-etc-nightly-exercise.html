@@ -1,0 +1,670 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Backing Up /etc Nightly Exercise</title>
+        <style>
+            :root {
+                color-scheme: light;
+                --it230-color-canvas: #fafafb;
+                --it230-color-surface: #ffffff;
+                --it230-color-raised: #ebebed;
+                --it230-color-line: #b9b9bf;
+                --it230-color-text: #25252b;
+                --it230-color-muted: #55555b;
+                --it230-color-accent-text: #0461be;
+                --it230-color-accent-fill: #3584e4;
+                --it230-color-accent-wash: rgb(53 132 228 / 14%);
+                --it230-color-warning: #905400;
+                --it230-font-sans:
+                    "Lato", "Segoe UI", "Noto Sans", "Liberation Sans",
+                    sans-serif;
+                --it230-font-mono:
+                    "Cascadia Code", "JetBrains Mono", "Noto Sans Mono",
+                    "DejaVu Sans Mono", monospace;
+                --it230-space-1: 0.25rem;
+                --it230-space-2: 0.5rem;
+                --it230-space-3: 0.75rem;
+                --it230-space-4: 1rem;
+                --it230-space-5: 1.5rem;
+                --it230-space-6: 2rem;
+                --it230-space-7: 3rem;
+                --it230-radius-sm: 0.5rem;
+                --it230-radius-md: 0.75rem;
+                --it230-radius-lg: 0.9375rem;
+                --it230-shadow-raised:
+                    0 0.125rem 0.25rem rgb(0 0 6 / 10%),
+                    0 1.2rem 3rem rgb(0 0 6 / 10%);
+                line-height: 1.6;
+                color: var(--it230-color-text);
+                background: var(--it230-color-canvas);
+            }
+
+            * {
+                box-sizing: border-box;
+            }
+
+            body {
+                min-width: 20rem;
+                margin: 0;
+                color: var(--it230-color-text);
+                background:
+                    radial-gradient(
+                        circle at 95% 5%,
+                        var(--it230-color-accent-wash),
+                        transparent 40%
+                    ),
+                    radial-gradient(
+                            circle,
+                            rgb(0 0 6 / 2%) 0 0.035rem,
+                            transparent 0.04rem
+                        )
+                        0 0 / 0.22rem 0.22rem,
+                    linear-gradient(
+                        145deg,
+                        var(--it230-color-surface),
+                        #f5f6f8 72%
+                    );
+                font-family: var(--it230-font-sans);
+                font-feature-settings:
+                    "liga" 0,
+                    "calt" 0;
+                font-variant-ligatures: none;
+                text-rendering: optimizeLegibility;
+            }
+
+            ::selection {
+                color: var(--it230-color-text);
+                background: color-mix(
+                    in srgb,
+                    var(--it230-color-accent-fill) 22%,
+                    white
+                );
+            }
+
+            :focus-visible {
+                border-radius: var(--it230-radius-sm);
+                outline: 0.18rem solid var(--it230-color-accent-fill);
+                outline-offset: 0.16rem;
+            }
+
+            a {
+                color: var(--it230-color-accent-text);
+                text-decoration: underline;
+                text-decoration-thickness: 0.08em;
+                text-underline-offset: 0.16em;
+            }
+
+            a:hover {
+                text-decoration-thickness: 0.14em;
+            }
+
+            .skip-link {
+                position: fixed;
+                z-index: 10;
+                top: var(--it230-space-3);
+                left: var(--it230-space-3);
+                padding: var(--it230-space-3) var(--it230-space-4);
+                border: 1px solid var(--it230-color-line);
+                border-radius: var(--it230-radius-sm);
+                background: var(--it230-color-surface);
+                box-shadow: var(--it230-shadow-raised);
+                transform: translateY(-200%);
+            }
+
+            .skip-link:focus {
+                transform: translateY(0);
+            }
+
+            .site-header {
+                position: sticky;
+                z-index: 5;
+                top: 0;
+                border-bottom: 1px solid var(--it230-color-line);
+                background: color-mix(
+                    in srgb,
+                    var(--it230-color-surface) 92%,
+                    transparent
+                );
+                box-shadow: 0 0.125rem 0.35rem rgb(0 0 6 / 8%);
+                backdrop-filter: blur(0.75rem);
+            }
+
+            .header-inner,
+            main,
+            footer {
+                width: min(64rem, calc(100% - 2rem));
+                margin-inline: auto;
+            }
+
+            .header-inner {
+                display: flex;
+                min-height: 3.5rem;
+                align-items: center;
+                gap: var(--it230-space-3);
+            }
+
+            .header-inner p {
+                margin: 0;
+            }
+
+            .header-inner a {
+                color: inherit;
+                text-decoration: none;
+            }
+
+            .header-inner a:hover {
+                text-decoration: underline;
+            }
+
+            .course-code,
+            .course-code a {
+                color: var(--it230-color-accent-text);
+                font-weight: 800;
+                letter-spacing: 0.04em;
+            }
+
+            .course-code {
+                display: flex;
+                align-items: center;
+            }
+
+            .course-code::after {
+                content: "";
+                display: inline-block;
+                width: 1px;
+                height: 1.1em;
+                margin-left: var(--it230-space-3);
+                background: var(--it230-color-line);
+            }
+
+            h1,
+            h2 {
+                line-height: 1.2;
+            }
+
+            h1 {
+                max-width: 30ch;
+                margin: 0;
+                font-size: clamp(2rem, 6vw, 3rem);
+            }
+
+            main {
+                padding-block: clamp(2.1rem, 5.6vw, 3.85rem)
+                    var(--it230-space-7);
+                scroll-margin-top: 4rem;
+            }
+
+            .exercise-document {
+                overflow: hidden;
+                border: 1px solid var(--it230-color-line);
+                border-radius: var(--it230-radius-lg);
+                background: var(--it230-color-surface);
+                box-shadow: var(--it230-shadow-raised);
+            }
+
+            .exercise-header {
+                padding: clamp(1.5rem, 4vw, 2.25rem);
+                border-bottom: 0.25rem solid var(--it230-color-accent-fill);
+                background: linear-gradient(
+                    135deg,
+                    var(--it230-color-accent-wash),
+                    var(--it230-color-surface) 75%
+                );
+            }
+
+            .exercise-kicker {
+                margin: 0 0 var(--it230-space-2);
+                color: var(--it230-color-accent-text);
+                font-size: 0.82rem;
+                font-weight: 800;
+                letter-spacing: 0.06em;
+                text-transform: uppercase;
+            }
+
+            .overview {
+                padding: var(--it230-space-5);
+                border-bottom: 1px solid var(--it230-color-line);
+            }
+
+            .overview h2,
+            .step h2 {
+                margin: 0 0 var(--it230-space-4);
+                padding-left: var(--it230-space-3);
+                border-left: 0.22rem solid var(--it230-color-accent-fill);
+                font-size: clamp(1.35rem, 3vw, 1.65rem);
+            }
+
+            .requirements {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+                margin: var(--it230-space-5) 0;
+                border-block: 1px solid var(--it230-color-line);
+            }
+
+            .requirements div {
+                padding-block: var(--it230-space-3);
+            }
+
+            .requirements dt {
+                color: var(--it230-color-muted);
+                font-weight: 700;
+            }
+
+            .requirements dd {
+                margin: 0.25rem 0 0;
+            }
+
+            .steps {
+                margin: 0;
+                padding: 0;
+                list-style: none;
+                counter-reset: exercise-step;
+            }
+
+            .step {
+                counter-increment: exercise-step;
+                padding: var(--it230-space-5);
+                border-bottom: 1px solid var(--it230-color-line);
+            }
+
+            .step:last-child {
+                border-bottom: 0;
+            }
+
+            .step h2::before {
+                content: "Step " counter(exercise-step);
+                display: block;
+                margin-bottom: var(--it230-space-1);
+                color: var(--it230-color-accent-text);
+                font-size: 0.72rem;
+                font-weight: 800;
+                letter-spacing: 0.06em;
+                text-transform: uppercase;
+            }
+
+            code,
+            kbd {
+                font-family: var(--it230-font-mono);
+                font-weight: 600;
+            }
+
+            code:not(pre code) {
+                overflow-wrap: anywhere;
+                color: var(--it230-color-accent-text);
+            }
+
+            kbd {
+                padding: 0.1rem 0.3rem;
+                color: var(--it230-color-text);
+                background: var(--it230-color-raised);
+                border: 1px solid var(--it230-color-line);
+                border-radius: 0.25rem;
+                box-shadow: 0 1px 0 var(--it230-color-line);
+            }
+
+            pre {
+                max-width: 100%;
+                padding: var(--it230-space-4);
+                overflow-x: auto;
+                overflow-wrap: anywhere;
+                color: var(--it230-color-text);
+                border: 1px solid var(--it230-color-line);
+                border-radius: var(--it230-radius-md);
+                background: #f7f7f8;
+                box-shadow: inset 0 1px 0 rgb(255 255 255 / 80%);
+                tab-size: 4;
+                white-space: pre-wrap;
+            }
+
+            pre code {
+                font-size: 0.95rem;
+            }
+
+            .note,
+            .warning {
+                margin-block: var(--it230-space-5);
+                padding: var(--it230-space-3) var(--it230-space-4);
+                border-left: 0.3rem solid;
+            }
+
+            .note {
+                background: var(--it230-color-accent-wash);
+                border-color: var(--it230-color-accent-fill);
+            }
+
+            .note strong {
+                color: var(--it230-color-accent-text);
+            }
+
+            .warning {
+                background: color-mix(
+                    in srgb,
+                    var(--it230-color-warning) 9%,
+                    var(--it230-color-canvas)
+                );
+                border-color: var(--it230-color-warning);
+            }
+
+            .warning strong {
+                color: var(--it230-color-warning);
+            }
+
+            .note strong,
+            .warning strong {
+                display: block;
+            }
+
+            .exercise-navigation {
+                margin-top: var(--it230-space-6);
+                padding-top: var(--it230-space-4);
+            }
+
+            .exercise-navigation a {
+                font-weight: 700;
+            }
+
+            footer {
+                padding-block: 0 var(--it230-space-7);
+                color: var(--it230-color-muted);
+            }
+
+            footer::before {
+                display: block;
+                width: 100%;
+                height: 0.125rem;
+                margin-bottom: 0.35rem;
+                border-radius: 999px;
+                background: linear-gradient(
+                    90deg,
+                    var(--it230-color-line) 0 52%,
+                    color-mix(
+                            in srgb,
+                            var(--it230-color-accent-fill) 25%,
+                            transparent
+                        )
+                        100%
+                );
+                content: "";
+            }
+
+            footer p {
+                margin: 0;
+            }
+
+            @media (max-width: 32rem) {
+                .header-inner,
+                main,
+                footer {
+                    width: min(100% - 1.5rem, 64rem);
+                }
+
+                .header-inner {
+                    min-height: 3.25rem;
+                }
+
+                .overview,
+                .step {
+                    padding: var(--it230-space-4);
+                }
+
+                h1 {
+                    overflow-wrap: anywhere;
+                }
+            }
+
+            @media print {
+                :root {
+                    background: #ffffff;
+                }
+
+                body {
+                    background: #ffffff;
+                }
+
+                .skip-link,
+                .site-header {
+                    display: none;
+                }
+
+                main {
+                    width: 100%;
+                    padding: 0;
+                }
+
+                .exercise-document {
+                    border: 0;
+                    box-shadow: none;
+                }
+
+                .step {
+                    break-inside: avoid;
+                }
+            }
+        </style>
+    </head>
+
+    <body>
+        <a class="skip-link" href="#main-content">Skip to exercise</a>
+
+        <header class="site-header">
+            <div class="header-inner">
+                <p class="course-code"><a href="../../../">IT-230</a></p>
+                <p class="course-title">
+                    <a href="../../../">Linux Administration</a>
+                </p>
+            </div>
+        </header>
+
+        <main id="main-content">
+            <article class="exercise-document">
+                <header class="exercise-header">
+                    <p class="exercise-kicker">Exercise</p>
+                    <h1>Backing Up /etc Nightly Exercise</h1>
+                </header>
+
+                <section class="overview" aria-labelledby="overview-heading">
+                    <h2 id="overview-heading">Task</h2>
+                    <p>
+                        Back up <code>/etc</code> every night at 10 p.m. as
+                        <code>root</code>, on two machines with very different
+                        habits. <code>servera</code> is a server that never
+                        sleeps, so a system crontab suits it. Treat
+                        <code>workstation</code> as a laptop that is closed at
+                        10 p.m., and give the same script to anacron instead.
+                    </p>
+
+                    <dl class="requirements">
+                        <div>
+                            <dt>Hosts</dt>
+                            <dd>
+                                <code>servera</code>, then
+                                <code>workstation</code>
+                            </dd>
+                        </div>
+                        <div>
+                            <dt>Back up</dt>
+                            <dd><code>/etc</code></dd>
+                        </div>
+                        <div>
+                            <dt>Runs as</dt>
+                            <dd><code>root</code></dd>
+                        </div>
+                        <div>
+                            <dt>Schedule</dt>
+                            <dd>every night at 10 p.m.</dd>
+                        </div>
+                    </dl>
+                </section>
+
+                <ol class="steps">
+                    <li class="step">
+                        <h2>Write the backup script on servera</h2>
+                        <p>
+                            Log in to <code>servera</code> and become
+                            <code>root</code>, because everything in this
+                            exercise is system-wide.
+                        </p>
+                        <pre><code>sudo -i
+vim /usr/bin/etc_backup.sh</code></pre>
+                        <p>
+                            Press <kbd>i</kbd> and write two lines, then leave
+                            insert mode with <kbd>j</kbd><kbd>j</kbd> and save
+                            with <code>:wq</code>.
+                        </p>
+                        <pre><code>#!/bin/bash
+tar -caf /tmp/etc_$(date --iso-8601=minutes).tar.gz /etc 2>/dev/null</code></pre>
+                        <p>
+                            Make it executable and run it once by hand. Never
+                            hand a schedule a command you have not run yourself.
+                        </p>
+                        <pre><code>chmod a+x /usr/bin/etc_backup.sh
+etc_backup.sh
+ls -l /tmp/etc_*.tar.gz</code></pre>
+                        <aside class="note">
+                            <strong>Why the name alone works</strong>
+                            <code>/usr/bin</code> is already on
+                            <code>root</code>'s <code>PATH</code>, so the script
+                            runs without a leading <code>./</code> or a full
+                            path.
+                        </aside>
+                    </li>
+
+                    <li class="step">
+                        <h2>Schedule it in <code>/etc/cron.d</code></h2>
+                        <p>
+                            Copy <code>/etc/crontab</code> into
+                            <code>/etc/cron.d/</code> as a starting point. You
+                            get the field reference in the comments, and you
+                            leave the original file untouched.
+                        </p>
+                        <pre><code>cp /etc/crontab /etc/cron.d/backups
+vim /etc/cron.d/backups</code></pre>
+                        <p>
+                            Press <kbd>G</kbd> to reach the last line and
+                            <kbd>o</kbd> to open a new one below it. Add a test
+                            schedule that runs every minute, then save.
+                        </p>
+                        <pre><code>* * * * * root /usr/bin/etc_backup.sh</code></pre>
+                        <aside class="note">
+                            <strong>The extra field</strong>
+                            A system crontab has <code>root</code> between the
+                            five time fields and the command. Your own crontab
+                            has no such field, because every job in it already
+                            runs as you.
+                        </aside>
+                    </li>
+
+                    <li class="step">
+                        <h2>Confirm root ran it</h2>
+                        <p>
+                            Wait for the next minute to tick over, then read the
+                            log and look for a new archive.
+                        </p>
+                        <pre><code>grep etc_backup /var/log/cron
+ls -l /tmp/etc_*.tar.gz</code></pre>
+                        <p>The log names the user the job ran as:</p>
+                        <pre><code>CROND[12124]: (root) CMD (/usr/bin/etc_backup.sh)
+CROND[12123]: (root) CMDEND (/usr/bin/etc_backup.sh)</code></pre>
+                    </li>
+
+                    <li class="step">
+                        <h2>Set the real 10 p.m. schedule</h2>
+                        <p>
+                            The job works, so give it the schedule you actually
+                            want. Press <kbd>G</kbd> for the last line and
+                            <kbd>c</kbd><kbd>c</kbd> to replace it.
+                        </p>
+                        <pre><code>vim /etc/cron.d/backups</code></pre>
+                        <pre><code>0 22 * * * root /usr/bin/etc_backup.sh</code></pre>
+                        <p>Save, then read the last line back to confirm it.</p>
+                        <pre><code>tail -1 /etc/cron.d/backups</code></pre>
+                    </li>
+
+                    <li class="step">
+                        <h2>Give the same script to anacron on workstation</h2>
+                        <p>
+                            That schedule is fine for a server. Now treat
+                            <code>workstation</code> as a laptop: closed and
+                            asleep at 10 p.m., so a crontab entry would simply
+                            never fire. Leave the root shell, connect, and
+                            become <code>root</code> there.
+                        </p>
+                        <pre><code>exit
+ssh workstation
+sudo -i</code></pre>
+                        <p>
+                            Write the same script, but into
+                            <code>/etc/cron.daily/</code>, and make it
+                            executable. A script that is not executable is
+                            silently ignored.
+                        </p>
+                        <pre><code>vim /etc/cron.daily/etc_backup.sh</code></pre>
+                        <pre><code>#!/bin/bash
+tar -caf /tmp/etc_$(date --iso-8601=minutes).tar.gz /etc 2>/dev/null</code></pre>
+                        <pre><code>chmod a+x /etc/cron.daily/etc_backup.sh</code></pre>
+                        <aside class="note">
+                            <strong>No schedule to write</strong>
+                            There are no time fields here. You are asking for
+                            "about once a day" and letting anacron pick the
+                            moment.
+                        </aside>
+                    </li>
+
+                    <li class="step">
+                        <h2>Let anacron catch up</h2>
+                        <p>
+                            Anacron records the date it last ran each group of
+                            jobs. Look at that date, then ask anacron to run
+                            anything overdue.
+                        </p>
+                        <pre><code>cat /var/spool/anacron/cron.daily
+anacron -n
+ls /tmp/etc_*.tar.gz</code></pre>
+                        <p>
+                            Nothing happened, because today's daily job is not
+                            overdue. Now pretend the laptop has been closed
+                            since January and ask again.
+                        </p>
+                        <pre><code>echo 20260101 > /var/spool/anacron/cron.daily
+anacron -n
+ls -l /tmp/etc_*.tar.gz
+cat /var/spool/anacron/cron.daily</code></pre>
+                        <p>
+                            The backup ran, and the recorded date has caught up
+                            to today. That is the whole point: the job was
+                            missed, and anacron noticed.
+                        </p>
+                    </li>
+
+                    <li class="step">
+                        <h2>Clean up both hosts</h2>
+                        <p>
+                            Remove the laptop side first, while you are still on
+                            it.
+                        </p>
+                        <pre><code>rm -f /etc/cron.daily/etc_backup.sh /tmp/etc_*.tar.gz
+exit
+exit</code></pre>
+                        <p>
+                            Those two <code>exit</code> commands drop the root
+                            shell and then the <code>ssh</code> session, leaving
+                            you back on <code>servera</code>. Remove the server
+                            side there.
+                        </p>
+                        <pre><code>sudo rm -f /etc/cron.d/backups /usr/bin/etc_backup.sh /tmp/etc_*.tar.gz
+ls /etc/cron.d/</code></pre>
+                    </li>
+                </ol>
+            </article>
+            <nav class="exercise-navigation" aria-label="Exercise navigation">
+                <a href="../">← Back to week overview</a>
+            </nav>
+        </main>
+
+        <footer>
+            <p>IT-230 · Linux Administration</p>
+        </footer>
+    </body>
+</html>

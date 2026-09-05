@@ -27,8 +27,8 @@ vertical: center
 
 Hand a command to `at` and walk away
 
-- Good for <SuccessText>one-off</SuccessText> jobs — a job that runs once and is done
-- Not for <DangerText>recurring</DangerText> jobs — nothing repeats every day at 8 p.m.
+- Good for <SuccessText>one-off</SuccessText> jobs that run once and are done
+- Not for <DangerText>recurring</DangerText> jobs like every day at 8 p.m.
 
 ```bash
 echo "reboot" | at now +2min
@@ -74,7 +74,7 @@ Installing the package <AccentText>enables</AccentText> `atd`, but does not star
 
 # Start `atd`
 
-`at` only queues jobs — `atd` is the daemon that runs them
+`at` only queues jobs, and `atd` is the daemon that runs them
 
 <TerminalWindow title="student@servera:~" :rows="6">
 
@@ -160,7 +160,7 @@ layout: center
 
 # Inspect a Job
 
-`at -c` prints the job as `atd` will run it — including the environment `at` saved for you
+`at -c` prints the job as `atd` will run it, including the environment `at` saved for you
 
 <TerminalWindow title="student@servera:~" :rows="15">
 
@@ -216,7 +216,7 @@ student@servera:~$ atq
 
 # Did It Run?
 
-A job disappears from `atq` whether it succeeded or failed — the log is the proof
+A job disappears from `atq` whether it succeeded or failed, so the log is the proof
 
 <TerminalWindow title="student@servera:~" :rows="4">
 
