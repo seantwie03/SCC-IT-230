@@ -179,6 +179,45 @@ no crontab for student
 </Callout>
 
 ---
+layout: two-cols-header
+vertical: center
+---
+
+# Cron's PATH Is Not Your PATH
+
+`crond` never reads your login files, so your `PATH` is not the one your job gets
+
+<Callout type="warning">
+
+A script in `~/bin` or `/usr/local/bin` fails with `command not found`, and only the log says so. Use an absolute path, or set `PATH=` in the crontab.
+
+</Callout>
+
+::left::
+
+## Your shell
+
+```bash
+/home/student/.local/bin
+/home/student/bin
+/usr/local/bin
+/usr/bin
+/usr/local/sbin
+/usr/sbin
+```
+
+::right::
+
+## Any cron job
+
+```bash
+/usr/bin
+/bin
+/usr/sbin
+/sbin
+```
+
+---
 layout: exercise
 ---
 

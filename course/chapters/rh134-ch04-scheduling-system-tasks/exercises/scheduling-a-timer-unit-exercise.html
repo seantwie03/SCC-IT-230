@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Backing Up /etc Nightly Exercise</title>
+        <title>Scheduling a Timer Unit Exercise</title>
         <style>
             :root {
                 color-scheme: light;
@@ -461,231 +461,155 @@
             <article class="exercise-document">
                 <header class="exercise-header">
                     <p class="exercise-kicker">Exercise</p>
-                    <h1>Backing Up /etc Nightly Exercise</h1>
+                    <h1>Scheduling a Timer Unit Exercise</h1>
                 </header>
 
                 <section class="overview" aria-labelledby="overview-heading">
                     <h2 id="overview-heading">Task</h2>
                     <p>
-                        Back up <code>/etc</code> every night at 10 p.m. as
-                        <code>root</code>, copying each archive to another host
-                        so it is not lost with the machine.
-                        <code>servera</code> is a server that never sleeps, so a
-                        system crontab suits it. Treat
-                        <code>workstation</code> as a laptop that is closed at
-                        10 p.m., and give the same script to anacron instead.
+                        Take the service you already wrote and put it on a
+                        schedule, then make that schedule survive the machine
+                        being switched off. This is the same catch-up behavior
+                        anacron gives cron, done per unit.
                     </p>
 
                     <dl class="requirements">
                         <div>
-                            <dt>Hosts</dt>
-                            <dd>
-                                <code>servera</code>, then
-                                <code>workstation</code>
-                            </dd>
+                            <dt>Host</dt>
+                            <dd><code>servera</code></dd>
                         </div>
                         <div>
-                            <dt>Back up</dt>
-                            <dd><code>/etc</code></dd>
-                        </div>
-                        <div>
-                            <dt>Snapshot to</dt>
-                            <dd><code>workstation:/tmp</code></dd>
-                        </div>
-                        <div>
-                            <dt>Runs as</dt>
-                            <dd><code>root</code></dd>
+                            <dt>Prerequisite exercise</dt>
+                            <dd>A Service That Checks Before It Runs</dd>
                         </div>
                         <div>
                             <dt>Schedule</dt>
-                            <dd>every night at 10 p.m.</dd>
+                            <dd>every two minutes to test, then daily</dd>
+                        </div>
+                        <div>
+                            <dt>Must survive</dt>
+                            <dd>the machine being switched off</dd>
                         </div>
                     </dl>
                 </section>
 
                 <ol class="steps">
                     <li class="step">
-                        <h2>Write the backup script on servera</h2>
+                        <h2>Confirm the service still works</h2>
                         <p>
-                            Become <code>root</code>, because everything here is
-                            system-wide.
+                            Become <code>root</code> and run the unit from the
+                            previous exercise once by hand.
                         </p>
                         <pre><code>sudo -i
-vim /usr/local/bin/etc_backup.sh</code></pre>
-                        <p>
-                            Give it a hashbang and keep its settings in
-                            variables, so the destination host is named once
-                            rather than buried in a command.
-                        </p>
-                        <pre><code>#!/bin/bash
-BACKUP_HOST="workstation"
-ARCHIVE="/tmp/etc_$(date --iso-8601=minutes).tar.gz"
+systemctl start etc-sync.service
+systemctl is-failed etc-sync.service</code></pre>
+                    </li>
 
-tar -caf "${ARCHIVE}" /etc 2>/dev/null
-scp -q "${ARCHIVE}" "${BACKUP_HOST}:/tmp/"</code></pre>
+                    <li class="step">
+                        <h2>Write a timer for it</h2>
                         <p>
-                            Make it executable and run it once by hand, then
-                            check both ends.
+                            A timer takes the name of the service it triggers,
+                            with a <code>.timer</code> suffix. That matching
+                            name is the whole link between them.
                         </p>
-                        <pre><code>chmod a+x /usr/local/bin/etc_backup.sh
-/usr/local/bin/etc_backup.sh
-ls -l /tmp/etc_*.tar.gz
-ssh workstation 'ls -l /tmp/etc_*.tar.gz'</code></pre>
+                        <pre><code>vim /etc/systemd/system/etc-sync.timer</code></pre>
+                        <pre><code>[Unit]
+Description=Sync /etc to workstation on a schedule
+
+[Timer]
+OnCalendar=*:0/2
+
+[Install]
+WantedBy=timers.target</code></pre>
+                        <pre><code>systemctl daemon-reload</code></pre>
                         <aside class="note">
                             <strong
-                                >A backup on one machine is not a backup</strong
+                                >This unit does have an
+                                <code>[Install]</code> section</strong
                             >
-                            The <code>scp</code> line is what makes this useful.
-                            If servera dies, the archive dies with it.
+                            The timer is the thing that gets enabled, which is
+                            why it needs one and the service does not.
                         </aside>
                     </li>
 
                     <li class="step">
-                        <h2>Schedule it in <code>/etc/cron.d</code></h2>
+                        <h2>Enable the timer, not the service</h2>
+                        <pre><code>systemctl enable --now etc-sync.timer
+systemctl list-timers etc-sync.timer --no-pager</code></pre>
                         <p>
-                            Copy <code>/etc/crontab</code> as a starting point.
-                            You get the field reference in the comments and
-                            leave the original untouched.
+                            <code>NEXT</code> is when it fires next, and
+                            <code>ACTIVATES</code> names the service it will
+                            start.
                         </p>
-                        <pre><code>cp /etc/crontab /etc/cron.d/backups
-vim /etc/cron.d/backups</code></pre>
+                    </li>
+
+                    <li class="step">
+                        <h2>Watch it fire</h2>
+                        <p>Wait for the next even minute, then look again.</p>
+                        <pre><code>systemctl list-timers etc-sync.timer --no-pager
+journalctl -u etc-sync.service -n 5 --no-pager</code></pre>
                         <p>
-                            Press <kbd>G</kbd> for the last line and
-                            <kbd>o</kbd> to open one below it. Add a test
-                            schedule that runs every minute:
+                            <code>LAST</code> and <code>PASSED</code> now show a
+                            real run.
                         </p>
-                        <pre><code>* * * * * root etc_backup.sh</code></pre>
+                    </li>
+
+                    <li class="step">
+                        <h2>Make it survive downtime</h2>
+                        <p>
+                            First look at what systemd is recording about this
+                            timer.
+                        </p>
+                        <pre><code>ls -l /var/lib/systemd/timers/</code></pre>
+                        <p>
+                            There is no stamp file, because nothing is tracking
+                            the last run yet. Change the schedule to daily and
+                            ask for persistence.
+                        </p>
+                        <pre><code>vim /etc/systemd/system/etc-sync.timer</code></pre>
+                        <p>
+                            Search with <code>/OnCalendar</code>, replace that
+                            line with <kbd>c</kbd><kbd>c</kbd>, then
+                            <kbd>o</kbd> to open a line below it:
+                        </p>
+                        <pre><code>OnCalendar=daily
+Persistent=true</code></pre>
+                        <pre><code>systemctl daemon-reload
+systemctl restart etc-sync.timer
+ls -l /var/lib/systemd/timers/</code></pre>
+                        <p>
+                            A stamp file appeared. Count the completed runs,
+                            backdate the stamp as though the machine had been
+                            off for three days, and restart the timer.
+                        </p>
+                        <pre><code>journalctl -u etc-sync.service --no-pager | grep -c Finished
+touch -d "3 days ago" /var/lib/systemd/timers/stamp-etc-sync.timer
+systemctl restart etc-sync.timer
+journalctl -u etc-sync.service --no-pager | grep -c Finished</code></pre>
                         <aside class="note">
-                            <strong>The extra field</strong>
-                            A system crontab has <code>root</code> between the
-                            five time fields and the command. Your own crontab
-                            has no such field, because every job in it already
-                            runs as you.
+                            <strong>The count went up</strong>
+                            The overdue run happened as soon as the timer came
+                            back, without waiting for the next daily slot. That
+                            is <code>Persistent=true</code>, and it is what
+                            anacron does for <code>/etc/cron.daily</code>,
+                            except per unit, without needing
+                            <code>root</code>-owned directories and without the
+                            battery rule.
                         </aside>
                     </li>
 
                     <li class="step">
-                        <h2>Find out why nothing happened</h2>
+                        <h2>Clean up</h2>
                         <p>
-                            Wait for the next minute, then look for a new
-                            archive.
+                            Remove the timer, the service, the script, and the
+                            stamp, on both hosts.
                         </p>
-                        <pre><code>ls -l /tmp/etc_*.tar.gz
-grep etc_backup /var/log/cron</code></pre>
-                        <p>No new archive, and the log says why:</p>
-                        <pre><code>CROND[...]: (root) CMD (etc_backup.sh)
-CROND[...]: (root) CMDOUT (/bin/bash: line 1: etc_backup.sh: command not found)</code></pre>
-                        <aside class="note">
-                            <strong>Cron's PATH is not your PATH</strong>
-                            Your shell searches <code>/usr/local/bin</code>; a
-                            cron job searches only
-                            <code>/usr/bin:/bin:/usr/sbin:/sbin</code>. The
-                            script is invisible to it. This is true of user
-                            crontabs too.
-                        </aside>
-                        <p>
-                            Fix it with an absolute path. Press <kbd>G</kbd>,
-                            then <kbd>c</kbd><kbd>c</kbd> to replace the line:
-                        </p>
-                        <pre><code>vim /etc/cron.d/backups</code></pre>
-                        <pre><code>* * * * * root /usr/local/bin/etc_backup.sh</code></pre>
-                    </li>
-
-                    <li class="step">
-                        <h2>Confirm root ran it, then set the real schedule</h2>
-                        <p>
-                            Wait another minute, then check the log and both
-                            hosts.
-                        </p>
-                        <pre><code>grep etc_backup /var/log/cron
-ls -l /tmp/etc_*.tar.gz
-ssh workstation 'ls -l /tmp/etc_*.tar.gz'</code></pre>
-                        <p>The log names the user the job ran as:</p>
-                        <pre><code>CROND[12124]: (root) CMD (/usr/local/bin/etc_backup.sh)
-CROND[12123]: (root) CMDEND (/usr/local/bin/etc_backup.sh)</code></pre>
-                        <p>
-                            It works, so give it the schedule you actually want.
-                            Press <kbd>G</kbd> and <kbd>c</kbd
-                            ><kbd>c</kbd> again:
-                        </p>
-                        <pre><code>vim /etc/cron.d/backups</code></pre>
-                        <pre><code>0 22 * * * root /usr/local/bin/etc_backup.sh</code></pre>
-                        <pre><code>tail -1 /etc/cron.d/backups</code></pre>
-                    </li>
-
-                    <li class="step">
-                        <h2>Give the same script to anacron on workstation</h2>
-                        <p>
-                            That schedule suits a server. Now treat
-                            <code>workstation</code> as a laptop: closed and
-                            asleep at 10 p.m., so a crontab entry would never
-                            fire. Leave the root shell, connect, and become
-                            <code>root</code> there.
-                        </p>
-                        <pre><code>exit
-ssh workstation
-sudo -i</code></pre>
-                        <p>
-                            Write a local-only version into
-                            <code>/etc/cron.daily/</code> and make it
-                            executable. A script that is not executable is
-                            silently ignored.
-                        </p>
-                        <pre><code>vim /etc/cron.daily/etc_backup.sh</code></pre>
-                        <pre><code>#!/bin/bash
-ARCHIVE="/tmp/etc_$(date --iso-8601=minutes).tar.gz"
-
-tar -caf "${ARCHIVE}" /etc 2>/dev/null</code></pre>
-                        <pre><code>chmod a+x /etc/cron.daily/etc_backup.sh</code></pre>
-                        <aside class="note">
-                            <strong>No schedule to write</strong>
-                            There are no time fields here. You are asking for
-                            “about once a day” and letting anacron pick the
-                            moment.
-                        </aside>
-                    </li>
-
-                    <li class="step">
-                        <h2>Let anacron catch up</h2>
-                        <p>
-                            Anacron records the date it last ran each group of
-                            jobs. Look at that date, then ask it to run anything
-                            overdue.
-                        </p>
-                        <pre><code>cat /var/spool/anacron/cron.daily
-anacron -n
-ls /tmp/etc_*.tar.gz</code></pre>
-                        <p>
-                            Nothing happened, because today's daily job is not
-                            overdue. Now pretend the laptop has been closed
-                            since January and ask again.
-                        </p>
-                        <pre><code>echo 20260101 > /var/spool/anacron/cron.daily
-anacron -n
-ls -l /tmp/etc_*.tar.gz
-cat /var/spool/anacron/cron.daily</code></pre>
-                        <p>
-                            The backup ran and the recorded date caught up to
-                            today. The job was missed, and anacron noticed.
-                        </p>
-                    </li>
-
-                    <li class="step">
-                        <h2>Clean up both hosts</h2>
-                        <p>
-                            Remove the laptop side first, while you are still on
-                            it.
-                        </p>
-                        <pre><code>rm -f /etc/cron.daily/etc_backup.sh /tmp/etc_*.tar.gz
-exit
-exit</code></pre>
-                        <p>
-                            Those two <code>exit</code> commands drop the root
-                            shell and then the <code>ssh</code> session, leaving
-                            you back on <code>servera</code>.
-                        </p>
-                        <pre><code>sudo rm -f /etc/cron.d/backups /usr/local/bin/etc_backup.sh /tmp/etc_*.tar.gz
-ls /etc/cron.d/</code></pre>
+                        <pre><code>systemctl disable --now etc-sync.timer
+rm -f /etc/systemd/system/etc-sync.timer /etc/systemd/system/etc-sync.service
+rm -f /usr/local/bin/etc_sync.sh /var/lib/systemd/timers/stamp-etc-sync.timer
+systemctl daemon-reload
+ssh workstation 'rm -rf /tmp/etc_from_servera'
+dnf remove -y rsync</code></pre>
                     </li>
                 </ol>
             </article>
