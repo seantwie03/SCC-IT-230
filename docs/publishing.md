@@ -37,6 +37,18 @@ rather than only the ones at or past the boundary, which is useful when judging
 how much room a slide really has. Run `--all` after changing a shared layout, component, or theme token,
 because those changes can push content past the content box on any week.
 
+A new or re-made screen recording is processed before it is published, which
+trims it, marks its section boundaries, and refuses it if it still carries
+local shell identity:
+
+```sh
+pnpm run casts -- course/chapters/<chapter>/exercises/<name>-exercise.cast
+```
+
+`pnpm check` includes `pnpm run check:casts`, which applies the same rules
+without modifying a recording. A cast that has not been processed fails that
+check rather than publishing as recorded.
+
 If the format check reports a supported file, apply the configured formatter
 and validate again:
 

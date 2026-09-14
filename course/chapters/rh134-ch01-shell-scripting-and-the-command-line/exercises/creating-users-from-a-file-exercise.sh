@@ -42,6 +42,7 @@ clear
 #^ 3. Read the file line by line
 vim user_creator.sh
 /Starting \$0
+#@ noenter
 o
 while read -r new_user; do
     echo "Processing: $new_user"
@@ -75,6 +76,7 @@ sudo bash -c 'echo $EUID'
 clear
 vim user_creator.sh
 /bin\/bash
+#@ noenter
 o
 if [[ $EUID -ne 0 ]]; then
     echo "You must be root to run this script!"
@@ -90,12 +92,15 @@ clear
 #^ 6. Skip blank lines
 #! A stray blank line at the end of the input file is very common.
 vim new_users.txt
+#@ noenter
 G
+#@ noenter
 o
 jj:wq
 sudo ./user_creator.sh
 vim user_creator.sh
 /Processing:
+#@ noenter
 O
     if [[ -z "$new_user" ]]; then
         echo "Skipping empty line"

@@ -309,20 +309,20 @@ click state, so a frame that still changes size is visible as a changing number.
 
 When one transcript carries two or three related ideas, mark the boundaries with
 a step banner in the transcript itself rather than with prose beside it. Use the
-same `#^` marker that `kitty-demo.sh` uses for a visible step header:
+same `#^` marker that `kitty-demo.py` uses for a visible step header:
 
 ```
 #^ 2. Bypass it once with a backslash
 ```
 
-The theme renders the heading in bold blue, matching the color `kitty-demo.sh`
+The theme renders the heading in bold blue, matching the color `kitty-demo.py`
 prints, so a step boundary looks the same in the live demonstration and on the
 slide. The marker is muted, and the line stays a valid shell comment in copied
 text. Do not pad the line: the banner is colored text, not a filled band, so
 padding only adds trailing whitespace.
 
 Banners are appended in transcript order, so earlier lines never move. Keep them
-to a single line; the three-line form `kitty-demo.sh` draws costs vertical budget
+to a single line; the three-line form `kitty-demo.py` draws costs vertical budget
 that the transcript usually needs.
 
 ### One terminal, several concepts
@@ -463,7 +463,8 @@ rather than turning it into an answer key; see "Demonstrations and exercises"
 below for the file-based counterpart under `exercises/`.
 
 The second slide uses the `recording` variant and the same source title. Put the
-exercise GIF in the `recording` slot and its two links in the `resources` slot:
+recording in the `recording` slot and the written exercise in the `resources`
+slot:
 
 ```md
 ---
@@ -471,21 +472,46 @@ layout: exercise
 variant: recording
 ---
 
+<script setup>
+import castUrl from "./exercises/example-exercise.cast?url";
+</script>
+
 # Title
 
 ::recording::
 
-![Specific description of the demonstrated workflow](./assets/example.gif)
+<AsciinemaPlayer
+    :src="castUrl"
+    label="Specific description of the demonstrated workflow"
+/>
 
 ::resources::
 
-<a href="https://asciinema.org/a/example" target="_blank" rel="noopener noreferrer" aria-label="Watch the Asciinema recording in a new tab">Asciinema recording</a><a href="../resources/example-exercise.html" target="_blank" rel="noopener noreferrer" aria-label="Open the written exercise in a new tab">Written exercise</a>
+<a href="../resources/example-exercise.html" target="_blank" rel="noopener noreferrer" aria-label="Open the written exercise in a new tab">Written exercise</a>
 ```
 
-Create the GIF from the Asciinema recording using `agg`. Use the exact visible
-link labels `Asciinema recording` and `Written exercise`; the layout presents
-them as one compact segmented resource group. Keep the links adjacent in source
-without separator text so the layout can supply their visual division.
+Embed the recording with `AsciinemaPlayer` rather than a GIF. The player
+renders the session as real text, so it stays selectable, scalable, pausable,
+and navigable by section marker. The `label` prop is the text alternative and
+should describe the workflow the way the GIF's alt text used to.
+
+Import the cast with Vite's `?url` suffix, from the topic's `exercises/`
+directory where `kitty-demo.py` writes it. A missing or renamed cast then
+fails the build rather than producing a broken slide.
+
+Do not pass a `theme` option. Asciicast v3 embeds the recording terminal's own
+palette, and the player applies it. Do not link the recording to
+asciinema.org; the cast is served from this site so the recording does not
+depend on an external service.
+
+Process every new recording with `pnpm run casts -- <path>` before publishing.
+That trims the session down to the exercise, adds a marker per section header,
+and refuses recordings that still carry local shell identity. `pnpm check`
+asserts it has been done.
+
+Use the exact visible link label `Written exercise`; the layout presents the
+resources slot as one compact segmented group. Keep any links adjacent in
+source without separator text so the layout can supply their visual division.
 
 See the 'Demonstrations and exercises' section for more details.
 
@@ -500,7 +526,7 @@ pattern.
 ## Demonstrations and exercises
 
 Live command-line activities are always authored and stored as exercises.
-Normally, the instructor performs the exercise with `kitty-demo.sh` while students
+Normally, the instructor performs the exercise with `kitty-demo.py` while students
 type along. When time is limited, the instructor may perform the exercise solo;
 this delivery mode is called a demonstration. A demonstration is not a separate content
 type: use the existing exercise file and do not create a demos/ directory or
@@ -508,20 +534,62 @@ demonstration-specific copy.
 
 Store type-along exercises under the owning topic's `exercises/` directory.
 The instructor performs each exercise with
-[`kitty-demo.sh`](https://github.com/seantwie03/cli_demos) while students type
+[`kitty-demo.py`](https://github.com/seantwie03/cli_demos) while students type
 the same steps on their own VMs. This is the guided "We Do" phase of the
 instructional model, not a separate demonstration.
 
-Each exercise is a command file for `kitty-demo.sh`, which uses Kitty's remote
+Each exercise is a command file for `kitty-demo.py`, which uses Kitty's remote
 control to drive a two-window presentation: a Controller window for the
 instructor and an audience-facing Presentation window. Within the file:
 
 - `#^` marks a visible step header, shown to the audience.
+- `#` continues that header and is audience visible. A section header claims
+  every `#` line that follows it, whatever the spacing between them; a command
+  is what closes the section.
+- After a command, a `#` line is typed into the Presentation window like any
+  other line. Use it for a comment both the audience and the instructor should
+  read, and for a commented line that belongs in a config file being edited.
+  The shell ignores it at a prompt, and an editor takes it as text. Use `#!`
+  for a comment the audience should not see.
 - `#!` marks a delivery note, shown only in the Controller window. The note is
   still public repository source.
-- Every other line — including a literal `#` comment — is typed into the
-  Presentation window and executed live, including keystrokes for a TUI such
-  as `vim`, `less`, or `fdisk`.
+- `#@` is a directive for the driver and is never displayed. `#@ pause N`
+  holds N seconds after the next step when recording, and `#@ noenter` marks
+  the next line as keystrokes that take no Enter after them. Both must be
+  followed by the step they apply to.
+- `#@ key KEY` is a directive that is also an action. It costs one press and
+  sends a single key event with no Enter after it, which is how a
+  demonstration presses <kbd>Esc</kbd>, <kbd>Ctrl</kbd>+<kbd>X</kbd>, or any
+  other combination that cannot be typed as text. The argument goes to Kitty's
+  `send-key` unchanged, so write `escape` or `ctrl+x` rather than `^X`, one key
+  per directive. A `#@ noenter` in front of it is an error, since a key event
+  never carries an Enter. Validation checks only that an argument is present:
+  whether the key is real, and whether the target application accepts it, is
+  found by running the exercise.
+- Every other line is typed into the Presentation window and executed live,
+  including keystrokes for a TUI such as `vim`, `less`, or `fdisk`.
+
+<kbd>F2</kbd> performs the next action: the first press puts a command on the
+prompt, the second runs it. A section header costs one press, presenter notes
+cost none, and a bare `clear` directly before a header is merged into it.
+<kbd>F1</kbd> and <kbd>F3</kbd> move the Controller's selection back and
+forward without typing, running, or undoing anything in the Presentation
+window, which is how a question is taken mid-demonstration and the sequence
+resumed afterwards.
+
+Every line gets an Enter unless it carries `#@ noenter`. That default is right
+at a shell prompt, and right for most lines inside a full-screen program too,
+because there the Enter is the newline: an inserted body line needs one, and so
+does a `:wq` written on its own line. Mark the exceptions, which are the
+keystrokes that finish the moment they arrive, such as `q` leaving a pager or
+`dd` deleting a line.
+
+Nothing detects where a full-screen program begins or ends. A heuristic for it
+is wrong in both directions, since it cannot know that `export PAGER=cat` stops
+`man` from paging, and it would demand an annotation on every ordinary shell
+command. So a missed exception is found by playing the exercise back, not by a
+check, and it shows up unmistakably: a command typed and never run, or a stray
+Enter landing in an editor.
 
 Every exercise file opens with the target host and a clear screen:
 
@@ -530,9 +598,11 @@ kitten @ set-font-size 30.0 && ssh {HOSTNAME}
 clear
 ```
 
-Write file edits as literal keystrokes — for example, `i`, the text to insert,
-then `jj:wq` to exit insert mode and save, since lab hosts map `jj` to
-<kbd>Esc</kbd>. An exercise must be self-contained because students follow it
+Write file edits as literal keystrokes: `i`, the text to insert, then
+`#@ key escape` to leave insert mode and `:wq` to save. Existing exercises
+instead type `jj:wq`, which works because lab hosts map `jj` to <kbd>Esc</kbd>.
+Prefer the key directive in new material, because it does not depend on that
+mapping being present on the host being demonstrated. An exercise must be self-contained because students follow it
 on their own VMs in real time: include prerequisites, the expected environment,
 required setup, safe execution guidance, verification, and cleanup when
 needed. Target the SCC Lab, defaulting to `servera` and `workstation` unless the
@@ -560,6 +630,49 @@ resources, filenames, data, or outcomes that require learners to transfer the
 idea to a new situation. Avoid realism that introduces tools or troubleshooting
 unrelated to the learning goal.
 
+### Recording an exercise
+
+Work in this order. Each step assumes the one before it passed, and skipping
+ahead wastes a recording.
+
+1. **Write the command file, verifying every command on the lab as you write
+   it.** Run each command through `pnpm lab` before it goes in the file, per
+   the `lab-verification` skill. Verifying afterwards means discovering a
+   broken command during a recording, and a command file is the wrong place to
+   find out that ported material does not match RHEL 10.0. Mark immediate
+   keystrokes with `#@ noenter` while the reason is in front of you.
+2. **Run it live and correct the file.** `kitty-demo.py <file>` opens a
+   Presentation window and turns the current window into the Controller.
+   Step through it with <kbd>F2</kbd>, using <kbd>F1</kbd> and <kbd>F3</kbd> to
+   move the selection when an action needs repeating or skipping. This is where
+   a wrong `#@ noenter` and a key the application does not accept both show
+   themselves. Edit and run again until it plays cleanly.
+3. **Close the Presentation window** with `ctrl+alt+w`. Live mode leaves it
+   open on purpose so a question can be answered, and only one demonstration
+   may run at a time, so the recording refuses to start until it is gone.
+4. **Record it.** `kitty-demo.py --record <file>` plays unattended into a
+   sanitized session and writes the cast beside the command file. Budget the
+   press count times the pause, plus any `#@ pause` holds. Do not type while it
+   runs. A failed attempt keeps the previous recording and names the partial
+   file it retained, so a bad take never destroys a good one.
+5. **Process the cast** with `pnpm run casts -- <path>`, which trims the
+   preamble and sentinel, adds one marker per section header, and refuses a
+   recording that is not publishable.
+6. **Play the recording back and watch it.** The checks confirm structure, not
+   pacing, and this is the only thing that confirms the recording is worth
+   showing.
+
+Every run validates the command file first, so there is no separate validation
+step. A file that cannot be parsed stops the run before a window opens, a
+session is claimed, or asciinema starts, which is what keeps a malformed file
+from wasting a take. `kitty-demo.py --check <file>` runs that same validation
+and nothing else, which is useful while drafting because it needs no Kitty
+window and starts no demonstration.
+
+Changing a command file invalidates its recording. Adding or removing a step
+changes the press count and the total runtime, which can strand `#@ pause`
+values tuned for a wait.
+
 ## Assets
 
 Keep ordinary assets with their topic. Every third-party asset needs a clear
@@ -569,10 +682,11 @@ Do not reproduce Red Hat Academy source material, guided exercises, labs,
 quizzes, instructor-guide content, transcripts, or extracted media. References
 to curriculum names are for alignment only.
 
-Generate a exercise's screen-recording GIF from its `kitty-demo.sh`
-Asciinema recording with
-`agg --cols 120 --rows 24 --theme github-light --last-frame-duration 10 <cast-or-url> <output>.gif`,
-keeping the recording visually consistent with the theme's light terminal surface.
+Keep an exercise's screen recording as the `.cast` file `kitty-demo.py` writes
+beside its command file, and embed it with `AsciinemaPlayer`. Do not generate a
+GIF: a looping raster of terminal text is an image of text with no pause
+control, it cannot reflow, and it is roughly thirty-five times larger than the
+recording it depicts.
 
 Assets consumed only by a presentation stay with the owning topic and are
 processed by Slidev. Student-facing exercise documents use the `topicInfo`

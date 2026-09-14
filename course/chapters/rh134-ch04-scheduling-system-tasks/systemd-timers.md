@@ -191,3 +191,25 @@ Schedule a job with a timer, then make it survive the machine being switched off
 3. Write a matching `.timer` unit and enable it
 4. Confirm it fires with `systemctl list-timers` and the journal
 5. Add `Persistent=true` and reload, then check the timer again
+
+---
+layout: exercise
+variant: recording
+---
+
+<script setup>
+import castUrl from "./exercises/scheduling-a-timer-unit-exercise.cast?url";
+</script>
+
+# Scheduling a Timer Unit
+
+::recording::
+
+<AsciinemaPlayer
+    :src="castUrl"
+    label="Screen recording of the instructor confirming a sync service still works, writing a timer unit for it, enabling the timer rather than the service, watching it fire on the next even minute, and making the schedule survive the machine being switched off."
+/>
+
+::resources::
+
+<a href="../resources/scheduling-a-timer-unit-exercise.html" target="_blank" rel="noopener noreferrer" aria-label="Read the written Scheduling a Timer Unit exercise in a new tab">Written exercise</a>

@@ -33,3 +33,5 @@ pnpm-debug.log*
 .DS_Store
 Thumbs.db
 
+# Abandoned screen recordings
+*.cast.*.partial

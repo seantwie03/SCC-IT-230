@@ -500,11 +500,6 @@
                     <li class="step">
                         <h2>Create something worth backing up</h2>
                         <p>
-                            Install <code>rsync</code>, which is not part of a
-                            minimal RHEL installation.
-                        </p>
-                        <pre><code>sudo dnf install -y rsync</code></pre>
-                        <p>
                             Build a small document tree so the backup has real
                             files to copy, including one in a subdirectory.
                         </p>
@@ -523,15 +518,15 @@ ls -R ~/Documents</code></pre>
                             crontab.
                         </p>
                         <pre><code>date --iso-8601=minutes
-rsync -a ~/Documents/ /tmp/documents_$(date --iso-8601=minutes)/
+cp -r ~/Documents /tmp/documents_$(date --iso-8601=minutes)
 ls -d /tmp/documents_*</code></pre>
                         <aside class="note">
-                            <strong>The trailing slash matters</strong>
-                            <code>~/Documents/</code> with a trailing slash
-                            copies the <em>contents</em> of the directory.
-                            Without it, <code>rsync</code> would copy the
-                            directory itself, nesting it one level deeper than
-                            you meant.
+                            <strong>Why the timestamp matters here</strong>
+                            <code>cp -r</code> copies <em>into</em> a
+                            destination that already exists, which would leave
+                            you with <code>documents_.../Documents</code>.
+                            Because the timestamp makes a fresh directory every
+                            run, the contents land where you expect.
                         </aside>
                     </li>
 
@@ -547,7 +542,7 @@ ls -d /tmp/documents_*</code></pre>
                             line. Use the absolute path, because cron does not
                             expand <code>~</code> the way your login shell does.
                         </p>
-                        <pre><code>* * * * * rsync -a /home/student/Documents/ /tmp/documents_$(date --iso-8601=minutes)/</code></pre>
+                        <pre><code>* * * * * cp -r /home/student/Documents /tmp/documents_$(date --iso-8601=minutes)</code></pre>
                         <p>
                             Press <kbd>j</kbd><kbd>j</kbd> to leave insert mode,
                             then type <code>:wq</code> to save. Read the crontab
@@ -580,8 +575,8 @@ ls -d /tmp/documents_*</code></pre>
                             <kbd>q</kbd> to quit. Look for a matching pair of
                             lines:
                         </p>
-                        <pre><code>CROND[11611]: (student) CMD (rsync -a /home/student/Documents/ /tmp/documents_$(date --iso-8601=minutes)/)
-CROND[11609]: (student) CMDEND (rsync -a /home/student/Documents/ /tmp/documents_$(date --iso-8601=minutes)/)</code></pre>
+                        <pre><code>CROND[11611]: (student) CMD (cp -r /home/student/Documents /tmp/documents_$(date --iso-8601=minutes))
+CROND[11609]: (student) CMDEND (cp -r /home/student/Documents /tmp/documents_$(date --iso-8601=minutes))</code></pre>
                         <p>Then look for a second backup directory.</p>
                         <pre><code>ls -d /tmp/documents_*</code></pre>
                         <aside class="note">
@@ -603,10 +598,10 @@ CROND[11609]: (student) CMDEND (rsync -a /home/student/Documents/ /tmp/documents
                         </p>
                         <pre><code>crontab -e</code></pre>
                         <p>
-                            Press <kbd>c</kbd><kbd>c</kbd> to replace the whole
-                            line, and type the nightly version.
+                            Press <kbd>C</kbd> to replace the whole line, and
+                            type the nightly version.
                         </p>
-                        <pre><code>0 2 * * * rsync -a /home/student/Documents/ /tmp/documents_$(date --iso-8601=minutes)/</code></pre>
+                        <pre><code>0 2 * * * cp -r /home/student/Documents /tmp/documents_$(date --iso-8601=minutes)</code></pre>
                         <p>
                             Leave insert mode with <kbd>j</kbd><kbd>j</kbd>,
                             save with <code>:wq</code>, and read it back.

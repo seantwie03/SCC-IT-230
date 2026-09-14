@@ -47,6 +47,7 @@ clear
 #^ 5. Persist noclobber in ~/.bashrc
 vim ~/.bashrc
 Gzz
+#@ noenter
 o
 set -o noclobber
 jj:wq

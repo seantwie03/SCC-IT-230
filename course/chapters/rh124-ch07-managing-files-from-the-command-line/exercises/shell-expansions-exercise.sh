@@ -1,6 +1,7 @@
 kitten @ set-font-size 30.0 && ssh servera
 clear
 
+#@ pause 12
 #^ Task: Match Files with Glob Patterns in /etc/ssh
 # Requirements
 #   Host: servera

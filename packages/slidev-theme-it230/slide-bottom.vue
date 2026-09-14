@@ -1,14 +1,60 @@
 <script setup lang="ts">
+import { computed } from "vue";
+
 import SequenceEndCue from "./components/SequenceEndCue.vue";
+
+/**
+ * Where this deck sits on the course site, or null when that cannot be known.
+ *
+ * The site builds each deck with `--base <root>weeks/<id>/slides/`, so both the
+ * site root and the week are already in the bundle. Deriving them keeps the
+ * theme free of any hard-coded domain and correct under a non-default
+ * `IT230_SITE_BASE`, and needs no per-deck frontmatter duplicating the
+ * filename. Anything else, a dev server, the theme gallery, or a PDF export,
+ * builds at `/` and has no site to point at.
+ *
+ * Rather than testing for those cases one by one, a link is produced only when
+ * the base actually parses, so any future context without one degrades to
+ * plain footer text instead of a broken href.
+ */
+const site = computed(() => {
+    const base = import.meta.env.BASE_URL ?? "/";
+    const parsed = /^(.*\/)weeks\/(w\d+)\/slides\/?$/.exec(base);
+    if (!parsed) return null;
+    const [, root, id] = parsed;
+    return { root, week: `${root}weeks/${id}/`, label: id.toUpperCase() };
+});
 </script>
 
 <template>
     <footer class="it230-footer" aria-label="Slide footer">
         <div class="it230-footer__rule" aria-hidden="true"></div>
         <div class="it230-footer__content">
-            <span>IT-230 · Linux Administration</span>
+            <span>
+                <a
+                    v-if="site"
+                    class="it230-footer__link"
+                    :href="site.root"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="IT-230 course site, opens in a new tab"
+                    >IT-230</a
+                ><template v-else>IT-230</template>
+                · Linux Administration
+            </span>
             <span class="it230-footer__status">
                 <SequenceEndCue />
+                <span v-if="site" class="it230-footer__week">
+                    <a
+                        class="it230-footer__link"
+                        :href="site.week"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        :aria-label="`${site.label} week overview, opens in a new tab`"
+                        >{{ site.label }}</a
+                    >
+                    ·
+                </span>
                 <SlideCurrentNo />
             </span>
         </div>
@@ -41,11 +87,51 @@ import SequenceEndCue from "./components/SequenceEndCue.vue";
     width: 100%;
 }
 
+/*
+ * The footer is `pointer-events: none` so it never intercepts a click meant
+ * for the slide, which also makes anything inside it unclickable. The link
+ * opts itself back in.
+ *
+ * The dotted underline is not decoration. Every accent measures between
+ * 1.12:1 and 1.25:1 against the muted footer text, far below the 3:1 that
+ * WCAG technique G183 requires before colour alone may distinguish a link from
+ * the text around it, so the link needs a cue that does not depend on hue. It
+ * goes solid on hover and focus.
+ */
+.it230-footer__link {
+    color: var(--it230-color-accent-text);
+    pointer-events: auto;
+    text-decoration: underline dotted;
+    text-underline-offset: 0.2em;
+}
+
+.it230-footer__link:hover,
+.it230-footer__link:focus-visible {
+    text-decoration: underline solid;
+}
+
+/*
+ * The theme's focus ring is scoped to `.slidev-layout`, which does not contain
+ * the footer, so this link would otherwise fall back to the browser's thin
+ * default. Repeated here so a keyboard user sees the same indicator as
+ * everywhere else in the deck.
+ */
+.it230-footer__link:focus-visible {
+    border-radius: var(--it230-radius-sm);
+    outline: 0.18rem solid var(--it230-color-accent-fill);
+    outline-offset: 0.16rem;
+}
+
 .it230-footer__content {
     align-items: center;
     display: flex;
     justify-content: space-between;
     padding-inline: 0.2rem;
+}
+
+/* Keeps `W04 ·` together so the status gap falls before the page number. */
+.it230-footer__week {
+    white-space: nowrap;
 }
 
 .it230-footer__status {

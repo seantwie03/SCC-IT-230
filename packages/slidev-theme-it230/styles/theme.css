@@ -511,3 +511,41 @@ body {
         box-shadow: none;
     }
 }
+
+/*
+ * Keep the slide navigation visible.
+ *
+ * Slidev renders its controls at `opacity: 0` and reveals them on hover or
+ * focus. That hides how to advance from anyone who does not already know, and
+ * a pointer that never hovers, such as a touch screen in landscape, gets no
+ * hint at all. These decks are published for students to read on their own as
+ * well as presented, so discoverability matters more here than an unobtrusive
+ * canvas.
+ *
+ * The controls sit in a direct child of the slide container, selected by the
+ * `nav` it wraps rather than by the utility classes Slidev happens to emit.
+ * Full opacity rather than a faded hint is deliberate: dimming the icons would
+ * put them below the 3:1 contrast that WCAG 2.1 SC 1.4.11 asks of user
+ * interface components.
+ *
+ * They are centred rather than left aligned because Slidev's default corner
+ * overlaps the footer's course name. The footer is `space-between`, so its
+ * middle is empty and the controls can sit there without covering anything.
+ */
+#slide-container > div:has(> nav) {
+    left: 50%;
+    opacity: 1;
+    right: auto;
+    transform: translateX(-50%);
+}
+
+/*
+ * Slidev dims the "/ total" half of the slide counter to `opacity: 0.5`,
+ * which lands at 3.1:1 on this theme's light surface and fails WCAG 2.1
+ * SC 1.4.3. While the control bar was hidden it was never measured; showing
+ * the bar makes it real text that has to meet contrast. Raising it keeps the
+ * counter visually secondary while clearing 4.5:1.
+ */
+#slide-container > div:has(> nav) .opacity-50 {
+    opacity: 0.75;
+}

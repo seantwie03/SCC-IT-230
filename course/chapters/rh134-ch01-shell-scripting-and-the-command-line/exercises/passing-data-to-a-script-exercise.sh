@@ -29,7 +29,9 @@ clear
 #^ 2. Take the technician name as an argument
 vim shift_report.sh
 /Shift report filed
+#@ noenter
 dd
+#@ noenter
 o
 echo "Shift report filed by $1"
 jj:wq
@@ -40,7 +42,9 @@ clear
 
 #^ 3. Read the starship name from standard input
 vim shift_report.sh
+#@ noenter
 G
+#@ noenter
 o
 echo "Which starship did you command?"
 read -r system_name
@@ -60,7 +64,9 @@ clear
 
 #^ 5. Add a value produced by another command
 vim shift_report.sh
+#@ noenter
 G
+#@ noenter
 o
 log_file=$(basename /var/log/audit/audit.log)
 echo "Recorded in $log_file"

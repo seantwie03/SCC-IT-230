@@ -49,6 +49,7 @@ clear
 #! anything you put in it, so you never touch ~/.bashrc itself.
 mkdir -p ~/.bashrc.d
 vim ~/.bashrc.d/aliases
+#@ noenter
 i
 alias sl='ls'
 alias rm='rm -i'

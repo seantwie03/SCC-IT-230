@@ -324,12 +324,19 @@ layout: exercise
 variant: recording
 ---
 
+<script setup>
+import castUrl from "./exercises/shell-expansions-exercise.cast?url";
+</script>
+
 # Shell Expansions
 
 ::recording::
 
-![Screen recording of the instructor demonstrating shell expansions: matching files with glob patterns and showing unquoted asterisk expansion.](./assets/shell-expansions-exercise.gif)
+<AsciinemaPlayer
+    :src="castUrl"
+    label="Screen recording of the instructor matching files in /etc/ssh with glob patterns: asterisks, question marks, bracket character sets, and pathname expansion shown directly with echo."
+/>
 
 ::resources::
 
-<a href="https://asciinema.org/a/1263845" target="_blank" rel="noopener noreferrer" aria-label="Watch the Shell Expansions recording in a new tab">Asciinema recording</a><a href="../resources/shell-expansions-exercise.html" target="_blank" rel="noopener noreferrer" aria-label="Read the written Shell Expansions exercise in a new tab">Written exercise</a>
+<a href="../resources/shell-expansions-exercise.html" target="_blank" rel="noopener noreferrer" aria-label="Read the written Shell Expansions exercise in a new tab">Written exercise</a>

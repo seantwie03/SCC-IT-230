@@ -11,7 +11,7 @@ topicInfo:
       - chapter: "12"
         title: Scheduling Tasks
   exercises:
-    - title: Backing Up /etc Nightly Exercise
+    - title: Backing Up /etc/passwd Nightly Exercise
       source: ./exercises/backing-up-etc-nightly-exercise.html
 ---
 
@@ -25,7 +25,7 @@ topicInfo:
 
 One field more than your own crontab: the <AccentText>user-name</AccentText> a job runs as
 
-```bash [/etc/crontab] {14}
+```bash [/etc/crontab]
 SHELL=/bin/bash
 PATH=/sbin:/bin:/usr/sbin:/usr/bin
 MAILTO=root
@@ -50,7 +50,7 @@ vertical: center
 
 Applications run under their own accounts, not under yours
 
-<TerminalWindow title="student@servera:~" :rows="5">
+<TerminalWindow title="student@servera:~" :rows="4">
 
 ```bash-session
 student@servera:~$ grep chrony /etc/passwd
@@ -67,6 +67,8 @@ A <AccentText>nologin</AccentText> shell refuses every interactive login, so `ch
 
 # Grouping Jobs in `/etc/cron.d`
 
+`/etc/cron.d` is a drop-in directory (like `~/.bashrc.d`)
+
 `crond` reads every file in the directory as a crontab
 
 Keep related jobs together in one named file
@@ -79,7 +81,9 @@ Keep related jobs together in one named file
 
 <Callout type="warning">
 
-Put your jobs in `/etc/cron.d/`, never in `/etc/crontab`. A package update overwrites `/etc/crontab`.
+Put your jobs in `/etc/cron.d/` instead of `/etc/crontab`
+
+An update to the `crontabs` package update overwrites `/etc/crontab`.
 
 </Callout>
 
@@ -163,7 +167,7 @@ Nothing runs while the job is up to date, however often the machine wakes up
 layout: exercise
 ---
 
-# Backing Up `/etc` Nightly
+# Backing Up `/etc/passwd` Nightly
 
 ::goal::
 
@@ -177,7 +181,29 @@ Schedule the same backup two ways: on a server that is always on, and on a machi
 
 1. Write a short backup script on `servera` and make it executable
 2. Schedule it in `/etc/cron.d/`, test it every minute, and set the real 10 p.m. time
-3. Confirm in `/var/log/cron` that `root` ran it, and check the archive
+3. Confirm in `/var/log/cron` that `root` ran it, and check the snapshot
 4. Install the same script into `/etc/cron.daily/` on `workstation`
 5. Convince anacron the machine was off for months, then let it catch up
 6. Confirm the backup ran and clean up both hosts
+
+---
+layout: exercise
+variant: recording
+---
+
+<script setup>
+import castUrl from "./exercises/backing-up-etc-nightly-exercise.cast?url";
+</script>
+
+# Backing Up `/etc/passwd` Nightly
+
+::recording::
+
+<AsciinemaPlayer
+    :src="castUrl"
+    label="Screen recording of the instructor writing a backup script on servera that copies /etc/passwd to a timestamped snapshot and sends it to workstation, scheduling it in /etc/cron.d, discovering that cron's PATH does not include /usr/local/bin, correcting the entry and setting the 10 p.m. schedule, then installing the same script into anacron on workstation and letting it catch up."
+/>
+
+::resources::
+
+<a href="../resources/backing-up-etc-nightly-exercise.html" target="_blank" rel="noopener noreferrer" aria-label="Read the written Backing Up `/etc/passwd` Nightly exercise in a new tab">Written exercise</a>

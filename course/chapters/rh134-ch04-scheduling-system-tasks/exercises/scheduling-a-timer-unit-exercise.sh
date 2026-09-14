@@ -1,10 +1,11 @@
 kitten @ set-font-size 30.0 && ssh servera
 clear
 
+#@ pause 17
 #^ Exercise: Scheduling a Timer Unit
 # Requirements
 #   Host: servera
-#   Prerequisite: A Service That Checks Before It Runs
+#   Prerequisite: A Robust Sync Service
 #   Run etc-sync.service on a schedule instead of by hand
 #   The schedule must survive the machine being switched off
 # Tasks
@@ -42,6 +43,7 @@ systemctl enable --now etc-sync.timer
 systemctl list-timers etc-sync.timer --no-pager
 clear
 
+#@ pause 130
 #^ 4. Watch it fire
 #! Wait for the next even minute
 systemctl list-timers etc-sync.timer --no-pager
@@ -53,7 +55,7 @@ ls -l /var/lib/systemd/timers/
 #! No stamp file yet, because nothing is recording the last run
 vim /etc/systemd/system/etc-sync.timer
 /OnCalendar
-ccOnCalendar=daily
+COnCalendar=daily
 oPersistent=true
 jj:wq
 systemctl daemon-reload

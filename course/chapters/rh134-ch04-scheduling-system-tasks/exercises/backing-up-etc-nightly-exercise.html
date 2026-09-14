@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Backing Up /etc Nightly Exercise</title>
+        <title>Backing Up /etc/passwd Nightly Exercise</title>
         <style>
             :root {
                 color-scheme: light;
@@ -461,15 +461,15 @@
             <article class="exercise-document">
                 <header class="exercise-header">
                     <p class="exercise-kicker">Exercise</p>
-                    <h1>Backing Up /etc Nightly Exercise</h1>
+                    <h1>Backing Up /etc/passwd Nightly Exercise</h1>
                 </header>
 
                 <section class="overview" aria-labelledby="overview-heading">
                     <h2 id="overview-heading">Task</h2>
                     <p>
-                        Back up <code>/etc</code> every night at 10 p.m. as
-                        <code>root</code>, copying each archive to another host
-                        so it is not lost with the machine.
+                        Back up <code>/etc/passwd</code> every night at 10 p.m.
+                        as <code>root</code>, copying each snapshot to another
+                        host so it is not lost with the machine.
                         <code>servera</code> is a server that never sleeps, so a
                         system crontab suits it. Treat
                         <code>workstation</code> as a laptop that is closed at
@@ -519,24 +519,24 @@ vim /usr/local/bin/etc_backup.sh</code></pre>
                         </p>
                         <pre><code>#!/bin/bash
 BACKUP_HOST="workstation"
-ARCHIVE="/tmp/etc_$(date --iso-8601=minutes).tar.gz"
+SNAPSHOT="/tmp/passwd_$(date --iso-8601=minutes)"
 
-tar -caf "${ARCHIVE}" /etc 2>/dev/null
-scp -q "${ARCHIVE}" "${BACKUP_HOST}:/tmp/"</code></pre>
+cp /etc/passwd "${SNAPSHOT}"
+scp -q "${SNAPSHOT}" "${BACKUP_HOST}:/tmp/"</code></pre>
                         <p>
                             Make it executable and run it once by hand, then
                             check both ends.
                         </p>
                         <pre><code>chmod a+x /usr/local/bin/etc_backup.sh
 /usr/local/bin/etc_backup.sh
-ls -l /tmp/etc_*.tar.gz
-ssh workstation 'ls -l /tmp/etc_*.tar.gz'</code></pre>
+ls -l /tmp/passwd_*
+ssh workstation 'ls -l /tmp/passwd_*'</code></pre>
                         <aside class="note">
                             <strong
                                 >A backup on one machine is not a backup</strong
                             >
                             The <code>scp</code> line is what makes this useful.
-                            If servera dies, the archive dies with it.
+                            If servera dies, the snapshot dies with it.
                         </aside>
                     </li>
 
@@ -568,11 +568,11 @@ vim /etc/cron.d/backups</code></pre>
                         <h2>Find out why nothing happened</h2>
                         <p>
                             Wait for the next minute, then look for a new
-                            archive.
+                            snapshot.
                         </p>
-                        <pre><code>ls -l /tmp/etc_*.tar.gz
+                        <pre><code>ls -l /tmp/passwd_*
 grep etc_backup /var/log/cron</code></pre>
-                        <p>No new archive, and the log says why:</p>
+                        <p>No new snapshot, and the log says why:</p>
                         <pre><code>CROND[...]: (root) CMD (etc_backup.sh)
 CROND[...]: (root) CMDOUT (/bin/bash: line 1: etc_backup.sh: command not found)</code></pre>
                         <aside class="note">
@@ -585,7 +585,7 @@ CROND[...]: (root) CMDOUT (/bin/bash: line 1: etc_backup.sh: command not found)<
                         </aside>
                         <p>
                             Fix it with an absolute path. Press <kbd>G</kbd>,
-                            then <kbd>c</kbd><kbd>c</kbd> to replace the line:
+                            then <kbd>C</kbd> to replace the line:
                         </p>
                         <pre><code>vim /etc/cron.d/backups</code></pre>
                         <pre><code>* * * * * root /usr/local/bin/etc_backup.sh</code></pre>
@@ -598,8 +598,8 @@ CROND[...]: (root) CMDOUT (/bin/bash: line 1: etc_backup.sh: command not found)<
                             hosts.
                         </p>
                         <pre><code>grep etc_backup /var/log/cron
-ls -l /tmp/etc_*.tar.gz
-ssh workstation 'ls -l /tmp/etc_*.tar.gz'</code></pre>
+ls -l /tmp/passwd_*
+ssh workstation 'ls -l /tmp/passwd_*'</code></pre>
                         <p>The log names the user the job ran as:</p>
                         <pre><code>CROND[12124]: (root) CMD (/usr/local/bin/etc_backup.sh)
 CROND[12123]: (root) CMDEND (/usr/local/bin/etc_backup.sh)</code></pre>
@@ -633,9 +633,9 @@ sudo -i</code></pre>
                         </p>
                         <pre><code>vim /etc/cron.daily/etc_backup.sh</code></pre>
                         <pre><code>#!/bin/bash
-ARCHIVE="/tmp/etc_$(date --iso-8601=minutes).tar.gz"
+SNAPSHOT="/tmp/passwd_$(date --iso-8601=minutes)"
 
-tar -caf "${ARCHIVE}" /etc 2>/dev/null</code></pre>
+cp /etc/passwd "${SNAPSHOT}"</code></pre>
                         <pre><code>chmod a+x /etc/cron.daily/etc_backup.sh</code></pre>
                         <aside class="note">
                             <strong>No schedule to write</strong>
@@ -654,7 +654,7 @@ tar -caf "${ARCHIVE}" /etc 2>/dev/null</code></pre>
                         </p>
                         <pre><code>cat /var/spool/anacron/cron.daily
 anacron -n
-ls /tmp/etc_*.tar.gz</code></pre>
+ls /tmp/passwd_*</code></pre>
                         <p>
                             Nothing happened, because today's daily job is not
                             overdue. Now pretend the laptop has been closed
@@ -662,7 +662,7 @@ ls /tmp/etc_*.tar.gz</code></pre>
                         </p>
                         <pre><code>echo 20260101 > /var/spool/anacron/cron.daily
 anacron -n
-ls -l /tmp/etc_*.tar.gz
+ls -l /tmp/passwd_*
 cat /var/spool/anacron/cron.daily</code></pre>
                         <p>
                             The backup ran and the recorded date caught up to
@@ -676,7 +676,7 @@ cat /var/spool/anacron/cron.daily</code></pre>
                             Remove the laptop side first, while you are still on
                             it.
                         </p>
-                        <pre><code>rm -f /etc/cron.daily/etc_backup.sh /tmp/etc_*.tar.gz
+                        <pre><code>rm -f /etc/cron.daily/etc_backup.sh /tmp/passwd_*
 exit
 exit</code></pre>
                         <p>
@@ -684,7 +684,7 @@ exit</code></pre>
                             shell and then the <code>ssh</code> session, leaving
                             you back on <code>servera</code>.
                         </p>
-                        <pre><code>sudo rm -f /etc/cron.d/backups /usr/local/bin/etc_backup.sh /tmp/etc_*.tar.gz
+                        <pre><code>sudo rm -f /etc/cron.d/backups /usr/local/bin/etc_backup.sh /tmp/passwd_*
 ls /etc/cron.d/</code></pre>
                     </li>
                 </ol>

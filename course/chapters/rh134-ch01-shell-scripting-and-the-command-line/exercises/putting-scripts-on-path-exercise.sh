@@ -22,6 +22,7 @@ clear
 #! Red Hat already customizes PATH here. You are about to do the same thing.
 less ~/.bashrc
 /PATH
+#@ noenter
 q
 clear
 
@@ -42,6 +43,7 @@ clear
 #^ 5. Persist it in ~/.bashrc
 vim ~/.bashrc
 Gzz
+#@ noenter
 o
 PATH=$PATH:~/scripts
 jj:wq

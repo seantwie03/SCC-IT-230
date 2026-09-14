@@ -25,7 +25,7 @@ vertical: center
 
 # Do This, Later
 
-Hand a command to `at` and walk away
+Hand a command to `at` to run it later
 
 - Good for <SuccessText>one-off</SuccessText> jobs that run once and are done
 - Not for <DangerText>recurring</DangerText> jobs like every day at 8 p.m.
@@ -39,6 +39,10 @@ at 23:10 < database_backup.sh
 
 Reset a firewall in ten minutes, in case the rule you are about to write locks you out.
 
+```
+echo "firewall-cmd --reload" | at now +10min
+```
+
 </Callout>
 
 ---
@@ -49,7 +53,7 @@ The package is not part of a minimal RHEL installation
 
 <TerminalWindow title="student@servera:~" :rows="14">
 
-```bash-session {*}{lines:false}
+```bash-session {1,3-4,10,12,14}
 student@servera:~$ sudo dnf install at
 ...output omitted...
 Installing:
@@ -76,12 +80,13 @@ Installing the package <AccentText>enables</AccentText> `atd`, but does not star
 
 `at` only queues jobs, and `atd` is the daemon that runs them
 
-<TerminalWindow title="student@servera:~" :rows="6">
+<TerminalWindow title="student@servera:~" :rows="5">
 
 ````md magic-move
 ```bash-session
 student@servera:~$ systemctl is-active atd
 inactive
+student@servera:~$ 
 ```
 ```bash-session
 student@servera:~$ systemctl is-active atd
@@ -113,7 +118,7 @@ vertical: center
 
 ## Pipe a command
 
-<TerminalWindow title="student@servera:~" :rows="4">
+<TerminalWindow title="student@servera:~" :rows="3">
 
 ```bash-session
 student@servera:~$ echo "reboot" | at now +2min
@@ -127,7 +132,7 @@ job 1 at Fri Sep  4 11:39:00 2026
 
 ## Redirect a script
 
-<TerminalWindow title="student@servera:~" :rows="4">
+<TerminalWindow title="student@servera:~" :rows="3">
 
 ```bash-session
 student@servera:~$ at now +1min < database_backup.sh
@@ -164,7 +169,7 @@ layout: center
 
 <TerminalWindow title="student@servera:~" :rows="15">
 
-```bash-session {*}{lines:false}
+```bash-session {1-2|5-12|14}
 student@servera:~$ at -c 1
 #!/bin/sh
 # atrun uid=1000 gid=1000
@@ -192,7 +197,7 @@ vertical: center
 
 `atrm` takes the job number from `atq`
 
-<TerminalWindow title="student@servera:~" :rows="5">
+<TerminalWindow title="student@servera:~" :rows="6">
 
 ````md magic-move
 ```bash-session
@@ -218,7 +223,7 @@ student@servera:~$ atq
 
 A job disappears from `atq` whether it succeeded or failed, so the log is the proof
 
-<TerminalWindow title="student@servera:~" :rows="4">
+<TerminalWindow title="student@servera:~" :rows="2">
 
 ```bash-session
 student@servera:~$ sudo less /var/log/cron
@@ -280,3 +285,25 @@ Schedule a search for recently changed log files and confirm that it ran
 4. Inspect the pending job with `atq` and `at -c`
 5. Confirm in `/var/log/cron` that `atd` started the job
 6. Verify the file the job wrote
+
+---
+layout: exercise
+variant: recording
+---
+
+<script setup>
+import castUrl from "./exercises/finding-modified-logs-exercise.cast?url";
+</script>
+
+# Finding Recently Modified Logs
+
+::recording::
+
+<AsciinemaPlayer
+    :src="castUrl"
+    label="Screen recording of the instructor installing at and starting atd, building a find command that lists files under /var/log modified in the last two minutes, scheduling it to run once two minutes later, inspecting the pending job, and confirming from /var/log/cron that atd ran it."
+/>
+
+::resources::
+
+<a href="../resources/finding-modified-logs-exercise.html" target="_blank" rel="noopener noreferrer" aria-label="Read the written Finding Recently Modified Logs exercise in a new tab">Written exercise</a>

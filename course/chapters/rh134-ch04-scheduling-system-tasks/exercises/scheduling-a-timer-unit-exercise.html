@@ -480,7 +480,7 @@
                         </div>
                         <div>
                             <dt>Prerequisite exercise</dt>
-                            <dd>A Service That Checks Before It Runs</dd>
+                            <dd>A Robust Sync Service</dd>
                         </div>
                         <div>
                             <dt>Schedule</dt>
@@ -569,8 +569,8 @@ journalctl -u etc-sync.service -n 5 --no-pager</code></pre>
                         <pre><code>vim /etc/systemd/system/etc-sync.timer</code></pre>
                         <p>
                             Search with <code>/OnCalendar</code>, replace that
-                            line with <kbd>c</kbd><kbd>c</kbd>, then
-                            <kbd>o</kbd> to open a line below it:
+                            line with <kbd>C</kbd>, then <kbd>o</kbd> to open a
+                            line below it:
                         </p>
                         <pre><code>OnCalendar=daily
 Persistent=true</code></pre>

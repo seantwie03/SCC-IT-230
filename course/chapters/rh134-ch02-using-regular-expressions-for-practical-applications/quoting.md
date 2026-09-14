@@ -379,12 +379,19 @@ layout: exercise
 variant: recording
 ---
 
+<script setup>
+import castUrl from "./exercises/quoting-exercise.cast?url";
+</script>
+
 # Quoting
 
 ::recording::
 
-![Screen recording of the instructor demonstrating quoting and escaping: protecting asterisks, comparing single and double quotes with variables, and creating directories containing spaces.](./assets/quoting-exercise.gif)
+<AsciinemaPlayer
+    :src="castUrl"
+    label="Screen recording of the instructor demonstrating quoting and escaping: protecting asterisks, comparing single and double quotes with variables, and creating directories containing spaces."
+/>
 
 ::resources::
 
-<a href="https://asciinema.org/a/1263848" target="_blank" rel="noopener noreferrer" aria-label="Watch the Quoting recording in a new tab">Asciinema recording</a><a href="../resources/quoting-exercise.html" target="_blank" rel="noopener noreferrer" aria-label="Read the written Quoting exercise in a new tab">Written exercise</a>
+<a href="../resources/quoting-exercise.html" target="_blank" rel="noopener noreferrer" aria-label="Read the written Quoting exercise in a new tab">Written exercise</a>

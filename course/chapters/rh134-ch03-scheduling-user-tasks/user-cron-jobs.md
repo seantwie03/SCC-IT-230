@@ -28,11 +28,11 @@ listSpacing: padded
 
 - Available on <SuccessText>every</SuccessText> Linux system
 - Every user has one
-- Finicky syntax, but you will meet it everywhere
+- Finicky, ubiquitous syntax
 
 <Callout>
 
-`at` runs a job once. `cron` runs it again, and again, on a schedule you define.
+`at` runs a job once. `cron` runs it repeatedly on a schedule you define.
 
 </Callout>
 
@@ -54,14 +54,14 @@ layout: center
   ]"
 />
 
+A `*` means *every* value of that field
+
 ---
 
 # Reading a Schedule
 
-A `*` means *every* value of that field
-
 ```bash [Every minute]
-* *  *  *  * echo "This runs every minute of every hour of every day in every month" >> stating_the_obvious.log
+* * * * * echo "This runs every minute of every hour of every day in every month" >> stating_the_obvious.log
 ```
 
 <v-click>
@@ -75,30 +75,18 @@ A `*` means *every* value of that field
 <v-click>
 
 ```bash [Every 30-minutes]
-0,30 * * * *  echo "This runs every 30 minutes" >> stating_the_obvious.log
+0,30 * * * *  echo "This runs on the 0th and 30th minute of every hour" >> stating_the_obvious.log
 ```
 
 </v-click>
 
----
-
-# Reading a Schedule
-
-```bash [3a.m. and 3p.m.]
-0 3,15 * * * echo "This runs at 3a.m. and 3p.m." >> stating_the_obvious.log
-```
-
-```bash [8pm on the 15th of every month]
-0 20 15 * * echo "This runs at 8p.m. on the 15th day of every month" >> stating_the_obvious.log
-```
-
-```bash [Every 10 minutes on May 4th]
-0/10 * 4 may * echo "May the 4th be with you (every 10mins on May 4th)" >> stating_the_obvious.log
-```
+<v-click>
 
 ```bash [2:15a.m. on Sunday, Monday and Tuesday]
 15 2 * * sun,mon,tue echo "This runs every Sunday, Monday and Tuesday at 2:15a.m." >> stating_the_obvious.log
 ```
+
+</v-click>
 
 ---
 layout: two-cols-header
@@ -119,17 +107,17 @@ student@servera:~$ crontab -e
 
 </TerminalWindow>
 
-Opens in `$EDITOR`, which is `vi` unless you changed it
+Opens in `$EDITOR` (`vi` unless you changed it)
 
 ::right::
 
 ## Read
 
-<TerminalWindow title="student@servera:~" :rows="3">
+<TerminalWindow title="student@servera:~" :rows="2">
 
 ```bash-session
 student@servera:~$ crontab -l
-* * * * * date --iso-8601=seconds > /tmp/cron_ran
+* * * * * date --iso-8601=minutes > /tmp/cron_ran
 ```
 
 </TerminalWindow>
@@ -142,9 +130,9 @@ The file itself lives in `/var/spool/cron/`
 
 `crond` records every job it starts and finishes
 
-<TerminalWindow title="student@servera:~" :rows="6">
+<TerminalWindow title="student@servera:~" :rows="5">
 
-```bash-session {*}{lines:false}
+```bash-session
 student@servera:~$ sudo grep "(student)" /var/log/cron
 Sep  5 14:16:01 servera CROND[11393]: (student) CMD (date --iso-8601=seconds > /tmp/cron_ran)
 Sep  5 14:16:01 servera CROND[11391]: (student) CMDEND (date --iso-8601=seconds > /tmp/cron_ran)
@@ -162,7 +150,7 @@ student@servera:~$ cat /tmp/cron_ran
 
 # Removing Your Crontab
 
-<TerminalWindow title="student@servera:~" :rows="5">
+<TerminalWindow title="student@servera:~" :rows="3">
 
 ```bash-session
 student@servera:~$ crontab -r
@@ -180,7 +168,6 @@ no crontab for student
 
 ---
 layout: two-cols-header
-vertical: center
 ---
 
 # Cron's PATH Is Not Your PATH
@@ -238,3 +225,25 @@ Schedule a nightly backup of your documents and prove that it ran
 3. Schedule it one minute out with `crontab -e`
 4. Confirm in `/var/log/cron` that it ran, and check the backup
 5. Reset the schedule to 2 a.m. and review it with `crontab -l`
+
+---
+layout: exercise
+variant: recording
+---
+
+<script setup>
+import castUrl from "./exercises/backing-up-documents-nightly-exercise.cast?url";
+</script>
+
+# Backing Up Documents Nightly
+
+::recording::
+
+<AsciinemaPlayer
+    :src="castUrl"
+    label="Screen recording of the instructor creating files worth backing up, testing a command that copies the Documents directory to a timestamped directory under /tmp, scheduling it with crontab to run every minute, confirming from /var/log/cron that it ran, and then setting the real 2 a.m. schedule."
+/>
+
+::resources::
+
+<a href="../resources/backing-up-documents-nightly-exercise.html" target="_blank" rel="noopener noreferrer" aria-label="Read the written Backing Up Documents Nightly exercise in a new tab">Written exercise</a>

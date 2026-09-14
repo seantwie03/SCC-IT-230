@@ -362,6 +362,24 @@ continuity and orientation without competing with instructional content or
 resembling application chrome. On the final state of any non-empty click
 sequence, the footer displays `NEXT →` immediately before the slide number.
 
+The course identity and the week label are links, to the site root and to that
+week's overview page, and both open in a new tab so a presentation is never
+navigated away from. Both are derived from the deck's own base URL rather than
+written down, which keeps the theme independent of any domain name. A build
+whose base does not resolve to a week, such as the standalone theme gallery or
+a deck built at `/`, renders the identity as plain text and omits the week
+label entirely rather than emitting a broken link.
+
+Slide navigation controls stay visible instead of appearing on hover. Slidev
+renders them at `opacity: 0`, which hides how to advance from a reader who does
+not already know and gives a touch screen no hint at all, and these decks are
+published for students to read alone as well as presented. They are centred,
+because Slidev's default corner overlaps the footer's course name while the
+footer's own middle is empty. Showing the bar also makes its text subject to
+contrast requirements that were never measured while it was hidden, so the
+dimmed half of the slide counter is raised from Slidev's `opacity: 0.5`, which
+measures 3.1:1 on this theme's light surface, to clear 4.5:1.
+
 Use ordinary fenced code for source and short commands. Use `TerminalWindow`
 when a terminal frame clarifies that the content is an interactive session or
 captured command output. Use a `bash-session` fence inside `TerminalWindow`
@@ -449,11 +467,24 @@ nonwrapping segments in one compact group rather than a full-width action bar.
 | Slot        | Recording content                                  |
 | ----------- | -------------------------------------------------- |
 | `default`   | The same task-oriented `h1` as the workflow slide |
-| `recording` | One exercise GIF with a useful text alternative   |
-| `resources` | Asciinema and written-exercise links              |
+| `recording` | One `AsciinemaPlayer` with a useful text alternative |
+| `resources` | The written-exercise link                         |
 
-The recording variant omits the hands-on eyebrow so the GIF can use more of the
-canvas. Both variants retain the visible `Exercise:` title prefix and accent
+Slide text is selectable: the theme sets Slidev's `selectable` default to
+`true`. Slidev ships it as `false`, which suits a deck navigated by clicking
+and dragging, but this course's decks are not, and a recording whose commands
+cannot be copied loses most of its advantage over a screenshot.
+
+The recording slot is a block box with a definite height, which the player
+measures to size itself with `fit: "both"`. Do not make it a flex container:
+the player then has nothing to measure and collapses to zero width.
+
+Terminal colours come from the palette embedded in the recording, not from the
+theme, so a recording looks like the terminal it was made on. The monospace
+family is inherited from the theme, so recordings match the deck's code blocks.
+
+The recording variant omits the hands-on eyebrow so the player can use more of
+the canvas. Both variants retain the visible `Exercise:` title prefix and accent
 rail. Use the exact source structure and link labels documented in
 `docs/course-authoring.md`; do not add wrappers, separators, or slide-scoped
 styles.
@@ -633,7 +664,7 @@ input. Ordinary command-only fences retain the copy control.
 
 A line beginning with `#^` is a step banner: a boundary marker inside one
 transcript, rendered in bold blue with a muted marker. The color matches the
-header `kitty-demo.sh` prints for the same marker, so a step boundary reads the
+header `kitty-demo.py` prints for the same marker, so a step boundary reads the
 same in the live demonstration and on the slide. It is a fixed syntax color and
 does not follow the deck accent. A filled band is not available: Shiki's
 TextMate tokenizer never emits a token background, and Magic Move renders

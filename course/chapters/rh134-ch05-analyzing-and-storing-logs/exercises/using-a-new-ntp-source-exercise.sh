@@ -30,7 +30,7 @@ clear
 sudo cp /etc/chrony.conf /etc/chrony.conf.orig
 sudo vim /etc/chrony.conf
 /^pool
-ccpool time.google.com iburst
+Cpool time.google.com iburst
 jj:wq
 head -3 /etc/chrony.conf
 clear

@@ -43,6 +43,7 @@ clear
 cd ~
 vim ~/.bashrc
 Gzz
+#@ noenter
 o
 PS1='\\u@\h:\w\$ '
 jj:wq

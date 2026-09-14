@@ -1,6 +1,7 @@
 kitten @ set-font-size 30.0 && ssh servera
 clear
 
+#@ pause 17
 #^ Exercise: Finding Recently Modified Logs
 # Requirements
 #   Host: servera
@@ -46,10 +47,13 @@ atq
 at -c 1
 clear
 
+#@ pause 130
 #^ 5. Confirm the job ran
 #! Wait until the scheduled time has passed before continuing
 sudo less /var/log/cron
+#@ noenter
 G
+#@ noenter
 q
 ls -l /tmp/log_audit
 cat /tmp/log_audit

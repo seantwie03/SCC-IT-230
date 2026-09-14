@@ -203,12 +203,19 @@ layout: exercise
 variant: recording
 ---
 
+<script setup>
+import castUrl from "./exercises/scp-exercise.cast?url";
+</script>
+
 # Copying Files with `scp`
 
 ::recording::
 
-![Screen recording of the instructor demonstrating scp.](./assets/scp-exercise.gif)
+<AsciinemaPlayer
+    :src="castUrl"
+    label="Screen recording of the instructor demonstrating scp."
+/>
 
 ::resources::
 
-<a href="https://asciinema.org/a/1263865" target="_blank" rel="noopener noreferrer" aria-label="Watch the scp recording in a new tab">Asciinema recording</a><a href="../resources/scp-exercise.html" target="_blank" rel="noopener noreferrer" aria-label="Read the written scp exercise in a new tab">Written exercise</a>
+<a href="../resources/scp-exercise.html" target="_blank" rel="noopener noreferrer" aria-label="Read the written scp exercise in a new tab">Written exercise</a>

@@ -21,6 +21,7 @@ clear
 #^ 2. Export PAGER so man prints straight to the terminal
 #! Press q to leave less.
 man ls
+#@ noenter
 q
 export PAGER=cat
 #! Now the whole page prints instead of paging.
@@ -34,8 +35,10 @@ sudo dnf install -y nano
 crontab -e
 :q!
 export EDITOR=nano
-#! Same command, different editor. Press Ctrl+X to leave nano.
+#! Same command, different editor. The next press sends Ctrl+X, which is how
+#! you leave nano.
 crontab -e
+#@ key ctrl+x
 clear
 
 #^ 4. Confirm both are gone in a new session

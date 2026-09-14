@@ -26,7 +26,11 @@
             "aspectRatio": "16/9",
             "favicon": "./favicon.svg",
             "lineNumbers": true,
-            "preloadImages": false
+            "preloadImages": false,
+            "selectable": true
         }
+    },
+    "dependencies": {
+        "asciinema-player": "3.17.0"
     }
 }

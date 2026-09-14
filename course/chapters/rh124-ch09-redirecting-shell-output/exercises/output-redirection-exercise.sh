@@ -5,6 +5,7 @@ clear
 #^ Create a very important file
 vim evil_plan.md
 #! This is the first exercise that uses `vim` this semester, so explain the modes a bit. Press i to enter 'insert' mode
+#@ noenter
 i
 #! Tell students they don't have to type all this, the important part is that some content is in the file.
 == Plan for World Domination! ==
@@ -14,6 +15,7 @@ i
 ...
 96. Become the supreme-leader of the world!
 #! Press Escape to go back to 'normal' mode
+#@ noenter
 jj
 #! Press colon to enter 'command' mode. Then type wq for write and quit
 :wq

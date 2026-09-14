@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>A Service That Checks Before It Runs Exercise</title>
+        <title>A Robust Sync Service Exercise</title>
         <style>
             :root {
                 color-scheme: light;
@@ -461,17 +461,17 @@
             <article class="exercise-document">
                 <header class="exercise-header">
                     <p class="exercise-kicker">Exercise</p>
-                    <h1>A Service That Checks Before It Runs Exercise</h1>
+                    <h1>A Robust Sync Service Exercise</h1>
                 </header>
 
                 <section class="overview" aria-labelledby="overview-heading">
                     <h2 id="overview-heading">Task</h2>
                     <p>
-                        Sync <code>/etc</code> from <code>servera</code> to
-                        <code>workstation</code>, wrapped in a systemd service
-                        that refuses to run when <code>workstation</code> cannot
-                        be reached. Cron would run the job regardless and leave
-                        you to handle the failure in your own script.
+                        Synchronize <code>/etc</code> from
+                        <code>servera</code> to <code>workstation</code> when
+                        that host is reachable, and fail visibly when it is not.
+                        A sync that did not happen is a problem, and systemd
+                        will remember it as one.
                     </p>
 
                     <dl class="requirements">
@@ -494,7 +494,7 @@
                             <dd><code>root</code></dd>
                         </div>
                         <div>
-                            <dt>Refuses when</dt>
+                            <dt>Must fail when</dt>
                             <dd><code>workstation</code> is unreachable</dd>
                         </div>
                     </dl>
@@ -543,7 +543,7 @@ Description=Sync /etc to workstation
 
 [Service]
 Type=oneshot
-ExecCondition=/usr/bin/ping -c1 -W2 workstation
+ExecStartPre=/usr/bin/ping -c1 -W2 workstation
 ExecStart=/usr/local/bin/etc_sync.sh</code></pre>
                         <p>Tell systemd to re-read the unit files.</p>
                         <pre><code>systemctl daemon-reload</code></pre>
@@ -575,54 +575,39 @@ journalctl -u etc-sync.service -n 10 --no-pager</code></pre>
                     </li>
 
                     <li class="step">
-                        <h2>Try to enable it</h2>
+                        <h2>Break the check and watch the unit fail</h2>
                         <p>
-                            Enabling is what makes a unit start on its own. Try
-                            it.
-                        </p>
-                        <pre><code>systemctl enable etc-sync.service</code></pre>
-                        <p>systemd refuses, and explains why:</p>
-                        <pre><code>The unit files have no installation config (WantedBy=, RequiredBy=, UpheldBy=,
-Also=, or Alias= settings in the [Install] section...). This means they are not
-meant to be enabled or disabled using systemctl.</code></pre>
-                        <aside class="note">
-                            <strong
-                                >This service is not meant to be enabled</strong
-                            >
-                            It has no <code>[Install]</code> section because
-                            nothing should start it at boot. A timer will start
-                            it instead, and the timer is what gets enabled.
-                        </aside>
-                    </li>
-
-                    <li class="step">
-                        <h2>Break the check and watch the run be skipped</h2>
-                        <p>
-                            Point the condition at an address that does not
-                            answer.
+                            Point the check at an address that does not answer.
                         </p>
                         <pre><code>vim /etc/systemd/system/etc-sync.service</code></pre>
                         <p>
-                            Search for the line with
-                            <code>/ExecCondition</code>, press <kbd>c</kbd
-                            ><kbd>c</kbd> to replace it, and type:
+                            Search for the line with <code>/ExecStartPre</code>,
+                            press <kbd>C</kbd> to replace it from the cursor to
+                            the end of the line, and type:
                         </p>
-                        <pre><code>ExecCondition=/usr/bin/ping -c1 -W2 192.0.2.99</code></pre>
+                        <pre><code>ExecStartPre=/usr/bin/ping -c1 -W2 192.0.2.99</code></pre>
                         <p>Reload and start it again.</p>
                         <pre><code>systemctl daemon-reload
 systemctl start etc-sync.service
 echo "exit status: $?"
 systemctl is-failed etc-sync.service
 journalctl -u etc-sync.service -n 5 --no-pager</code></pre>
-                        <p>The journal names exactly what happened:</p>
-                        <pre><code>systemd[1]: etc-sync.service: Skipped due to 'exec-condition'.</code></pre>
+                        <p>
+                            The start command exits <code>1</code>, the unit
+                            reports <code>failed</code>, and
+                            <code>ExecStart</code> never ran. Now ask systemd
+                            what is broken on this machine.
+                        </p>
+                        <pre><code>systemctl --failed</code></pre>
                         <aside class="note">
-                            <strong>Skipped is not failed</strong>
-                            The start command exits <code>0</code> and the unit
-                            is not marked failed. A job that correctly declines
-                            to run is not an error, so nothing pages you at 2
-                            a.m. In cron you would write this check into the
-                            script yourself and hope it stays there.
+                            <strong>This is what cron cannot do</strong>
+                            The unit stays in the failed state until it succeeds
+                            or you run
+                            <code>systemctl reset-failed</code>, so a backup
+                            that quietly stopped working is visible in one
+                            command. cron mails <code>root</code> once and
+                            forgets, which makes a broken job look exactly like
+                            a working one.
                         </aside>
                     </li>
 
@@ -635,12 +620,13 @@ journalctl -u etc-sync.service -n 5 --no-pager</code></pre>
                         <pre><code>vim /etc/systemd/system/etc-sync.service</code></pre>
                         <p>
                             Search with <code>/ExecCondition</code>, replace the
-                            line with <kbd>c</kbd><kbd>c</kbd>:
+                            line with <kbd>C</kbd>:
                         </p>
-                        <pre><code>ExecCondition=/usr/bin/ping -c1 -W2 workstation</code></pre>
+                        <pre><code>ExecStartPre=/usr/bin/ping -c1 -W2 workstation</code></pre>
                         <pre><code>systemctl daemon-reload
 systemctl start etc-sync.service
-systemctl is-failed etc-sync.service</code></pre>
+systemctl is-failed etc-sync.service
+systemctl --failed</code></pre>
                         <aside class="note">
                             <strong>Leave this in place</strong>
                             The timer exercise schedules this same unit and

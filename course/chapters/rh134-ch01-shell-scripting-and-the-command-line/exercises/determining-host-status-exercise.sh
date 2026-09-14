@@ -33,6 +33,7 @@ clear
 #! Three of these addresses are on our network and two are not.
 vim pinger.sh
 /Starting \$0
+#@ noenter
 o
 finance_app_ips="172.25.250.9 19.19.19.18 172.25.250.10 19.19.19.19 172.25.250.11"
 for host in $finance_app_ips; do
@@ -46,6 +47,7 @@ clear
 #! ping returns 0 when the host answers and 1 when it does not. if reads that number.
 vim pinger.sh
 /echo "Checking \$host..."
+#@ noenter
 o
     if ping -c1 -W1 "$host"; then
         echo "$host is UP"
@@ -61,6 +63,7 @@ clear
 vim pinger.sh
 /if ping -c1
 f;
+#@ noenter
 i
  > /dev/null
 jj:wq

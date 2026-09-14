@@ -69,7 +69,8 @@ and are not committed.
   templates, the site and Canvas build-time renderers, and the stylesheet. The
   shared site-and-presentation favicon is owned by the theme package.
 - `scripts/` contains deterministic repository-wide operations, including the
-  rendered review commands and the lab-access wrapper.
+  rendered review commands, the screen-recording processor, and the lab-access
+  wrapper.
 - `docs/` contains enduring maintainer documentation.
 
 ## Rendered review
@@ -243,6 +244,12 @@ responsibilities:
   artifact before serving it without live reload.
 - `pnpm run check:links` checks required generated files and internal HTML and
   CSS references without depending on external network availability.
+- `pnpm run casts -- <path>` processes an exercise screen recording in place,
+  and `pnpm run check:casts` verifies every recording without modifying one.
+  `scripts/lib/casts.mjs` owns the asciicast rules so the processor and its
+  check cannot diverge. This is the only gate between a recording and
+  publication, so it refuses a cast it cannot trim or mark, and one that still
+  carries local shell identity.
 
 The focused theme gallery is generated inside
 `packages/slidev-theme-it230/dist/`. Root presentation and site builds use the

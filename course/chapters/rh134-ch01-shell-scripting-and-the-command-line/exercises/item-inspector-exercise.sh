@@ -35,6 +35,7 @@ clear
 #! The backup job lists a directory, a file, and a path that no longer exists.
 vim backup_auditor.sh
 /Starting \$0
+#@ noenter
 o
 for item in /etc/skel /etc/passwd /srv/nightly-backup; do
     echo "$item"
@@ -47,7 +48,9 @@ clear
 #! Replace the bare echo so each path produces one message, not two.
 vim backup_auditor.sh
 /echo "\$item"
+#@ noenter
 dd
+#@ noenter
 O
     if [[ -f "$item" ]]; then
         echo "$item is a file"

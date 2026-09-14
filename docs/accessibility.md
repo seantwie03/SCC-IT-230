@@ -44,6 +44,13 @@ The repository uses WCAG 2.1 Level AA as its minimum acceptance target.
   explanations for complex diagrams, charts, and other visual instruction.
 - Provide captions for prerecorded instructional video and an appropriate text
   alternative for instructional audio.
+- Publish terminal session recordings as replayable text with the
+  `AsciinemaPlayer` component, never as an animated GIF. A looping GIF of a
+  terminal starts automatically, runs far longer than five seconds, and offers
+  no pause control, which does not satisfy SC 2.2.2 Pause, Stop, Hide. It is
+  also an image of text under SC 1.4.5, cannot reflow for SC 1.4.10, and is
+  invisible to assistive technology beyond its alt text. The player renders
+  real text with pause, seek, and speed controls, and does not autoplay.
 - Use descriptive link text and proper headings, lists, and tables rather than
   visual formatting alone.
 - Meet applicable WCAG AA contrast requirements and never use color as the only
@@ -106,6 +113,10 @@ manual review as a required gate. For each applicable change:
 
 1. Inspect semantic and reading order.
 2. Navigate interactive output with the keyboard and verify visible focus.
+   Every deck now carries three persistent interactive regions: the slide
+   navigation controls, the course-identity link, and the week link. Confirm
+   each is reachable, has a visible focus indicator, and announces its purpose
+   and that it opens a new tab.
 3. Review text alternatives, links, tables, and media alternatives.
 4. Check contrast and color-independent meaning.
 5. Inspect representative browser rendering at the 1920x1080 desktop viewport
@@ -124,6 +135,16 @@ manual review as a required gate. For each applicable change:
 
 Record and resolve failures before publication. If a criterion cannot yet be
 reliably validated, document the limitation without treating it as a pass.
+
+One such limitation is known and unresolved. Slidev's own navigation control
+bar nests interactive controls inside other interactive controls, which axe
+reports as `nested-interactive` for the sync and more-options buttons, and it
+is present in the built deck rather than only in development. The markup
+belongs to Slidev, so the theme cannot correct it without replacing the control
+bar. Making the bar permanently visible did not introduce this and does not
+worsen it, since controls hidden by `opacity` were always in the accessibility
+tree and focusable, but the deck should not be described as free of violations
+while it stands.
 
 The automated build and validation checks verify deterministic structure around
 accessibility: the landing page is generated from a semantic HTML template,

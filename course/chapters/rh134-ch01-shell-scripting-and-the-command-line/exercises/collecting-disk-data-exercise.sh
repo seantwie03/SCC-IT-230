@@ -36,6 +36,7 @@ clear
 #^ 3. Write a basic for loop
 vim collect_disk_data.sh
 /Starting \$0
+#@ noenter
 o
 for host in workstation servera; do
     echo $host
@@ -69,8 +70,10 @@ clear
 vim collect_disk_data.sh
 /for host in
 #! w 3 times to move forward three words
+#@ noenter
 www
 #! Change to ;
+#@ noenter
 ct;
 "$@"
 jj:wq
