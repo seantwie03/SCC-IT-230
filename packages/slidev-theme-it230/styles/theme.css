@@ -409,12 +409,29 @@ body {
     width: 1.5rem;
 }
 
+/*
+ * Line numbers reach the page two different ways. An ordinary code block draws
+ * them with a `::before` counter taken out of flow, so the gutter costs the
+ * code no horizontal space and the digits sit right-aligned against its inner
+ * edge. Magic Move instead emits the number as a real token: the digit padded
+ * to the digit count of that state, then two spaces.
+ *
+ * Left alone, that token occupies its own width in the line, so a Magic Move
+ * block indents further than a plain fence beside it, and its digits, being
+ * left-aligned ahead of those two spaces, sit left of the counter's. The
+ * negative margin cancels the token's advance so both renderers start their
+ * code at the same place, and right-aligning text in a box widened by the two
+ * trailing spaces lands the digits on the counter's column whatever the state's
+ * digit count.
+ */
 .shiki-magic-move-line-number {
     color: var(--it230-color-muted) !important;
     display: inline-block;
     left: -2.5rem;
+    margin-right: calc(-1.5rem - 2ch);
     position: relative;
-    width: 1.5rem;
+    text-align: right;
+    width: calc(1.5rem + 2ch);
 }
 
 .slidev-layout blockquote {

@@ -544,9 +544,9 @@ ls -d /tmp/documents_*</code></pre>
                         </p>
                         <pre><code>* * * * * cp -r /home/student/Documents /tmp/documents_$(date --iso-8601=minutes)</code></pre>
                         <p>
-                            Press <kbd>j</kbd><kbd>j</kbd> to leave insert mode,
-                            then type <code>:wq</code> to save. Read the crontab
-                            back to confirm it was accepted.
+                            Press <kbd>Esc</kbd> to leave insert mode, then type
+                            <code>:wq</code> to save. Read the crontab back to
+                            confirm it was accepted.
                         </p>
                         <pre><code>crontab -l</code></pre>
                         <aside class="note">
@@ -603,8 +603,8 @@ CROND[11609]: (student) CMDEND (cp -r /home/student/Documents /tmp/documents_$(d
                         </p>
                         <pre><code>0 2 * * * cp -r /home/student/Documents /tmp/documents_$(date --iso-8601=minutes)</code></pre>
                         <p>
-                            Leave insert mode with <kbd>j</kbd><kbd>j</kbd>,
-                            save with <code>:wq</code>, and read it back.
+                            Leave insert mode with <kbd>Esc</kbd>, save with
+                            <code>:wq</code>, and read it back.
                         </p>
                         <pre><code>crontab -l</code></pre>
                         <p>

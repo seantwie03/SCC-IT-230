@@ -57,36 +57,39 @@ layout: center
 A `*` means *every* value of that field
 
 ---
+vertical: center
+---
 
 # Reading a Schedule
 
-```bash [Every minute]
+```bash [/etc/crontab]
+.---------------- minute (0 - 59)
+|  .------------- hour (0 - 23)
+|  |  .---------- day of month (1 - 31)
+|  |  |  .------- month (1 - 12) OR jan,feb,mar,apr ...
+|  |  |  |  .---- day of week (0 - 6) (Sunday=0 or 7) OR sun,mon,tue,wed,thu,fri,sat
+|  |  |  |  |
+*  *  *  *  * command to be executed
+```
+
+````md magic-move
+```bash
+# Every minute
 * * * * * echo "This runs every minute of every hour of every day in every month" >> stating_the_obvious.log
 ```
-
-<v-click>
-
-```bash [Every hour at 10 minute-mark]
-10 *  *  *  * echo "This runs on the 10th minute in every hour" >> stating_the_obvious.log
+```bash
+# Every hour at the 10-minute mark
+10 * * * * echo "This runs on the 10th minute in every hour" >> stating_the_obvious.log
 ```
-
-</v-click>
-
-<v-click>
-
-```bash [Every 30-minutes]
-0,30 * * * *  echo "This runs on the 0th and 30th minute of every hour" >> stating_the_obvious.log
+```bash
+# Every 30 minutes
+0,30 * * * * echo "This runs on the 0th and 30th minute of every hour" >> stating_the_obvious.log
 ```
-
-</v-click>
-
-<v-click>
-
-```bash [2:15a.m. on Sunday, Monday and Tuesday]
+```bash
+# 2:15 a.m. on Sunday, Monday, and Tuesday
 15 2 * * sun,mon,tue echo "This runs every Sunday, Monday and Tuesday at 2:15a.m." >> stating_the_obvious.log
 ```
-
-</v-click>
+````
 
 ---
 layout: two-cols-header

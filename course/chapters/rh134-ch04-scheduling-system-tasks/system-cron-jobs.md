@@ -151,7 +151,7 @@ If the machine was off when the job was due, anacron runs it once the machine is
 
 ---
 
-# What Anacron Costs You
+# Anacron Tradeoffs
 
 <Callout type="warning" title="You give up three things">
 

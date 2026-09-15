@@ -262,17 +262,16 @@ withDefaults(
 }
 
 /*
- * Magic Move writes its number as text (the digit padded to that state's digit
- * count, then two spaces) and lays the line out from that text. It therefore
- * indents further than the counter above, which draws into a fixed box. Pulling
- * the following token back by those three characters lines the two renderers up.
- *
- * Giving this token a width instead does not work: a fixed box leaves the text
- * to set the indent anyway, and the block formatting context it creates also
- * changes the line height.
+ * Magic Move's number token is normalized in `styles/theme.css`, against the
+ * 1.5rem gutter an ordinary slide uses. A transcript's gutter is the 2ch box
+ * set above, so the token is resized to that gutter plus the two spaces Magic
+ * Move writes after the digits, and its advance cancelled again. Keep the two
+ * widths in step: the box must stay `gutter + 2ch` and the margin its negative,
+ * or the transcript indents past its own line numbers.
  */
 .it230-terminal__body :deep(.shiki-magic-move-line-number) {
-    margin-right: -3ch;
+    margin-right: calc(-2ch - 2ch);
+    width: calc(2ch + 2ch);
 }
 
 .it230-terminal__body :deep(p:last-child) {

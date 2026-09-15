@@ -393,6 +393,16 @@ margin removed so the two read as one object. Use a title to name the file a
 snippet was taken from or belongs in, and leave it off for a command a student
 types at a prompt.
 
+Line numbers are on for every code block, and Slidev draws them two different
+ways: an ordinary fence uses a counter taken out of flow, and a Magic Move block
+writes the number into the line as a real token. The theme normalizes the two so
+they share one gutter, its digits right-aligned against the code. A plain fence
+and a Magic Move block on the same slide therefore start their code in the same
+column and number it in the same column, whether they stand on the slide or
+inside a `TerminalWindow`. A transcript that grows past nine lines keeps that
+column too, instead of widening its gutter partway through a sequence. Authors
+do not set a width, margin, or offset to get this.
+
 Images receive `min-width: 0` so they can shrink inside grid and flex tracks.
 The `default` and `two-cols-header` layouts additionally fit a lone Markdown
 image within its available region while preserving its aspect ratio. Size

@@ -206,6 +206,29 @@ active
 vertical: center
 ---
 
+# One gutter, both code renderers
+
+Slidev numbers an ordinary fence and a Magic Move block by different means. The
+theme gives them one gutter, so two blocks on a slide number their lines in the
+same column and start their code in the same column.
+
+```bash
+systemctl is-enabled sshd
+```
+
+````md magic-move
+```bash
+systemctl start sshd
+```
+```bash
+systemctl enable --now sshd
+```
+````
+
+---
+vertical: center
+---
+
 # Naming the file a snippet belongs in
 
 A fence may carry a title after the language. The theme attaches it to the top

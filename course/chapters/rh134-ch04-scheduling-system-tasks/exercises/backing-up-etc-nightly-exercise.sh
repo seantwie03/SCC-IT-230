@@ -22,11 +22,10 @@ clear
 sudo -i
 vim /usr/local/bin/etc_backup.sh
 i#!/bin/bash
-BACKUP_HOST="workstation"
-SNAPSHOT="/tmp/passwd_$(date --iso-8601=minutes)"
-cp /etc/passwd "${SNAPSHOT}"
-scp -q "${SNAPSHOT}" "${BACKUP_HOST}:/tmp/"
-jj:wq
+backup_host="workstation"
+scp -r /etc "student@${backup_host}:/tmp/$(hostname)_etc_$(date --iso-8601=minutes)"
+#@ key ESC
+:wq
 chmod a+x /usr/local/bin/etc_backup.sh
 #! Run it by hand before trusting it to a schedule
 /usr/local/bin/etc_backup.sh
