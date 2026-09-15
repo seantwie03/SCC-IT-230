@@ -23,7 +23,7 @@ topicInfo:
 
 # Logrotate in Action
 
-<TerminalWindow title="student@servera:~" :rows="4">
+<TerminalWindow title="student@servera:~">
 
 ```bash-session
 student@servera:~$ sudo ls -l /var/log/secure*
@@ -35,7 +35,7 @@ student@servera:~$ sudo ls -l /var/log/secure*
 
 `logrotate` renames the current file, starts a fresh one, and eventually deletes the oldest
 
-It runs from `logrotate.timer`, the same timer unit you read last week
+It runs from `logrotate.timer`
 
 ---
 layout: two-cols-header
@@ -45,7 +45,7 @@ vertical: center
 
 # Where the Rules Live
 
-`/etc/logrotate.conf` sets the defaults, then pulls in one file per package
+`/etc/logrotate.conf` sets the defaults
 
 ::left::
 
@@ -127,3 +127,25 @@ Rotate a log file when it outgrows 1 KB, keeping only the two most recent copies
 3. Run logrotate by hand rather than waiting for the timer
 4. Repeat until more than two old copies would exist
 5. Confirm the oldest was discarded
+
+---
+layout: exercise
+variant: recording
+---
+
+<script setup>
+import castUrl from "./exercises/rotating-a-log-file-exercise.cast?url";
+</script>
+
+# Rotating a Log File by Size
+
+::recording::
+
+<AsciinemaPlayer
+    :src="castUrl"
+    label="Screen recording of the instructor writing a logrotate configuration for /var/log/demo.log that rotates past 1k, compresses, and keeps two old copies, filling the file with a loop, forcing a rotation rather than waiting for the timer, repeating until a third rotation exists, and confirming the oldest compressed copy was discarded."
+/>
+
+::resources::
+
+<a href="../resources/rotating-a-log-file-exercise.html" target="_blank" rel="noopener noreferrer" aria-label="Read the written Rotating a Log File by Size exercise in a new tab">Written exercise</a>

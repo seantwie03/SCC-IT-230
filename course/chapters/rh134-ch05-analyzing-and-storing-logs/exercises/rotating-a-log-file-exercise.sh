@@ -25,13 +25,16 @@ i/var/log/demo.log {
     rotate 2
     compress
     missingok
+#@ noenter
 }
-jj:wq
+#@ key escape
+:wq
 cat /etc/logrotate.d/demo
 clear
 
 #^ 2. Fill the file past the threshold
 for i in {1..100}; do echo "Log entry line $i" >> /var/log/demo.log; done
+#@ pause 5
 ls -lh /var/log/demo.log
 clear
 
@@ -44,6 +47,7 @@ clear
 #^ 4. Fill and rotate again
 for i in {1..100}; do echo "Log entry line $i" >> /var/log/demo.log; done
 logrotate --force /etc/logrotate.d/demo
+#@ pause 5
 ls -lh /var/log/demo.log*
 clear
 
@@ -51,9 +55,10 @@ clear
 #! rotate 2 means two old copies, so the third rotation drops the first
 for i in {1..100}; do echo "Log entry line $i" >> /var/log/demo.log; done
 logrotate --force /etc/logrotate.d/demo
+#@ pause 5
 ls -lh /var/log/demo.log*
 clear
 
 #^ 6. Clean up
 rm -f /etc/logrotate.d/demo /var/log/demo.log*
-ls /var/log/demo.log* 2>&1
+
