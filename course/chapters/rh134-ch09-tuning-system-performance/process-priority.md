@@ -33,21 +33,14 @@ Linux runs far more processes than it has CPUs, so the kernel is always choosing
 Priority is how you tell the kernel which is which
 
 ---
-layout: two-cols-header
-vertical: center
----
 
 # Nice Values
-
-::left::
 
 Range from <AccentText>-20</AccentText> to <AccentText>19</AccentText>, default `0`
 
 A **lower** number means **less nice** to other processes, so it gets more CPU
 
 A higher number steps aside for everything else
-
-::right::
 
 <Callout type="warning">
 
@@ -59,7 +52,7 @@ Raising priority needs `root`. An ordinary user can only be nicer, never greedie
 
 # Reading Them
 
-<TerminalWindow title="student@servera:~" :rows="6">
+<TerminalWindow title="student@servera:~">
 
 ```bash-session {*}{lines:false}
 student@servera:~$ ps -axo pid,comm,nice,pri --sort=nice
@@ -73,13 +66,13 @@ student@servera:~$ ps -axo pid,comm,nice,pri --sort=nice
 
 `NI` is the nice value you set, and `PRI` is the priority the kernel derived from it
 
-`top` shows the same two columns and refreshes, so it is the one to reach for while something is running
+`top` shows the same two columns and refreshes automatically
 
 ---
 
 # Setting Them
 
-<TerminalWindow title="student@servera:~" :rows="9">
+<TerminalWindow title="student@servera:~">
 
 ```bash-session {*}{lines:false}
 student@servera:~$ nice -n 15 sleep 300 &
@@ -118,3 +111,25 @@ Change a running process's priority in both directions and find the limit
 4. Lower its priority again
 5. Try to raise it without privileges and read the error
 6. Stop the process
+
+---
+layout: exercise
+variant: recording
+---
+
+<script setup>
+import castUrl from "./exercises/managing-nice-values-exercise.cast?url";
+</script>
+
+# Managing Nice Values
+
+::recording::
+
+<AsciinemaPlayer
+    :src="castUrl"
+    label="Screen recording of the instructor backgrounding a sleep process, reading the nice value it started with alongside the priority the kernel derived from it, using sudo to renice it to a lower number for more CPU, raising the number again without sudo, being refused when trying to lower it back as an ordinary user, and finishing with nice to set a value at launch rather than after the fact."
+/>
+
+::resources::
+
+<a href="../resources/managing-nice-values-exercise.html" target="_blank" rel="noopener noreferrer" aria-label="Read the written Managing Nice Values exercise in a new tab">Written exercise</a>

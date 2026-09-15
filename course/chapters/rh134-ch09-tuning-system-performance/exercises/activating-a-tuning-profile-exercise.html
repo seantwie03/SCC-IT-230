@@ -468,8 +468,8 @@
                     <h2 id="overview-heading">Task</h2>
                     <p>
                         Switch <code>servera</code> from its default tuning
-                        profile to one built for low-latency networking, and
-                        confirm the change took effect.
+                        profile to one built for low-latency networking, then
+                        confirm the change took effect and survives a restart.
                     </p>
 
                     <dl class="requirements">
@@ -532,13 +532,36 @@ tuned-adm active</code></pre>
 
                     <li class="step">
                         <h2>Verify it took effect</h2>
-                        <pre><code>tuned-adm verify
-sudo tail -n5 /var/log/tuned/tuned.log</code></pre>
+                        <p>
+                            Ask tuned whether the running system actually
+                            matches the profile it reports as active.
+                        </p>
+                        <pre><code>tuned-adm verify</code></pre>
                         <aside class="note">
                             <strong>Some settings need a reboot</strong>
                             <code>verify</code> may mention that. Settings
                             applied through the bootloader cannot take effect
                             until the machine restarts.
+                        </aside>
+                        <p>
+                            So restart the machine. Wait for it to come back,
+                            then connect again.
+                        </p>
+                        <pre><code>sudo reboot
+ssh servera</code></pre>
+                        <p>
+                            Verify a second time, with nothing left waiting on a
+                            restart, and read what tuned recorded.
+                        </p>
+                        <pre><code>tuned-adm verify
+sudo tail -n5 /var/log/tuned/tuned.log</code></pre>
+                        <aside class="note">
+                            <strong>The profile survived the restart</strong>
+                            You enabled tuned at boot in step 1, so it starts
+                            with the machine and reapplies the profile it has
+                            saved. That is why the next step has to set
+                            <code>virtual-guest</code> back rather than just
+                            removing the package.
                         </aside>
                     </li>
 

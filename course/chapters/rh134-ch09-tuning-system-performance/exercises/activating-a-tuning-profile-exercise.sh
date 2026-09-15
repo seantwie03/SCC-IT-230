@@ -1,6 +1,7 @@
 kitten @ set-font-size 30.0 && ssh servera
 clear
 
+#@ pause 10
 #^ Exercise: Activating a Tuning Profile
 # Requirements
 #   Host: servera
@@ -15,6 +16,7 @@ clear
 clear
 
 #^ 1. Install tuned and start it
+#@ pause 8
 sudo dnf install -y tuned
 sudo systemctl enable --now tuned
 systemctl is-active tuned
@@ -26,8 +28,10 @@ tuned-adm active
 clear
 
 #^ 3. Read what network-latency changes
+#@ pause 6
 tuned-adm list
 clear
+#@ pause 6
 cat /usr/lib/tuned/profiles/network-latency/tuned.conf
 #! It includes latency-performance and adds network-specific sysctl settings
 clear
@@ -38,6 +42,11 @@ tuned-adm active
 clear
 
 #^ 5. Verify it took effect
+#@ pause 5
+tuned-adm verify
+#@ pause 5
+sudo reboot
+ssh servera
 tuned-adm verify
 sudo tail -n5 /var/log/tuned/tuned.log
 clear
@@ -46,4 +55,6 @@ clear
 sudo tuned-adm profile virtual-guest
 tuned-adm active
 sudo systemctl disable --now tuned
+#@ pause 6
 sudo dnf remove -y tuned
+

@@ -103,5 +103,28 @@ Switch `servera` to the network-latency profile and confirm it took effect
 1. Install `tuned` and start its service
 2. Find out which profile is active now
 3. Read what the `network-latency` profile actually changes
-4. Activate it and verify
-5. Put the original profile back
+4. Activate it
+5. Verify it took effect
+6. Put the original profile back
+
+---
+layout: exercise
+variant: recording
+---
+
+<script setup>
+import castUrl from "./exercises/activating-a-tuning-profile-exercise.cast?url";
+</script>
+
+# Activating a Tuning Profile
+
+::recording::
+
+<AsciinemaPlayer
+    :src="castUrl"
+    label="Screen recording of the instructor installing tuned and enabling it at boot, finding virtual-guest active because the lab machines are virtual, reading what the network-latency profile includes and adds on top, activating it, verifying it once and again after a reboot to show the profile comes back on its own, then restoring virtual-guest and removing the package."
+/>
+
+::resources::
+
+<a href="../resources/activating-a-tuning-profile-exercise.html" target="_blank" rel="noopener noreferrer" aria-label="Read the written Activating a Tuning Profile exercise in a new tab">Written exercise</a>
