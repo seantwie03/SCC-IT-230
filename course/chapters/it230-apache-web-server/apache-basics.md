@@ -114,11 +114,11 @@ layout: exercise
 
 ::goal::
 
-Stand up a web server, publish two pages, and reach them from another machine
+Stand up a web server, publish two pages
 
 ::environment::
 
-**Hosts:** `servera` and `workstation`
+**Hosts:** `servera`
 
 ::workflow::
 
@@ -126,4 +126,26 @@ Stand up a web server, publish two pages, and reach them from another machine
 2. Write a home page under the DocumentRoot
 3. Enable and start the service, then fetch the page locally
 4. Add a page in a subdirectory and fetch it by its URL
-5. Open the firewall and fetch both pages from `workstation`
+
+
+---
+layout: exercise
+variant: recording
+---
+
+<script setup>
+import castUrl from "./exercises/serving-a-web-page-exercise.cast?url";
+</script>
+
+# Serving a Web Page
+
+::recording::
+
+<AsciinemaPlayer
+    :src="castUrl"
+    label="Screen recording of the instructor installing httpd and finding it neither enabled nor running, reading DocumentRoot out of the Apache configuration before writing an index page there, enabling and starting the service and fetching that page with curl, adding a second page in an about subdirectory and fetching it by the URL path that matches its location on disk, then disabling the service and removing both the pages and the package."
+/>
+
+::resources::
+
+<a href="../resources/serving-a-web-page-exercise.html" target="_blank" rel="noopener noreferrer" aria-label="Read the written Serving a Web Page exercise in a new tab">Written exercise</a>
