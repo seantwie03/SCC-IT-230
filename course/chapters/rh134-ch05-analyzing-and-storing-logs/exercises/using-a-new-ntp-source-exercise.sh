@@ -23,6 +23,7 @@ clear
 
 #^ 2. Read the current sources
 #! ^* marks the source in use, ^+ acceptable, ^- excluded
+#@ pause 6
 chronyc sources -v
 clear
 
@@ -30,14 +31,16 @@ clear
 sudo cp /etc/chrony.conf /etc/chrony.conf.orig
 sudo vim /etc/chrony.conf
 /^pool
+#@ noenter
 Cpool time.google.com iburst
-jj:wq
+#@ key escape
+:wq
 head -3 /etc/chrony.conf
 clear
 
 #^ 4. Restart chronyd
 sudo systemctl restart chronyd
-systemctl is-active chronyd
+systemctl status chronyd --no-pager
 clear
 
 #^ 5. Confirm the new source is selected

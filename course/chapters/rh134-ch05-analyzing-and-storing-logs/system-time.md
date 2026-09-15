@@ -54,7 +54,7 @@ vertical: center
 
 Linux counts time as seconds since <AccentText>1 January 1970</AccentText>, UTC
 
-<TerminalWindow title="student@servera:~" :rows="5">
+<TerminalWindow title="student@servera:~">
 
 ```bash-session
 student@servera:~$ date +%s
@@ -71,7 +71,7 @@ The `@` is what tells `date` the number is epoch seconds rather than a date
 
 # What the System Thinks Right Now
 
-<TerminalWindow title="student@servera:~" :rows="9">
+<TerminalWindow title="student@servera:~">
 
 ```bash-session {*}{lines:false}
 student@servera:~$ timedatectl
@@ -97,7 +97,7 @@ vertical: center
 `tzselect` walks you through continent, country, and region, then prints a name.
 It changes nothing, it only tells you what to type.
 
-<TerminalWindow title="student@servera:~" :rows="6">
+<TerminalWindow title="student@servera:~">
 
 ```bash-session
 student@servera:~$ timedatectl list-timezones | grep -i amsterdam
@@ -132,3 +132,25 @@ Move `servera` to Amsterdam's time zone and confirm only the display changed
 3. Set the new time zone
 4. Confirm local time moved while universal time did not
 5. Put the original time zone back
+
+---
+layout: exercise
+variant: recording
+---
+
+<script setup>
+import castUrl from "./exercises/changing-the-time-zone-exercise.cast?url";
+</script>
+
+# Changing the Time Zone
+
+::recording::
+
+<AsciinemaPlayer
+    :src="castUrl"
+    label="Screen recording of the instructor recording servera's starting time zone with timedatectl and date, searching the time zone list for the name Amsterdam uses, setting Europe/Amsterdam, showing that local time moved while date -u did not so the clock itself never changed, and setting Etc/UTC back."
+/>
+
+::resources::
+
+<a href="../resources/changing-the-time-zone-exercise.html" target="_blank" rel="noopener noreferrer" aria-label="Read the written Changing the Time Zone exercise in a new tab">Written exercise</a>

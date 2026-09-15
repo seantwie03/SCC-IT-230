@@ -58,7 +58,7 @@ A `pool` line names a set of servers, and `iburst` makes the first sync fast
 
 # Checking the Sources
 
-<TerminalWindow title="student@servera:~" :rows="6">
+<TerminalWindow title="student@servera:~">
 
 ```bash-session {*}{lines:false}
 student@servera:~$ chronyc sources -v
@@ -94,3 +94,25 @@ Point `servera` at a specific time source and confirm it synchronizes
 3. Replace the pool with `time.google.com`
 4. Restart `chronyd` so it reads the change
 5. Confirm the new source is selected
+
+---
+layout: exercise
+variant: recording
+---
+
+<script setup>
+import castUrl from "./exercises/using-a-new-ntp-source-exercise.cast?url";
+</script>
+
+# Using a New NTP Source
+
+::recording::
+
+<AsciinemaPlayer
+    :src="castUrl"
+    label="Screen recording of the instructor confirming chrony is installed, enabled, and running, reading the current sources and the markers that say which one is in use, backing up chrony.conf before replacing its pool line with time.google.com, restarting chronyd, confirming the new source is the one selected and that the system is synchronized, then restoring the original configuration."
+/>
+
+::resources::
+
+<a href="../resources/using-a-new-ntp-source-exercise.html" target="_blank" rel="noopener noreferrer" aria-label="Read the written Using a New NTP Source exercise in a new tab">Written exercise</a>
