@@ -17,7 +17,7 @@ topicInfo:
 ## Where the answers are when something goes wrong
 
 ---
-vertical: center
+vertical: evenly
 ---
 
 # Why Look at Logs?
@@ -42,9 +42,9 @@ What went wrong, and why?
 layout: center
 ---
 
-# Logs are your best hope of answering either question
+# Logs are your best hope of answering
 
-## Usually your only hope
+## <AccentText>Usually your only hope</AccentText>
 
 ---
 layout: two-cols-header
@@ -53,19 +53,9 @@ vertical: center
 
 # Two Mechanisms, Mostly the Same Messages
 
-Some applications also write their own files, such as `httpd` to `/var/log/httpd/`
+Some applications write their own files, such as `httpd` to `/var/log/httpd/`
 
 ::left::
-
-## `journald`
-
-Part of systemd, so it knows about units
-
-Writes a binary journal, read with `journalctl`
-
-Not kept across reboots by default
-
-::right::
 
 ## `rsyslog`
 
@@ -73,7 +63,21 @@ Older, and still doing work systemd does not
 
 Writes plain text under `/var/log/`
 
-Kept across reboots, and can ship logs to a central server
+Kept across reboots
+
+Can ship logs to a central server
+
+::right::
+
+## `journald`
+
+Part of systemd, so it knows about units
+
+Writes a binary journal
+
+Read the journal with `journalctl`
+
+Not kept across reboots *by default*
 
 ---
 
@@ -88,3 +92,4 @@ Kept across reboots, and can ship logs to a central server
 | `/var/log/boot.log` | Console messages from system startup |
 
 Every one of these is written by `rsyslog`, following rules you can read and change
+

@@ -468,8 +468,8 @@
                     <h2 id="overview-heading">Task</h2>
                     <p>
                         Send authentication messages to a file of your own by
-                        adding a rule to rsyslog, then watch what else the rule
-                        catches.
+                        adding a rule to rsyslog, then confirm which priorities
+                        that one rule catches.
                     </p>
 
                     <dl class="requirements">
@@ -514,50 +514,6 @@ vim /etc/rsyslog.d/authpriv-info.conf</code></pre>
                             <code>:wq</code>, and read it back.
                         </p>
                         <pre><code>cat /etc/rsyslog.d/authpriv-info.conf</code></pre>
-                    </li>
-
-                    <li class="step">
-                        <h2>Restart rsyslog</h2>
-                        <p>
-                            rsyslog reads its configuration when it starts, so a
-                            new rule does nothing until you restart the service.
-                        </p>
-                        <pre><code>systemctl restart rsyslog
-systemctl is-active rsyslog
-ls -l /var/log/authpriv-info</code></pre>
-                        <aside class="note">
-                            <strong>The file appears on restart</strong>
-                            rsyslog creates the destination as soon as the rule
-                            loads, before any message arrives.
-                        </aside>
-                    </li>
-
-                    <li class="step">
-                        <h2>Send a test message</h2>
-                        <p>
-                            <code>logger</code> writes a message to syslog.
-                            <code>-p</code> chooses the facility and priority,
-                            which is what decides where the message lands.
-                        </p>
-                        <pre><code>logger -p authpriv.info "Houston, we have a problem."
-cat /var/log/authpriv-info</code></pre>
-                    </li>
-
-                    <li class="step">
-                        <h2>Watch the file fill as you authenticate</h2>
-                        <p>
-                            Your message is not the only thing matching this
-                            rule. Every login and every <code>sudo</code> is an
-                            <code>authpriv</code> event.
-                        </p>
-                        <pre><code>less /var/log/authpriv-info</code></pre>
-                        <p>
-                            Press <kbd>G</kbd> to jump to the end and
-                            <kbd>q</kbd> to quit. Open a second terminal,
-                            connect to <code>servera</code> again, then look at
-                            the tail of the file.
-                        </p>
-                        <pre><code>tail -n5 /var/log/authpriv-info</code></pre>
                         <aside class="note">
                             <strong
                                 >This is why <code>authpriv</code> is
@@ -573,15 +529,52 @@ cat /var/log/authpriv-info</code></pre>
                     </li>
 
                     <li class="step">
+                        <h2>Restart rsyslog</h2>
+                        <p>
+                            rsyslog reads its configuration when it starts, so a
+                            new rule does nothing until you restart the service.
+                        </p>
+                        <pre><code>systemctl restart rsyslog
+systemctl status rsyslog --no-pager</code></pre>
+                        <p>
+                            Look for <code>active (running)</code> and a
+                            <code>since</code> time of a moment ago, which is
+                            how you know the restart took.
+                        </p>
+                    </li>
+
+                    <li class="step">
+                        <h2>Send a test message</h2>
+                        <p>
+                            <code>logger</code> writes a message to syslog.
+                            <code>-p</code> chooses the facility and priority,
+                            which is what decides where the message lands.
+                        </p>
+                        <pre><code>logger -p authpriv.info "Houston, we have a problem."
+cat /var/log/authpriv-info</code></pre>
+                        <aside class="note">
+                            <strong>This message created the file</strong>
+                            rsyslog makes the destination when the first
+                            matching message arrives, not when the rule loads.
+                            Until you ran <code>logger</code>, there was no
+                            <code>/var/log/authpriv-info</code> to read.
+                        </aside>
+                    </li>
+
+                    <li class="step">
                         <h2>Confirm higher priorities land in the same file</h2>
                         <p>
                             A rule naming <code>info</code> catches
                             <code>info</code> and everything more severe. Send
-                            two messages well above it.
+                            two messages well above it, then read back all three
+                            you have sent.
                         </p>
                         <pre><code>logger -p authpriv.alert "Houston, we have an alert!"
 logger -p authpriv.emerg "Houston, we have an EMERGENCY!"
-tail -n2 /var/log/authpriv-info</code></pre>
+tail -n3 /var/log/authpriv-info</code></pre>
+                        <pre><code>Sep 15 12:18:59 servera root[12652]: Houston, we have a problem.
+Sep 15 12:18:59 servera root[12655]: Houston, we have an alert!
+Sep 15 12:18:59 servera root[12656]: Houston, we have an EMERGENCY!</code></pre>
                         <aside class="note">
                             <strong>Emergencies go everywhere</strong>
                             The default rules also include
