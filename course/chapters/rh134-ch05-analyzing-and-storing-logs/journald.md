@@ -41,7 +41,7 @@ By default the journal lives in `/run/log/journal/`, which is memory. A reboot l
 
 `journalctl -u` is the command you will reach for most
 
-<TerminalWindow title="student@servera:~" :rows="5">
+<TerminalWindow title="student@servera:~">
 
 ```bash-session {*}{lines:false}
 student@servera:~$ journalctl -u crond.service
@@ -102,7 +102,7 @@ journalctl SYSLOG_IDENTIFIER=sshd
 
 Create the directory, and journald starts using it
 
-<TerminalWindow title="root@servera:~" :rows="6">
+<TerminalWindow title="root@servera:~">
 
 ```bash-session
 root@servera:~# mkdir /var/log/journal
@@ -121,7 +121,7 @@ Storage moves from `/run/log/journal/` to `/var/log/journal/`, and past boots ar
 
 Only possible once the journal is persistent
 
-<TerminalWindow title="student@servera:~" :rows="5">
+<TerminalWindow title="student@servera:~">
 
 ```bash-session {*}{lines:false}
 student@servera:~$ journalctl --list-boots
@@ -156,3 +156,25 @@ Find entries by unit and by time, then make the journal survive a reboot
 3. Confirm only one boot is listed, and work out why
 4. Make the journal persistent and flush it to disk
 5. Reboot, then read the boot before the reboot
+
+---
+layout: exercise
+variant: recording
+---
+
+<script setup>
+import castUrl from "./exercises/reading-the-journal-exercise.cast?url";
+</script>
+
+# Reading the Journal
+
+::recording::
+
+<AsciinemaPlayer
+    :src="castUrl"
+    label="Screen recording of the instructor reading the journal for sshd, narrowing the same question to the last thirty minutes, finding only one boot listed because the journal lives in memory, creating /var/log/journal and flushing to make it persistent, rebooting servera and reading the boot before the reboot, then removing the directory to send journald back to memory-only storage."
+/>
+
+::resources::
+
+<a href="../resources/reading-the-journal-exercise.html" target="_blank" rel="noopener noreferrer" aria-label="Read the written Reading the Journal exercise in a new tab">Written exercise</a>

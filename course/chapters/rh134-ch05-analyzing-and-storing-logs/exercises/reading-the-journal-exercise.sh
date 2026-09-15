@@ -1,6 +1,7 @@
 kitten @ set-font-size 30.0 && ssh servera
 clear
 
+#@ pause 15
 #^ Exercise: Reading the Journal
 # Requirements
 #   Host: servera
@@ -17,13 +18,17 @@ clear
 
 #^ 1. Read the journal for one service
 journalctl -u sshd.service
+#@ noenter
 G
+#@ noenter
 q
 clear
 
 #^ 2. Narrow it to a time window
 journalctl --since "30 minutes ago"
+#@ noenter
 G
+#@ noenter
 q
 journalctl -u sshd.service --since "30 minutes ago" --no-pager
 clear
@@ -32,7 +37,6 @@ clear
 journalctl --list-boots
 #! Only boot 0, because the journal lives in memory and is lost on reboot
 ls -d /run/log/journal
-ls -d /var/log/journal
 clear
 
 #^ 4. Make the journal persistent
@@ -43,11 +47,14 @@ clear
 
 #^ 5. Reboot and read the previous boot
 #! Wait for servera to come back before continuing
+#@ pause 10
 sudo reboot
 ssh servera
 journalctl --list-boots
-journalctl -b -1 --no-pager
+journalctl -b -1
+#@ noenter
 G
+#@ noenter
 q
 clear
 
@@ -56,3 +63,4 @@ clear
 sudo rm -rf /var/log/journal
 sudo systemctl restart systemd-journald
 journalctl --list-boots
+
