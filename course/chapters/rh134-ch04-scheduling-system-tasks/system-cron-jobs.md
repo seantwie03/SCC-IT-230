@@ -109,61 +109,6 @@ Sep  5 16:19:01 servera CROND[12286]: (root) CMDEND (/usr/bin/check_updates.sh)
 The log says <AccentText>(root)</AccentText> instead of `(student)`, because the drop-in file named the user
 
 ---
-layout: two-cols-header
-vertical: center
----
-
-# Same Job, Different Machine
-
-A crontab entry only fires if the machine is awake at that moment
-
-::left::
-
-## Server
-
-<SuccessText>Awake at 6 a.m.</SuccessText>
-
-The update check runs on time
-
-::right::
-
-## Laptop
-
-<DangerText>Asleep at 6 a.m.</DangerText>
-
-The check never happens, and cron never looks back
-
----
-vertical: center
----
-
-# Anacron
-
-Anacron asks *has this run lately?* instead of *is it 6 a.m. yet?*
-
-Put `check_updates.sh` in one of these instead, as an executable script
-
-- `/etc/cron.daily/`
-- `/etc/cron.weekly/`
-- `/etc/cron.monthly/`
-
-If the machine was off when the job was due, anacron runs it once the machine is back
-
----
-
-# Anacron Tradeoffs
-
-<Callout type="warning" title="You give up three things">
-
-You do not choose the hour. The job runs as `root`. On a laptop it is skipped while running on battery.
-
-</Callout>
-
-Anacron tracks each directory by date, so it knows when a daily job is overdue
-
-Nothing runs while the job is up to date, however often the machine wakes up
-
----
 layout: exercise
 ---
 
@@ -171,20 +116,19 @@ layout: exercise
 
 ::goal::
 
-Schedule the same backup two ways: on a server that is always on, and on a machine that is not
+Back up a file every night as `root`, from a system crontab rather than your own
 
 ::environment::
 
-**Hosts:** `servera`, then `workstation` standing in for a laptop
+**Hosts:** `servera`, with `workstation` holding the offsite copy
 
 ::workflow::
 
 1. Write a short backup script on `servera` and make it executable
-2. Schedule it in `/etc/cron.d/`, test it every minute, and set the real 10 p.m. time
-3. Confirm in `/var/log/cron` that `root` ran it, and check the snapshot
-4. Install the same script into `/etc/cron.daily/` on `workstation`
-5. Convince anacron the machine was off for months, then let it catch up
-6. Confirm the backup ran and clean up both hosts
+2. Schedule it in `/etc/cron.d/` and test it every minute
+3. Find out why nothing ran, then correct the entry
+4. Confirm in `/var/log/cron` that `root` ran it, and check both hosts
+5. Set the real 10 p.m. schedule and read the entry back
 
 ---
 layout: exercise

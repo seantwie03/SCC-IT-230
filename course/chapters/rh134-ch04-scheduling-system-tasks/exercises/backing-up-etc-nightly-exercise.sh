@@ -65,32 +65,8 @@ jj:wq
 tail -1 /etc/cron.d/backups
 clear
 
-#^ 5. Give the same script to anacron on workstation
-#! workstation is our pretend laptop: asleep at 10 p.m., so cron would never fire
-exit
-ssh workstation
-sudo -i
-vim /etc/cron.daily/etc_backup.sh
-i#!/bin/bash
-SNAPSHOT="/tmp/passwd_$(date --iso-8601=minutes)"
-cp /etc/passwd "${SNAPSHOT}"
-jj:wq
-chmod a+x /etc/cron.daily/etc_backup.sh
-clear
-
-#^ 6. Let anacron catch up, then clean up both hosts
-cat /var/spool/anacron/cron.daily
-#! anacron does nothing while the job is up to date
-anacron -n
-ls /tmp/passwd_*
-#! Now pretend the laptop has been closed since January
-echo 20260101 > /var/spool/anacron/cron.daily
-anacron -n
-ls -l /tmp/passwd_*
-cat /var/spool/anacron/cron.daily
-rm -f /etc/cron.daily/etc_backup.sh /tmp/passwd_*
-exit
-exit
-#! Those two exits drop the root shell and the ssh session, landing back on servera
-sudo rm -f /etc/cron.d/backups /usr/local/bin/etc_backup.sh /tmp/passwd_*
+#^ 5. Clean up
+#! Still in the root shell on servera, so no sudo and no exits to unwind
+rm -f /etc/cron.d/backups /usr/local/bin/etc_backup.sh /tmp/passwd_*
 ls /etc/cron.d/
+exit
