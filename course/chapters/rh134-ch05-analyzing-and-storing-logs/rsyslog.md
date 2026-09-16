@@ -116,6 +116,29 @@ A priority catches that level <AccentText>and everything above it</AccentText>, 
 
 ---
 
+# Adding Rules in `/etc/rsyslog.d`
+
+Before those rules, `/etc/rsyslog.conf` pulls in a drop-in directory
+
+```bash [/etc/rsyslog.conf] {2}
+# Include all config files in /etc/rsyslog.d/
+include(file="/etc/rsyslog.d/*.conf" mode="optional")
+```
+
+Add your own rule as a file of your own there, named for what it routes
+
+```bash [/etc/rsyslog.d/authpriv-info.conf]
+authpriv.info /var/log/authpriv-info
+```
+
+<Callout type="warning">
+
+The name has to end in `.conf`, or the include never picks the file up
+
+</Callout>
+
+---
+
 # Writing and Reading
 
 ## Send a message with `logger`
