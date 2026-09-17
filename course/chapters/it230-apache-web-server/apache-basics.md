@@ -23,14 +23,14 @@ vertical: center
 
 Apache listens on a port, and hands back files when a browser asks for them
 
-| Component | Value |
-| --- | --- |
-| Package | `httpd` |
-| Service | `httpd.service` |
+| Component       | Value                                                 |
+|-----------------|-------------------------------------------------------|
+| Package         | `httpd`                                               |
+| Service         | `httpd.service`                                       |
 | Service account | `apache`, the `nologin` account from the cron chapter |
-| Configuration | `/etc/httpd/conf/httpd.conf` |
-| Content | `/var/www/html/` |
-| Logs | `/var/log/httpd/` |
+| Configuration   | `/etc/httpd/conf/httpd.conf`                          |
+| Content         | `/var/www/html/`                                      |
+| Logs            | `/var/log/httpd/`                                     |
 
 ---
 
