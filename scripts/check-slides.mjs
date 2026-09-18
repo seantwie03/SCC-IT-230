@@ -2,11 +2,11 @@
  * Detect slides whose content does not fit the theme's content box.
  *
  * A deck can build cleanly while slides are visually broken, so this check
- * renders each slide in a real browser and measures it. It reports two
- * conditions:
+ * renders each slide in a real browser and measures it. It fails on content
+ * that extends past the layout's content box, and on rendering errors.
  *
- *   - overflow, where content extends past the layout's content box
- *   - low clearance, where content stops less than one line above it
+ * A slide that merely fills its box is not a problem, so how much room remains
+ * below the content is reported by `--verbose` and never fails the check.
  *
  * The boundary is the layout's computed content box rather than the slide
  * edge, because the theme reserves its bottom padding for the slide footer.
@@ -29,12 +29,6 @@ import { startFocusedDeckServer } from "./lib/development.mjs";
 import { discoverCanonicalWeeks } from "./lib/presentations.mjs";
 
 const OVERFLOW_THRESHOLD = 2;
-/**
- * Clearance below this fraction of a line is reported as a warning. A slide
- * legitimately fills most of its box, so warning on a whole line of clearance
- * buries the slides that are genuinely one edit from overflowing.
- */
-const CLEARANCE_WARNING_LINES = 0.25;
 const REVIEW_PORT = 3232;
 const VIEWPORT = { height: 1080, width: 1920 };
 
@@ -56,7 +50,6 @@ const entries =
 if (entries.length === 0) throw new Error("No canonical weeks were found.");
 
 let failures = 0;
-let warnings = 0;
 
 await withBrowser(async (browser) => {
     for (const entry of entries) {
@@ -84,12 +77,8 @@ await withBrowser(async (browser) => {
             await page.close();
 
             const overflowing = findings.filter((finding) => finding.overflow);
-            const tight = findings.filter(
-                (finding) => !finding.overflow && finding.tight,
-            );
             failures += overflowing.length + diagnostics.length;
-            warnings += tight.length;
-            report(relative, overflowing, tight, diagnostics);
+            report(relative, overflowing, diagnostics);
             if (verbose)
                 for (const finding of findings)
                     console.log(
@@ -114,9 +103,7 @@ if (failures > 0) {
     );
     process.exitCode = 1;
 } else {
-    console.log(
-        `\nSlide review passed${warnings > 0 ? ` with ${warnings} low-clearance warning${warnings === 1 ? "" : "s"}` : ""}.`,
-    );
+    console.log("\nSlide review passed.");
 }
 
 async function measureSlide(page, slide) {
@@ -132,7 +119,6 @@ async function measureSlide(page, slide) {
         if (clicks !== clicksStart) await navigate(page, slide, clicks);
         const measurement = await page.evaluate(measureInPage, {
             threshold: OVERFLOW_THRESHOLD,
-            warnFraction: CLEARANCE_WARNING_LINES,
         });
         if (measurement)
             states.push({ ...measurement, clicks, clicksTotal, slide });
@@ -162,7 +148,7 @@ async function navigate(page, slide, clicks) {
  * any viewport size. Slidev scales the whole slide to fit, so a raw device
  * pixel would otherwise change meaning with the window.
  */
-function measureInPage({ threshold, warnFraction }) {
+function measureInPage({ threshold }) {
     const HIDDEN_CLASSES = [
         "slidev-vclick-hidden",
         "slidev-vclick-gone",
@@ -188,8 +174,6 @@ function measureInPage({ threshold, warnFraction }) {
         right: rect.right - parseFloat(styles.paddingRight) * scale,
         top: rect.top + parseFloat(styles.paddingTop) * scale,
     };
-    const lineHeight = parseFloat(styles.lineHeight) || 29;
-
     const scrolls = (element) => {
         const own = getComputedStyle(element);
         return (
@@ -264,12 +248,7 @@ function measureInPage({ threshold, warnFraction }) {
     return {
         clearance,
         frames,
-        lineHeight: Number(toCanvas(lineHeight * scale).toFixed(2)),
         overflow: worst,
-        tight:
-            clearance !== null &&
-            clearance >= 0 &&
-            clearance < toCanvas(lineHeight * scale) * warnFraction,
     };
 
     /**
@@ -300,14 +279,10 @@ function measureInPage({ threshold, warnFraction }) {
     }
 }
 
-function report(relative, overflowing, tight, diagnostics) {
+function report(relative, overflowing, diagnostics) {
     console.log(`\n${relative}`);
-    if (
-        overflowing.length === 0 &&
-        tight.length === 0 &&
-        diagnostics.length === 0
-    ) {
-        console.log("  no overflow, low clearance, or render errors");
+    if (overflowing.length === 0 && diagnostics.length === 0) {
+        console.log("  no overflow or render errors");
         return;
     }
     for (const finding of overflowing)
@@ -316,11 +291,6 @@ function report(relative, overflowing, tight, diagnostics) {
                 `${finding.overflow.selector} overflows ${finding.overflow.edge} ` +
                 `by ${finding.overflow.amount}px` +
                 (finding.overflow.text ? `: "${finding.overflow.text}"` : ""),
-        );
-    for (const finding of tight)
-        console.log(
-            `  WARN slide ${finding.slide}${state(finding)}: ` +
-                `${finding.clearance}px clearance below the content box`,
         );
     for (const message of diagnostics)
         console.log(

@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Comparing Compression Algorithms Exercise</title>
+        <title>Allow Users to Have Personal Web Pages Exercise</title>
         <style>
             :root {
                 color-scheme: light;
@@ -461,143 +461,151 @@
             <article class="exercise-document">
                 <header class="exercise-header">
                     <p class="exercise-kicker">Exercise</p>
-                    <h1>Comparing Compression Algorithms Exercise</h1>
+                    <h1>Allow Users to Have Personal Web Pages Exercise</h1>
                 </header>
 
                 <section class="overview" aria-labelledby="overview-heading">
-                    <h2 id="overview-heading">Overview</h2>
+                    <h2 id="overview-heading">Task</h2>
                     <p>
-                        Compression buys smaller files and pays for them in CPU
-                        time. How good the trade is depends on which algorithm
-                        you choose.
-                    </p>
-                    <p>
-                        In this hands-on exercise you will build the same
-                        archive three more times, once each with
-                        <code>gzip</code>, <code>bzip2</code>, and
-                        <code>xz</code>, timing every run. Then you will compare
-                        the four results side by side and confirm that
-                        extracting a compressed archive requires no extra option
-                        at all.
+                        Turn on Apache's UserDir feature on
+                        <code>workstation</code> so <code>student</code> can
+                        publish a page from <code>~/public_html</code>, then
+                        clear the two obstacles in the way: file permissions and
+                        SELinux.
                     </p>
 
                     <dl class="requirements">
                         <div>
                             <dt>Host</dt>
-                            <dd><code>servera</code></dd>
-                        </div>
-                        <div>
-                            <dt>Run as</dt>
-                            <dd><code>root</code></dd>
+                            <dd><code>workstation</code></dd>
                         </div>
                         <div>
                             <dt>Prerequisite</dt>
-                            <dd>Creating and Extracting Archives Exercise</dd>
+                            <dd>Set Up a Basic Web Server Exercise</dd>
+                        </div>
+                        <div>
+                            <dt>Personal page</dt>
+                            <dd><code>http://localhost/~student/</code></dd>
                         </div>
                     </dl>
                 </section>
 
                 <ol class="steps">
                     <li class="step">
-                        <h2>Connect to the lab host and become root</h2>
-                        <p>
-                            This exercise continues from the uncompressed
-                            <code>/tmp/etc-backup.tar</code> created in the
-                            previous exercise. Confirm it is still there.
-                        </p>
-                        <pre><code>ssh student@servera
-sudo -i
-ls -lh /tmp/etc-backup.tar</code></pre>
+                        <h2>Create a personal web page for the student user</h2>
+                        <pre><code>mkdir ~/public_html
+vim ~/public_html/index.html</code></pre>
+                        <p>Add this line and save the file:</p>
+                        <pre><code>&lt;h1&gt;Hello from student's home directory&lt;/h1&gt;</code></pre>
+                        <pre><code>cat ~/public_html/index.html</code></pre>
                     </li>
                     <li class="step">
-                        <h2>Compress with gzip</h2>
+                        <h2>Enable Apache's UserDir feature</h2>
                         <p>
-                            Add <code>-z</code> to the options you already know.
-                            <code>tar</code> will not add the file extension for
-                            you, so name the file for what it holds.
+                            Keep a copy of the original for the cleanup step.
+                            Apache loads only files that end in
+                            <code>.conf</code>, so the copy is ignored.
                         </p>
-                        <pre><code>dnf info gzip
-time tar -czvf /tmp/etc-backup.tar.gz /etc</code></pre>
+                        <pre><code>sudo cp /etc/httpd/conf.d/userdir.conf /etc/httpd/conf.d/userdir.conf.orig
+sudo vim /etc/httpd/conf.d/userdir.conf</code></pre>
+                        <p>
+                            Comment out the <code>UserDir disabled</code> line
+                            and uncomment the <code>UserDir public_html</code>
+                            line, so they read:
+                        </p>
+                        <pre><code>    #UserDir disabled
+    UserDir public_html</code></pre>
+                        <pre><code>sudo systemctl restart httpd.service
+systemctl status httpd.service --no-pager</code></pre>
+                    </li>
+                    <li class="step">
+                        <h2>Test the configuration</h2>
+                        <pre><code>curl http://localhost/~student/
+sudo ls /var/log/httpd
+sudo less /var/log/httpd/error_log</code></pre>
+                        <p>
+                            Press <code>G</code> to jump to the end of the log,
+                            then <code>q</code> to quit.
+                        </p>
+                        <pre><code>ls -ld ~</code></pre>
                         <aside class="note">
-                            <strong>Time every run</strong>
-                            <code>time</code> prints how long the command took
-                            once the file list finishes. Note the
-                            <code>real</code> line, the elapsed time, for each
-                            compressor: it is the cost side of the trade.
+                            <strong>A permissions problem</strong>
+                            Apache answers <code>403 Forbidden</code>, and the
+                            error log says search permissions are missing on a
+                            component of the path. Your home directory is
+                            <code>700</code>.
                         </aside>
                     </li>
                     <li class="step">
-                        <h2>Compress with bzip2</h2>
-                        <p>
-                            <code>bzip2</code> is not part of a minimal
-                            installation, so install it before you reach for it.
-                        </p>
-                        <pre><code>dnf info bzip2
-dnf install -y bzip2
-time tar -cjvf /tmp/etc-backup.tar.bz2 /etc</code></pre>
-                    </li>
-                    <li class="step">
-                        <h2>Compress with xz</h2>
-                        <p>
-                            <code>xz</code> produces the smallest archive of the
-                            three and takes the longest to do it.
-                        </p>
-                        <pre><code>dnf info xz
-time tar -cJvf /tmp/etc-backup.tar.xz /etc</code></pre>
-                        <aside class="warning">
-                            <strong>Case matters</strong>
-                            Lowercase <code>-j</code> selects bzip2. Uppercase
-                            <code>-J</code> selects xz. They are different
-                            options.
-                        </aside>
-                    </li>
-                    <li class="step">
-                        <h2>Compare all four archives</h2>
-                        <p>
-                            Sort by size so the difference is easy to read, then
-                            set the sizes beside the times you noted.
-                        </p>
-                        <pre><code>ls -lh --sort=size /tmp/etc-backup.tar*</code></pre>
-                    </li>
-                    <li class="step">
-                        <h2>Ask gzip and xz for their ratios</h2>
-                        <p>
-                            Both tools report the ratio without unpacking
-                            anything. <code>bzip2</code> has no such option.
-                        </p>
-                        <pre><code>gzip -l /tmp/etc-backup.tar.gz
-xz -l /tmp/etc-backup.tar.xz</code></pre>
-                    </li>
-                    <li class="step">
-                        <h2>Extract without naming the algorithm</h2>
-                        <p>
-                            <code>tar</code> inspects the file and picks the
-                            right decompressor itself. No <code>-J</code> is
-                            needed.
-                        </p>
-                        <pre><code>mkdir -p /tmp/etc-xz-extract
-cd /tmp/etc-xz-extract
-tar -xf /tmp/etc-backup.tar.xz
-ls</code></pre>
+                        <h2>Fix permissions (DAC)</h2>
+                        <pre><code>chmod 711 ~
+ls -ld ~
+ls -ld ~/public_html</code></pre>
                         <aside class="note">
-                            <strong>Key idea</strong>
-                            The compression option is only required when you
-                            create an archive. The same
-                            <code>tar -xf</code> extracts all four of the
-                            archives you built.
+                            <strong>No sudo required</strong>
+                            You own your home directory, so its permissions are
+                            at your discretion. <code>711</code> lets other
+                            users pass through it without listing it.
                         </aside>
+                    </li>
+                    <li class="step">
+                        <h2>Test again to observe a different failure</h2>
+                        <pre><code>curl http://localhost/~student/</code></pre>
+                        <p>
+                            Still <code>403 Forbidden</code>, but this time
+                            SELinux is the reason.
+                        </p>
+                    </li>
+                    <li class="step">
+                        <h2>Troubleshoot with sealert and getsebool</h2>
+                        <pre><code>sudo sealert -a /var/log/audit/audit.log | less</code></pre>
+                        <p>
+                            Type <code>/home/student</code> and press Enter to
+                            find the alert, then press <code>q</code> to quit.
+                        </p>
+                        <pre><code>getsebool httpd_enable_homedirs</code></pre>
+                        <aside class="note">
+                            <strong>A switch, not a policy</strong>
+                            sealert suggests enabling the
+                            <code>httpd_enable_homedirs</code> boolean, which is
+                            currently <code>off</code>.
+                        </aside>
+                    </li>
+                    <li class="step">
+                        <h2>Turn on the SELinux boolean (MAC)</h2>
+                        <pre><code>sudo setsebool -P httpd_enable_homedirs on
+getsebool httpd_enable_homedirs</code></pre>
+                        <p>
+                            <code>-P</code> writes the value to the policy so it
+                            survives a reboot.
+                        </p>
+                    </li>
+                    <li class="step">
+                        <h2>Verify the results</h2>
+                        <pre><code>curl http://localhost/~student/</code></pre>
+                        <p>
+                            You should see
+                            <code
+                                >&lt;h1&gt;Hello from student's home
+                                directory&lt;/h1&gt;</code
+                            >.
+                        </p>
                     </li>
                     <li class="step">
                         <h2>Clean up</h2>
-                        <p>
-                            Remove the archives and the extracted directories,
-                            remove the <code>bzip2</code> package you installed,
-                            then leave the root shell.
-                        </p>
-                        <pre><code>cd /tmp
-rm -rf /tmp/etc-backup.tar* /tmp/etc-extract /tmp/etc-one /tmp/etc-xz-extract
-dnf remove -y bzip2
-exit</code></pre>
+                        <pre><code>sudo setsebool -P httpd_enable_homedirs off
+chmod 700 ~
+rm -rf ~/public_html
+sudo mv /etc/httpd/conf.d/userdir.conf.orig /etc/httpd/conf.d/userdir.conf
+sudo systemctl disable --now httpd.service
+sudo rm -f /var/www/html/index.html
+sudo dnf remove -y httpd</code></pre>
+                        <aside class="note">
+                            <strong>The last workstation exercise</strong>
+                            This is the last SELinux exercise on
+                            <code>workstation</code>, so the cleanup removes the
+                            web server as well.
+                        </aside>
                     </li>
                 </ol>
             </article>

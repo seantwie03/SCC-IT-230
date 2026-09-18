@@ -90,7 +90,9 @@ scrolling ancestor are excluded. The command also fails on page errors and on
 console messages that indicate broken rendering, because a failed Mermaid
 diagram reports a warning rather than an error and would otherwise ship blank.
 
-Its `--verbose` output adds two measurements that are useful while authoring
+Overflow and rendering errors are the only failures. Clearance is measured but
+never judged, because a slide that fills its box is doing its job. Its
+`--verbose` output reports the two measurements that are useful while authoring
 rather than as pass or fail conditions: each slide's remaining clearance, and
 the height of every terminal frame. A terminal whose height changes between
 click states moves the surrounding block on every click, so a constant number

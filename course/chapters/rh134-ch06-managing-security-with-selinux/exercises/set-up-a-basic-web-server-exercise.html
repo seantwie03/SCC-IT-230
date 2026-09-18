@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Comparing Compression Algorithms Exercise</title>
+        <title>Set Up a Basic Web Server Exercise</title>
         <style>
             :root {
                 color-scheme: light;
@@ -461,143 +461,78 @@
             <article class="exercise-document">
                 <header class="exercise-header">
                     <p class="exercise-kicker">Exercise</p>
-                    <h1>Comparing Compression Algorithms Exercise</h1>
+                    <h1>Set Up a Basic Web Server Exercise</h1>
                 </header>
 
                 <section class="overview" aria-labelledby="overview-heading">
-                    <h2 id="overview-heading">Overview</h2>
+                    <h2 id="overview-heading">Task</h2>
                     <p>
-                        Compression buys smaller files and pays for them in CPU
-                        time. How good the trade is depends on which algorithm
-                        you choose.
-                    </p>
-                    <p>
-                        In this hands-on exercise you will build the same
-                        archive three more times, once each with
-                        <code>gzip</code>, <code>bzip2</code>, and
-                        <code>xz</code>, timing every run. Then you will compare
-                        the four results side by side and confirm that
-                        extracting a compressed archive requires no extra option
-                        at all.
+                        Install the Apache web server on
+                        <code>workstation</code>, publish a home page, and look
+                        at the SELinux labels on the page and on the running
+                        server.
                     </p>
 
                     <dl class="requirements">
                         <div>
                             <dt>Host</dt>
-                            <dd><code>servera</code></dd>
+                            <dd><code>workstation</code></dd>
                         </div>
                         <div>
-                            <dt>Run as</dt>
-                            <dd><code>root</code></dd>
-                        </div>
-                        <div>
-                            <dt>Prerequisite</dt>
-                            <dd>Creating and Extracting Archives Exercise</dd>
+                            <dt>Home page</dt>
+                            <dd><code>http://localhost/</code></dd>
                         </div>
                     </dl>
                 </section>
 
                 <ol class="steps">
                     <li class="step">
-                        <h2>Connect to the lab host and become root</h2>
-                        <p>
-                            This exercise continues from the uncompressed
-                            <code>/tmp/etc-backup.tar</code> created in the
-                            previous exercise. Confirm it is still there.
-                        </p>
-                        <pre><code>ssh student@servera
-sudo -i
-ls -lh /tmp/etc-backup.tar</code></pre>
+                        <h2>Install the httpd package</h2>
+                        <pre><code>sudo dnf install httpd -y</code></pre>
                     </li>
                     <li class="step">
-                        <h2>Compress with gzip</h2>
-                        <p>
-                            Add <code>-z</code> to the options you already know.
-                            <code>tar</code> will not add the file extension for
-                            you, so name the file for what it holds.
-                        </p>
-                        <pre><code>dnf info gzip
-time tar -czvf /tmp/etc-backup.tar.gz /etc</code></pre>
+                        <h2>Create a web page</h2>
+                        <p>Open the home page in vim and add this line:</p>
+                        <pre><code>sudo vim /var/www/html/index.html</code></pre>
+                        <pre><code>&lt;h1&gt;Welcome to Workstation&lt;/h1&gt;</code></pre>
+                        <p>Save the file, then check its SELinux label.</p>
+                        <pre><code>ls -lZ /var/www/html/index.html</code></pre>
                         <aside class="note">
-                            <strong>Time every run</strong>
-                            <code>time</code> prints how long the command took
-                            once the file list finishes. Note the
-                            <code>real</code> line, the elapsed time, for each
-                            compressor: it is the cost side of the trade.
+                            <strong>Labeled for the web</strong>
+                            The page has the <code>httpd_sys_content_t</code>
+                            type because it was created inside
+                            <code>/var/www</code>, where the policy labels new
+                            files for Apache.
                         </aside>
                     </li>
                     <li class="step">
-                        <h2>Compress with bzip2</h2>
-                        <p>
-                            <code>bzip2</code> is not part of a minimal
-                            installation, so install it before you reach for it.
-                        </p>
-                        <pre><code>dnf info bzip2
-dnf install -y bzip2
-time tar -cjvf /tmp/etc-backup.tar.bz2 /etc</code></pre>
-                    </li>
-                    <li class="step">
-                        <h2>Compress with xz</h2>
-                        <p>
-                            <code>xz</code> produces the smallest archive of the
-                            three and takes the longest to do it.
-                        </p>
-                        <pre><code>dnf info xz
-time tar -cJvf /tmp/etc-backup.tar.xz /etc</code></pre>
-                        <aside class="warning">
-                            <strong>Case matters</strong>
-                            Lowercase <code>-j</code> selects bzip2. Uppercase
-                            <code>-J</code> selects xz. They are different
-                            options.
-                        </aside>
-                    </li>
-                    <li class="step">
-                        <h2>Compare all four archives</h2>
-                        <p>
-                            Sort by size so the difference is easy to read, then
-                            set the sizes beside the times you noted.
-                        </p>
-                        <pre><code>ls -lh --sort=size /tmp/etc-backup.tar*</code></pre>
-                    </li>
-                    <li class="step">
-                        <h2>Ask gzip and xz for their ratios</h2>
-                        <p>
-                            Both tools report the ratio without unpacking
-                            anything. <code>bzip2</code> has no such option.
-                        </p>
-                        <pre><code>gzip -l /tmp/etc-backup.tar.gz
-xz -l /tmp/etc-backup.tar.xz</code></pre>
-                    </li>
-                    <li class="step">
-                        <h2>Extract without naming the algorithm</h2>
-                        <p>
-                            <code>tar</code> inspects the file and picks the
-                            right decompressor itself. No <code>-J</code> is
-                            needed.
-                        </p>
-                        <pre><code>mkdir -p /tmp/etc-xz-extract
-cd /tmp/etc-xz-extract
-tar -xf /tmp/etc-backup.tar.xz
-ls</code></pre>
+                        <h2>Enable and start the systemd service</h2>
+                        <pre><code>sudo systemctl enable httpd.service --now
+systemctl status httpd.service --no-pager
+ps -AZ | grep httpd</code></pre>
                         <aside class="note">
-                            <strong>Key idea</strong>
-                            The compression option is only required when you
-                            create an archive. The same
-                            <code>tar -xf</code> extracts all four of the
-                            archives you built.
+                            <strong>Labeled processes</strong>
+                            Every <code>httpd</code> process runs with the
+                            <code>httpd_t</code> type. SELinux decides what a
+                            process may touch by comparing its type with the
+                            type on the file.
                         </aside>
                     </li>
                     <li class="step">
-                        <h2>Clean up</h2>
+                        <h2>Verify the results</h2>
+                        <pre><code>curl http://localhost/</code></pre>
                         <p>
-                            Remove the archives and the extracted directories,
-                            remove the <code>bzip2</code> package you installed,
-                            then leave the root shell.
+                            You should see
+                            <code
+                                >&lt;h1&gt;Welcome to
+                                Workstation&lt;/h1&gt;</code
+                            >.
                         </p>
-                        <pre><code>cd /tmp
-rm -rf /tmp/etc-backup.tar* /tmp/etc-extract /tmp/etc-one /tmp/etc-xz-extract
-dnf remove -y bzip2
-exit</code></pre>
+                        <aside class="note">
+                            <strong>Keep the web server</strong>
+                            The next exercises use this server, so leave
+                            <code>httpd</code> installed and running.
+                        </aside>
                     </li>
                 </ol>
             </article>

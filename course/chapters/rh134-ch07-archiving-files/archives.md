@@ -21,7 +21,6 @@ topicInfo:
 
 ---
 layout: two-cols-header
-vertical: start
 ---
 
 # Why Bundle Files at All?
@@ -30,31 +29,34 @@ vertical: start
 
 ## Simpler handling
 
-One file is easier to back up, move, and keep track of than ten thousand.
+One file is easier to back up, move, and keep track of than ten thousand
 
 ## Preserved characteristics
 
-An archive keeps the directory structure, ownership, permissions, and timestamps that a plain copy can lose.
+An archive keeps the directory structure, ownership, permissions, and timestamps that a plain copy can lose
 
 ::right::
 
 ## Room for compression
 
-A single stream of data compresses far better than each file on its own.
+A single stream of data compresses far better than each file on its own
 
 <Callout>
 
-Bundling and compressing are two separate jobs. `tar` does the first and can call a compressor for the second.
+Bundling and compressing are two separate jobs. `tar` does the first and can call a compressor for the second
 
 </Callout>
 
+<!--
+An archive is also the one file you would move with the scp or rsync commands from week 2.
+-->
+
 ---
 layout: two-cols-header
-leftWidth: 55
-vertical: center
+leftWidth: 45
 ---
 
-# `tar` — Tape ARchive
+# `tar`: Tape ARchive
 
 ::left::
 
@@ -63,13 +65,37 @@ vertical: center
 - One file that contains many files
 - The Unix ancestor of the `.zip` file you know from Windows
 
-## Why the odd name?
+## How?
 
-`tar` was written to write data to magnetic **tape**, one file after another, in a single continuous stream.
+- The `tar` command
+- **T**ape **AR**chive
 
 ::right::
 
-![A reel of magnetic data tape mounted on a tape drive, the storage medium that tar was originally written for.](./assets/data-tape.jpg)
+![Illustration of a folder tree named IT-230, holding Lectures and Labs folders and the files Notes.txt and Script.sh, packed by the command tar -czvf archive.tar.gz into a cardboard box labeled Compressed Archive](./assets/tar-visual.jpg)
+
+Illustration generated with Google Gemini from a prompt by the instructor.
+
+<!--
+The command in the picture adds z for compression, which comes up in the next section.
+-->
+
+---
+layout: two-cols-header
+leftWidth: 45
+---
+
+# Yes, They Really Used to Put Data on Cassette Tapes!
+
+::left::
+
+## Why the odd name?
+
+`tar` was written to send data to magnetic **tape**, one file after another in a single continuous stream
+
+::right::
+
+![Three data tape cartridges and a floppy disk resting on top of an external tape drive](./assets/data-tape.jpg)
 
 Photograph by [Robert Jacek Tomczak](https://commons.wikimedia.org/wiki/User:Rjt), [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/), via [Wikimedia Commons](https://commons.wikimedia.org/w/index.php?curid=94360)
 
@@ -79,17 +105,20 @@ layout: center
 
 # Creating an Archive
 
-<CommandExplainer
-  command="tar -cvf /tmp/etc-backup.tar /etc"
+<TextExplainer
+  :lines="['tar -cvf /tmp/log-backup.tar /var/log']"
   :steps="[
-    { active: 'tar', occurrence: 1, explanation: 'The archiving program' },
-    { active: '-c', explanation: 'create a new archive' },
-    { active: 'v', explanation: 'verbose — list each file as it is added' },
-    { active: 'f', explanation: 'file — the next argument names the archive' },
-    { active: '/tmp/etc-backup.tar', explanation: 'The archive to write' },
-    { active: '/etc', occurrence: 2, explanation: 'What to put inside it' },
+    { line: 1, text: 'tar', occurrence: 1, explanation: 'The Tape ARchive Command' },
+    { line: 1, text: '-c', explanation: 'Create archive' },
+    { line: 1, text: 'v', occurrence: 1, explanation: 'Verbose Output' },
+    { line: 1, text: 'f /tmp/log-backup.tar', explanation: 'Filename flag and the target file' },
+    { line: 1, text: '/var/log', explanation: 'Source Directory' },
   ]"
 />
+
+<!--
+Reading everything under /var/log needs root, so the next slides run as root.
+-->
 
 ---
 vertical: start
@@ -97,42 +126,41 @@ vertical: start
 
 # Creating an Archive
 
-<TerminalWindow title="root@servera:~">
+<TerminalWindow title="root@servera:~" :rows="10">
 
 ````md magic-move
 ```bash-session
-root@servera:~# tar -cvf /tmp/etc-backup.tar /etc
+root@servera:~# tar -cvf /tmp/log-backup.tar /var/log
 ```
 ```bash-session
-root@servera:~# tar -cvf /tmp/etc-backup.tar /etc
+root@servera:~# tar -cvf /tmp/log-backup.tar /var/log
 tar: Removing leading `/' from member names
-/etc/
-/etc/fstab
-/etc/crypttab
-/etc/mtab
-...
-root@servera:~#
+/var/log/
+/var/log/private/
+/var/log/wtmp
+/var/log/lastlog
+...output omitted...
 ```
 ```bash-session
-root@servera:~# tar -cvf /tmp/etc-backup.tar /etc
+root@servera:~# tar -cvf /tmp/log-backup.tar /var/log
 tar: Removing leading `/' from member names
-/etc/
-/etc/fstab
-/etc/crypttab
-/etc/mtab
-...
-root@servera:~# ls -lh /tmp/etc-backup.tar
+/var/log/
+/var/log/private/
+/var/log/wtmp
+/var/log/lastlog
+...output omitted...
+root@servera:~# ls -lh /tmp/log-backup.tar
 ```
 ```bash-session
-root@servera:~# tar -cvf /tmp/etc-backup.tar /etc
+root@servera:~# tar -cvf /tmp/log-backup.tar /var/log
 tar: Removing leading `/' from member names
-/etc/
-/etc/fstab
-/etc/crypttab
-/etc/mtab
-...
-root@servera:~# ls -lh /tmp/etc-backup.tar
--rw-r--r--. 1 root root 41M Jan  6 13:04 /tmp/etc-backup.tar
+/var/log/
+/var/log/private/
+/var/log/wtmp
+/var/log/lastlog
+...output omitted...
+root@servera:~# ls -lh /tmp/log-backup.tar
+-rw-r--r--. 1 root root 7.1M Sep 17 11:01 /tmp/log-backup.tar
 root@servera:~#
 ```
 ````
@@ -141,7 +169,7 @@ root@servera:~#
 
 <Callout type="warning">
 
-`tar` strips the leading `/` so the archive cannot overwrite `/etc` when someone extracts it somewhere else.
+`tar` strips the leading `/` so the archive cannot overwrite `/var/log` when someone extracts it somewhere else
 
 </Callout>
 
@@ -151,24 +179,24 @@ vertical: center
 
 # Listing What Is Inside
 
-Read the contents without unpacking anything.
+Read the contents without unpacking anything
 
-<CommandExplainer
-  command="tar -tf /tmp/etc-backup.tar"
+<TextExplainer
+  :lines="['tar -tf /tmp/log-backup.tar']"
   :steps="[
-    { active: '-t', explanation: 'lisT — show the member names' },
-    { active: 'f', explanation: 'File — the archive to inspect' },
+    { line: 1, text: '-t', explanation: 'lisT: show the member names' },
+    { line: 1, text: 'f /tmp/log-backup.tar', explanation: 'File: the archive to inspect' },
   ]"
 />
 
 <TerminalWindow title="root@servera:~">
 
 ```bash-session
-root@servera:~# tar -tf /tmp/etc-backup.tar | head -n4
-etc/
-etc/fstab
-etc/crypttab
-etc/mtab
+root@servera:~# tar -tf /tmp/log-backup.tar | head -n4
+var/log/
+var/log/private/
+var/log/wtmp
+var/log/lastlog
 root@servera:~#
 ```
 
@@ -180,33 +208,35 @@ vertical: start
 
 # Extracting an Archive
 
-`tar` unpacks into the <DangerText>current working directory</DangerText>, so change into an empty one first.
+`tar` unpacks into the <DangerText>current working directory</DangerText>, so change into an empty one first
 
-<TerminalWindow title="root@servera:~">
+<TerminalWindow title="root@servera:~" :rows="6">
 
 ````md magic-move
 ```bash-session
-root@servera:~# mkdir -p /tmp/etc-extract
-root@servera:~# cd /tmp/etc-extract
+root@servera:~# mkdir -p /tmp/log-extract
+root@servera:~# cd /tmp/log-extract
 ```
 ```bash-session
-root@servera:~# mkdir -p /tmp/etc-extract
-root@servera:~# cd /tmp/etc-extract
-root@servera:/tmp/etc-extract# tar -xf /tmp/etc-backup.tar
+root@servera:~# mkdir -p /tmp/log-extract
+root@servera:~# cd /tmp/log-extract
+root@servera:/tmp/log-extract# tar -xf /tmp/log-backup.tar
 ```
 ```bash-session
-root@servera:~# mkdir -p /tmp/etc-extract
-root@servera:~# cd /tmp/etc-extract
-root@servera:/tmp/etc-extract# tar -xf /tmp/etc-backup.tar
-root@servera:/tmp/etc-extract# ls
-etc
-root@servera:/tmp/etc-extract#
+root@servera:~# mkdir -p /tmp/log-extract
+root@servera:~# cd /tmp/log-extract
+root@servera:/tmp/log-extract# tar -xf /tmp/log-backup.tar
+root@servera:/tmp/log-extract# ls
+var
+root@servera:/tmp/log-extract#
 ```
 ````
 
 </TerminalWindow>
 
-`-x` is e**x**tract; `-f` names the archive, exactly as before.
+`-x` is e**x**tract
+
+`-f` names the archive
 
 ---
 vertical: center
@@ -214,29 +244,34 @@ vertical: center
 
 # Extracting One File
 
-Name the member you want, exactly as `-t` printed it.
+Same extract command
 
-<TerminalWindow title="root@servera:/tmp/etc-extract">
+Just add the file you want to extract at the end
 
-````md magic-move
+Name the file exactly as `-t` printed it
+
+<TerminalWindow title="root@servera:~">
+
 ```bash-session
-root@servera:/tmp/etc-extract# tar -xf /tmp/etc-backup.tar etc/hosts
+root@servera:~# mkdir -p /tmp/log-one
+root@servera:~# cd /tmp/log-one
+root@servera:/tmp/log-one# tar -xf /tmp/log-backup.tar var/log/secure
+root@servera:/tmp/log-one# ls var/log
+secure
+root@servera:/tmp/log-one#
 ```
-```bash-session
-root@servera:/tmp/etc-extract# tar -xf /tmp/etc-backup.tar etc/hosts
-root@servera:/tmp/etc-extract# ls etc
-hosts
-root@servera:/tmp/etc-extract#
-```
-````
 
 </TerminalWindow>
 
 <Callout>
 
-Use `etc/hosts`, not `/etc/hosts` — the archive stores the path without its leading slash.
+Use `var/log/secure`, not `/var/log/secure`, because the archive stores the path without its leading slash
 
 </Callout>
+
+<!--
+With the leading slash, tar answers "tar: /var/log/secure: Not found in archive" and exits with status 2.
+-->
 
 ---
 vertical: start
@@ -250,29 +285,54 @@ vertical: start
 |  `-t`  | lis**t**| show what is inside an archive        |
 |  `-x`  | e**x**tract | unpack an archive into the current directory |
 
-`-f` always names the archive file, and `-v` always makes the operation verbose.
+`-f` always names the archive file,
+
+`-v` always makes the operation verbose
 
 <Callout type="danger">
 
-`-c` overwrites its target without asking, exactly like the `>` operator.
+`-c` overwrites its target without asking, exactly like the `>` operator
 
 </Callout>
 
 ---
 
-# Exercise: Creating and Extracting Archives
+# Archives and File Attributes
 
-## Requirements
+An archive leaves out extended attributes unless you ask for them
 
-Host: `servera`
+| Option      | Keeps                                                  |
+|-------------|--------------------------------------------------------|
+| `--selinux` | SELinux contexts                                       |
+| `--acls`    | POSIX access control lists                             |
+| `--xattrs`  | Other extended attributes                              |
+| `-p`        | Original permissions on extract, already on for `root` |
 
-Reading all of `/etc` requires administrative privileges.
+Without `--selinux`, extracted files are labeled like any new file
 
-## Steps
+<!--
+Addition from RHA chapter 7 section 1. On servera, /var/log/secure is var_log_t. Extracted into /tmp/log-extract without --selinux, the copy is user_tmp_t. Archived and extracted with --selinux, it stays var_log_t.
+-->
 
-1. Become `root`
-2. Bundle the entire `/etc` directory into one uncompressed archive under `/tmp`
-3. Check the size of the archive you produced
-4. Read the archive's contents without unpacking it
-5. Unpack the archive into an empty directory of its own
-6. Confirm the extracted tree looks like the original
+---
+layout: exercise
+---
+
+# Creating and Extracting Archives
+
+::goal::
+
+Back up `/etc` and restore it somewhere safe
+
+::environment::
+
+**Host:** `servera`
+
+::workflow::
+
+1. Bundle all of `/etc` as `root` into one uncompressed archive under `/tmp`
+2. Check the size of the archive you produced
+3. Read the archive's contents without unpacking it
+4. Unpack the archive into an empty directory of its own
+5. Confirm the extracted tree looks like the original
+6. Extract a single file into a fresh directory

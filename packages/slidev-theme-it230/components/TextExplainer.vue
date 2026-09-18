@@ -7,6 +7,7 @@ import {
     type PropType,
 } from "vue";
 
+import { guardAuthoring } from "../setup/authoring-error.ts";
 import {
     buildStates,
     selectSize,
@@ -14,6 +15,7 @@ import {
     type TextExplainerState,
     type TextExplainerStep,
 } from "../setup/text-explainer.ts";
+import AuthoringError from "./AuthoringError.vue";
 
 const ClickSequence = defineComponent({
     props: {
@@ -45,13 +47,16 @@ const props = defineProps<{
     size?: TextExplainerSize;
 }>();
 
-const states = computed(() => buildStates(props.lines, props.steps));
+const { error, value: states } = guardAuthoring("TextExplainer", () =>
+    buildStates(props.lines, props.steps),
+);
 
 const size = computed(() => props.size ?? selectSize(props.lines));
 </script>
 
 <template>
-    <ClickSequence v-slot="{ state }" :states="states">
+    <AuthoringError v-if="error" component="TextExplainer" :message="error" />
+    <ClickSequence v-else v-slot="{ state }" :states="states ?? []">
         <figure
             class="it230-text-explainer"
             :class="`it230-text-explainer--${size}`"

@@ -481,7 +481,7 @@
 
                     <dl class="requirements">
                         <div>
-                            <dt>Target host</dt>
+                            <dt>Host</dt>
                             <dd><code>servera</code></dd>
                         </div>
                         <div>
@@ -493,16 +493,18 @@
 
                 <ol class="steps">
                     <li class="step">
-                        <h2>Connect to the lab host and become root</h2>
+                        <h2>
+                            Bundle all of /etc as root into one uncompressed
+                            archive under /tmp
+                        </h2>
                         <p>
                             Reading every file under <code>/etc</code> requires
-                            administrative privileges.
+                            administrative privileges, so connect to
+                            <code>servera</code> and become <code>root</code>
+                            first.
                         </p>
                         <pre><code>ssh student@servera
 sudo -i</code></pre>
-                    </li>
-                    <li class="step">
-                        <h2>Create an uncompressed archive</h2>
                         <p>
                             <code>-c</code> creates, <code>-v</code> lists each
                             member as it is added, and <code>-f</code> names the
@@ -519,7 +521,7 @@ sudo -i</code></pre>
                         </aside>
                     </li>
                     <li class="step">
-                        <h2>Check the size of the archive</h2>
+                        <h2>Check the size of the archive you produced</h2>
                         <p>
                             <code>-h</code> prints the size in human-readable
                             units.
@@ -527,7 +529,9 @@ sudo -i</code></pre>
                         <pre><code>ls -lh /tmp/etc-backup.tar</code></pre>
                     </li>
                     <li class="step">
-                        <h2>Read the contents without unpacking</h2>
+                        <h2>
+                            Read the archive's contents without unpacking it
+                        </h2>
                         <p>
                             <code>-t</code> lists the members. Notice that every
                             path is stored without its leading slash.
@@ -535,7 +539,10 @@ sudo -i</code></pre>
                         <pre><code>tar -tf /tmp/etc-backup.tar | head -n 20</code></pre>
                     </li>
                     <li class="step">
-                        <h2>Extract the archive into an empty directory</h2>
+                        <h2>
+                            Unpack the archive into an empty directory of its
+                            own
+                        </h2>
                         <p>
                             <code>tar</code> unpacks into the current working
                             directory, so change into a directory of its own
@@ -547,7 +554,9 @@ tar -xf /tmp/etc-backup.tar
 ls</code></pre>
                     </li>
                     <li class="step">
-                        <h2>Confirm the extracted tree</h2>
+                        <h2>
+                            Confirm the extracted tree looks like the original
+                        </h2>
                         <p>
                             Compare one extracted file against the original.
                             <code>diff</code> printing nothing means the two
@@ -557,10 +566,10 @@ ls</code></pre>
 diff /tmp/etc-extract/etc/hosts /etc/hosts</code></pre>
                     </li>
                     <li class="step">
-                        <h2>Extract a single file</h2>
+                        <h2>Extract a single file into a fresh directory</h2>
                         <p>
-                            Name the member you want, exactly as
-                            <code>-t</code> printed it — <code>etc/hosts</code>,
+                            Name the member you want exactly as
+                            <code>-t</code> printed it: <code>etc/hosts</code>,
                             not <code>/etc/hosts</code>.
                         </p>
                         <pre><code>mkdir -p /tmp/etc-one
@@ -570,8 +579,9 @@ ls -R /tmp/etc-one</code></pre>
                         <aside class="note">
                             <strong>Keep the archive</strong>
                             The compression exercise continues from the
-                            <code>/tmp/etc-backup.tar</code> you just built, so
-                            leave it in place for now.
+                            <code>/tmp/etc-backup.tar</code> you just built and
+                            cleans up these files at its end, so leave them in
+                            place for now.
                         </aside>
                     </li>
                 </ol>

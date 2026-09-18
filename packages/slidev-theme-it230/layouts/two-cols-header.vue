@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import AuthoringError from "../components/AuthoringError.vue";
+import { guardAuthoring } from "../setup/authoring-error.ts";
 
 type VerticalAlignment = "start" | "center" | "evenly";
 type HorizontalAlignment = "start" | "center" | "end";
@@ -20,7 +21,7 @@ const props = withDefaults(
     },
 );
 
-const columnWidths = computed(() => {
+const { error, value: columnWidths } = guardAuthoring("two-cols-header", () => {
     if (
         !Number.isFinite(props.leftWidth) ||
         props.leftWidth <= 0 ||
@@ -45,7 +46,13 @@ const columnWidths = computed(() => {
         <div class="it230-two-cols-header__header">
             <slot />
         </div>
+        <AuthoringError
+            v-if="error"
+            component="two-cols-header"
+            :message="error"
+        />
         <div
+            v-else
             class="it230-two-cols-header__columns"
             :style="{ gridTemplateColumns: columnWidths }"
         >
@@ -155,10 +162,25 @@ const columnWidths = computed(() => {
 
 .it230-two-cols-header[data-list-spacing="padded"]
     .it230-two-cols-header__column
-    :deep(> ul > li),
+    :deep(> ul li),
 .it230-two-cols-header[data-list-spacing="padded"]
     .it230-two-cols-header__column
-    :deep(> ol > li) {
+    :deep(> ol li) {
     margin-block: var(--it230-space-4);
+}
+
+/*
+ * As in the default layout: a nested list's own bottom margin collapses with
+ * its parent item's, so the rule above cannot separate one group from the
+ * next. Widen the nested list instead, and leave the last one alone so the
+ * column gains no trailing space.
+ */
+.it230-two-cols-header[data-list-spacing="padded"]
+    .it230-two-cols-header__column
+    :deep(> ul > li:not(:last-child) > :is(ul, ol)),
+.it230-two-cols-header[data-list-spacing="padded"]
+    .it230-two-cols-header__column
+    :deep(> ol > li:not(:last-child) > :is(ul, ol)) {
+    margin-bottom: var(--it230-space-6);
 }
 </style>

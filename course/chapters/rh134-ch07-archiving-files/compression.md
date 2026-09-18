@@ -23,36 +23,41 @@ topicInfo:
 layout: center
 ---
 
-# Compression buys smaller files.
+# Compression gives you samller files
 
-## It pays for them in CPU time.
+## At the cost of CPU time
 
----
-layout: two-cols-header
-vertical: start
 ---
 
 # The Trade
 
-::left::
+The same `/var/log` archive, kept two ways
 
-## Uncompressed
+<div
+  class="grid items-center gap-x-5 gap-y-4 w-full"
+  style="grid-template-columns: max-content 1fr max-content" >
+  <span>Uncompressed: <code>log-backup.tar</code></span>
+  <div
+    aria-hidden="true"
+    style="width: 100%; height: 2.25rem; border-radius: 0.375rem; background: var(--it230-color-accent-fill)"
+  ></div>
+  <strong>7.1 MB</strong>
+  <span>Compressed: <code>log-backup.tar.gz</code></span>
+  <div
+    aria-hidden="true"
+    style="width: 9.3%; height: 2.25rem; border-radius: 0.375rem; background: var(--it230-color-accent-fill)"
+  ></div>
+  <strong>677 KB</strong>
+</div>
 
-**41 MB on disk**
 
-<SuccessText>Costs almost no CPU to read.</SuccessText>
+Disk space saved: **<SuccessText>6.4 MB</SuccessText>**
 
-<DangerText>Takes the most space.</DangerText>
+Additional CPU Use is the cost:<DangerText>once to compress, and on every read</DangerText>
 
-::right::
-
-## Compressed
-
-**9 MB on disk**
-
-<SuccessText>Saves 32 MB.</SuccessText>
-
-<DangerText>Costs CPU once to compress — and again every time anyone reads it.</DangerText>
+<!--
+The sizes are the /var/log archive from the previous section, before and after gzip. Plain text logs compress unusually well.
+-->
 
 ---
 layout: center
@@ -60,79 +65,105 @@ layout: center
 
 # Is Compression Worth It?
 
-## <DangerText>It depends.</DangerText>
+## <DangerText>It depends</DangerText>
 
-- Which algorithm are you using?
-- How much spare CPU does the server have?
-- How much storage do you actually have left?
-- How often will the file be read?
+<div v-click>
 
----
-vertical: start
+How often will the data be read?
+
+</div>
+
+<div v-click>
+
+What kind of data is it?
+
+</div>
+
+<div v-click>
+
+Which algorithm are you using?
+
+</div>
+
+<div v-click>
+
+How much storage do you have?
+
+</div>
+
+<div v-click>
+
+How busy is the CPU?
+
+</div>
+
+
+<!--
+The last question is from RHA chapter 7 section 1: data that is already compressed, such as images or RPM packages, barely shrinks whichever algorithm you use.
+-->
+
 ---
 
 # Three Compressors, One Option Each
 
-Add one letter to the `tar` options you already know.
+Add one letter to the `tar` options you already know
 
-| Option | Algorithm | Extension | Character                                                  |
-| :----: | --------- | --------- | ---------------------------------------------------------- |
-|  `-z`  | gzip      | `.gz`     | Old faithful — installed nearly everywhere                 |
+| Option | Algorithm | Extension | Character                                                      |
+|:------:|-----------|-----------|----------------------------------------------------------------|
+|  `-z`  | gzip      | `.gz`     | Old faithful, installed nearly everywhere                      |
 |  `-j`  | bzip2     | `.bz2`    | Smaller than gzip, more CPU; often missing on minimal installs |
-|  `-J`  | xz        | `.xz`     | Smallest of the three, and the most CPU                    |
+|  `-J`  | xz        | `.xz`     | Smallest of the three, and the most CPU                        |
 
 <Callout type="warning">
 
-`-j` and `-J` are different options. Lowercase is bzip2; uppercase is xz.
+`-j` and `-J` are different options: lowercase is bzip2, uppercase is xz
 
 </Callout>
 
 ---
-vertical: center
+layout: center
 ---
 
 # Creating a Compressed Archive
 
-<CommandExplainer
-  command="tar -czvf /tmp/etc-backup.tar.gz /etc"
+<TextExplainer
+  size="md"
+  :lines="['tar -czvf /tmp/log-backup.tar.gz /var/log']"
   :steps="[
-    { active: '-c', explanation: 'create — the same operation as before' },
-    { active: 'z', occurrence: 1, explanation: 'Run the result through gzip' },
-    { active: 'v', explanation: 'verbose' },
-    { active: 'f', explanation: 'file — the archive to write' },
-    { active: '.gz', explanation: 'Name the file for what it holds. tar will not add the extension for you.' },
+    { line: 1, text: '-c', explanation: 'Create' },
+    { line: 1, text: 'z', occurrence: 1, explanation: 'gzip compression algorithm' },
+    { line: 1, text: 'v', occurrence: 1, explanation: 'Verbose' },
+    { line: 1, text: 'f /tmp/log-backup.tar', explanation: 'File: the next argument names the archive' },
+    { line: 1, text: '.gz', explanation: 'gzip extension, tar does not add the extension for you' },
+    { line: 1, text: '/var/log', explanation: 'files to compress' },
   ]"
 />
 
 ---
-vertical: start
----
 
 # Comparing the Results
 
-<TerminalWindow title="root@servera:~">
+<TerminalWindow title="root@servera:~" :rows="6">
 
 ````md magic-move
 ```bash-session
-root@servera:~# ls -lh --sort=size /tmp/etc-backup.tar*
+root@servera:~# ls -lh --sort=size /tmp/log-backup.tar*
 ```
 ```bash-session
-root@servera:~# ls -lh --sort=size /tmp/etc-backup.tar*
--rw-r--r--. 1 root root  41M Jan  6 13:04 /tmp/etc-backup.tar
--rw-r--r--. 1 root root 9.4M Jan  6 13:06 /tmp/etc-backup.tar.gz
--rw-r--r--. 1 root root 8.6M Jan  6 13:08 /tmp/etc-backup.tar.bz2
--rw-r--r--. 1 root root 6.7M Jan  6 13:11 /tmp/etc-backup.tar.xz
+root@servera:~# ls -lh --sort=size /tmp/log-backup.tar*
+-rw-r--r--. 1 root root 7.1M Sep 17 11:01 /tmp/log-backup.tar
+-rw-r--r--. 1 root root 677K Sep 17 11:01 /tmp/log-backup.tar.gz
+-rw-r--r--. 1 root root 506K Sep 17 11:01 /tmp/log-backup.tar.bz2
+-rw-r--r--. 1 root root 329K Sep 17 11:01 /tmp/log-backup.tar.xz
 root@servera:~#
 ```
 ````
 
 </TerminalWindow>
 
-<v-click>
-
-Same content every time. The only thing that changed is how long each one took to build.
-
-</v-click>
+<!--
+bzip2 is not installed on the lab hosts; the .bz2 archive needed dnf install bzip2 first.
+-->
 
 ---
 vertical: center
@@ -140,73 +171,65 @@ vertical: center
 
 # Extracting Is Simpler Than Creating
 
-`tar` inspects the file and picks the right decompressor itself.
+`tar` inspects the file and picks the right decompressor itself
 
-<TerminalWindow title="root@servera:/tmp/etc-extract">
+<TerminalWindow title="root@servera:/tmp/log-xz">
 
 ```bash-session
-root@servera:/tmp/etc-extract# tar -xf /tmp/etc-backup.tar.xz
-root@servera:/tmp/etc-extract#
+root@servera:/tmp/log-xz# tar -xf /tmp/log-backup.tar.xz
+root@servera:/tmp/log-xz#
 ```
 
 </TerminalWindow>
 
 <Callout>
 
-No `-J` needed. The same `tar -xf` extracts all four archives.
+No `-J` needed
 
 </Callout>
 
 ---
-vertical: start
----
 
 # Checking a Compressed Archive
 
-Each compressor ships a tool that reports the ratio without unpacking anything.
+`gzip` and `xz` report the ratio with `-l`
 
 <TerminalWindow title="root@servera:~">
 
-````md magic-move
 ```bash-session
-root@servera:~# gzip -l /tmp/etc-backup.tar.gz
-```
-```bash-session
-root@servera:~# gzip -l /tmp/etc-backup.tar.gz
+root@servera:~# gzip -l /tmp/log-backup.tar.gz
          compressed        uncompressed  ratio uncompressed_name
-            9853184            42967040  77.1% /tmp/etc-backup.tar
-root@servera:~#
-```
-```bash-session
-root@servera:~# gzip -l /tmp/etc-backup.tar.gz
-         compressed        uncompressed  ratio uncompressed_name
-            9853184            42967040  77.1% /tmp/etc-backup.tar
-root@servera:~# xz -l /tmp/etc-backup.tar.xz
-```
-```bash-session
-root@servera:~# gzip -l /tmp/etc-backup.tar.gz
-         compressed        uncompressed  ratio uncompressed_name
-            9853184            42967040  77.1% /tmp/etc-backup.tar
-root@servera:~# xz -l /tmp/etc-backup.tar.xz
+             692689             7352320  90.6% /tmp/log-backup.tar
+root@servera:~# xz -l /tmp/log-backup.tar.xz
 Strms  Blocks   Compressed Uncompressed  Ratio  Check   Filename
-    1       1      6.7 MiB     41.0 MiB  0.163  CRC64   /tmp/etc-backup.tar.xz
-root@servera:~#
+    1       1    328.6 KiB  7,180.0 KiB  0.046  CRC64   /tmp/log-backup.tar.xz
 ```
-````
 
 </TerminalWindow>
 
+See how much disk space will be used by decompressing
+
+<!--
+bzip2 has no -l option; it answers "Bad flag".
+-->
+
+---
+layout: exercise
 ---
 
-# Exercise: Comparing Compression Algorithms
+# Comparing Compression Algorithms
 
-## Requirements
+::goal::
 
-Host: `servera`, as `root`
+Find which compressor makes the smallest `/etc` backup, and at what cost
 
-`bzip2` is not part of a minimal installation. Confirm it is available before you use it.
+::environment::
 
-## Steps
+**Host:** `servera`
+
+**Prerequisite exercise:** Creating and Extracting Archives
+
+::workflow::
 
 1. Bundle `/etc` three more times, once with each of the three compressors
 2. Install whichever compression package is missing before you reach for it

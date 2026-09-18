@@ -514,11 +514,19 @@ element is one `h1`; each later top-level element is one body item.
 | ------------- | ----------------------------- | -------- | ----------------------------------------- |
 | `vertical`    | `start`, `center`, `evenly`   | `evenly` | Positions body items below the fixed title |
 | `horizontal`  | `start`, `center`, `end`      | `start`  | Aligns body blocks, not their inner text   |
-| `listSpacing` | `normal`, `padded`             | `normal` | Adds space to top-level list items only    |
+| `listSpacing` | `normal`, `padded`             | `normal` | Spaces top-level list items and the groups a nested list forms |
 
 Flexible spacing collapses before content when height is constrained. A lone
 Markdown image fits the available body region without changing its aspect
 ratio. Split an overcrowded slide instead of reducing type.
+
+`padded` raises the margin on every item in the list, nested ones included, and
+where a top-level item ends in a nested list it also widens that list's bottom
+margin, so each item and its sub-bullets read as one group separated from the
+next by twice the spacing within it. The final group adds no trailing space.
+That second rule is what makes the separation visible: a nested list's own
+margin collapses with its parent item's, so raising item margins alone leaves
+the groups exactly as close as they were.
 
 ```md
 ---
@@ -556,6 +564,25 @@ Layouts do not add title bars, window controls, or other application chrome.
 Ordinary slides must not pretend to be desktop applications.
 
 ## Components
+
+### Reporting an authoring mistake
+
+A component that validates its props must not throw while rendering. Vue aborts
+the mount partway, so the slide goes blank with no indication of what is wrong,
+and the component is left in the tree without an element, which makes the next
+hot update fail instead of showing the corrected slide. The author then has to
+reload the page by hand to see any edit take effect.
+
+Wrap the validation in `guardAuthoring` from `setup/authoring-error.ts` and
+render `AuthoringError` in place of the component's own output. The component
+keeps throwing where the mistake is detected, which keeps the messages testable;
+`guardAuthoring` catches at the component boundary, exposes the message, and
+writes it to the console.
+
+That console write is required, not incidental. `check-slides.mjs` fails a deck
+on console errors, so a component that reported its mistake only on the slide
+would let a broken deck pass review. Every error state a component can render
+belongs in the console as well.
 
 ### `SequenceEndCue`
 
@@ -785,9 +812,11 @@ When a shared pattern is justified:
 1. Name it for its presentation responsibility, not its originating week or
    Linux topic.
 2. Add the smallest supported interface.
-3. Add a focused gallery example.
-4. Document when it should and should not be used.
-5. Build the gallery and all published decks before publication.
+3. Report an invalid interface through `guardAuthoring`, never by throwing
+   during render. See "Reporting an authoring mistake".
+4. Add a focused gallery example.
+5. Document when it should and should not be used.
+6. Build the gallery and all published decks before publication.
 
 ## Gallery and validation
 

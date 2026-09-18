@@ -1,36 +1,55 @@
 kitten @ set-font-size 30.0 && ssh servera
 clear
 
-#^ Task: Compare gzip, bzip2, and xz
-#! This exercise continues from the uncompressed /tmp/etc-backup.tar you already built.
-sudo -i
-ls -lh /tmp/etc-backup.tar
+#^ Exercise: Comparing Compression Algorithms
+# Requirements
+#   Host: servera
+#   Prerequisite: Creating and Extracting Archives
+#   Find which compressor makes the smallest /etc backup, and at what cost
+# Steps
+#   1. gzip with -z
+#   2. bzip2 with -j, after installing it
+#   3. xz with -J
+#   4. Compare all four archives
+#   5. Ask gzip and xz for their ratios
+#   6. Extract without naming the algorithm
+#   7. Clean up
 clear
 
 #^ 1. gzip with -z
+#! This exercise continues from the uncompressed /tmp/etc-backup.tar you already built
+sudo -i
+ls -lh /tmp/etc-backup.tar
 dnf info gzip
-tar -czvf /tmp/etc-backup.tar.gz /etc
+clear
+#! time reports how long the archive took to build, the CPU half of the trade
+#@ pause 5
+time tar -czvf /tmp/etc-backup.tar.gz /etc
 clear
 
-#^ 2. bzip2 with -j
-#! bzip2 is not part of a minimal installation, so install it first.
+#^ 2. bzip2 with -j, after installing it
+#! bzip2 is not part of a minimal installation, so install it first
 dnf info bzip2
 dnf install -y bzip2
 clear
-tar -cjvf /tmp/etc-backup.tar.bz2 /etc
+#@ pause 5
+time tar -cjvf /tmp/etc-backup.tar.bz2 /etc
 clear
 
 #^ 3. xz with -J
 #! Lowercase -j is bzip2. Uppercase -J is xz. They are different options.
 dnf info xz
-tar -cJvf /tmp/etc-backup.tar.xz /etc
+clear
+#@ pause 5
+time tar -cJvf /tmp/etc-backup.tar.xz /etc
 clear
 
 #^ 4. Compare all four archives
 ls -lh --sort=size /tmp/etc-backup.tar*
+#! Set these sizes beside the real times from each run: xz is smallest and slowest
 clear
 
-#^ 5. Ask each compressor for its ratio
+#^ 5. Ask gzip and xz for their ratios
 gzip -l /tmp/etc-backup.tar.gz
 xz -l /tmp/etc-backup.tar.xz
 clear
@@ -46,4 +65,6 @@ clear
 #^ 7. Clean up
 cd /tmp
 rm -rf /tmp/etc-backup.tar* /tmp/etc-extract /tmp/etc-one /tmp/etc-xz-extract
-ls /tmp
+#@ pause 6
+dnf remove -y bzip2
+exit

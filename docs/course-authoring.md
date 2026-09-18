@@ -235,9 +235,9 @@ intended type size.
 
 A slide that fits in the browser can still overlap the footer, and a diagram or
 a later click state can overflow when the first state does not. Run
-`pnpm run check:slides` instead of judging by eye; it reports overflow, the
-slides closest to overflowing, and rendering errors that would otherwise ship a
-blank diagram.
+`pnpm run check:slides` instead of judging by eye; it fails on overflow and on
+rendering errors that would otherwise ship a blank diagram. Add `--verbose` to
+see how much room each slide has left.
 
 ### Presenting commands and workflows
 

@@ -61,7 +61,10 @@ listSpacing: padded
 
 - Keep the list together as one centered body block.
 - Add deliberate space between its top-level items.
-- Leave nested lists at the theme's normal spacing.
+- Separate an item that owns sub-bullets from the item after it.
+  - Space sub-bullets on the same scale.
+  - Keep them closer to their item than to the next one.
+- Leave the last group without trailing space.
 
 ---
 layout: two-cols-header

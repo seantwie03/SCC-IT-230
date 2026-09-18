@@ -108,8 +108,21 @@ withDefaults(
     width: auto;
 }
 
-.it230-default[data-list-spacing="padded"] :deep(> h1:first-child ~ ul > li),
-.it230-default[data-list-spacing="padded"] :deep(> h1:first-child ~ ol > li) {
+.it230-default[data-list-spacing="padded"] :deep(> h1:first-child ~ ul li),
+.it230-default[data-list-spacing="padded"] :deep(> h1:first-child ~ ol li) {
     margin-block: var(--it230-space-4);
+}
+
+/*
+ * A top-level item that owns a nested list ends with that list, whose own
+ * bottom margin collapses with the item's, so the rule above cannot separate
+ * one group from the next. Widen the nested list's margin instead, and leave
+ * the last one alone so the list gains no trailing space.
+ */
+.it230-default[data-list-spacing="padded"]
+    :deep(> h1:first-child ~ ul > li:not(:last-child) > :is(ul, ol)),
+.it230-default[data-list-spacing="padded"]
+    :deep(> h1:first-child ~ ol > li:not(:last-child) > :is(ul, ol)) {
+    margin-bottom: var(--it230-space-6);
 }
 </style>

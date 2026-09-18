@@ -41,20 +41,23 @@ Follow-up directions from the instructor:
 ## Answer in brief
 
 **Eight topic fragments** in two chapter directories, six new and two
-modernized, with **nine exercises** and a deck of **77 slides**:
+modernized, with **nine exercises** and a deck of **80 slides**: the 77
+planned, plus the continuation of 2.2, the second half of 4.3, and the second
+half of 5.2. Seventy render today; the other ten are the nine recording slides
+still to come and one hidden slide.
 
 | # | Fragment                          | Section title           | Slides | Exercises |
 |--:|-----------------------------------|-------------------------|-------:|----------:|
 | 1 | `selinux-concepts.md`             | Manage SELinux Security |     13 |         1 |
-| 2 | `selinux-troubleshooting.md`      | Troubleshooting SELinux |      8 |         1 |
+| 2 | `selinux-troubleshooting.md`      | Troubleshooting SELinux |      9 |         1 |
 | 3 | `selinux-file-policies.md`        | SELinux File Policies   |      7 |         1 |
-| 4 | `custom-file-policies.md`         | Custom File Policies    |      6 |         1 |
-| 5 | `selinux-booleans.md`             | SELinux Booleans        |     12 |         1 |
+| 4 | `custom-file-policies.md`         | Custom File Policies    |      7 |         1 |
+| 5 | `selinux-booleans.md`             | SELinux Booleans        |     13 |         1 |
 | 6 | `selinux-practice.md`             | SELinux Practice        |      5 |         2 |
 | 7 | `archives.md` (modernized)        | Archives                |     13 |         1 |
 | 8 | `compression.md` (modernized)     | Compression             |     11 |         1 |
 |   | Entry file: cover and VM reminder |                         |      2 |           |
-|   | **Total**                         |                         | **77** |     **9** |
+|   | **Total**                         |                         | **80** |     **9** |
 
 Every slide is described under "Topic fragments", each with its own heading.
 
@@ -96,10 +99,13 @@ fine for now: everything is ported first, then reviewed and trimmed.
 **Every source slide keeps its title, its text, its place in the sequence,
 and its layout.** The source's order already teaches the week's loop (break
 something, prove SELinux did it, read the explanation, fix it), so no slide is
-split, merged, or dropped, and every source exercise is ported. The one
-reorder is the instructor's: source slide 5 (context labels) now follows
-slides 6 and 7 (process and file labels), as 1.5 to 1.7 show. The source's
-hidden regex slide (3.3) is now shown.
+merged or dropped, and every source exercise is ported. Two source slides run
+over two slides each: 2.2, which overflowed and continues at its "Log file"
+item as planned, and 4.3, which the instructor asked to present differently.
+
+The instructor's own changes: source slide 5 (context labels) now follows
+slides 6 and 7 (process and file labels), as 1.5 to 1.7 show; the source's
+hidden regex slide (3.3) is now shown; and one addition, 2.6, is hidden.
 
 What changes is limited to four things:
 
@@ -152,10 +158,11 @@ Modernizing means:
    slides go back to the w02 source's `/var/log` example, and the exercises
    keep `/etc` (decided).
 9. **One addition** (7.11) connects archives to this week's SELinux material.
-10. **Every image from the w02 source comes over** (decided): the three icons
-    on 7.2, the archive illustration on 7.3, and the tape photograph (already
-    in the port) on 7.4. The five `tar_create` images come over as the text
-    of 7.5's explainer. See "Images from the w02 archiving source".
+10. **The w02 source's pictures come over** (decided): the archive
+    illustration on 7.3 and the tape photograph (already in the port) on 7.4.
+    The five `tar_create` images come over as the text of 7.5's explainer. The
+    three icons and the two GIFs stay out. See "Images from the w02 archiving
+    source".
 
 ## Sequencing and framing
 
@@ -227,7 +234,7 @@ Source slide numbers count every `---`-separated slide in `selinux.md` from 1.
 | existing `archives.md`           | the same file, modernized                   |
 | existing `compression.md`        | the same file, modernized                   |
 | w02 `archive_files.md`           | example paths for 7.5 to 7.9 and 8.3 to 8.9 |
-| w02 `public/archive_files/` images | 7.2 to 7.5 |
+| w02 `public/archive_files/` images | 7.3 to 7.5 |
 
 ## File inventory
 
@@ -238,7 +245,7 @@ Source slide numbers count every `---`-separated slide in `selinux.md` from 1.
 | Exercise command files   |   7 |       2 | `<chapter>/exercises/*-exercise.sh`   |
 | Exercise HTML documents  |   7 |       2 | `<chapter>/exercises/*-exercise.html` |
 | Exercise recordings      |   9 |       0 | `<chapter>/exercises/*-exercise.cast` |
-| Slide images             |   6 |       0 | `<chapter>/assets/`, listed below     |
+| Slide images             |   3 |       0 | `<chapter>/assets/`, listed below     |
 
 Recordings are `.cast` files embedded with `AsciinemaPlayer`, per the current
 `docs/course-authoring.md`. `w05-porting.md` still says GIF; that guidance has
@@ -259,11 +266,10 @@ New slide images:
   from `personal_pages.svg`. That file is only an 832 x 569 PNG wrapped in SVG,
   so the PNG is extracted and published directly (about 485 KB instead of
   690 KB). Its attribution is under "Third-party images".
-- `rh134-ch07-archiving-files/assets/icon-storage.svg`, `icon-handling.svg`,
-  and `icon-integrity.svg`, from the w02 source, for 7.2.
-- `rh134-ch07-archiving-files/assets/tar-visual.png`, from the w02 source, for
-  7.3. It is 2816 x 1504 and 4.8 MB, so it is resized to about 1400 px wide and
-  compressed before it lands.
+- `rh134-ch07-archiving-files/assets/tar-visual.jpg`, from the w02 source's
+  `tar-visual.png`, for 7.3. The 2816 x 1504, 4.8 MB original is resized to
+  1400 px wide and saved as a 92 KB JPEG, which kept its gradients cleaner
+  than a reduced-palette PNG.
 
 The archiving port's `assets/data-tape.jpg` is byte-identical to the w02
 source's `data_tape.png`, so it already covers that image. It stays as it is,
@@ -285,7 +291,7 @@ The instructor has chosen to port it with this attribution:
 - **Image caption:** "Jane's Place (2000). Archived screenshot of an early
   personal culinary homepage. Author unknown."
 
-Where each goes on slide 5.2:
+Where each goes on slide 5.2a:
 
 - **Caption.** A plain paragraph directly beneath the image, the same pattern
   `rh134-ch07-archiving-files/archives.md` uses for its tape photograph, so it
@@ -307,24 +313,20 @@ anywhere in the SELinux source deck, so it is not ported.
 
 ### Images from the w02 archiving source
 
-Every image in `~/s/IT-230/w02/slides/public/archive_files/` comes over
-(decided):
+Decided for each image in `~/s/IT-230/w02/slides/public/archive_files/`:
 
-- **The three icons** (`icon-storage.svg`, `icon-handling.svg`,
-  `icon-integrity.svg`) go on 7.2. Their shapes match the Lucide icon set's
-  `archive`, `package`, and `shield-check` (the first two came from Feather
-  Icons), drawn in pure blue, red, and green. Lucide is ISC-licensed and
-  carries Feather's MIT license, so each SVG keeps that license notice as a
-  comment. They are decorative, so they take empty alt text, and their strokes
-  are recolored to the theme's fixed palette, since pure hues clash with it.
-  See "Open questions" to confirm where they came from.
-- **The archive illustration** (`tar-visual.png`) goes on 7.3. It shows a
+- **The archive illustration** (`tar-visual.png`, published as
+  `tar-visual.jpg`) goes on 7.3. It shows a
   folder tree labeled IT-230 being packed into a box labeled "Compressed
-  Archive" by `tar -czvf archive.tar.gz`. Its lower-right corner carries the
-  sparkle mark Google Gemini adds to generated images, and no source is
-  recorded. Before it lands, record who generated it and with what tool, and
-  caption it the same way the tape photograph is captioned (for example,
-  "Illustration generated with Google Gemini"). See "Open questions".
+  Archive" by `tar -czvf archive.tar.gz`. The instructor wrote the prompt and
+  generated it with Google Gemini's image generator, which is its publication
+  basis. Its caption, placed like the tape photograph's: "Illustration
+  generated with Google Gemini from a prompt by the instructor."
+- **The three icons** (`icon-storage.svg`, `icon-handling.svg`,
+  `icon-integrity.svg`) stay out; the instructor left them optional. They
+  were decorative, their source was unconfirmed (their shapes match Lucide's
+  `archive`, `package`, and `shield-check`), and 7.2 reads the same without
+  them.
 - **The tape photograph** (`data_tape.png`) is already in the port as
   `data-tape.jpg`, with its photographer, CC BY-SA 3.0 license, and Wikimedia
   Commons link beneath it. It moves to 7.4. Correction: the port's alt text
@@ -339,11 +341,10 @@ Every image in `~/s/IT-230/w02/slides/public/archive_files/` comes over
   longer use. If you want the image files themselves, their command text has
   to be edited to the `/var/log` example first.
 - **The two GIFs** (`in_class_exercise-archive_files.gif` and
-  `create_a_compressed_archive.gif`) are terminal recordings rather than
-  pictures. `docs/course-authoring.md` embeds recordings as `.cast` files with
-  `AsciinemaPlayer`, not GIFs. The new casts on 7.13 and 8.11 replace the
-  first, and the second records the Documents demo, which is not ported. See
-  "Open questions".
+  `create_a_compressed_archive.gif`) stay out (decided). They are terminal
+  recordings, and `docs/course-authoring.md` embeds recordings as `.cast`
+  files with `AsciinemaPlayer`. The new casts on 7.13 and 8.11 replace the
+  first, and the second records the Documents demo, which is not ported.
 
 ## Topic fragments
 
@@ -411,11 +412,13 @@ Components: default layout, two headings with their bullet lists. The source's
 
 ##### 1.5 Every Process Has a Label
 
-Source slide 6. "Viewed using `ps -auxZ`", the heading "View Process Label",
-and `ps -auxZ | grep httpd` with its output, recaptured on RHEL 10.
+Source slide 6. "Viewed using `ps -AZ`", the heading "View Process Label",
+and `ps -AZ | grep httpd` with its output, recaptured on RHEL 10. The source
+used `ps -auxZ`, whose lines are too wide for the slide; `ps -AZ` is the form
+exercise 1 uses (decision 13).
 
 Components: default layout, `TerminalWindow` (fixed) holding the command and
-its output. If the full-width `ps` lines overflow, see "Still to verify".
+its output.
 
 ##### 1.6 Every File Has a Label
 
@@ -489,9 +492,11 @@ Components: `exercise`.
 Components: `exercise` with `variant: recording`, `AsciinemaPlayer`, and the
 Written exercise link. Command file from `setup_basic_web_server.sh`.
 
-#### 2. `selinux-troubleshooting.md` (8 slides)
+#### 2. `selinux-troubleshooting.md` (9 slides, 1 hidden)
 
-`routeAlias: selinux-troubleshooting`
+`routeAlias: selinux-troubleshooting`. The instructor put 2.3 between the two
+halves of 2.2, so the order runs: modes, the mode at boot, the log file, the
+AVC record, then `sealert`.
 
 ##### 2.1 Troubleshooting SELinux
 
@@ -544,9 +549,10 @@ suggestion can be technically right and still wrong for the situation.
 
 Components: default layout, list, titled fence (`Output`), recaptured.
 
-##### 2.6 Following the Alert
+##### 2.6 Following the Alert (hidden)
 
-**Addition** (RHA s07, and the assigned RHA lab in s09). While
+**Addition, hidden by the instructor** with `hide: true`, so it stays in the
+fragment but not in the deck. (RHA s07, and the assigned RHA lab in s09.) While
 `setroubleshoot-server` is installed, each new denial also produces a one-line
 summary in the journal and `/var/log/messages`, naming a `sealert -l <id>`
 command for that denial. The assigned RHA lab starts from this line.
@@ -640,7 +646,7 @@ Components: `exercise`.
 Components: `exercise` with `variant: recording`, `AsciinemaPlayer`. Command
 file from `fix_selinux_label.sh`.
 
-#### 4. `custom-file-policies.md` (6 slides)
+#### 4. `custom-file-policies.md` (7 slides)
 
 `routeAlias: custom-file-policies`
 
@@ -662,14 +668,26 @@ words kept. The source's `##` title becomes the slide's `#` title.
 
 ##### 4.3 Add a Custom Directory
 
-Source slide 21. `semanage fcontext` options: `-a` to add, `-l` to list (with
-`-C` for local customizations only), and `-d` to delete. Then the command
-`sudo semanage fcontext -a -t httpd_sys_content_t '/web(/.*)?'` as a large
-line, followed by: this only changes the policy, and `restorecon` must apply
-it to the files.
+Source slide 21, presented over two slides at the instructor's request. The
+source's own layout, a nested option list above the command, was written
+first and then replaced by these two.
 
-Components: default layout, nested list, the command as a `##` heading of
-inline code as in the source.
+Steps through `semanage fcontext -a -t httpd_sys_content_t '/web(/.*)?'`:
+the command, `-a` to add, `-t` and the type label it assigns, and the path
+pattern. The remaining options (`-l`, `-l -C`, `-d`) follow in a compact
+table.
+
+Components: default layout, `TextExplainer` (`md`), table.
+
+##### 4.3b Policy First, Then `restorecon`
+
+The second half of source slide 21: the rule changes the policy, and
+`restorecon` applies it to the files. One transcript, captured on `servera`,
+adds the rule, lists it with `-l -C`, shows `/web` still labeled `default_t`,
+then relabels it with `restorecon -Rv`.
+
+Components: `TerminalWindow` (Magic Move, `rows="13"`) with `#^` banners for
+the three steps.
 
 ##### 4.4 Pointing Apache at the Directory
 
@@ -697,7 +715,7 @@ Components: `exercise`. Seven steps, as in the source; combine two only if
 Components: `exercise` with `variant: recording`, `AsciinemaPlayer`. Command
 file from `new_document_root.sh`.
 
-#### 5. `selinux-booleans.md` (12 slides)
+#### 5. `selinux-booleans.md` (13 slides)
 
 `routeAlias: selinux-booleans`
 
@@ -708,23 +726,36 @@ describes".
 
 Components: `section`.
 
-##### 5.2 Apache UserDir: Personal Web Directories
+##### 5.2a Geocities | Late 1990s-Early 2000s
 
-Source slide 23. Left: Apache lets users have their own page, created in
-`~/public_html/` and viewable at `http://server/~username/`. "Why is this
-useful?" Academic environments (students and faculty publish pages, such as
-`http://cs.university.edu/~jsmith/`), several developers sharing one server
-with their own test environments, and limiting access to `/var/www/html`.
-Right: "1990s Geocities", "Allowed anyone to create their own web page", and
-the Geocities screenshot.
+Source slide 23, right half, now a slide of its own. Subtitle "Allowed anyone
+to create their own web page". The left column carries the story: before
+social media, a page you built yourself was how you put yourself on the web,
+and universities ran the same idea on their own servers, where every student
+and faculty member got space for a personal page. The right column is the
+Geocities screenshot.
 
-Components: `two-cols-header` (title and subtitle in the shared header). In
-the right column, the screenshot is a Markdown image whose alt text opens with
-the in-text attribution, followed by a caption paragraph: "Jane's Place
-(2000). Archived screenshot of an early personal culinary homepage. Author
-unknown." Because the image shares its column with a heading, a sentence, and
-the caption, the theme's lone-image fit does not apply, so check its size
-with `check:slides`. See "Third-party images".
+Components: `two-cols-header` with `leftWidth: 38`, so the screenshot gets the
+wider column. The screenshot is a Markdown image whose alt text opens with the
+in-text attribution, followed by a caption paragraph: "Jane's Place (2000).
+Archived screenshot of an early personal culinary homepage. Author unknown."
+See "Third-party images". The image sizes itself to whatever the caption
+leaves, so `check:slides` reports it at zero clearance, the same as the
+cassette tape photograph on 7.4.
+
+##### 5.2b Apache UserDir
+
+Source slide 23, left half, now a slide of its own at full width. Subtitle
+"The Apache feature behind that explosion of creativity", which hands off from
+the Geocities slide. Three lines define the feature: every user on the server
+can publish their own page, written in `~/public_html/` and viewable at
+`http://server/~username/`. Then "Why Is This Useful?" keeps the source's three
+reasons: academic environments where students and faculty publish their own
+pages, such as `http://cs.university.edu/~jsmith/`; several developers sharing
+one server, each with their own test environment; and limiting access to
+`/var/www/html`.
+
+Components: default layout with `listSpacing: padded`.
 
 ##### 5.3 Configuring Apache UserDir
 
@@ -734,9 +765,10 @@ comments out `UserDir disabled` and uncomments `UserDir public_html`. Then
 restart `httpd`, `mkdir ~/public_html`, and two `echo` lines writing the page,
 the second being the research line about categorizing boogers.
 
-Components: default layout, Magic Move on a titled fence (`userdir.conf`),
-`TerminalWindow` (fixed) with the four commands. Prompts become
-`student@workstation:~$`.
+Components: default layout, Magic Move on a titled fence (`userdir.conf`), and
+a second Magic Move inside `TerminalWindow` (`:rows="6"`) that types the four
+commands the way a student would: one state per typed command, one per
+returned prompt, eight states in all. Prompts become `student@workstation:~$`.
 
 ##### 5.4 Allowing UserDir
 
@@ -892,13 +924,9 @@ Right: room for compression, and a `Callout` saying that bundling and
 compressing are separate jobs, with `tar` doing the first and calling a
 compressor for the second.
 
-Components: `two-cols-header`, `Callout`, and the w02 source's three icons,
-one beside each heading as the source had them above its three columns:
-`icon-handling.svg` for simpler handling, `icon-integrity.svg` for preserved
-characteristics, and `icon-storage.svg` for room for compression. Modernize:
-drop sentence-ending periods, and remove `vertical: start` unless the default
-leaves a gap. If the icons read poorly in two columns, the fallback is the
-source's three-column arrangement, which needs a small HTML grid.
+Components: `two-cols-header`, `Callout`. Modernize: drop sentence-ending
+periods, and remove `vertical: start` unless the default leaves a gap. The
+w02 source's three icons stay out (decided).
 
 ##### 7.3 tar: Tape ARchive
 
@@ -1228,8 +1256,8 @@ port slide.
    guided exercise, and the RHEL 10 change to `SELINUX=disabled`.
 2. **Reading an AVC Denial** (2.4). Source slide 13 shows a record without
    explaining it.
-3. **Following the Alert** (2.6). The assigned RHA lab starts from this
-   message.
+3. **Following the Alert** (2.6), now hidden by the instructor. The assigned
+   RHA lab starts from this message.
 4. **chcon Skips the Policy** (3.5). In RHA s03 and the cert guide, and in
    older documentation students will find.
 5. **Pointing Apache at the Directory** (4.4). Exercise 4 edits two lines no
@@ -1291,13 +1319,12 @@ SELinux source:
 - The lesson plan's suggestion to move w07's SELinux port material here. It
   stays in w07; see `w07-porting.md`.
 
-w02 archiving source. Every image comes over (see "Images from the w02
-archiving source"); these do not:
+w02 archiving source (see "Images from the w02 archiving source"):
 
 - The `tar_create_0{1..5}.svg` files themselves. Their captions come over as
   the text of 7.5.
-- The three-column "Why Archive Files?" arrangement, unless the icons need it
-  (7.2).
+- The three icon SVGs and the three-column "Why Archive Files?" arrangement
+  they sat in.
 - "Demo: Create a Compressed Archive of Documents" and its `setup.yml`. It
   repeats the exercise's workflow and depends on an Ansible-staged directory
   tree, and the repository does not allow exercises that depend on pre-staged
@@ -1366,10 +1393,6 @@ SELinux:
 
 - Every transcript, captured fresh. The source is RHEL 9 era, including the
   `ps` output, the `ls -lZ` dates, the AVC record, and the `sealert` text.
-- **`ps -auxZ` width** on 1.5. If the lines overflow, the choices are
-  `ps -eZ | grep httpd`, which prints the same label in fewer columns, or
-  keeping `ps -auxZ` with its output trimmed to the label and command columns.
-  Both change the slide, so ask before choosing.
 - **Which types `httpd_enable_homedirs` opens.** Check with
   `sesearch -A -s httpd_t -b httpd_enable_homedirs` before rewording 5.4, 5.6,
   and 5.10.
@@ -1396,7 +1419,7 @@ SELinux:
   ImageMagick export; check it in the browser. It also embeds a 600 x 600 PNG
   burglar icon whose origin is not recorded; confirm it is original or
   replace it.
-- The Geocities screenshot at column width on 5.2, with its caption.
+- The Geocities screenshot at column width on 5.2a, with its caption.
 
 Archiving:
 
@@ -1406,8 +1429,7 @@ Archiving:
 - The output of `time` on the three compressed runs.
 - **The labels on extracted files** without `--selinux` (7.11). The slide
   claims they are labeled like new files.
-- The three icons at heading size on 7.2, after recoloring, and the resized
-  illustration on 7.3.
+- The resized illustration and its caption on 7.3.
 - The wrong-compressor error text on RHEL 10 (8.8, optional).
 - Both command files, played back live and recorded, then processed with
   `pnpm run casts`.
@@ -1463,17 +1485,115 @@ Answered by the instructor on 2026-09-17.
    removes `bzip2`.
 9. **Port everything, then trim.** A 77-slide deck is fine at this stage; the
    instructor reviews it once the port is complete.
-10. **Every image from the w02 archiving source comes over.**
+10. **The w02 archiving source's pictures come over.** `tar-visual.png` is
+    included; the instructor generated it with Google Gemini from their own
+    prompt.
+11. **The three w02 icons stay out**, left to the port's discretion.
+12. **The two w02 GIFs stay out.** The new casts replace them.
+13. **Slides 1.5 and 1.10 use `ps -AZ | grep httpd`**, matching exercise 1,
+    because every `ps -auxZ` line overflowed the terminal.
 
 ## Open questions
 
-1. **Where did `tar-visual.png` come from?** Its corner carries Google
-   Gemini's mark. If you generated it, the caption can say so; either way the
-   source needs recording before it lands (7.3).
-2. **Are the three icons from Lucide or Feather Icons?** Their shapes match
-   Lucide's `archive`, `package`, and `shield-check`. Confirming the source
-   settles which license notice each SVG carries (7.2).
-3. **Are the two GIFs covered by the casts?** The plan leaves them out: the
-   in-class GIF is replaced by the two new casts, and the other records the
-   Documents demo, which is not ported. Say so if you want either one on a
-   slide anyway.
+None.
+
+## Implementation status (2026-09-17)
+
+Implemented and unstaged, per `AGENTS.md`:
+
+- `course/w06-draft.md`, the six SELinux fragments and their assets, and the
+  seven SELinux exercises (command file and HTML document each).
+- `archives.md`, `compression.md`, and both archiving exercises, modernized in
+  place, plus `assets/tar-visual.jpg`.
+
+Validation:
+
+- `pnpm run check:entry -- course/w06-draft.md` passes as week w06.
+- `pnpm run check:exercises -- course/w06-draft.md` passes for all nine
+  documents.
+- `kitty-demo --check` passes for all nine command files. Their `vim` edits of
+  `httpd.conf` and `userdir.conf` were replayed with `vim -s` and produce the
+  intended lines.
+- `pnpm run check:slides -- course/w06-draft.md` passes, with low-clearance
+  warnings on slides 35 and 51 (0 px).
+- Rendered slides were reviewed with `pnpm run capture:course`. The emoji in
+  the Mermaid diagrams render there.
+
+Lab work:
+
+- Every slide transcript and all nine exercise workflows ran on `servera` and
+  `workstation`, including cleanup. Both hosts are back to their starting
+  state, except for a harmless `httpd_enable_homedirs (off, off)` entry that
+  `setsebool -P ... off` leaves in `workstation`'s `semanage boolean -l -C`
+  list.
+- Verified along the way: the denied page returns `403 Forbidden`; the AVC
+  permission is `{ open }`; the `sealert` restorecon plugin still reports 92.2
+  confidence; `restorecon` keeps the `unconfined_u` user field; a
+  `DocumentRoot`-only change gets Apache's own AH01630 denial;
+  `httpd_enable_homedirs` opens `httpd_user_content_type`; extracted files take
+  the destination's label unless `--selinux` is used; and exercise 9's timings
+  were gzip 0.35 s, bzip2 0.75 s, and xz 4.3 s.
+
+Changes from the plan made while building:
+
+- **Cover:** the agenda lists six items (File Policies covers both
+  file-policy sections, and Archives and Compression share a line), because
+  eight overflowed the cover.
+- **Slide adjustments to fit:**
+  - 1.9's `setools-console` note moved to presenter notes.
+  - 1.10's three headings became fence titles ("Source Domain: httpd
+    process", and so on).
+  - 2.3 uses two columns.
+  - 2.5's "There is an easier way" became a sentence under the title, with the
+    command in the fence title.
+  - 3.2's "/var/www/html's Policy" heading became a fence title.
+  - 3.3's explanations were tightened.
+  - 5.2's three intro lines became one header sentence, and its list was
+    flattened, before the instructor split the slide in two.
+  - 5.7's two terminals were merged into one.
+  - 8.6's explainer uses `size="md"`.
+- **Soft wraps:** long output lines on 2.2, 2.6, and 3.4 are wrapped the way a
+  narrow terminal wraps them. The long `echo` on 5.3 uses a
+  backslash-newline, which produces identical file content.
+- **2.6:** shows `grep ... | tail -n 1`, because the real log held two
+  summaries.
+- **Floor plan:**
+  - The labels had no font set, so they fell back to a system font that
+    lacks Latin glyphs. They are now set in Lato, with ligatures off, and
+    converted to outlines.
+  - The embedded raster burglar, whose source was unknown, was replaced with
+    an original vector figure in the same spot.
+- **Command files:** `systemctl status` uses `--no-pager`, so an unattended
+  recording cannot leave a stray `q` at the prompt. The DocumentRoot and
+  UserDir exercises back up the original configuration file beside it for
+  their cleanup step.
+
+Instructor changes since the port landed:
+
+- **4.3 is now two slides.** The original list-and-command layout was
+  replaced by the command anatomy (slide 30) and "Policy First, Then
+  `restorecon`" (slide 31).
+- **"Following the Alert" (2.6) is hidden** with `hide: true`.
+- **"Setting the Mode at Boot" moved** to sit between the two halves of 2.2.
+- Slide 1.4 gained the DAC and MAC acronyms and a padded list, and 4.4 shows
+  its `httpd.conf` edit as a Magic Move.
+- **5.2 is now two slides.** The single two-column slide was cramped, so its
+  right half became "Geocities | Late 1990s-Early 2000s" (slide 35) and its
+  left half became "Apache UserDir" (slide 36), each described above.
+
+The deck is 80 slides on paper: 70 render today, plus the nine recording
+slides still to come and the one hidden slide.
+
+Published: the entry is `course/w06.md`, which is this repository's publication
+approval. `tests/site.test.mjs` lists the canonical weeks, so publication added
+`w06` there, the same one-line change w04 and w05 each made. `pnpm check`
+passes, and the site build writes `dist/weeks/w06/` with the deck, the PDF, the
+Canvas page, and all nine exercises.
+
+Still to do:
+
+- **The exercises**, which the instructor is revising next. They validate and
+  build, so they publish with the week in whatever state they are in.
+- **Record the nine casts** with `kitty-demo.py --record`, process them with
+  `pnpm run casts`, and add each fragment's `variant: recording` slide, as
+  w05 did when its cast landed. Until then the deck has 70 slides.

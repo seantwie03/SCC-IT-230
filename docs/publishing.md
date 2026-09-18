@@ -32,9 +32,10 @@ pnpm run check:exercises -- course/w03-draft.md
 `check:entry` applies the complete catalog validation to a draft under the week
 ID it will publish as, so a rename is never the first time a metadata error
 appears. `check:slides` and `check:exercises` accept the same argument or
-`--all`. Add `--verbose` to `check:slides` to print every slide's clearance
-rather than only the ones at or past the boundary, which is useful when judging
-how much room a slide really has. Run `--all` after changing a shared layout, component, or theme token,
+`--all`. `check:slides` fails only on content that leaves the content box and on
+rendering errors; a slide that fills its box is not a problem. Add `--verbose`
+to print how much room remains below the content on every slide, which is useful
+when judging how much a slide can still take. Run `--all` after changing a shared layout, component, or theme token,
 because those changes can push content past the content box on any week.
 
 A new or re-made screen recording is processed before it is published, which

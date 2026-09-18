@@ -16,6 +16,9 @@ import {
     type PropType,
 } from "vue";
 
+import { guardAuthoring } from "../setup/authoring-error.ts";
+import AuthoringError from "./AuthoringError.vue";
+
 interface CommandSegment {
     text: string;
     active?: boolean;
@@ -72,33 +75,36 @@ const props = defineProps<{
     steps?: CommandStep[];
 }>();
 
-const states = computed<CommandState[]>(() => {
-    if (props.steps?.length) {
-        if (props.segments || props.explanation)
+const { error, value: states } = guardAuthoring<CommandState[]>(
+    "CommandExplainer",
+    () => {
+        if (props.steps?.length) {
+            if (props.segments || props.explanation)
+                throw new Error(
+                    "CommandExplainer cannot combine steps with segments or explanation.",
+                );
+
+            return buildStepStates(props.steps, props.command);
+        }
+
+        if (!props.segments?.length || !props.explanation)
             throw new Error(
-                "CommandExplainer cannot combine steps with segments or explanation.",
+                "CommandExplainer requires steps, or both segments and explanation.",
             );
 
-        return buildStepStates(props.steps, props.command);
-    }
+        if (props.segments.filter((segment) => segment.active).length !== 1)
+            throw new Error(
+                "CommandExplainer segments must contain exactly one active segment.",
+            );
 
-    if (!props.segments?.length || !props.explanation)
-        throw new Error(
-            "CommandExplainer requires steps, or both segments and explanation.",
-        );
-
-    if (props.segments.filter((segment) => segment.active).length !== 1)
-        throw new Error(
-            "CommandExplainer segments must contain exactly one active segment.",
-        );
-
-    return [
-        {
-            explanation: props.explanation,
-            segments: props.segments,
-        },
-    ];
-});
+        return [
+            {
+                explanation: props.explanation,
+                segments: props.segments,
+            },
+        ];
+    },
+);
 
 function requiredExplanation(explanation: string, index: number): string {
     if (explanation.length > 0) return explanation;
@@ -230,7 +236,12 @@ function splitAtHighlightableRanges(
 </script>
 
 <template>
-    <ClickSequence v-slot="{ state }" :states="states">
+    <AuthoringError
+        v-if="error"
+        component="CommandExplainer"
+        :message="error"
+    />
+    <ClickSequence v-else v-slot="{ state }" :states="states ?? []">
         <figure class="it230-command-explainer">
             <code class="it230-command-explainer__command"
                 ><template
