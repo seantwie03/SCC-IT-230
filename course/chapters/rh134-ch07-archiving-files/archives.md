@@ -21,6 +21,7 @@ topicInfo:
 
 ---
 layout: two-cols-header
+leftWidth: 55
 ---
 
 # Why Bundle Files at All?
@@ -29,23 +30,32 @@ layout: two-cols-header
 
 ## Simpler handling
 
-One file is easier to back up, move, and keep track of than ten thousand
+One file is easier to back up, and manage
 
-## Preserved characteristics
+## Better compression
 
-An archive keeps the directory structure, ownership, permissions, and timestamps that a plain copy can lose
-
-::right::
-
-## Room for compression
-
-A single stream of data compresses far better than each file on its own
+A single stream of data compresses better than each file individually
 
 <Callout>
 
-Bundling and compressing are two separate jobs. `tar` does the first and can call a compressor for the second
+Bundling and compressing are two separate jobs.
+
+`tar` does the first but calls a compressor for the second
 
 </Callout>
+
+::right::
+
+## Preserved characteristics
+
+An archive can keep the:
+
+- directory structure
+- ownership
+- permissions
+- timestamps
+- etc.
+
 
 <!--
 An archive is also the one file you would move with the scp or rsync commands from week 2.
@@ -74,22 +84,18 @@ leftWidth: 45
 
 ![Illustration of a folder tree named IT-230, holding Lectures and Labs folders and the files Notes.txt and Script.sh, packed by the command tar -czvf archive.tar.gz into a cardboard box labeled Compressed Archive](./assets/tar-visual.jpg)
 
-Illustration generated with Google Gemini from a prompt by the instructor.
-
 <!--
 The command in the picture adds z for compression, which comes up in the next section.
 -->
 
 ---
 layout: two-cols-header
-leftWidth: 45
 ---
 
-# Yes, They Really Used to Put Data on Cassette Tapes!
 
 ::left::
 
-## Why the odd name?
+# Yes, They Really Used to Put <AccentText>Data</AccentText> on Cassette Tapes!
 
 `tar` was written to send data to magnetic **tape**, one file after another in a single continuous stream
 
