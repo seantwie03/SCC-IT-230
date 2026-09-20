@@ -605,6 +605,8 @@ This internal footer component displays `NEXT →` at the final state of a
 non-empty click sequence without shifting slide content. It appears in main and
 presenter rendering, not overview or next-slide preview. Authors never add it;
 the footer owns the instance, and layouts that hide the footer hide the cue.
+The cue takes the footer's own type size, and weight and color are what set it
+apart, so the rule and the footer text hold still as it comes and goes.
 
 ### `TextExplainer`
 

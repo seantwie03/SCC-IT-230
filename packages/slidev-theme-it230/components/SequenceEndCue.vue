@@ -46,12 +46,19 @@ const visible = computed(() =>
     width: 0.85em;
 }
 
+/*
+ * The cue sets no type size of its own, so it matches the footer text it sits
+ * in and weight and color are what set it apart. Set larger, it makes the
+ * footer row taller than the row without it, and because the footer is
+ * anchored to the bottom of the slide, the rule and the footer text lift a
+ * couple of pixels for the final click of a sequence. The footer then twitches
+ * as a reader clicks past any slide that ends in one.
+ */
 .it230-sequence-end-cue {
     align-items: center;
     color: var(--it230-color-accent-text);
     display: inline-flex;
     font-family: var(--it230-font-sans);
-    font-size: 0.85rem;
     font-weight: var(--it230-font-weight-black);
     gap: var(--it230-space-1);
     letter-spacing: 0.04em;
