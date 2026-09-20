@@ -567,6 +567,73 @@ body {
 }
 
 /*
+ * Move the controls into the letterbox on a short landscape screen.
+ *
+ * A phone held in landscape is wider than the 16/9 canvas, so the slide is
+ * pillarboxed and the bar at the bottom covers instruction while empty space
+ * sits either side of it. Stacking the bar into that empty column returns the
+ * whole slide, footer included, on the screens where the loss hurt most.
+ *
+ * The media query is the geometry: a viewport wider than 2:1 has a letterbox
+ * column of its own, and one shorter than a laptop is a phone rather than a
+ * desktop window. At the 2:1 boundary the column and the layout's own side
+ * padding together still exceed the width of the rail, so the rail never
+ * reaches content. A 16/9 phone, such as a small iPhone in landscape, has no
+ * letterbox at all and keeps the bar at the bottom. `pointer: coarse` would
+ * describe the intent more directly, but Playwright's viewport sizing does not
+ * emulate touch, so the review commands could never see this.
+ *
+ * Wrapping is what makes the rail safe rather than a fixed list of buttons.
+ * A column only wraps against a definite height, so the bar is capped at the
+ * visible viewport, using the same `--vh` Slidev maintains from
+ * `window.innerHeight` rather than `vh`, which on a phone measures the window
+ * as though the browser's own chrome were not there. Anything that does not
+ * fit, now or after a Slidev release adds a button, starts a second column
+ * toward the slide instead of leaving the screen.
+ *
+ * The bar takes no pointer events and its children take them back, so the
+ * letterbox around the rail keeps advancing the deck when tapped, the way the
+ * rest of the letterbox does.
+ *
+ * Slidev's own counter is dropped here because it is wide text rather than a
+ * square, and carrying it doubles the width of the rail for a number the
+ * footer already shows.
+ */
+@media (min-aspect-ratio: 2/1) and (max-height: 520px) {
+    #slide-container > div:has(> nav) {
+        bottom: auto;
+        left: auto;
+        margin-inline: 0;
+        pointer-events: none;
+        right: 0;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    #slide-container > div:has(> nav) nav > div {
+        align-items: center;
+        flex-direction: column;
+        flex-wrap: wrap-reverse;
+        max-height: calc(var(--vh, 1vh) * 100 - 1rem);
+    }
+
+    #slide-container > div:has(> nav) nav > div > * {
+        pointer-events: auto;
+    }
+
+    /* Slidev's dividers are drawn for a row. */
+    #slide-container > div:has(> nav) nav > div > .w-1px {
+        height: 1px;
+        width: 1.25rem;
+    }
+
+    #slide-container > div:has(> nav) .px2.my-auto,
+    #slide-container > div:has(> nav) .w-1px:has(+ .px2.my-auto) {
+        display: none;
+    }
+}
+
+/*
  * Slidev dims the "/ total" half of the slide counter to `opacity: 0.5`,
  * which lands at 3.1:1 on this theme's light surface and fails WCAG 2.1
  * SC 1.4.3. While the control bar was hidden it was never measured; showing

@@ -384,6 +384,17 @@ subject to contrast requirements that were never measured while it was hidden,
 so the dimmed half of the slide counter is raised from Slidev's `opacity: 0.5`,
 which measures 3.1:1 on this theme's light surface, to clear 4.5:1.
 
+On a viewport wider than 2:1 and shorter than a laptop, which in practice is a
+phone held in landscape, the controls move into the letterbox column beside the
+slide rather than sitting over it, and the whole slide including its footer is
+visible again. The bar stacks into that column, wraps toward the slide if it
+ever outgrows the height available, and drops Slidev's own slide counter, which
+is wide text rather than a square icon and repeats a number the footer already
+prints. The bar stops taking pointer events and its buttons take them back, so
+the letterbox around the rail still advances the deck when tapped, as the rest
+of the letterbox does. A phone whose landscape viewport is 16/9 has no
+letterbox to move into and keeps the bar at the bottom.
+
 Use ordinary fenced code for source and short commands. Use `TerminalWindow`
 when a terminal frame clarifies that the content is an interactive session or
 captured command output. Use a `bash-session` fence inside `TerminalWindow`
