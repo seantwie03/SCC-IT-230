@@ -159,7 +159,7 @@ export function renderWeekSummary(view) {
                         <p>${escapeHtml(view.summary)}</p>
                         <div class="week-summary-actions">
                             <a class="primary-action" href="${escapeHtml(view.overviewHref)}">Week overview</a>
-                            <a class="secondary-action" href="${escapeHtml(view.inClass.presentationAction.href)}" target="_blank" rel="noopener noreferrer" aria-label="Open presentation in a new tab">Open presentation</a>
+                            <a class="secondary-action" href="${escapeHtml(view.inClass.presentationAction.href)}">Open presentation</a>
                         </div>
                     </li>`;
 }
@@ -199,7 +199,7 @@ export function renderWeeklyOverview(view, navigation) {
                         <p class="phase-label">${escapeHtml(view.inClass.label)}</p>
                         <h2 id="${view.id}-agenda">${escapeHtml(view.inClass.heading)}</h2>
                         <div class="week-actions">
-                            <a class="primary-action" href="${escapeHtml(view.inClass.presentationAction.href)}" target="_blank" rel="noopener noreferrer" aria-label="${escapeHtml(view.inClass.presentationAction.text)} in a new tab">${escapeHtml(view.inClass.presentationAction.text)}</a>
+                            <a class="primary-action" href="${escapeHtml(view.inClass.presentationAction.href)}">${escapeHtml(view.inClass.presentationAction.text)}</a>
                             <a class="secondary-action" href="${escapeHtml(view.inClass.pdfAction.href)}" download="${escapeHtml(view.inClass.pdfAction.filename)}">${escapeHtml(view.inClass.pdfAction.text)}</a>
                         </div>
                         <p class="phase-pretext">${escapeHtml(view.inClass.preText)}</p>
@@ -223,7 +223,7 @@ function renderAgendaTopic(topic) {
         ? `<ul class="topic-links">${exercises}</ul>`
         : "";
     return `<li class="agenda-topic">
-                                <h3><a href="${escapeHtml(topic.href)}" target="_blank" rel="noopener noreferrer" aria-label="Open ${escapeHtml(topic.text)} slides in a new tab">${escapeHtml(topic.text)}</a></h3>
+                                <h3><a href="${escapeHtml(topic.href)}" aria-label="Open ${escapeHtml(topic.text)} slides">${escapeHtml(topic.text)}</a></h3>
                                 ${exerciseList}
                             </li>`;
 }

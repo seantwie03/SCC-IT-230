@@ -75,8 +75,8 @@ sits in a different host document and Canvas supplies its page title outside
 the pasted fragment. No surface may skip a level. `docs/design-system.md` owns
 the level-by-level map; change it there and mirror the result in every
 renderer. Agenda topic headings link directly to their opening slides, and
-their accessible names identify both the slide destination and new-tab
-behavior.
+their accessible names identify the slide destination, and in the Canvas
+rendering the new-tab behavior as well.
 Automated tests compare the ordered `{text, href}` pairs produced by the site
 and Canvas renderers after removing the required Canvas origin prefix. This
 guards their shared information and destination order, but does not replace
@@ -116,7 +116,7 @@ manual review as a required gate. For each applicable change:
    Every deck now carries three persistent interactive regions: the slide
    navigation controls, the course-identity link, and the week link. Confirm
    each is reachable, has a visible focus indicator, and announces its purpose
-   and that it opens a new tab.
+   and destination.
 3. Review text alternatives, links, tables, and media alternatives.
 4. Check contrast and color-independent meaning.
 5. Inspect representative browser rendering at the 1920x1080 desktop viewport

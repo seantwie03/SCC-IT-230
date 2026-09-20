@@ -22,7 +22,7 @@ const site = computed(() => {
     const parsed = /^(.*\/)weeks\/(w\d+)\/slides\/?$/.exec(base);
     if (!parsed) return null;
     const [, root, id] = parsed;
-    return { root, week: `${root}weeks/${id}/`, label: id.toUpperCase() };
+    return { root, week: `${root}weeks/${id}/`, label: `Week ${id.slice(1)}` };
 });
 </script>
 
@@ -35,27 +35,25 @@ const site = computed(() => {
                     v-if="site"
                     class="it230-footer__link"
                     :href="site.root"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label="IT-230 course site, opens in a new tab"
+                    aria-label="IT-230 course site"
                     >IT-230</a
                 ><template v-else>IT-230</template>
                 · Linux Administration
             </span>
             <span class="it230-footer__status">
                 <SequenceEndCue />
-                <span v-if="site" class="it230-footer__week">
-                    <a
-                        class="it230-footer__link"
-                        :href="site.week"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        :aria-label="`${site.label} week overview, opens in a new tab`"
-                        >{{ site.label }}</a
-                    >
-                    ·
+                <span class="it230-footer__position">
+                    <span v-if="site">
+                        <a
+                            class="it230-footer__link"
+                            :href="site.week"
+                            :aria-label="`${site.label} overview`"
+                            >{{ site.label }}</a
+                        >
+                        ·
+                    </span>
+                    <SlideCurrentNo />
                 </span>
-                <SlideCurrentNo />
             </span>
         </div>
     </footer>
@@ -129,8 +127,12 @@ const site = computed(() => {
     padding-inline: 0.2rem;
 }
 
-/* Keeps `W04 ·` together so the status gap falls before the page number. */
-.it230-footer__week {
+/*
+ * The week label, the middle dot, and the slide number are one text run, so
+ * the dot is spaced by ordinary word spaces like the dot on the left. The
+ * status gap falls before the run, between it and the sequence cue.
+ */
+.it230-footer__position {
     white-space: nowrap;
 }
 

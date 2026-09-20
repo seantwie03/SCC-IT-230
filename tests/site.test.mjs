@@ -438,7 +438,7 @@ test("landing page stays compact and links to the weekly detail page", async () 
     );
     assert.match(
         html,
-        /class="secondary-action" href="\/project\/weeks\/w16\/slides\/" target="_blank" rel="noopener noreferrer" aria-label="Open presentation in a new tab">Open presentation<\/a>/,
+        /class="secondary-action" href="\/project\/weeks\/w16\/slides\/">Open presentation<\/a>/,
     );
     assert.doesNotMatch(html, /Meeting Agenda/);
     assert.doesNotMatch(html, /Integration Exercise/);
@@ -491,17 +491,15 @@ test("weekly detail page is vertical, linked home, and navigates published weeks
     assert.match(html, /this week’s Canvas module/);
     assert.match(
         html,
-        /<h3><a[^>]*target="_blank"[^>]*>Named Fragment<\/a><\/h3>/,
+        /<h3><a[^>]*aria-label="Open Named Fragment slides"[^>]*>Named Fragment<\/a><\/h3>/,
     );
+    assert.doesNotMatch(html, /<h3><a[^>]*target="_blank"/);
     assert.match(
         html,
         /href="\/project\/weeks\/w08\/slides\/#\/named-fragment"/,
     );
     assert.doesNotMatch(html, />Slides<\/a>/);
-    assert.match(
-        html,
-        /class="primary-action"[^>]*target="_blank"[^>]*rel="noopener noreferrer"/,
-    );
+    assert.doesNotMatch(html, /class="primary-action"[^>]*target="_blank"/);
     assert.match(html, />Integration Exercise<\/a><\/li>/);
     assert.doesNotMatch(html, /Start the Integration Exercise exercise/);
     assert.match(html, /href="\/project\/"[^>]*>IT-230<\/a>/);

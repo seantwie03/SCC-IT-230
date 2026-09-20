@@ -36,9 +36,9 @@ root.
 The landing page is a compact list of published weeks. Each item shows only the
 week title, summary, and a two-action footer so a full semester remains easy to
 scan. The title and primary Week overview action open the detail page; the
-secondary Open presentation action launches Slidev in a new tab. The action row
-wraps on narrow screens. The landing page and weekly detail pages use the same
-content width. The sticky course number and title both link back to that list.
+secondary Open presentation action launches Slidev. The action row wraps on
+narrow screens. The landing page and weekly detail pages use the same content
+width. The sticky course number and title both link back to that list.
 
 Each detail page is one document-like weekly overview with neutral Before
 class, In class, required After class labs, and optional After class reading
@@ -363,12 +363,24 @@ resembling application chrome. On the final state of any non-empty click
 sequence, the footer displays `NEXT →` immediately before the slide number.
 
 The course identity and the week label are links, to the site root and to that
-week's overview page, and both open in a new tab so a presentation is never
-navigated away from. Both are derived from the deck's own base URL rather than
-written down, which keeps the theme independent of any domain name. A build
-whose base does not resolve to a week, such as the standalone theme gallery or
-a deck built at `/`, renders the identity as plain text and omits the week
-label entirely rather than emitting a broken link.
+week's overview page. The label reads `Week 06`, the wording the site's own
+week pages use, and the middle dot before the slide number is spaced like the
+one on the left because label, dot, and number are a single run of text. Both
+are derived from the deck's own base URL rather than written down, which keeps
+the theme independent of any domain name. A build whose base does not resolve
+to a week, such as the standalone theme gallery or a deck built at `/`, renders
+the identity as plain text and omits the week label entirely rather than
+emitting a broken link.
+
+Both links navigate in the same tab, as do the site's own links into a deck.
+The week label is the return leg the site previously lacked, so a reader moves
+from a week page into its deck and back without collecting tabs, and because
+decks route on the hash, the browser's Back button returns to the slide that
+was open rather than to the first one. Two groups of links still open a new
+tab, because neither can make that round trip. The Canvas fragment's links
+leave the LMS for the public site, which the deck footer cannot return anyone
+to. A deck's written exercise links reach a page whose own way back is the week
+overview, one level above the slide that linked to it.
 
 Slide navigation controls stay visible instead of appearing on hover. Slidev
 renders them at `opacity: 0`, which hides how to advance from a reader who does
