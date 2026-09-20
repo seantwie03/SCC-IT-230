@@ -1,6 +1,7 @@
 kitten @ set-font-size 30.0 && ssh servera
 clear
 
+#@ pause 8
 #^ Exercise: Creating and Extracting Archives
 # Requirements
 #   Host: servera
@@ -18,6 +19,7 @@ clear
 #! Reading every file under /etc requires root
 sudo -i
 #! -c creates, -v lists each member as it is added, -f names the archive
+#@ pause 5
 tar -cvf /tmp/etc-backup.tar /etc
 #! tar strips the leading slash, so extracting somewhere else cannot overwrite /etc
 clear
@@ -28,6 +30,7 @@ clear
 
 #^ 3. Read the archive's contents without unpacking it
 #! -t lists. The member names have no leading slash.
+#@ pause 5
 tar -tf /tmp/etc-backup.tar | head -n 20
 clear
 
@@ -41,6 +44,7 @@ clear
 
 #^ 5. Confirm the extracted tree looks like the original
 ls -l /tmp/etc-extract/etc | head -n 10
+#@ pause 5
 diff /tmp/etc-extract/etc/hosts /etc/hosts
 #! No output from diff means the two files are identical
 clear
