@@ -90,7 +90,18 @@ scrolling ancestor are excluded. The command also fails on page errors and on
 console messages that indicate broken rendering, because a failed Mermaid
 diagram reports a warning rather than an error and would otherwise ship blank.
 
-Overflow and rendering errors are the only failures. Clearance is measured but
+It then measures the navigation controls once, at a phone-landscape viewport.
+That chrome sits outside the layout, so the walk above never sees it, and the
+theme's treatment of it depends on matching Slidev's internal markup: a release
+that changes the markup would quietly restore Slidev's own hidden, cornered
+controls. The measurements are geometric rather than an inventory of buttons,
+because the bar wraps into a further column instead of leaving the screen, so
+only a column that reaches slide content is a defect. Controls hidden from
+view, controls overlapping the content box or the screen edge, a letterbox that
+no longer advances the deck when tapped, and a button that no longer takes a
+tap each fail the deck.
+
+Overflow, navigation, and rendering errors are the only failures. Clearance is measured but
 never judged, because a slide that fills its box is doing its job. Its
 `--verbose` output reports the two measurements that are useful while authoring
 rather than as pass or fail conditions: each slide's remaining clearance, and

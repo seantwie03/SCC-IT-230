@@ -31,6 +31,15 @@ import { discoverCanonicalWeeks } from "./lib/presentations.mjs";
 const OVERFLOW_THRESHOLD = 2;
 const REVIEW_PORT = 3232;
 const VIEWPORT = { height: 1080, width: 1920 };
+/**
+ * A phone held in landscape, where the theme moves the navigation controls out
+ * of the slide and into the letterbox beside it. iPhone-class hardware reports
+ * this size, and a visible browser URL bar only makes the window shorter and
+ * the letterbox wider, so this is the tightest case the rail has to survive.
+ */
+const PHONE_VIEWPORT = { height: 390, width: 844 };
+/** How far the controls must stay clear of the layout's content box. */
+const CONTROL_CLEARANCE = 24;
 
 const root = fileURLToPath(new URL("../", import.meta.url));
 const args = userArguments(process.argv.slice(2));
@@ -74,11 +83,13 @@ await withBrowser(async (browser) => {
                 for (const state of await measureSlide(page, slide))
                     findings.push(state);
             }
+            const controls = await measureControls(page);
             await page.close();
 
             const overflowing = findings.filter((finding) => finding.overflow);
-            failures += overflowing.length + diagnostics.length;
-            report(relative, overflowing, diagnostics);
+            failures +=
+                overflowing.length + diagnostics.length + controls.length;
+            report(relative, overflowing, diagnostics, controls);
             if (verbose)
                 for (const finding of findings)
                     console.log(
@@ -124,6 +135,100 @@ async function measureSlide(page, slide) {
             states.push({ ...measurement, clicks, clicksTotal, slide });
     }
     return states;
+}
+
+/**
+ * Check the navigation chrome at a phone-landscape viewport.
+ *
+ * The control bar lives outside `.slidev-layout`, so the per-slide measurement
+ * never sees it, and every decision the theme makes about it hangs off one
+ * selector that describes Slidev's internal markup rather than an API. A
+ * release that nests that markup one level deeper would silently return the
+ * controls to Slidev's own treatment: hidden until hover, in the corner, on
+ * top of the slide. These measurements are the signal that this happened.
+ *
+ * Geometry rather than an inventory of buttons, because the rail wraps: a
+ * release that adds a button starts another column instead of leaving the
+ * screen, and only a column that reaches the slide is a defect.
+ */
+async function measureControls(page) {
+    await page.setViewportSize(PHONE_VIEWPORT);
+    // Slidev transitions the bar into place. Waiting out the animation would
+    // work, but removing it makes the measurement immediate and exact. The
+    // page is closed straight afterwards.
+    await page.addStyleTag({ content: "* { transition: none !important; }" });
+    await page.evaluate(
+        () =>
+            new Promise((resolve) =>
+                requestAnimationFrame(() => requestAnimationFrame(resolve)),
+            ),
+    );
+    return page.evaluate(measureControlsInPage, {
+        clearance: CONTROL_CLEARANCE,
+    });
+}
+
+/**
+ * Measure the navigation controls inside the page.
+ *
+ * Returns a problem for each broken expectation, in device pixels: the
+ * controls are browser chrome drawn outside the scaled canvas, so a canvas
+ * pixel would not describe them.
+ */
+function measureControlsInPage({ clearance }) {
+    const wrapper = document.querySelector("#slide-container > div:has(> nav)");
+    const container = document.getElementById("slide-container");
+    const layout = [...document.querySelectorAll(".slidev-layout")].find(
+        (element) => element.getBoundingClientRect().height > 0,
+    );
+    const bar = wrapper?.querySelector("nav > div");
+    const button = bar?.querySelector(".slidev-icon-btn");
+    if (!wrapper || !container || !layout || !bar || !button)
+        return [
+            "the navigation controls are not where the theme styles them, so the theme no longer styles them",
+        ];
+
+    const problems = [];
+    if (Number.parseFloat(getComputedStyle(wrapper).opacity) < 1)
+        problems.push("the navigation controls are not fully visible");
+
+    const rect = bar.getBoundingClientRect();
+    const layoutRect = layout.getBoundingClientRect();
+    const scale = layoutRect.height / layout.offsetHeight;
+    const contentRight =
+        layoutRect.right -
+        parseFloat(getComputedStyle(layout).paddingRight) * scale;
+    const gap = Math.round(rect.left - contentRight);
+    if (gap < clearance)
+        problems.push(
+            `the controls come within ${gap}px of slide content, short of ${clearance}px`,
+        );
+    if (rect.top < 0 || rect.bottom > window.innerHeight)
+        problems.push(
+            `the controls are ${Math.round(rect.height)}px tall and reach past a ${window.innerHeight}px screen`,
+        );
+
+    // The letterbox advances the deck when tapped, which is the navigation a
+    // touch screen finds first. The controls sit in it and must not absorb it.
+    const letterbox = document.elementFromPoint(
+        window.innerWidth - 2,
+        Math.round(window.innerHeight / 2),
+    );
+    if (letterbox !== container)
+        problems.push(
+            "the letterbox beside the controls no longer advances the deck when tapped",
+        );
+
+    // And the controls themselves still have to take a tap.
+    const own = button.getBoundingClientRect();
+    const target = document.elementFromPoint(
+        Math.round(own.left + own.width / 2),
+        Math.round(own.top + own.height / 2),
+    );
+    if (!button.contains(target))
+        problems.push("the control buttons no longer receive a tap");
+
+    return problems;
 }
 
 async function navigate(page, slide, clicks) {
@@ -279,10 +384,14 @@ function measureInPage({ threshold }) {
     }
 }
 
-function report(relative, overflowing, diagnostics) {
+function report(relative, overflowing, diagnostics, controls) {
     console.log(`\n${relative}`);
-    if (overflowing.length === 0 && diagnostics.length === 0) {
-        console.log("  no overflow or render errors");
+    if (
+        overflowing.length === 0 &&
+        diagnostics.length === 0 &&
+        controls.length === 0
+    ) {
+        console.log("  no overflow, navigation, or render errors");
         return;
     }
     for (const finding of overflowing)
@@ -296,6 +405,8 @@ function report(relative, overflowing, diagnostics) {
         console.log(
             `  FAIL render ${message.type}: ${message.text.split("\n")[0]}`,
         );
+    for (const problem of controls)
+        console.log(`  FAIL navigation: ${problem}`);
 }
 
 function state(finding) {
