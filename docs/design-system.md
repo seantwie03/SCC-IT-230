@@ -375,10 +375,14 @@ renders them at `opacity: 0`, which hides how to advance from a reader who does
 not already know and gives a touch screen no hint at all, and these decks are
 published for students to read alone as well as presented. They are centred,
 because Slidev's default corner overlaps the footer's course name while the
-footer's own middle is empty. Showing the bar also makes its text subject to
-contrast requirements that were never measured while it was hidden, so the
-dimmed half of the slide counter is raised from Slidev's `opacity: 0.5`, which
-measures 3.1:1 on this theme's light surface, to clear 4.5:1.
+footer's own middle is empty. Centring spans the full width of the slide
+container so the bar keeps to one row: Slidev wraps the bar in reverse, so a
+bar given too little width sends its slide counter to a second row above the
+buttons and covers twice as much of the slide, and a phone held in landscape
+is narrow enough to cross that threshold. Showing the bar also makes its text
+subject to contrast requirements that were never measured while it was hidden,
+so the dimmed half of the slide counter is raised from Slidev's `opacity: 0.5`,
+which measures 3.1:1 on this theme's light surface, to clear 4.5:1.
 
 Use ordinary fenced code for source and short commands. Use `TerminalWindow`
 when a terminal frame clarifies that the content is an interactive session or

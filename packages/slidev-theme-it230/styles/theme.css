@@ -548,12 +548,22 @@ body {
  * They are centred rather than left aligned because Slidev's default corner
  * overlaps the footer's course name. The footer is `space-between`, so its
  * middle is empty and the controls can sit there without covering anything.
+ *
+ * Centring comes from automatic margins across the full container rather than
+ * a half offset, so the bar keeps to one row. Slidev lays it out as
+ * `flex-wrap-reverse`, which sends the slide counter to a line above the
+ * buttons as soon as the bar runs out of width and doubles the height of the
+ * overlay. Offsetting from `left: 50%` caps that width at half the slide
+ * container, and a phone held in landscape is narrow enough to cross the
+ * threshold.
  */
 #slide-container > div:has(> nav) {
-    left: 50%;
+    left: 0;
+    margin-inline: auto;
+    max-width: 100%;
     opacity: 1;
-    right: auto;
-    transform: translateX(-50%);
+    right: 0;
+    width: max-content;
 }
 
 /*
