@@ -1,6 +1,7 @@
 kitten @ set-font-size 30.0 && ssh workstation
 clear
 
+#@ pause 10
 #^ Exercise: Configure a New DocumentRoot for Apache
 # Requirements
 #   Host: workstation
@@ -22,6 +23,7 @@ sudo mkdir /web
 sudo vim /web/index.html
 #@ noenter
 i<h1>Welcome to /web</h1>
+#@ pause 5
 #@ key escape
 :wq
 ls -lZ /web/
@@ -44,14 +46,17 @@ f"ci"
 f"ci"
 #@ noenter
 /web
+#@ pause 5
 #@ key escape
 :wq
 sudo systemctl restart httpd.service
+#@ pause 5
 systemctl status httpd.service --no-pager
 clear
 
 #^ 3. Test and troubleshoot: switch SELinux to permissive temporarily
 #! Expect the Apache test page: SELinux blocks /web, so Apache answers with its welcome page
+#@ pause 5
 curl http://localhost/
 sudo setenforce 0
 curl http://localhost/
@@ -59,7 +64,9 @@ sudo setenforce 1
 clear
 
 #^ 4. Troubleshoot: use sealert
+#@ pause 8
 sudo sealert -a /var/log/audit/audit.log | less
+#@ pause 6
 /web/index.html
 #@ noenter
 q

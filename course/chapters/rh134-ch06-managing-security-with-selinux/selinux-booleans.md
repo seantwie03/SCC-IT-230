@@ -285,3 +285,25 @@ Configure Apache's UserDir feature
 6. Troubleshoot: `sealert` and `getsebool`
 7. Turn on the SELinux boolean (MAC)
 8. Verify the results
+
+---
+layout: exercise
+variant: recording
+---
+
+<script setup>
+import castUrl from "./exercises/allow-personal-web-pages-exercise.cast?url";
+</script>
+
+# Allow Users to Have Personal Web Pages
+
+::recording::
+
+<AsciinemaPlayer
+    :src="castUrl"
+    label="Screen recording of the instructor creating a page in ~/public_html, enabling UserDir in userdir.conf, getting 403 Forbidden and finding the permission denied entry in error_log, opening the home directory with chmod 711, getting 403 Forbidden again, using sealert and getsebool to find the httpd_enable_homedirs boolean, turning it on with setsebool -P, confirming the page loads, then undoing the changes."
+/>
+
+::resources::
+
+<a href="../resources/allow-personal-web-pages-exercise.html" target="_blank" rel="noopener noreferrer" aria-label="Read the written Allow Users to Have Personal Web Pages exercise in a new tab">Written exercise</a>

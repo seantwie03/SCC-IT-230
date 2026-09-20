@@ -157,3 +157,25 @@ Apply the correct label to `about.html`
 2. Use `restorecon` to apply the policy to `/var/www` recursively
 3. Verify access to `about.html`
 4. Test `cp` vs `mv`: what if we had copied instead?
+
+---
+layout: exercise
+variant: recording
+---
+
+<script setup>
+import castUrl from "./exercises/fix-selinux-label-exercise.cast?url";
+</script>
+
+# Fix SELinux Label on about.html File
+
+::recording::
+
+<AsciinemaPlayer
+    :src="castUrl"
+    label="Screen recording of the instructor listing the default file contexts for /var/www with semanage fcontext, running restorecon -Rv to relabel about.html from user_tmp_t to httpd_sys_content_t, confirming curl now returns the page, copying a second page with cp to show that a copy takes the label of its destination directory, and removing the test pages."
+/>
+
+::resources::
+
+<a href="../resources/fix-selinux-label-exercise.html" target="_blank" rel="noopener noreferrer" aria-label="Read the written Fix SELinux Label on about.html File exercise in a new tab">Written exercise</a>

@@ -1,6 +1,7 @@
 kitten @ set-font-size 30.0 && ssh workstation
 clear
 
+#@ pause 10
 #^ Exercise: Add New Web Page
 # Requirements
 #   Host: workstation
@@ -20,6 +21,7 @@ clear
 vim /tmp/about.html
 #@ noenter
 i<h1>About Us</h1>
+#@ pause 5
 #@ key escape
 :wq
 ls -lZ /tmp/about.html
@@ -32,6 +34,7 @@ ls -lZ /var/www/html/
 
 #^ 2. Attempt to access http://localhost/about.html
 #! Expect 403 Forbidden: SELinux blocks httpd_t from opening a user_tmp_t file
+#@ pause 5
 curl http://localhost/about.html
 clear
 
@@ -47,6 +50,7 @@ clear
 #^ 4. Troubleshoot: view /var/log/audit/audit.log
 #! The log is dense. Look for type=AVC records that name about.html.
 sudo less /var/log/audit/audit.log
+#@ pause 6
 /about.html
 #@ noenter
 q
@@ -56,6 +60,7 @@ clear
 #! workstation already has setroubleshoot-server, so dnf has nothing to do
 sudo dnf install setroubleshoot-server -y
 clear
+#@ pause 8
 sudo sealert -a /var/log/audit/audit.log | less
 #@ noenter
 q

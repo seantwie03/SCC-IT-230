@@ -213,3 +213,26 @@ The developer wants you to add `about.html` to the web site
 3. Troubleshoot: switch SELinux to permissive temporarily
 4. Troubleshoot: view `/var/log/audit/audit.log`
 5. Troubleshoot: use `sealert`
+
+---
+layout: exercise
+variant: recording
+---
+
+<script setup>
+import castUrl from "./exercises/add-new-web-page-exercise.cast?url";
+</script>
+
+# Add New Web Page
+
+::recording::
+
+<AsciinemaPlayer
+    :src="castUrl"
+    label="Screen recording of the instructor creating about.html in /tmp, moving it into /var/www/html where it keeps its user_tmp_t label, getting a 403 Forbidden from curl, switching SELinux to permissive to show the page loads and back to enforcing, finding the denial in /var/log/audit/audit.log, and reading the sealert report that recommends restorecon."
+/>
+
+::resources::
+
+<a href="../resources/add-new-web-page-exercise.html" target="_blank" rel="noopener noreferrer" aria-label="Read the written Add New Web Page exercise in a new tab">Written exercise</a>
+

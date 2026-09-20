@@ -306,3 +306,26 @@ Install a basic web server
 2. Create a web page
 3. Enable and start the systemd service
 4. Verify the results
+
+---
+layout: exercise
+variant: recording
+---
+
+<script setup>
+import castUrl from "./exercises/set-up-a-basic-web-server-exercise.cast?url";
+</script>
+
+# Set Up a Basic Web Server
+
+::recording::
+
+<AsciinemaPlayer
+    :src="castUrl"
+    label="Screen recording of the instructor installing the httpd package, creating an index.html page with vim and checking that it received the httpd_sys_content_t label, enabling and starting httpd.service, checking its status and confirming with ps -AZ that every httpd process runs as httpd_t, then requesting the page with curl."
+/>
+
+::resources::
+
+<a href="../resources/set-up-a-basic-web-server-exercise.html" target="_blank" rel="noopener noreferrer" aria-label="Read the written Set Up a Basic Web Server exercise in a new tab">Written exercise</a>
+

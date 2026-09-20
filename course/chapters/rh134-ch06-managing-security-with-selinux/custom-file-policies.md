@@ -186,3 +186,25 @@ Configure Apache to serve content from the `/web` directory
 5. Configure a policy to set `httpd_sys_content_t` on `/web(/.*)?` files
 6. Apply the policy to the files
 7. Verify the results
+
+---
+layout: exercise
+variant: recording
+---
+
+<script setup>
+import castUrl from "./exercises/configure-a-new-document-root-exercise.cast?url";
+</script>
+
+# Configure a New DocumentRoot for Apache
+
+::recording::
+
+<AsciinemaPlayer
+    :src="castUrl"
+    label="Screen recording of the instructor creating /web with an index.html labeled default_t, pointing DocumentRoot and its Directory block in httpd.conf at /web, seeing Apache return its test page until SELinux is set to permissive, reading the sealert report, adding an httpd_sys_content_t file context rule for /web with semanage fcontext, relabeling with restorecon, confirming Apache serves the new page, then restoring the original configuration."
+/>
+
+::resources::
+
+<a href="../resources/configure-a-new-document-root-exercise.html" target="_blank" rel="noopener noreferrer" aria-label="Read the written Configure a New DocumentRoot for Apache exercise in a new tab">Written exercise</a>

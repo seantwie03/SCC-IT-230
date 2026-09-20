@@ -1,6 +1,7 @@
 kitten @ set-font-size 30.0 && ssh workstation
 clear
 
+#@ pause 8
 #^ Exercise: Set Up a Basic Web Server
 # Requirements
 #   Host: workstation
@@ -13,6 +14,7 @@ clear
 clear
 
 #^ 1. Install the httpd package
+#@ pause 6
 sudo dnf install httpd -y
 clear
 
@@ -20,6 +22,7 @@ clear
 sudo vim /var/www/html/index.html
 #@ noenter
 i<h1>Welcome to Workstation</h1>
+#@ pause 5
 #@ key escape
 :wq
 ls -lZ /var/www/html/index.html
@@ -28,7 +31,9 @@ clear
 
 #^ 3. Enable and start the systemd service
 sudo systemctl enable httpd.service --now
+#@ pause 5
 systemctl status httpd.service --no-pager
+#@ pause 5
 ps -AZ | grep httpd
 #! Every httpd process runs as httpd_t
 clear

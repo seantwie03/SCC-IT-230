@@ -1,6 +1,7 @@
 kitten @ set-font-size 30.0 && ssh servera
 clear
 
+#@ pause 10
 #^ Exercise: Configure a New DocumentRoot for Apache on servera
 # Requirements
 #   Host: servera
@@ -19,7 +20,9 @@ clear
 
 #^ 1. Install httpd and start its service
 #! servera has no web server yet
+#@ pause 6
 sudo dnf install -y httpd
+clear
 sudo systemctl enable --now httpd.service
 systemctl is-active httpd.service
 clear
@@ -29,6 +32,7 @@ sudo mkdir /website
 sudo vim /website/index.html
 #@ noenter
 i<h1>Welcome to /website</h1>
+#@ pause 5
 #@ key escape
 :wq
 ls -lZ /website/
@@ -48,15 +52,19 @@ f"ci"
 f"ci"
 #@ noenter
 /website
+#@ pause 5
 #@ key escape
 :wq
 sudo systemctl restart httpd.service
+#@ pause 5
 systemctl status httpd.service --no-pager
 clear
 
 #^ 4. Test and troubleshoot: switch SELinux to permissive temporarily
 #! Expect the Apache test page: SELinux blocks /website
+#@ pause 5
 curl http://localhost/
+clear
 sudo setenforce 0
 curl http://localhost/
 sudo setenforce 1
@@ -64,9 +72,12 @@ clear
 
 #^ 5. Troubleshoot: use sealert
 #! servera does not have setroubleshoot-server yet
+#@ pause 6
 sudo dnf install -y setroubleshoot-server
 clear
+#@ pause 8
 sudo sealert -a /var/log/audit/audit.log | less
+#@ pause 6
 /website/index.html
 #@ noenter
 q

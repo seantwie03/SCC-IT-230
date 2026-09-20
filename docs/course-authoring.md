@@ -673,6 +673,42 @@ Changing a command file invalidates its recording. Adding or removing a step
 changes the press count and the total runtime, which can strand `#@ pause`
 values tuned for a wait.
 
+#### Pausing for the audience
+
+Recording holds 3 seconds after every step (`DEFAULT_PAUSE` in `kitty-demo`),
+which is enough to read one short line. Add `#@ pause N` only where a step
+needs longer, so the pauses that remain tell the viewer where to look. Do not
+pause after every command.
+
+A pause holds after the step that follows it, not before. Write it directly
+above the step whose result should linger, after any `#!` note, and stack it
+with `#@ noenter` when both apply. Add one in these cases:
+
+- **The intro.** Hold 8 seconds after the requirements block, or 10 when it runs
+  longer than about ten lines, so viewers can read the goal and the steps
+  before the first command.
+- **Text typed into an editor.** Hold 5 seconds on the last insert-mode
+  keystroke, before `#@ key escape`, so viewers can read what was typed. In a
+  configuration file, hold on the last edit so the changed lines are on screen
+  when the pause runs out.
+- **Output the viewer has to read.** Hold 5 seconds after multi-line or wide
+  output, an error page, or a status display that the next step is about to
+  `clear`. Leave single-line output alone.
+- **A search hit in a pager.** Hold 6 seconds on the search (`/pattern`) so the
+  matching record is visible. If the command that opens the pager is slow, such
+  as `sealert`, pause on it too, long enough for it to finish loading before the
+  next keystroke arrives.
+- **A slow command.** `--record` does not detect whether a command has finished,
+  so hold at least as long as the command runs. Package installs and removals
+  and `setsebool -P` take several seconds, so use 6.
+- **The last command.** Hold long enough for it to finish before the recording
+  shell is closed, as with a cleanup `dnf remove`.
+- **A wait on the clock or another process.** Hold for the real wait, for
+  example until the next timer firing.
+
+These values are starting points. The first take will show which pauses are too
+short or too long, so play the recording back, adjust them, and record again.
+
 ## Assets
 
 Keep ordinary assets with their topic. Every third-party asset needs a clear

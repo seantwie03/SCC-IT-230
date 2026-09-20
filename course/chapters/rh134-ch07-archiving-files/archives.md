@@ -342,3 +342,25 @@ Back up `/etc` and restore it somewhere safe
 4. Unpack the archive into an empty directory of its own
 5. Confirm the extracted tree looks like the original
 6. Extract a single file into a fresh directory
+
+---
+layout: exercise
+variant: recording
+---
+
+<script setup>
+import castUrl from "./exercises/archives-exercise.cast?url";
+</script>
+
+# Creating and Extracting Archives
+
+::recording::
+
+<AsciinemaPlayer
+    :src="castUrl"
+    label="Screen recording of the instructor opening a root shell on servera, bundling /etc into an uncompressed archive with tar -cvf, checking its size with ls -lh, listing its members with tar -tf, extracting the archive into an empty directory and comparing etc/hosts with the original using diff, then extracting the single file etc/hosts into a fresh directory."
+/>
+
+::resources::
+
+<a href="../resources/archives-exercise.html" target="_blank" rel="noopener noreferrer" aria-label="Read the written Creating and Extracting Archives exercise in a new tab">Written exercise</a>

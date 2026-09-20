@@ -1,6 +1,7 @@
 kitten @ set-font-size 30.0 && ssh workstation
 clear
 
+#@ pause 8
 #^ Exercise: Fix SELinux Label on about.html File
 # Requirements
 #   Host: workstation
@@ -15,10 +16,12 @@ clear
 clear
 
 #^ 1. Inspect the policy for /var/www
+#@ pause 6
 sudo semanage fcontext -l | grep '/var/www' | head -n5
 clear
 
 #^ 2. Use restorecon to apply the policy to /var/www recursively
+#@ pause 5
 sudo restorecon -Rv /var/www
 ls -lZ /var/www/html/
 clear

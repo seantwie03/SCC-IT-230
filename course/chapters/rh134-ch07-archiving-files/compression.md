@@ -237,3 +237,25 @@ Find which compressor makes the smallest `/etc` backup, and at what cost
 4. Ask `gzip` and `xz` to report the compression ratio of their own archives
 5. Extract one of the compressed archives without naming its algorithm
 6. Note which archive was smallest and which took longest to create
+
+---
+layout: exercise
+variant: recording
+---
+
+<script setup>
+import castUrl from "./exercises/compression-exercise.cast?url";
+</script>
+
+# Comparing Compression Algorithms
+
+::recording::
+
+<AsciinemaPlayer
+    :src="castUrl"
+    label="Screen recording of the instructor timing tar builds of the /etc backup with gzip, then bzip2 after installing it with dnf, then xz, listing all four archives sorted by size to show that xz is smallest and slowest, reading the ratios with gzip -l and xz -l, extracting the xz archive without naming the algorithm, and cleaning up."
+/>
+
+::resources::
+
+<a href="../resources/compression-exercise.html" target="_blank" rel="noopener noreferrer" aria-label="Read the written Comparing Compression Algorithms exercise in a new tab">Written exercise</a>
