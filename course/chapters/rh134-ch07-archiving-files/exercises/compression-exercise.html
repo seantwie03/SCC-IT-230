@@ -66,6 +66,13 @@
                         var(--it230-color-surface),
                         #f5f6f8 72%
                     );
+                /*
+                 * The accent wash is pinned to the viewport so it stays in the
+                 * corner as a long exercise scrolls under it. Only the wash is
+                 * fixed; the dot texture and the base gradient still travel
+                 * with the content.
+                 */
+                background-attachment: fixed, scroll, scroll;
                 font-family: var(--it230-font-sans);
                 font-feature-settings:
                     "liga" 0,
@@ -149,12 +156,20 @@
                 margin: 0;
             }
 
-            .header-inner a {
+            /*
+             * The course identity is chrome, not prose, so it keeps the
+             * surrounding text color and takes its underline on hover. It
+             * appears in the header and again in the footer, and both lead to
+             * the course home.
+             */
+            .header-inner a,
+            footer a {
                 color: inherit;
                 text-decoration: none;
             }
 
-            .header-inner a:hover {
+            .header-inner a:hover,
+            footer a:hover {
                 text-decoration: underline;
             }
 
@@ -207,11 +222,7 @@
             .exercise-header {
                 padding: clamp(1.5rem, 4vw, 2.25rem);
                 border-bottom: 0.25rem solid var(--it230-color-accent-fill);
-                background: linear-gradient(
-                    135deg,
-                    var(--it230-color-accent-wash),
-                    var(--it230-color-surface) 75%
-                );
+                background: var(--it230-color-accent-wash);
             }
 
             .exercise-kicker {
@@ -607,7 +618,10 @@ exit</code></pre>
         </main>
 
         <footer>
-            <p>IT-230 · Linux Administration</p>
+            <p>
+                <a href="../../../">IT-230</a> ·
+                <a href="../../../">Linux Administration</a>
+            </p>
         </footer>
     </body>
 </html>

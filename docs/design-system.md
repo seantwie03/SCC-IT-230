@@ -33,8 +33,9 @@ root.
 
 ### Weekly overview
 
-The landing page is a compact list of published weeks. Each item shows only the
-week title, summary, and a two-action footer so a full semester remains easy to
+The landing page is a compact list of published weeks. Each item carries its
+week's accent as an even wash across the whole card, and shows only the week
+title, summary, and a two-action footer so a full semester remains easy to
 scan. The title and primary Week overview action open the detail page; the
 secondary Open presentation action launches Slidev. The action row wraps on
 narrow screens. The landing page and weekly detail pages use the same content
@@ -72,12 +73,21 @@ variables and the global blue fallback; `site/styles.css` must not duplicate
 the named palette. Before/In/After surfaces stay neutral so multiple phase
 colors do not compete with deck identity.
 
+A week page carries one accent, so it applies those variables at document root
+rather than to the article holding its content. The page wash, the header and
+skip links, focus rings, the selection highlight, and the footer rule are
+painted outside that article, and scoping the accent to it left those surfaces
+on the blue fallback while the week's own content wore its accent. Published
+exercise pages already receive an equivalent root-level block. The landing page
+is the exception: it lists every week at once, so each card carries its own
+accent inline and the page itself keeps the fallback.
+
 ### Exercise documents
 
 Standalone HTML exercises visually continue the weekly detail page. They use
 the same fixed light tokens, textured canvas gradient, `64rem` content width,
 sticky course header, responsive gutters, raised white document surface, and
-accent-gradient document header. The exercise overview and ordered steps stack
+accent-wash document header. The exercise overview and ordered steps stack
 inside that single surface with separators. Step headings use the same accent
 left rule as weekly phase headings, with a small numbered step label. Do not
 turn individual steps into cards; reserve inset treatments for code blocks,
@@ -168,7 +178,12 @@ surfaces or verify the new pairing independently.
 The canvas combines a near-white base, a restrained selected-accent wash, and
 an original low-opacity procedural texture. The texture creates quiet
 desktop-like depth; it is not a copied GNOME asset and must remain visually
-secondary. Keep cards, code, terminals, and any surface where texture could
+secondary. On every site page, including standalone exercises, the wash alone
+is pinned to the viewport, so it holds its corner while a long page scrolls
+under it instead of sliding away and leaving the lower half plain. The texture
+and the base gradient still travel with the content, and a browser that
+declines a fixed background scrolls the wash as it did before rather than
+losing it. Keep cards, code, terminals, and any surface where texture could
 impair reading flat and high contrast.
 
 Mermaid diagrams do not scale themselves to fit a slide. Set an explicit

@@ -69,6 +69,10 @@ export async function renderWeekPage(
             withSiteBase(siteBase, "/favicon.svg"),
         ],
         [
+            "<!-- IT230_WEEK_ACCENT_STYLE -->",
+            renderRootAccentStyle(view.accentCssVariables),
+        ],
+        [
             "<!-- IT230_WEEK_CONTENT -->",
             renderWeeklyOverview(view, {
                 allWeeksHref: homeHref,
@@ -165,7 +169,6 @@ export function renderWeekSummary(view) {
 }
 
 export function renderWeeklyOverview(view, navigation) {
-    const style = renderAccentStyle(view.accentCssVariables);
     const academy = view.beforeClass
         ? `<section class="week-phase" aria-labelledby="${view.id}-before">
                         <p class="phase-label">${escapeHtml(view.beforeClass.label)}</p>
@@ -187,7 +190,7 @@ export function renderWeeklyOverview(view, navigation) {
                         <h2 id="${view.id}-labs">${escapeHtml(view.labs.heading)}</h2>
                         <p>${escapeHtml(view.labs.body)}</p>
                     </section>`;
-    return `<article class="week-overview" style="${escapeHtml(style)}" aria-labelledby="${view.id}-title">
+    return `<article class="week-overview" aria-labelledby="${view.id}-title">
                 <header class="week-header">
                     <p class="week-kicker">${escapeHtml(weekLabel(view.id))}</p>
                     <h1 id="${view.id}-title">${escapeHtml(view.title)}</h1>
@@ -242,6 +245,27 @@ function renderAccentStyle(variables) {
     return Object.entries(variables)
         .map(([name, value]) => `${name}: ${value}`)
         .join("; ");
+}
+
+/*
+ * A week page carries one accent, so its variables belong at document root
+ * rather than on the article. The page wash, the header and skip links, focus
+ * rings, the selection highlight, and the footer rule are all painted outside
+ * the article and would otherwise keep the blue fallback while the week's own
+ * content wore its accent. Published exercise pages already receive the same
+ * root-level block from `scripts/lib/exercise-resource.mjs`, under the same
+ * attribute name. The landing page keeps its per-card inline variables, since
+ * it lists every week at once.
+ */
+function renderRootAccentStyle(variables) {
+    const declarations = Object.entries(variables)
+        .map(([name, value]) => `                ${name}: ${value};`)
+        .join("\n");
+    return `<style data-it230-week-accent>
+            :root {
+${declarations}
+            }
+        </style>`;
 }
 
 function weekLabel(id) {

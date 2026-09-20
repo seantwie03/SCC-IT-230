@@ -473,6 +473,11 @@ test("weekly detail page is vertical, linked home, and navigates published weeks
     };
     const html = await renderWeekPage(catalog, 1, "/project/");
     assert.match(html, /class="week-overview"/);
+    assert.match(
+        html,
+        /<style data-it230-week-accent>\s*:root \{\s*--it230-color-accent-fill: #9141AC;/,
+    );
+    assert.doesNotMatch(html, /class="week-overview" style=/);
     assert.match(html, /<h1 id="w08-title">Week 08/);
     assert.match(html, /<h2 id="w08-agenda">Meeting Agenda<\/h2>/);
     assert.match(
