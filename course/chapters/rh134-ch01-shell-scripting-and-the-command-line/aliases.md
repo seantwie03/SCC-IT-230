@@ -109,7 +109,7 @@ RHEL predefines only a handful, mostly `--color` wrappers
 
 # Bypassing and Removing an Alias
 
-<v-switch at="0">
+<v-switch at="1">
 
 <template #0-2>
 

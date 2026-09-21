@@ -25,7 +25,7 @@ topicInfo:
 # Variables Explained
 
 
-<v-switch at="0">
+<v-switch at="1">
 
 <template #0-2>
 
@@ -109,7 +109,7 @@ These are called <AccentText>Environment Variables</AccentText> because they are
 
 # Exported Variables
 
-<v-switch at="0">
+<v-switch at="1">
 
 <template #0>
 

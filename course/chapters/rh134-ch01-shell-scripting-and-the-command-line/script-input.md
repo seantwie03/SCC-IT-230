@@ -57,6 +57,8 @@ switch_ip='172.25.250.2'
 echo "$switch_ip"
 ```
 
+</v-click>
+
 <v-click>
 
 ```bash [Output]
@@ -64,8 +66,6 @@ echo "$switch_ip"
 ```
 
 An assignment replaces the old value, so the last one wins
-
-</v-click>
 
 </v-click>
 

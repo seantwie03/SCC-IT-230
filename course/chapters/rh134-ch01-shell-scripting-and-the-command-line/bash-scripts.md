@@ -137,7 +137,7 @@ vertical: center
 
 # Why Doesn't It Run by Name?
 
-<v-switch at="0">
+<v-switch at="1">
 
 <template #0-2>
 

@@ -333,7 +333,7 @@ its own sentence above the terminal and repeats the whole transcript so far, wit
 the lines for the current concept highlighted and the earlier ones dimmed:
 
 `````md
-<v-switch at="0">
+<v-switch at="1">
 
 <template #0-2>
 
@@ -363,6 +363,13 @@ alpha
 ...
 </v-switch>
 `````
+
+Give `v-switch` an `at` of `1`, not `0`. Slidev rejects an `at` below 1 and
+substitutes 1 while logging a console warning for every such switch on every
+render, including each PDF export. The first template still appears before any
+click, because it covers the range `#0-2` and the switch offsets its own
+templates from `at`. Writing `1` therefore renders exactly what `0` rendered,
+without the warning.
 
 A Magic Move nested in a `v-switch` template still opens with four backticks and
 its states with three, exactly as it would on its own. Nesting inside the

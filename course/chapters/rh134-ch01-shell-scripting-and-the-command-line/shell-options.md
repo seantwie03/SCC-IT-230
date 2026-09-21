@@ -44,7 +44,7 @@ noclobber      	off
 
 # The `noclobber` Option
 
-<v-switch at="0">
+<v-switch at="1">
 
 <template #0-3>
 
