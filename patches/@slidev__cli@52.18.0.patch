@@ -1,0 +1,28 @@
+diff --git a/dist/cli.mjs b/dist/cli.mjs
+index 78df53afbbe5e2b7f0d16976d2659dd82c414e49..432e00cb1d728b8459a8cb35ffd5af3b525aca89 100644
+--- a/dist/cli.mjs
++++ b/dist/cli.mjs
+@@ -370,7 +370,7 @@ cli.command("theme [subcommand]", "Theme related operations", (command) => {
+ cli.command("export [entry..]", "Export slides to PDF", (args) => exportOptions(commonOptions(args)).strict().help(), async (args) => {
+ 	const { entry, theme } = args;
+ 	const { exportSlides, getExportOptions } = await import("./export-B_maVZXE.mjs");
+-	const candidatePort = await getPort(12445);
++	const candidatePort = await getPort(12445 + process.pid % 997);
+ 	let warned = false;
+ 	for (const entryFile of entry) {
+ 		const options = await resolveOptions({
+diff --git a/dist/serve-1daxO8VB.mjs b/dist/serve-1daxO8VB.mjs
+index 3aafcb910767096274075ff3c81a1b7af4803664..961130f6ee178e333c4e442f7083ce383a206553 100644
+--- a/dist/serve-1daxO8VB.mjs
++++ b/dist/serve-1daxO8VB.mjs
+@@ -331,7 +331,9 @@ function createMakeAbsoluteImportGlob(baseRoot) {
+ 		const proxyModule = resolveImportGlobProxyModule(proxyBase, content);
+ 		if (proxyModules.get(proxyModule) !== content) {
+ 			mkdirSync(dirname(proxyModule), { recursive: true });
+-			writeFileSync(proxyModule, content, "utf-8");
++			const temporaryModule = `${proxyModule}.${process.pid}.${Math.random().toString(36).slice(2, 10)}.tmp`;
++			writeFileSync(temporaryModule, content, "utf-8");
++			fs.renameSync(temporaryModule, proxyModule);
+ 			proxyModules.set(proxyModule, content);
+ 		}
+ 		return toAtFS(proxyModule);

@@ -25,7 +25,10 @@
 - When updating the pinned Slidev dependencies, refresh
   `.agents/skills/slidev/` from the matching `@slidev/cli` release and verify
   that Slidev still preserves the custom `courseInfo` and `topicInfo`
-  frontmatter used by the publishing pipeline.
+  frontmatter used by the publishing pipeline. Re-verify the pinned patch under
+  `patches/` at the same time: rename it for the new version, confirm it still
+  applies, and confirm repeated `pnpm run build:site` runs still succeed, since
+  the parallel build depends on it.
 - This repository is worked on with Codex, Claude Code, and Google
   Antigravity. Their configurations mirror each other: `.mcp.json`
   (shared with Antigravity via `.agents/mcp_config.json`) and

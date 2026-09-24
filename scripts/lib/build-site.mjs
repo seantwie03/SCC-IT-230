@@ -20,6 +20,14 @@ import {
 } from "./showcase-previews.mjs";
 import { renderPublishedArtifacts } from "./site-artifacts.mjs";
 
+/**
+ * How many week builds or PDF exports run at once.
+ *
+ * Four keeps a build busy without letting a long course decide how much of the
+ * machine it takes.
+ */
+const BUILD_CONCURRENCY = 4;
+
 export async function buildPublishedSite({
     catalog,
     root,
@@ -116,11 +124,11 @@ export async function buildPublishedSite({
             recursive: true,
         });
 
-    await Promise.all(
-        catalog.presentations.map(async (presentation) => {
+    await withLimit(catalog.presentations, (presentation) =>
+        onceMore(`${presentation.id} slides`, async () => {
             const output = outputs.presentations.get(presentation.id);
             await preparePresentationOutput(output);
-            return buildPresentationSlides({
+            await buildPresentationSlides({
                 presentation,
                 root: absoluteRoot,
                 output,
@@ -129,15 +137,69 @@ export async function buildPublishedSite({
         }),
     );
 
-    for (const presentation of catalog.presentations) {
-        await exportPresentationPdf({
-            presentation,
-            root: absoluteRoot,
-            output: outputs.presentations.get(presentation.id),
-        });
-    }
+    /*
+     * Exports run alongside each other again.
+     *
+     * They were serialized because parallel exports failed intermittently.
+     * The cause was not the export itself: every Slidev process, build and
+     * export alike, rewrote the same generated import-glob modules under the
+     * course directory, and a process could read one while another was partway
+     * through replacing it. The pinned Slidev patch makes that replacement
+     * atomic, so the exports no longer collide and the serial pass, which was
+     * most of a build's wall time, is gone.
+     */
+    await withLimit(catalog.presentations, (presentation) =>
+        onceMore(`${presentation.id} PDF`, () =>
+            exportPresentationPdf({
+                presentation,
+                root: absoluteRoot,
+                output: outputs.presentations.get(presentation.id),
+            }),
+        ),
+    );
 
     return { distRoot: absoluteDist, siteBase: base };
+}
+
+/**
+ * Run one week's task, and once more if the first attempt fails.
+ *
+ * Slidev processes share generated state beyond the pinned patch's reach: Vite
+ * pre-bundles this project's dependencies into one directory inside the Slidev
+ * package, and processes starting together while that is cold have been seen to
+ * collide there. Nothing about the material is wrong in that case, and the
+ * second attempt finds the work already done.
+ *
+ * A retry is announced rather than absorbed. A real failure in the material
+ * fails twice and still stops the build; a collision shows up in the log as
+ * something that happened once.
+ */
+async function onceMore(label, task) {
+    try {
+        return await task();
+    } catch (error) {
+        console.warn(`${label} failed, retrying once: ${error.message}`);
+        return await task();
+    }
+}
+
+/**
+ * Run a task for every week, a few weeks at a time.
+ *
+ * Each task is a Slidev process: a complete Vite build or a headless browser
+ * export. The ceiling is memory rather than cores, so a sixteen-week course
+ * must not start sixteen of them at once, and a course of any length should
+ * not depend on how many weeks it happens to have.
+ */
+async function withLimit(items, run, limit = BUILD_CONCURRENCY) {
+    const queue = [...items];
+    const workers = Array.from(
+        { length: Math.min(limit, queue.length) },
+        async () => {
+            while (queue.length > 0) await run(queue.shift());
+        },
+    );
+    await Promise.all(workers);
 }
 
 export function validateBuildOutputs(catalog, distRoot) {

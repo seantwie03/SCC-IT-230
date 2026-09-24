@@ -5,4 +5,6 @@ allowBuilds:
   playwright-chromium: true
 
 engineStrict: true
+patchedDependencies:
+  "@slidev/cli@52.18.0": patches/@slidev__cli@52.18.0.patch
 verifyDepsBeforeRun: error

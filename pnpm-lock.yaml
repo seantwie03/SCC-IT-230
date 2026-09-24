@@ -4,6 +4,9 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+patchedDependencies:
+  '@slidev/cli@52.18.0': af4ab88406f17c762665ddcab20cc8d55d9ada06669bd01d68d546f5bd9fe2b2
+
 importers:
 
   .:
@@ -13,7 +16,7 @@ importers:
         version: 0.0.78
       '@slidev/cli':
         specifier: 52.18.0
-        version: 52.18.0(@nuxt/kit@3.21.10)(@types/markdown-it@14.1.2)(@types/node@22.20.1)(@vue/compiler-sfc@3.5.40)(cac@7.0.0)(lightningcss@1.33.0)(markdown-it@14.3.0)(playwright-chromium@1.62.0)(postcss@8.5.25)(rolldown@1.2.1)(solid-js@1.9.15)(srvx@0.12.5)
+        version: 52.18.0(patch_hash=af4ab88406f17c762665ddcab20cc8d55d9ada06669bd01d68d546f5bd9fe2b2)(@nuxt/kit@3.21.10)(@types/markdown-it@14.1.2)(@types/node@22.20.1)(@vue/compiler-sfc@3.5.40)(cac@7.0.0)(lightningcss@1.33.0)(markdown-it@14.3.0)(playwright-chromium@1.62.0)(postcss@8.5.25)(rolldown@1.2.1)(solid-js@1.9.15)(srvx@0.12.5)
       '@slidev/types':
         specifier: 52.18.0
         version: 52.18.0(@nuxt/kit@3.21.10)(@vue/compiler-sfc@3.5.40)(rolldown@1.2.1)(typescript@6.0.3)(vite@8.2.0(@types/node@22.20.1)(jiti@2.7.0)(yaml@2.9.0))
@@ -4223,7 +4226,7 @@ snapshots:
 
   '@shikijs/vscode-textmate@10.0.2': {}
 
-  '@slidev/cli@52.18.0(@nuxt/kit@3.21.10)(@types/markdown-it@14.1.2)(@types/node@22.20.1)(@vue/compiler-sfc@3.5.40)(cac@7.0.0)(lightningcss@1.33.0)(markdown-it@14.3.0)(playwright-chromium@1.62.0)(postcss@8.5.25)(rolldown@1.2.1)(solid-js@1.9.15)(srvx@0.12.5)':
+  '@slidev/cli@52.18.0(patch_hash=af4ab88406f17c762665ddcab20cc8d55d9ada06669bd01d68d546f5bd9fe2b2)(@nuxt/kit@3.21.10)(@types/markdown-it@14.1.2)(@types/node@22.20.1)(@vue/compiler-sfc@3.5.40)(cac@7.0.0)(lightningcss@1.33.0)(markdown-it@14.3.0)(playwright-chromium@1.62.0)(postcss@8.5.25)(rolldown@1.2.1)(solid-js@1.9.15)(srvx@0.12.5)':
     dependencies:
       '@antfu/ni': 30.3.0
       '@antfu/utils': 9.3.0

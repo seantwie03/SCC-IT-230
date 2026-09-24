@@ -35,6 +35,26 @@ resolved by the single root `pnpm-lock.yaml`. Install dependencies from the
 repository root with `pnpm install --frozen-lockfile` so installation does not
 silently change the reviewed dependency graph.
 
+`@slidev/cli` carries one pinned patch under `patches/`, named for the pinned
+version, registered in `pnpm-workspace.yaml` and applied on install. It makes
+two writes safe for concurrent Slidev processes, which the site build runs
+several of:
+
+- The generated `import-glob` proxy modules beneath the entry directory's
+  `node_modules/.slidev/virtual/` are written to a temporary file and renamed
+  into place. Every Slidev process sharing an entry directory rewrites these
+  same files on every run, so one could read a file while another was partway
+  through replacing it, failing the build with `MISSING_EXPORT`. Each filename
+  is a hash of that file's own content, so the writers never disagree about
+  what belongs there; only the moment of replacement was unsafe.
+- PDF export derives its server port from the running process instead of every
+  export beginning its search at the same port and racing to bind it.
+
+Both are worth sending upstream. Because `verifyDepsBeforeRun` is `error`,
+changing the patch requires an install before any `pnpm run` command works
+again, and a patch that no longer applies fails `pnpm install` rather than
+passing silently.
+
 The repository-scoped Slidev skill lives at `.agents/skills/slidev/`. It is
 copied from the skill bundled with the pinned `@slidev/cli` release and must be
 refreshed whenever the pinned Slidev dependencies are updated.
@@ -258,6 +278,11 @@ responsibilities:
 - `pnpm build` generates the theme gallery and recreates the complete
   course-site production artifact. `pnpm run build:theme` and
   `pnpm run build:site` retain those focused operations.
+- The site build runs the week builds and the PDF exports through one bounded
+  pool, so a course of any length uses the same amount of the machine rather
+  than starting one Slidev process per week. Both phases rely on the pinned
+  Slidev patch described under the toolchain contract; without it, concurrent
+  builds and concurrent exports both fail intermittently.
 - `pnpm run build:deck -- <id>` builds one published web deck, its supplemental
   PDF, and its exercises. `pnpm run export:pdf -- <id>` creates a separate
   review PDF under `exports/`; both accept only a canonical published week ID.
