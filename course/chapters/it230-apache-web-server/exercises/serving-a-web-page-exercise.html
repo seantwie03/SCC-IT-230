@@ -526,7 +526,7 @@ systemctl is-active httpd</code></pre>
                         </p>
                         <pre><code>grep DocumentRoot /etc/httpd/conf/httpd.conf
 vim /var/www/html/index.html</code></pre>
-                        <pre><code><h1>Welcome to servera</h1></code></pre>
+                        <pre><code>&lt;h1&gt;Welcome to servera&lt;/h1&gt;</code></pre>
                     </li>
 
                     <li class="step">
@@ -540,7 +540,7 @@ curl http://localhost/</code></pre>
                         <h2>Add a page in a subdirectory</h2>
                         <pre><code>mkdir /var/www/html/about
 vim /var/www/html/about/contact-us.html</code></pre>
-                        <pre><code><h1>Contact Us</h1></code></pre>
+                        <pre><code>&lt;h1&gt;Contact Us&lt;/h1&gt;</code></pre>
                         <pre><code>curl http://localhost/about/contact-us.html</code></pre>
                         <aside class="note">
                             <strong>The URL is the path</strong>
