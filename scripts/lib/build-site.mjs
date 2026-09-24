@@ -1,4 +1,4 @@
-import { mkdir, rm, writeFile } from "node:fs/promises";
+import { cp, mkdir, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 
 import { DEFAULT_PUBLIC_ORIGIN } from "./config.mjs";
@@ -8,11 +8,16 @@ import {
     canvasAuthoringRoute,
     presentationPdfFilename,
     presentationRoute,
+    showcaseRoute,
     weekOverviewRoute,
     validateSiteBase,
     withSiteBase,
 } from "./paths.mjs";
 import { run } from "./process.mjs";
+import {
+    buildShowcasePreviews,
+    resolveShowcaseSlots,
+} from "./showcase-previews.mjs";
 import { renderPublishedArtifacts } from "./site-artifacts.mjs";
 
 export async function buildPublishedSite({
@@ -22,15 +27,35 @@ export async function buildPublishedSite({
     safetyRoot = root,
     siteBase = "/",
     publicOrigin = DEFAULT_PUBLIC_ORIGIN,
+    /*
+     * Which showcase slots this build requires. A parameter with no default,
+     * because only a build of the published course knows it should have them:
+     * the fixture week and the malformed-catalog tests carry none and must
+     * still reach the failure they are checking for.
+     */
+    showcaseSlotAliases = [],
 }) {
     const absoluteRoot = path.resolve(root);
     const absoluteDist = await assertSafeGeneratedRoot(distRoot, safetyRoot);
     const base = validateSiteBase(siteBase);
     const outputs = validateBuildOutputs(catalog, absoluteDist);
+    /*
+     * Build the showcase's slide bundle before the output directory is
+     * recreated, so a failure leaves the previous build intact rather than a
+     * half-written site. The bundle is content addressed, so a build whose
+     * featured slides have not changed reuses the previous one.
+     */
+    const showcaseSlots = resolveShowcaseSlots(catalog, showcaseSlotAliases);
+    const previews = await buildShowcasePreviews({
+        root: absoluteRoot,
+        siteBase: base,
+        slots: showcaseSlots,
+    });
     const artifacts = await renderPublishedArtifacts({
         catalog,
-        siteBase: base,
         publicOrigin,
+        showcase: { slots: showcaseSlots },
+        siteBase: base,
     });
 
     await rm(absoluteDist, { force: true, recursive: true });
@@ -39,6 +64,22 @@ export async function buildPublishedSite({
         writeFile(path.join(absoluteDist, "favicon.svg"), artifacts.favicon),
         writeFile(path.join(absoluteDist, "index.html"), artifacts.landingPage),
         writeFile(path.join(absoluteDist, "site.css"), artifacts.styles),
+        mkdir(outputs.showcaseAssets, { recursive: true }).then(() =>
+            Promise.all([
+                writeFile(
+                    path.join(outputs.showcase, "index.html"),
+                    artifacts.showcasePage,
+                ),
+                writeFile(
+                    path.join(outputs.showcaseAssets, "showcase.css"),
+                    artifacts.showcaseStyles,
+                ),
+                writeFile(
+                    path.join(outputs.showcaseAssets, "showcase.mjs"),
+                    artifacts.showcaseScript,
+                ),
+            ]),
+        ),
         ...catalog.presentations.map((presentation, index) => {
             const output = outputs.presentations.get(presentation.id);
             const week = artifacts.weeks[index];
@@ -66,6 +107,15 @@ export async function buildPublishedSite({
         }),
     ]);
 
+    /*
+     * Publish the showcase's slide bundle. It is copied rather than rebuilt
+     * into place so the content-addressed cache survives between builds.
+     */
+    if (previews.directory)
+        await cp(previews.directory, outputs.showcasePreviews, {
+            recursive: true,
+        });
+
     await Promise.all(
         catalog.presentations.map(async (presentation) => {
             const output = outputs.presentations.get(presentation.id);
@@ -92,6 +142,12 @@ export async function buildPublishedSite({
 
 export function validateBuildOutputs(catalog, distRoot) {
     const presentations = new Map();
+    const showcase = path.resolve(distRoot, showcaseRoute().slice(1));
+    const showcaseAssets = path.join(showcase, "assets");
+    const showcasePreviews = path.join(showcase, "previews");
+    assertContained(distRoot, showcase, "showcase output");
+    assertContained(showcase, showcaseAssets, "showcase asset output");
+    assertContained(showcase, showcasePreviews, "showcase preview output");
 
     for (const presentation of catalog.presentations) {
         const week = path.resolve(
@@ -122,7 +178,12 @@ export function validateBuildOutputs(catalog, distRoot) {
         );
     }
 
-    return { presentations };
+    return {
+        presentations,
+        showcase,
+        showcaseAssets,
+        showcasePreviews,
+    };
 }
 
 export async function buildPresentation({

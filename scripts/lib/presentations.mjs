@@ -75,7 +75,7 @@ async function loadPresentation(entryAbsolute, context, overrides = {}) {
     const label = overrides.label ?? `canonical week ${filename}`;
     const data = await loadResolvedDeck(entryAbsolute, context, label);
     const headmatter = validateWeekHeadmatter(data, id, entryAbsolute, label);
-    validateRouteAliases(data, context);
+    const routeAliases = validateRouteAliases(data, context);
     const topics = await collectTopicMetadata(data, id, context, label);
     const sourceFiles = Object.keys(data.watchFiles).map((file) =>
         path.resolve(file),
@@ -86,6 +86,7 @@ async function loadPresentation(entryAbsolute, context, overrides = {}) {
         summary: headmatter.summary,
         entryAbsolute,
         accentCssVariables: headmatter.accentCssVariables,
+        routeAliases: Object.fromEntries(routeAliases),
         ...topics,
         sourceFiles,
     };
@@ -148,21 +149,43 @@ function validateWeekHeadmatter(data, id, entryAbsolute, label) {
     };
 }
 
+/*
+ * Validate every declared alias and retain where each one resolved.
+ *
+ * Aliases are Slidev routes first, but the showcase also uses them as stable
+ * build-time selectors: a capture names the slot it wants and the deck decides
+ * which slide fills it. Returning the resolved slide numbers means moving an
+ * alias to another slide is the whole edit, with no slide number recorded
+ * anywhere outside the deck source.
+ */
 function validateRouteAliases(data, context) {
-    const allAliases = new Map();
-    for (const slide of data.slides) {
+    const declaredAt = new Map();
+    const slideNumbers = new Map();
+    for (const [index, slide] of data.slides.entries()) {
         if (!Object.hasOwn(slide.frontmatter, "routeAlias")) continue;
         const alias = slide.frontmatter.routeAlias;
         if (typeof alias !== "string" || !ROUTE_ALIAS.test(alias))
             throw new Error(
                 `${sourceLabel(slide.source, context.root)}: routeAlias must match ${ROUTE_ALIAS}.`,
             );
-        if (allAliases.has(alias))
+        if (declaredAt.has(alias))
             throw new Error(
-                `${sourceLabel(slide.source, context.root)}: duplicate routeAlias ${alias}; first declared at ${allAliases.get(alias)}.`,
+                `${sourceLabel(slide.source, context.root)}: duplicate routeAlias ${alias}; first declared at ${declaredAt.get(alias)}.`,
             );
-        allAliases.set(alias, sourceLabel(slide.source, context.root));
+        declaredAt.set(alias, sourceLabel(slide.source, context.root));
+        slideNumbers.set(alias, {
+            slideNo: index + 1,
+            /*
+             * Where the slide lives in its own file, not in the resolved deck.
+             * The showcase builds a preview deck that imports single slides by
+             * range, which addresses them relative to their source.
+             */
+            sourceAbsolute: slide.source?.filepath ?? "",
+            sourceIndex: slide.source?.index ?? 0,
+            title: slide.title ?? "",
+        });
     }
+    return slideNumbers;
 }
 
 async function collectTopicMetadata(data, id, context, label) {

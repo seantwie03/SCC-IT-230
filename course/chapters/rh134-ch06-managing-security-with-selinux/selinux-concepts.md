@@ -54,6 +54,8 @@ Start with people before processes. Nobody argues that a new accountant needs th
 -->
 
 ---
+routeAlias: showcase-3-1
+---
 
 # Principle of Least Privilege
 
@@ -66,11 +68,11 @@ Start with people before processes. Nobody argues that a new accountant needs th
 ```mermaid {scale: 0.75}
 graph TD
     H["⚙️ httpd's PURPOSE:<br/>serve web content"]
-    H -->|"✅ needs"| A["📁 /var/www/html<br/>web content to serve"]
-    H -->|"✅ needs"| B["📁 /etc/httpd<br/>httpd Configuration"]
-    H -->|"✅ needs"| C["📁 /var/log/httpd<br/>httpd Log files"]
-    H -->|"❌ no reason"| D["📁 /etc"]
-    H -->|"❌ no reason"| E["📁 /tmp"]
+    H -->|"✅ needs"| A["📁 /var/www/html<br/>Web content to serve"]
+    H -->|"✅ needs"| B["📁 /etc/httpd<br/>HTTPD configuration"]
+    H -->|"✅ needs"| C["📁 /var/log/httpd<br/>HTTPD Log files"]
+    H -->|"❌ no need"| D["📁 /home<br/>User documents"]
+    H -->|"❌ no need"| E["📁 /mnt<br/>File system mounts"]
     style A fill:#00753a,color:#fff
     style B fill:#00753a,color:#fff
     style C fill:#00753a,color:#fff
@@ -288,6 +290,7 @@ File permissions alone would have let a compromised httpd wander into /tmp. SELi
 
 ---
 layout: exercise
+routeAlias: showcase-5-1
 ---
 
 # Set Up a Basic Web Server
@@ -310,6 +313,7 @@ Install a basic web server
 ---
 layout: exercise
 variant: recording
+routeAlias: showcase-5-2
 ---
 
 <script setup>

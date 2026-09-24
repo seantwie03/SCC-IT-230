@@ -9,14 +9,17 @@ import { CANONICAL_WEEK_FILENAME } from "./presentations.mjs";
 import {
     canvasAuthoringRoute,
     presentationResourceRoute,
+    showcaseAssetRoute,
+    showcaseRoute,
     weekOverviewRoute,
     withSiteBase,
 } from "./paths.mjs";
+import { buildShowcasePreviews } from "./showcase-previews.mjs";
 import { waitForServer } from "./browser.mjs";
-import { assertPortAvailable, listen } from "./server.mjs";
+import { assertPortAvailable, listen, serveStaticFile } from "./server.mjs";
 
 const LIVE_RELOAD_PATH = "/__it230_reload";
-const IMPLEMENTATION_SOURCE_FILENAME = /\.(?:css|html|mjs|ts)$/;
+const IMPLEMENTATION_SOURCE_FILENAME = /\.(?:css|html|mjs|ts|vue)$/;
 const WORKER_TIMEOUT_MILLISECONDS = 30_000;
 const LIVE_RELOAD_SCRIPT = `<script>
             new EventSource("${LIVE_RELOAD_PATH}").onmessage = () => location.reload();
@@ -28,6 +31,11 @@ export async function createCourseSiteDevServer({
     siteBase = DEFAULT_SITE_BASE,
     publicOrigin = DEFAULT_PUBLIC_ORIGIN,
     onReloadError = () => {},
+    /*
+     * Which showcase examples this course must supply. Empty by default so a
+     * synthetic course, which carries no showcase aliases, still serves.
+     */
+    showcaseSlotAliases = [],
     workerTimeoutMilliseconds = WORKER_TIMEOUT_MILLISECONDS,
 }) {
     const absoluteCourseRoot = path.resolve(root, courseRoot);
@@ -40,7 +48,7 @@ export async function createCourseSiteDevServer({
     let current;
     try {
         current = await loadCourseSite(
-            { root, courseRoot, siteBase, publicOrigin },
+            { root, courseRoot, siteBase, publicOrigin, showcaseSlotAliases },
             renderOptions,
         );
     } catch (error) {
@@ -58,7 +66,13 @@ export async function createCourseSiteDevServer({
     const refresh = async () => {
         try {
             const next = await loadCourseSite(
-                { root, courseRoot, siteBase, publicOrigin },
+                {
+                    root,
+                    courseRoot,
+                    siteBase,
+                    publicOrigin,
+                    showcaseSlotAliases,
+                },
                 renderOptions,
             );
             if (disposed) return;
@@ -136,7 +150,7 @@ export async function createCourseSiteDevServer({
         current.sourceFiles,
         current.implementationDirectories,
     );
-    const server = http.createServer((request, response) => {
+    const server = http.createServer(async (request, response) => {
         if (!request.url || !["GET", "HEAD"].includes(request.method)) {
             respond(
                 response,
@@ -223,6 +237,29 @@ export async function createCourseSiteDevServer({
                 request.method,
             );
             return;
+        }
+        const showcaseAsset = current.showcaseAssets?.get(pathname);
+        if (showcaseAsset) {
+            respond(
+                response,
+                200,
+                showcaseAsset.type,
+                showcaseAsset.body,
+                request.method,
+            );
+            return;
+        }
+        if (
+            current.previewsRoot &&
+            pathname.startsWith(current.previewsPrefix)
+        ) {
+            const served = await serveStaticFile({
+                absoluteRoot: current.previewsRoot,
+                relativeUrl: pathname.slice(current.previewsPrefix.length),
+                request,
+                response,
+            });
+            if (served) return;
         }
         respond(response, 404, "text/plain; charset=utf-8", "Not found.\n");
     });
@@ -333,10 +370,30 @@ export async function serveFocusedDeck({ entry, root, port }) {
 }
 
 async function loadCourseSite(options, renderOptions) {
-    const { artifacts, implementationDirectories, sourceFiles } =
+    const { artifacts, implementationDirectories, showcaseSlots, sourceFiles } =
         await renderInFreshWorker(options, renderOptions);
+    /*
+     * Build the showcase's slide bundle here rather than in the render worker,
+     * because it runs Slidev as a subprocess. It is content addressed, so a
+     * reload that did not touch a featured slide reuses the existing bundle
+     * instead of building anything.
+     */
+    const previews = await buildShowcasePreviews({
+        root: options.root,
+        siteBase: artifacts.siteBase,
+        slots: showcaseSlots ?? [],
+    });
     const weekPages = new Map();
     const resourcePages = new Map();
+    /*
+     * The showcase is served here too, so the landing page's link to it works
+     * while authoring. Its slide previews come from the bundle built above,
+     * served under the same route the production build publishes them at.
+     */
+    const showcasePage = addLiveReload(artifacts.showcasePage);
+    const showcase = withSiteBase(artifacts.siteBase, showcaseRoute());
+    weekPages.set(showcase, showcasePage);
+    weekPages.set(`${showcase}index.html`, showcasePage);
     for (const week of artifacts.weeks) {
         const rendered = addLiveReload(week.page);
         const route = withSiteBase(
@@ -361,10 +418,34 @@ async function loadCourseSite(options, renderOptions) {
                 addLiveReload(resource.html),
             );
     }
+    /* The showcase's own stylesheet and controller, served only to that page. */
+    const showcaseAssets = new Map([
+        [
+            withSiteBase(
+                artifacts.siteBase,
+                showcaseAssetRoute("showcase.css"),
+            ),
+            { body: artifacts.showcaseStyles, type: "text/css; charset=utf-8" },
+        ],
+        [
+            withSiteBase(
+                artifacts.siteBase,
+                showcaseAssetRoute("showcase.mjs"),
+            ),
+            {
+                body: artifacts.showcaseScript,
+                type: "text/javascript; charset=utf-8",
+            },
+        ],
+    ]);
+
     return {
         favicon: artifacts.favicon,
         landingPage: addLiveReload(artifacts.landingPage),
         implementationDirectories,
+        showcaseAssets,
+        previewsPrefix: `${withSiteBase(artifacts.siteBase, showcaseRoute())}previews/`,
+        previewsRoot: previews.directory,
         resourcePages,
         siteBase: artifacts.siteBase,
         styles: artifacts.styles,

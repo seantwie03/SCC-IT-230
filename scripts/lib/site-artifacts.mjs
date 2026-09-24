@@ -1,7 +1,12 @@
+import { readFile } from "node:fs/promises";
+
 import {
     renderCanvasAuthoringPage,
     renderSiteFavicon,
     renderLandingPage,
+    renderShowcasePage,
+    renderShowcaseScript,
+    renderShowcaseStyles,
     renderSiteStyles,
     renderWeekPage,
 } from "../../site/render-template.mjs";
@@ -15,12 +20,28 @@ export async function renderPublishedArtifacts({
     catalog,
     siteBase = DEFAULT_SITE_BASE,
     publicOrigin = DEFAULT_PUBLIC_ORIGIN,
+    showcase = { slots: [] },
 }) {
     const base = validateSiteBase(siteBase);
-    const [favicon, styles, landingPage, weeks] = await Promise.all([
+    const recordings = await countRecordings(catalog);
+    const [
+        favicon,
+        styles,
+        landingPage,
+        showcasePage,
+        showcaseStyles,
+        showcaseScript,
+        weeks,
+    ] = await Promise.all([
         renderSiteFavicon(),
         renderSiteStyles(),
         renderLandingPage(catalog, base),
+        renderShowcasePage(catalog, base, {
+            recordings,
+            slots: showcase.slots,
+        }),
+        renderShowcaseStyles(),
+        renderShowcaseScript(),
         Promise.all(
             catalog.presentations.map(async (presentation, index) => {
                 const canvasView = buildWeeklyView(presentation, {
@@ -40,7 +61,16 @@ export async function renderPublishedArtifacts({
             }),
         ),
     ]);
-    return { favicon, landingPage, siteBase: base, styles, weeks };
+    return {
+        favicon,
+        landingPage,
+        showcasePage,
+        showcaseScript,
+        showcaseStyles,
+        siteBase: base,
+        styles,
+        weeks,
+    };
 }
 
 export function renderPresentationResources(presentation) {
@@ -51,4 +81,25 @@ export function renderPresentationResources(presentation) {
             presentation.accentCssVariables,
         ),
     }));
+}
+
+/**
+ * Count the distinct recorded demonstrations published weeks embed.
+ *
+ * Counting `.cast` files on disk would also count recordings made for weeks
+ * that are not published yet, so the figure on the showcase comes from the
+ * resolved deck sources instead. A topic reused by two weeks still holds one
+ * recording, so sources are de-duplicated by path.
+ */
+async function countRecordings(catalog) {
+    const sources = new Set();
+    for (const presentation of catalog.presentations)
+        for (const file of presentation.sourceFiles) sources.add(file);
+    let total = 0;
+    for (const file of sources) {
+        if (!file.endsWith(".md")) continue;
+        const source = await readFile(file, "utf8").catch(() => "");
+        total += source.split("<AsciinemaPlayer").length - 1;
+    }
+    return total;
 }

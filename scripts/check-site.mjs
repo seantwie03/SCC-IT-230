@@ -34,6 +34,8 @@ try {
             distRoot: output,
             safetyRoot: path.join(temporaryRoot, name),
             siteBase,
+            // The synthetic week carries no showcase aliases and needs none.
+            showcaseSlotAliases: [],
         });
         await checkGeneratedSite({ distRoot: output, catalog, siteBase });
         await assertFixtureOutput(output, siteBase);

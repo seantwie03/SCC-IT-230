@@ -152,7 +152,7 @@ required generated files and internal links exist and production decks omit
 presenter notes. The responsive stylesheet provides visible focus treatment and
 narrow-screen reflow.
 
-Two rendered checks extend that coverage, and `pnpm check` runs both:
+Three rendered checks extend that coverage, and `pnpm check` runs all of them:
 
 - `pnpm run check:slides` measures every slide and click state against the
   layout's content box. It catches content that overflows the slide or collides
@@ -163,6 +163,12 @@ Two rendered checks extend that coverage, and `pnpm check` runs both:
   320 CSS pixels for SC 1.4.10. Because the exercise surface hides its overflow,
   it reports both horizontal page scrolling and content clipped inside an
   ancestor; either is a loss of information at that width.
+- `pnpm run check:showcase` applies the same `axe-core` rules and the same
+  reflow measurement to the built `/showcase/` page, and fails when an embedded
+  example does not render. It reads the page with reduced motion requested.
+  The page's scaled device frames clip a layout laid out at a wider viewport by
+  design, so they are exempt from the clipping rule and from that rule only;
+  `docs/showcase.md` explains why.
 
 These checks reduce known failure modes; they do not test assistive-technology
 behavior, keyboard use, reading order, visual quality, or WCAG conformance. In

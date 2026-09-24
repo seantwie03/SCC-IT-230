@@ -168,13 +168,15 @@ output location.
 
 Local development and agent review use separate reserved ports:
 
-| Purpose                           | Command                 | Port |
-| --------------------------------- | ----------------------- | ---: |
-| Maintainer-run theme development  | `pnpm run dev:theme`    | 2020 |
-| Agent-run theme review            | `pnpm run review:theme` | 2121 |
-| Maintainer-run course development | `pnpm dev`              | 3030 |
-| Agent-run course review           | `pnpm run review`       | 3131 |
-| Exact production-site preview     | `pnpm preview`          | 4040 |
+| Purpose                           | Command                   | Port |
+| --------------------------------- | ------------------------- | ---: |
+| Maintainer-run theme development  | `pnpm run dev:theme`      | 2020 |
+| Agent-run theme review            | `pnpm run review:theme`   | 2121 |
+| Maintainer-run course development | `pnpm dev`                | 3030 |
+| Agent-run course review           | `pnpm run review`         | 3131 |
+| Exact production-site preview     | `pnpm preview`            | 4040 |
+| Rendered slide review             | `pnpm run check:slides`   | 3232 |
+| Rendered showcase review          | `pnpm run check:showcase` | 3233 |
 
 The fixed assignments are intentional. If a reserved port is occupied, the new
 command fails. An agent reports the conflict and does not scan for another

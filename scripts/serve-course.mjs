@@ -3,6 +3,7 @@ import { fileURLToPath } from "node:url";
 import { userArguments, validateFocusedEntry } from "./lib/arguments.mjs";
 import { siteConfiguration } from "./lib/config.mjs";
 import { serveCourseSite, serveFocusedDeck } from "./lib/development.mjs";
+import { SHOWCASE_SLOT_ALIASES } from "./lib/showcase-slots.mjs";
 
 const root = fileURLToPath(new URL("../", import.meta.url));
 const [mode, ...rawArgs] = process.argv.slice(2);
@@ -25,6 +26,12 @@ if (args.length === 1) {
 } else {
     await serveCourseSite({
         root,
+        /*
+         * The published course must supply every showcase example, so an alias
+         * that has been moved to a slide that no longer exists fails here
+         * rather than quietly rendering a gap.
+         */
+        showcaseSlotAliases: SHOWCASE_SLOT_ALIASES,
         ...siteConfiguration(),
         ...settings,
     });

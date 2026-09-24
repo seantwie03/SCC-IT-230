@@ -40,6 +40,7 @@ layout: two-cols-header
 ![Diagram of the RHA lab environment: a workstation and three servers connected on a private network](./assets/rha-lab-diagram.png)
 
 ---
+routeAlias: lab-environment
 ---
 
 # IT-230 Lab Environments

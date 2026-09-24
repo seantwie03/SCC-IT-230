@@ -58,57 +58,75 @@ export function createStaticServer(root, { siteBase = "/" } = {}) {
                 respond(response, 404, "Not found.\n");
                 return;
             }
-            let relativeUrl = requestUrl.pathname.slice(base.length);
-            let decoded;
-            try {
-                decoded = decodeURIComponent(relativeUrl);
-            } catch {
-                respond(response, 400, "Invalid URL encoding.\n");
-                return;
-            }
-            if (decoded.includes("\\") || decoded.split("/").includes("..")) {
-                respond(response, 400, "Invalid path.\n");
-                return;
-            }
-            if (decoded === "" || decoded.endsWith("/"))
-                decoded += "index.html";
-            const lexical = path.resolve(absoluteRoot, decoded);
-            assertContained(absoluteRoot, lexical, "served file");
-
-            let resolved;
-            let info;
-            try {
-                [resolved, info] = await Promise.all([
-                    realpath(lexical),
-                    stat(lexical),
-                ]);
-                assertContained(
-                    await realpath(absoluteRoot),
-                    resolved,
-                    "served file",
-                );
-            } catch {
-                respond(response, 404, "Not found.\n");
-                return;
-            }
-            if (!info.isFile()) {
-                respond(response, 404, "Not found.\n");
-                return;
-            }
-
-            response.writeHead(200, {
-                "Content-Length": info.size,
-                "Content-Type":
-                    CONTENT_TYPES.get(path.extname(resolved).toLowerCase()) ??
-                    "application/octet-stream",
-                "X-Content-Type-Options": "nosniff",
+            const served = await serveStaticFile({
+                absoluteRoot,
+                relativeUrl: requestUrl.pathname.slice(base.length),
+                request,
+                response,
             });
-            if (request.method === "HEAD") response.end();
-            else createReadStream(resolved).pipe(response);
+            if (!served) respond(response, 404, "Not found.\n");
         } catch (error) {
             respond(response, 500, `${error.message}\n`);
         }
     });
+}
+
+/**
+ * Serve one file from a directory, or report that it is not there.
+ *
+ * Extracted so the course-site development server can hand a request to a
+ * directory of generated files without reimplementing the path checks that
+ * keep a request inside its root. It responds only when it has something to
+ * send, or when the request itself is malformed; the caller decides what a
+ * miss means.
+ *
+ * Returns true when the response has been written.
+ */
+export async function serveStaticFile({
+    absoluteRoot,
+    relativeUrl,
+    request,
+    response,
+}) {
+    let decoded;
+    try {
+        decoded = decodeURIComponent(relativeUrl);
+    } catch {
+        respond(response, 400, "Invalid URL encoding.\n");
+        return true;
+    }
+    if (decoded.includes("\\") || decoded.split("/").includes("..")) {
+        respond(response, 400, "Invalid path.\n");
+        return true;
+    }
+    if (decoded === "" || decoded.endsWith("/")) decoded += "index.html";
+
+    const lexical = path.resolve(absoluteRoot, decoded);
+    assertContained(absoluteRoot, lexical, "served file");
+
+    let resolved;
+    let info;
+    try {
+        [resolved, info] = await Promise.all([
+            realpath(lexical),
+            stat(lexical),
+        ]);
+        assertContained(await realpath(absoluteRoot), resolved, "served file");
+    } catch {
+        return false;
+    }
+    if (!info.isFile()) return false;
+
+    response.writeHead(200, {
+        "Content-Length": info.size,
+        "Content-Type":
+            CONTENT_TYPES.get(path.extname(resolved).toLowerCase()) ??
+            "application/octet-stream",
+        "X-Content-Type-Options": "nosniff",
+    });
+    if (request.method === "HEAD") response.end();
+    else createReadStream(resolved).pipe(response);
+    return true;
 }
 
 export function listen(server, port, label) {

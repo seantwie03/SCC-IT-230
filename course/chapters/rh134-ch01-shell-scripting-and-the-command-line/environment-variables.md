@@ -20,65 +20,60 @@ topicInfo:
 ## Values with a Name
 
 ---
+routeAlias: showcase-1-1
 ---
 
 # Variables Explained
-
-
-<v-switch at="1">
-
-<template #0-2>
 
 A variable is a <AccentText>name</AccentText> holding a <AccentText>value</AccentText>
 
 Assign with `name=value`, then read it back with `$name`
 
-<TerminalWindow title="student@servera:~" :rows="7">
+<TerminalWindow title="student@servera:~" :rows="6">
 
 ````md magic-move
 ```bash-session
-#^ 1. Assign a value, then read it back
 student@servera:~$ course=IT-230
 ```
-```bash-session {3,4}
-#^ 1. Assign a value, then read it back
+```bash-session
+student@servera:~$ course=IT-230
+student@servera:~$
+```
+```bash-session
+student@servera:~$ course=IT-230
+student@servera:~$ echo $course
+```
+```bash-session
 student@servera:~$ course=IT-230
 student@servera:~$ echo $course
 IT-230
+student@servera:~$
+```
+```bash-session
+student@servera:~$ course=IT-230
+student@servera:~$ echo $course
+IT-230
+student@servera:~$ course = IT-230
+```
+```bash-session
+student@servera:~$ course=IT-230
+student@servera:~$ echo $course
+IT-230
+student@servera:~$ course = IT-230
+bash: course: command not found
+student@servera:~$
 ```
 ````
 
 </TerminalWindow>
 
-</template>
-
-<template #2>
-
 No spaces are allowed around the `=`
-
-<TerminalWindow title="student@servera:~" :rows="7">
-
-```bash-session {5,6,7}
-#^ 1. Assign a value, then read it back
-student@servera:~$ course=IT-230
-student@servera:~$ echo $course
-IT-230
-#^ 2. No spaces are allowed around the =
-student@servera:~$ course = IT-230
-bash: course: command not found
-```
-
-</TerminalWindow>
 
 <Callout type="warning">
 
 With spaces Bash reads `course` as a command name, and `=` and `IT-230` as its arguments.
 
 </Callout>
-
-</template>
-
-</v-switch>
 
 ---
 ---

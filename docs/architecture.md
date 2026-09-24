@@ -65,9 +65,9 @@ and are not committed.
   project.
 - `packages/slidev-theme-it230/` contains shared presentation styling,
   layouts, components, its focused gallery, and theme-specific validation.
-- `site/` contains the landing, weekly-detail, and Canvas-authoring HTML
-  templates, the site and Canvas build-time renderers, and the stylesheet. The
-  shared site-and-presentation favicon is owned by the theme package.
+- `site/` contains the landing, weekly-detail, showcase, and Canvas-authoring
+  HTML templates, the site and Canvas build-time renderers, and the stylesheet.
+  The shared site-and-presentation favicon is owned by the theme package.
 - `scripts/` contains deterministic repository-wide operations, including the
   rendered review commands, the screen-recording processor, and the lab-access
   wrapper.
@@ -158,6 +158,11 @@ come from `topicInfo` on resolved topic slides. Curriculum identities are
 de-duplicated for the weekly overview while the agenda remains in resolved
 presentation order.
 
+Route aliases are validated for format and deck-wide uniqueness on every
+slide, not only on topic slides, and the catalog retains where each one
+resolved along with that slide's parsed title. A slide number is therefore
+never recorded outside the deck it belongs to.
+
 Canonical exercise source files are owned by their topic and can be reused by
 multiple weeks. Each generated copy and public URL is week-owned: HTML
 exercises and the supplemental PDF publish beneath
@@ -187,6 +192,13 @@ base, output directory, and
 `/weeks/<id>/resources/SCC-IT-230-<id>.pdf`; declared resources share that
 directory. Assets referenced by deck sources are processed by Slidev.
 Generated output is not committed.
+
+One public showcase page is generated at `/showcase/`. It is aimed at
+colleagues and reviewers rather than students, is linked from the landing
+page's About section, and is built by the same artifact generator as every
+other page. `docs/showcase.md` owns its design, its content rules, and how
+its slide examples are selected; nothing about it belongs in this document
+beyond its existence and its route.
 
 The compact landing page uses `site/index.html` as its static document
 template; each full weekly overview uses `site/week.html`; and each Canvas

@@ -41,6 +41,14 @@ export function canvasAuthoringRoute(id) {
     return `${weekOverviewRoute(id)}canvas/`;
 }
 
+export function showcaseRoute() {
+    return "/showcase/";
+}
+
+export function showcaseAssetRoute(filename) {
+    return `${showcaseRoute()}assets/${filename}`;
+}
+
 export function presentationPdfFilename(id) {
     return `SCC-IT-230-${id}.pdf`;
 }

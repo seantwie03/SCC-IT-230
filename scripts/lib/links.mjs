@@ -6,6 +6,8 @@ import {
     presentationPdfFilename,
     presentationResourceRoute,
     presentationRoute,
+    showcaseAssetRoute,
+    showcaseRoute,
     weekOverviewRoute,
     validateSiteBase,
     withSiteBase,
@@ -25,6 +27,9 @@ export async function checkGeneratedSite({
         "favicon.svg",
         "index.html",
         "site.css",
+        `${showcaseRoute().slice(1)}index.html`,
+        showcaseAssetRoute("showcase.css").slice(1),
+        showcaseAssetRoute("showcase.mjs").slice(1),
         ...catalog.presentations.map(
             ({ id }) => `${weekOverviewRoute(id).slice(1)}index.html`,
         ),

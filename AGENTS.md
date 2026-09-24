@@ -78,6 +78,7 @@ Read the relevant document before changing files in its area:
 | Project structure, workspace boundaries, presentation catalog, routes, or build output     | `docs/architecture.md`     |
 | Theme tokens, global styles, layouts, shared components, or the theme gallery              | `docs/design-system.md`    |
 | Accessibility standards, audits, remediation, or cross-cutting accessibility work          | `docs/accessibility.md`    |
+| The public `/showcase/` page, its content, or the slides it features                       | `docs/showcase.md`         |
 | Staging, committing, pushing, deployment, publication checks, or production corrections    | `docs/publishing.md`       |
 
 If a task crosses more than one area, read each applicable document. Update the

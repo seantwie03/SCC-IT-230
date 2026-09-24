@@ -9,7 +9,7 @@ topicInfo:
         title: Managing Files from the Command Line
     rhcsaCertGuide:
       - chapter: "03"
-        title: Essential File Management
+        title: Essential File Management Tools
   exercises:
     - title: Shell Expansions Exercise
       source: ./exercises/shell-expansions-exercise.html
@@ -322,6 +322,7 @@ Match pathnames with Bash wildcard patterns and observe the resulting expansion
 ---
 layout: exercise
 variant: recording
+routeAlias: showcase-6-1
 ---
 
 <script setup>

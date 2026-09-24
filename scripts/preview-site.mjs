@@ -6,6 +6,7 @@ import { buildPublishedSite } from "./lib/build-site.mjs";
 import { siteConfiguration } from "./lib/config.mjs";
 import { checkGeneratedSite } from "./lib/links.mjs";
 import { loadPresentationCatalog } from "./lib/presentations.mjs";
+import { SHOWCASE_SLOT_ALIASES } from "./lib/showcase-slots.mjs";
 import { createStaticServer, listen } from "./lib/server.mjs";
 
 requireNoArguments(userArguments(process.argv.slice(2)), "Production preview");
@@ -18,6 +19,12 @@ await buildPublishedSite({
     catalog,
     root,
     distRoot,
+    /*
+     * A build of the published course must supply every showcase example, so a
+     * slot whose alias no longer matches a slide fails the build rather than
+     * quietly publishing a gap.
+     */
+    showcaseSlotAliases: SHOWCASE_SLOT_ALIASES,
     ...configuration,
 });
 await checkGeneratedSite({ distRoot, catalog, siteBase });
