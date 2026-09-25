@@ -1,6 +1,7 @@
 kitten @ set-font-size 30.0 && ssh servera
 clear
 
+#@ pause 8
 #^ Task: Manage Shell Expansion with Quoting
 # Requirements
 #   Host: servera

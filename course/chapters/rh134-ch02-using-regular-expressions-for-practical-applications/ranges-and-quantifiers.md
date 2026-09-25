@@ -381,12 +381,19 @@ layout: exercise
 variant: recording
 ---
 
+<script setup>
+import castUrl from "./exercises/ranges-and-quantifiers-exercise.cast?url";
+</script>
+
 # Ranges and Quantifiers
 
 ::recording::
 
-![Screen recording of the instructor seeding failed-password entries with logger, extracting IP addresses from the authentication log with a quantified digit range, counting the unique addresses, then creating a website directory tree and filtering it with an extended group pattern](./assets/ranges-and-quantifiers.gif)
+<AsciinemaPlayer
+    :src="castUrl"
+    label="Screen recording of the instructor writing sample failed-password entries to the authentication log, extracting and counting IP addresses with a quantified digit range, then matching paths in a sample website tree."
+/>
 
 ::resources::
 
-<a href="https://asciinema.org/a/BLokJ1ZIVOfAMXA6" target="_blank" rel="noopener noreferrer" aria-label="Watch the Ranges and Quantifiers recording in a new tab">Asciinema recording</a><a href="../resources/ranges-and-quantifiers-exercise.html" target="_blank" rel="noopener noreferrer" aria-label="Read the written Ranges and Quantifiers exercise in a new tab">Written exercise</a>
+<a href="../resources/ranges-and-quantifiers-exercise.html" target="_blank" rel="noopener noreferrer" aria-label="Read the written Ranges and Quantifiers exercise in a new tab">Written exercise</a>

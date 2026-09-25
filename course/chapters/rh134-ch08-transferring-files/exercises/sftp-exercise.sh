@@ -1,6 +1,7 @@
 kitten @ set-font-size 30.0 && ssh workstation
 clear
 
+#@ pause 8
 #^ Task: Download /etc/group from servera with sftp
 # Requirements
 #   Local host: workstation
@@ -13,6 +14,7 @@ clear
 clear
 
 #^ 1. Open a transfer session and inspect both sides
+#@ pause 5
 sftp student@servera
 lpwd
 pwd
@@ -26,10 +28,12 @@ pwd
 #^ 3. Download and verify the group file
 ls group
 get group
+#@ pause 5
 lls
 
 #^ 4. Leave the session and clean up
 bye
 ls -l /home/student/Downloads
+#@ pause 5
 cat /home/student/Downloads/group
 rm /home/student/Downloads/group

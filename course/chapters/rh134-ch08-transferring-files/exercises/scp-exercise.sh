@@ -1,6 +1,7 @@
 kitten @ set-font-size 30.0 && ssh workstation
 clear
 
+#@ pause 8
 #^ Task: Copy a File to servera and Back Again
 # Requirements
 #   Student hosts: Windows VDI session and servera

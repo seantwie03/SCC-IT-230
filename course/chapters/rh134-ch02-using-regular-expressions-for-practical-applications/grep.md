@@ -297,3 +297,25 @@ Search log data and refine the surrounding context of each match
 1. Find matching log entries
 2. Show context around matches
 3. Refine results with grep options
+
+---
+layout: exercise
+variant: recording
+---
+
+<script setup>
+import castUrl from "./exercises/grep-exercise.cast?url";
+</script>
+
+# Searching Log Files with `grep`
+
+::recording::
+
+<AsciinemaPlayer
+    :src="castUrl"
+    label="Screen recording of the instructor searching the SSH authentication log with grep, showing context around the sshd service status, and refining matches with grep options."
+/>
+
+::resources::
+
+<a href="../resources/grep-exercise.html" target="_blank" rel="noopener noreferrer" aria-label="Read the written Searching Log Files with grep exercise in a new tab">Written exercise</a>

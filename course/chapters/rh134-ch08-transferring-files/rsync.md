@@ -271,3 +271,25 @@ Preview and synchronize directory changes between two systems
 2. Preview and run the first synchronization
 3. Generate changes and synchronize again
 4. Verify the synchronized changes
+
+---
+layout: exercise
+variant: recording
+---
+
+<script setup>
+import castUrl from "./exercises/rsync-exercise.cast?url";
+</script>
+
+# Synchronizing with `rsync`
+
+::recording::
+
+<AsciinemaPlayer
+    :src="castUrl"
+    label="Screen recording of the instructor installing rsync, previewing and copying servera's log directory to workstation, connecting to servera to generate log activity, then synchronizing and checking the local copy."
+/>
+
+::resources::
+
+<a href="../resources/rsync-exercise.html" target="_blank" rel="noopener noreferrer" aria-label="Read the written Synchronizing Directories with rsync exercise in a new tab">Written exercise</a>

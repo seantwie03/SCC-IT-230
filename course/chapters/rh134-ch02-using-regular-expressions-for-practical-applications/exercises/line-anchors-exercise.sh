@@ -1,6 +1,7 @@
 kitten @ set-font-size 30.0 && ssh servera
 clear
 
+#@ pause 8
 #^ Task: Anchor a Pattern to the Start or End of a Line
 # Requirements
 #   Host: servera
@@ -12,14 +13,18 @@ clear
 clear
 
 #^ 1. Install the dictionary and search without anchors
+#@ pause 6
 sudo dnf install -y words
 ls -l /usr/share/dict/words
+#@ pause 5
 grep 'cat' /usr/share/dict/words
 clear
 
 #^ 2. Compare start, end, and exact-line anchors
 grep '^cat' /usr/share/dict/words
+#@ pause 5
 grep 'cat$' /usr/share/dict/words
+#@ pause 5
 grep '^cat$' /usr/share/dict/words
 clear
 
@@ -33,4 +38,5 @@ clear
 
 #^ 4. Use an end anchor to identify configuration files
 #! The dot is a wildcard to grep, so it must be escaped to match a real period.
+#@ pause 5
 ls -l /etc | grep '\.conf$'

@@ -294,12 +294,19 @@ layout: exercise
 variant: recording
 ---
 
+<script setup>
+import castUrl from "./exercises/line-anchors-exercise.cast?url";
+</script>
+
 # Line Anchors
 
 ::recording::
 
-![Screen recording of the instructor anchoring grep patterns: searching the system dictionary for a word with no anchors, then with a leading caret, then with a trailing dollar sign, then with both; and filtering a long listing of /etc down to directories and then to .conf file names](./assets/line-anchors.gif)
+<AsciinemaPlayer
+    :src="castUrl"
+    label="Screen recording of the instructor comparing unanchored, start-anchored, end-anchored, and exact-line grep searches in a dictionary, then filtering an /etc listing for directories and configuration files."
+/>
 
 ::resources::
 
-<a href="https://asciinema.org/a/773029" target="_blank" rel="noopener noreferrer" aria-label="Watch the Line Anchors recording in a new tab">Asciinema recording</a><a href="../resources/line-anchors-exercise.html" target="_blank" rel="noopener noreferrer" aria-label="Read the written Line Anchors exercise in a new tab">Written exercise</a>
+<a href="../resources/line-anchors-exercise.html" target="_blank" rel="noopener noreferrer" aria-label="Read the written Line Anchors exercise in a new tab">Written exercise</a>

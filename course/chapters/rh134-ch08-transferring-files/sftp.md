@@ -278,3 +278,25 @@ Download and verify a remote file through an interactive transfer session
 2. Navigate the local side to `Downloads` and the remote side to `/etc`
 3. Download and verify the `group` file
 4. Exit the session and inspect the downloaded file
+
+---
+layout: exercise
+variant: recording
+---
+
+<script setup>
+import castUrl from "./exercises/sftp-exercise.cast?url";
+</script>
+
+# Downloading Files with `sftp`
+
+::recording::
+
+<AsciinemaPlayer
+    :src="castUrl"
+    label="Screen recording of the instructor opening an sftp session from workstation to servera, navigating local and remote directories, downloading /etc/group, and verifying the local copy."
+/>
+
+::resources::
+
+<a href="../resources/sftp-exercise.html" target="_blank" rel="noopener noreferrer" aria-label="Read the written Downloading Files with sftp exercise in a new tab">Written exercise</a>

@@ -213,7 +213,7 @@ import castUrl from "./exercises/scp-exercise.cast?url";
 
 <AsciinemaPlayer
     :src="castUrl"
-    label="Screen recording of the instructor demonstrating scp."
+    label="Screen recording of the instructor showing how to copy a file between a Windows VDI and servera, then upload and download groups of files between workstation and servera with scp and glob patterns."
 />
 
 ::resources::
