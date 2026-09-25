@@ -44,7 +44,8 @@
     margin-bottom: var(--it230-space-6);
 }
 
-.showcase-actions .secondary-action {
+.showcase-actions .secondary-action,
+.showcase-document .secondary-action {
     display: inline-block;
     padding: 0.65rem 1rem;
     border: 1px solid var(--it230-color-line);
@@ -56,7 +57,8 @@
     text-decoration: none;
 }
 
-.showcase-actions .secondary-action:hover {
+.showcase-actions .secondary-action:hover,
+.showcase-document .secondary-action:hover {
     border-color: var(--it230-color-accent-fill);
 }
 
@@ -118,6 +120,55 @@
 
 .showcase-caption-text {
     min-width: 0;
+}
+
+/*
+ * The recording pair keeps its recording controls apart from the exercise
+ * link so a narrow screen can put each beneath its own device. On a wide
+ * screen they wrap back into one centered row beneath the progress line.
+ */
+.showcase-mixed {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    column-gap: var(--it230-space-3);
+}
+
+.showcase-mixed .showcase-devices,
+.showcase-mixed .showcase-progress {
+    flex-basis: 100%;
+}
+
+/* A frame lays out at full device width, so it must not size its flex item. */
+.showcase-mixed .showcase-devices {
+    min-width: 0;
+}
+
+.showcase-mixed .showcase-progress {
+    margin-bottom: var(--it230-space-3);
+    text-align: center;
+}
+
+.showcase-pair-controls {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--it230-space-3);
+}
+
+.showcase-slot .showcase-pair-caption {
+    padding-top: 0;
+    margin-top: 0;
+}
+
+/* Present for assistive technology, which cannot see the hidden frames. */
+.showcase-caption-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
 }
 
 .showcase-slot figcaption a {
@@ -233,32 +284,48 @@
     border-radius: 0.3rem;
 }
 
-/* Slot controls */
-.showcase-controls {
-    display: flex;
-    flex-shrink: 0;
+/* Slot controls: the toggle and the links beside it share one button shape. */
+.showcase-control {
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: var(--it230-space-3);
-    flex-wrap: wrap;
-}
-
-.showcase-control {
     min-height: 2.75rem;
     min-width: 5.5rem;
     padding: 0.5rem 1rem;
     border: 1px solid var(--it230-color-line);
-    border-radius: 999px;
+    border-radius: var(--it230-radius-sm);
     background: var(--it230-color-surface);
     color: var(--it230-color-accent-text);
     font: inherit;
     font-size: 0.9rem;
     font-weight: 700;
+    text-decoration: none;
     cursor: pointer;
 }
 
 .showcase-control:hover {
     border-color: var(--it230-color-accent-fill);
+}
+
+/*
+ * The toggle is filled with the accent text colour rather than the fill: at
+ * this size white text needs 4.5:1, which most accent fills do not reach.
+ * This is the same pairing the site's primary action uses.
+ */
+.showcase-control[data-toggle] {
+    border-color: var(--it230-color-accent-text);
+    background: var(--it230-color-accent-text);
+    color: white;
+}
+
+.showcase-control[data-toggle]:hover {
+    filter: brightness(0.92);
+}
+
+.showcase-control[aria-disabled="true"] {
+    cursor: default;
+    filter: none;
+    opacity: 0.6;
 }
 
 .showcase-progress {
@@ -331,7 +398,7 @@
     border-radius: var(--it230-radius-lg);
     background: var(--it230-color-surface);
     box-shadow: var(--it230-shadow-raised);
-    margin-bottom: calc(2 * var(--it230-space-7));
+    margin-bottom: var(--it230-space-7);
     scroll-margin-top: 5rem;
 }
 
@@ -340,32 +407,11 @@
     border-bottom: 1px solid var(--it230-color-line);
 }
 
-.showcase-example-title {
-    margin: 0 0 var(--it230-space-4);
-    font-size: 1.1rem;
-    font-weight: 700;
-    line-height: 1.4;
-}
-
 .showcase-slot .showcase-card-actions {
     flex-wrap: wrap;
     gap: var(--it230-space-3);
     padding-top: 0;
     margin-top: 0;
-}
-
-.showcase-card-action {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: var(--it230-radius-sm);
-    text-decoration: none;
-}
-
-.showcase-slot .showcase-card-action[data-toggle] {
-    border-color: var(--it230-color-accent-fill);
-    background: var(--it230-color-accent-fill);
-    color: var(--it230-color-surface);
 }
 
 .showcase-card-actions .showcase-progress {
@@ -452,7 +498,6 @@
     display: flex;
     flex-direction: column;
     min-width: 7rem;
-    max-width: 14rem;
 }
 
 .showcase-stat-value {
@@ -514,6 +559,43 @@
 
     .showcase-devices {
         padding-bottom: 0;
+    }
+
+    /*
+     * Unwrap the devices so the recording controls can sit between the
+     * laptop and the phone. The wrapper is a plain div, so nothing is lost
+     * to assistive technology, and the phone holds nothing focusable, so
+     * reordering it leaves the tab order matching what is seen.
+     */
+    .showcase-mixed {
+        flex-flow: column nowrap;
+        align-items: center;
+    }
+
+    .showcase-mixed .showcase-devices {
+        display: contents;
+    }
+
+    .showcase-mixed .device-laptop {
+        order: 1;
+    }
+
+    .showcase-mixed .showcase-progress {
+        order: 2;
+        margin-top: var(--it230-space-4);
+    }
+
+    .showcase-pair-controls {
+        order: 3;
+    }
+
+    .showcase-mixed .device-phone {
+        order: 4;
+    }
+
+    .showcase-slot .showcase-pair-caption {
+        order: 5;
+        margin-top: var(--it230-space-4);
     }
 }
 
@@ -612,7 +694,10 @@
     aspect-ratio: 390 / 780;
 }
 
-/* The exercise preview and its destination share one card. */
+/*
+ * The exercise preview and its destination share one card. The frame fills
+ * the card edge to edge, so the card's own border is the only one around it.
+ */
 .showcase-document {
     overflow: hidden;
     border: 1px solid var(--it230-color-line);
@@ -624,7 +709,6 @@
 
 .doc-frame {
     min-width: 0;
-    padding: var(--it230-space-5);
 }
 
 .doc-screen {
@@ -632,9 +716,6 @@
     overflow: hidden;
     width: 100%;
     aspect-ratio: 1280 / 900;
-    border: 1px solid var(--it230-color-line);
-    border-radius: var(--it230-radius-sm);
-    background: var(--it230-color-surface);
 }
 
 .doc-screen iframe {
@@ -648,18 +729,9 @@
 
 .showcase-document figcaption {
     display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--it230-space-3);
+    justify-content: center;
     padding: var(--it230-space-4) var(--it230-space-5);
     border-top: 1px solid var(--it230-color-line);
-    color: var(--it230-color-muted);
-    font-size: 0.95rem;
-}
-
-.showcase-document figcaption a {
-    font-weight: 700;
 }
 
 .device-phone[data-orientation="portrait"] .device-screen iframe {

@@ -98,7 +98,7 @@ needs a paragraph of explanation is the wrong label.
 ### Heading levels
 
 The page title is `h1`, the four group labels are `h2`, and the sections are
-`h3`. The Deconstruction example title is an `h4`. No level is skipped.
+`h3`. No level is skipped.
 
 ### Visual composition
 
@@ -115,7 +115,9 @@ all its content.
 
 Device frames use slim neutral bezels and a shallow laptop base. Where an example
 includes a phone, it overlaps the laptop on wide screens and sits centered below
-it on screens up to 40rem wide. Playback controls, progress, and the example
+it on screens up to 40rem wide. In the recording pair on those narrow screens,
+the progress, playback toggle, and recording link sit beneath the laptop, and
+the written-exercise link sits beneath the phone. Playback controls, progress, and the example
 caption share one wrapping row beneath the
 devices. The accent picker sits in a neutral panel, with named swatches and a
 visible selection ring. These treatments belong only to the showcase.
@@ -125,8 +127,14 @@ controls, and caption in one rounded card with a neutral border and shadow.
 Each card has a thin divider beneath its title. Progress sits directly below
 the Deconstruction laptop, followed by Pause/Replay and the presentation link
 as action buttons. Other playable examples use the same action-button footer;
-static examples keep their descriptive captions. Card padding reduces on
-narrow screens.
+static examples keep their descriptive captions. A playable example's caption
+stays in its footer, visually hidden, because its frames are hidden from
+assistive technology and the figure would otherwise have no description. The
+Play/Pause/Replay toggle is filled with the accent text color, the pairing the
+site's primary action uses, because white on most accent fills falls below
+4.5:1 at this size. Until an example's frames report in, the toggle is marked
+`aria-disabled` rather than `disabled`, so it stays in the tab order. Card
+padding reduces on narrow screens.
 
 Secondary showcase actions, including the PDF download, are centered button
 links with the site's neutral border treatment.
@@ -156,9 +164,10 @@ The rules that hold whatever the page grows into:
   builder the real page uses, so it cannot describe a week differently from the
   week itself.
 
-The We Do exercise frame and its caption share a single rounded card, with
-padding around all four sides of the inset frame and the full-exercise link in
-the card footer. The frame shows the exercise document edge to edge. After it
+The We Do exercise frame fills a single rounded card with no inner border or
+padding, and the full-exercise link sits centered in the card footer as a
+secondary button. The frame has no visible caption; the prose before it
+introduces the exercise. The frame shows the exercise document edge to edge. After it
 loads, preview-only styles hide its course header and remove the outer page
 gutters, border, rounding, and shadow. The exercise's own title, content padding,
 and instructional content remain. The standalone exercise and the portrait
@@ -214,11 +223,14 @@ show, an accent, and step commands, and it reports back what it is showing.
 Stepping is driven by the page rather than inside each frame, because a device
 pair is two separate documents and two independent timers drift apart.
 
-Showcase playback runs at 1.5×: slide steps hold for about 1.73 seconds and the
-opening exercise workflow for 2.8 seconds. The generated preview application's
-setup provides `it230-recording-speed: 1.5` to its recording players. Published
-course decks retain their normal recording speed. Pause, replay, and the
-reduced-motion behavior apply at the faster pace as well.
+Showcase playback runs faster than real time, at the pace set by
+`SHOWCASE_PLAYBACK_SPEED` in `scripts/lib/showcase-slots.mjs`. The page reads it
+from a `data-playback-speed` attribute and divides its step, dwell, and settle
+times by it. The generated preview application's setup provides it to its
+recording players under the theme's `IT230_RECORDING_SPEED_KEY`, and the value
+is part of the preview bundle's fingerprint. Published course decks retain
+their normal recording speed. Pause, replay, and the reduced-motion behavior
+apply at the faster pace as well.
 
 Preloading and playback are separate. Frames may preload 300 pixels ahead of
 the viewport, but only the active visible example may autoplay. The hero starts

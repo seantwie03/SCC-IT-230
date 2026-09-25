@@ -11,14 +11,20 @@
  * sending the same step to both is the only way they stay together.
  */
 
-const STEP_MS = 2600 / 1.5;
+/* Every pause below is a real-time length scaled by the page's pace. */
+const PLAYBACK_SPEED = Number(document.body.dataset.playbackSpeed) || 1;
+
+const STEP_MS = 2600 / PLAYBACK_SPEED;
 
 /*
  * How long a sequence rests on its first slide before advancing. Long enough
  * to read a goal and a short workflow, short enough that a visitor does not
  * conclude the example is stuck.
  */
-const DWELL_MS = 4200 / 1.5;
+const DWELL_MS = 4200 / PLAYBACK_SPEED;
+
+/* How long a sequence shows its recording slide before starting the replay. */
+const SETTLE_MS = 900 / PLAYBACK_SPEED;
 const FRAME_SIZES = {
     desktop: { height: 1080, width: 1920 },
     phone: { height: 390, width: 844 },
@@ -253,7 +259,12 @@ function isFinished(slot) {
  */
 function updateToggle(slot) {
     if (!slot.toggle) return;
-    slot.toggle.disabled = !isReady(slot);
+    /*
+     * aria-disabled rather than disabled: a disabled button leaves the tab
+     * order, so a keyboard user would skip the control of any example that
+     * had not finished loading.
+     */
+    slot.toggle.setAttribute("aria-disabled", String(!isReady(slot)));
     slot.toggle.textContent = slot.playing
         ? "Pause"
         : isFinished(slot)
@@ -359,7 +370,7 @@ function playSequence(slot) {
         broadcast(slot, { clicks: 0, slot: slot.then, type: "it230:init" });
         slot.dwell = setTimeout(() => {
             broadcast(slot, { type: "it230:recording-play" });
-        }, 900);
+        }, SETTLE_MS);
     }, DWELL_MS);
 }
 
@@ -476,6 +487,7 @@ function wire(element) {
     updateToggle(slot);
 
     slot.toggle?.addEventListener("click", () => {
+        if (!isReady(slot)) return;
         slot.manuallyPaused = slot.playing;
         autoplayTarget = slot;
         if (slot.playing) stop(slot);

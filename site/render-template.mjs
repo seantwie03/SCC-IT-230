@@ -16,7 +16,10 @@ import {
     showcaseAccents,
 } from "../scripts/lib/showcase-content.mjs";
 import { buildOverviewExcerpt } from "../scripts/lib/showcase-excerpts.mjs";
-import { showcaseSlotById } from "../scripts/lib/showcase-slots.mjs";
+import {
+    SHOWCASE_PLAYBACK_SPEED,
+    showcaseSlotById,
+} from "../scripts/lib/showcase-slots.mjs";
 import { buildWeeklyView } from "../scripts/lib/weekly-view.mjs";
 import { escapeHtml } from "./html.mjs";
 
@@ -219,6 +222,10 @@ export async function renderShowcasePage(
             "<!-- IT230_SHOWCASE_PREVIEWS_BASE -->",
             `${withSiteBase(siteBase, showcaseRoute())}previews/`,
         ],
+        [
+            "<!-- IT230_SHOWCASE_PLAYBACK_SPEED -->",
+            String(SHOWCASE_PLAYBACK_SPEED),
+        ],
         ["<!-- IT230_SHOWCASE_HOME_HREF -->", withSiteBase(siteBase, "/")],
         [
             "<!-- IT230_SHOWCASE_CONTENT -->",
@@ -299,7 +306,7 @@ function renderExerciseFrame(block) {
                     <div class="doc-frame">
                         <div class="doc-screen" data-loaded="false" data-frame-src="${escapeHtml(block.href)}" data-frame-size="wide" data-frame-title="${escapeHtml(block.title)}"></div>
                     </div>
-                    <figcaption><span>${escapeHtml(block.caption)}</span><a href="${escapeHtml(block.href)}">Open the written exercise</a></figcaption>
+                    <figcaption><a class="secondary-action" href="${escapeHtml(block.href)}">Open the written exercise</a></figcaption>
                 </figure>`;
 }
 
@@ -327,6 +334,10 @@ function renderOverviewExcerpt(excerpt) {
  * The phone is portrait and holds real text rather than a frame. A slide has
  * to be landscape because it is 16:9; a page does not, and the excerpt is
  * legible at this size precisely because it is not a scaled document.
+ *
+ * The recording's controls and the exercise link are separate groups so a
+ * narrow screen can place each beneath the device it belongs to. The
+ * figcaption stays last, as a figure requires.
  */
 function renderShowcasePair(block, context) {
     const entry = context.resolve(block.slot);
@@ -348,11 +359,14 @@ function renderShowcasePair(block, context) {
                             </div>
                         </div>
                     </div>
-                    <figcaption class="showcase-card-actions">
-                        <span class="showcase-progress" data-progress></span>
-                        <button class="showcase-control showcase-card-action" type="button" data-toggle>Play</button>
-                        <a class="showcase-control showcase-card-action" href="${escapeHtml(href)}">Open the recording</a>
-                        <a class="showcase-control showcase-card-action" href="${escapeHtml(block.exerciseHref)}">Open the written exercise</a>
+                    <span class="showcase-progress" data-progress></span>
+                    <div class="showcase-pair-controls">
+                        <button class="showcase-control" type="button" data-toggle>Play</button>
+                        <a class="showcase-control" href="${escapeHtml(href)}">Open the recording</a>
+                    </div>
+                    <figcaption class="showcase-pair-caption">
+                        <span class="showcase-caption-hidden">${escapeHtml(weekLabel(slot.weekId))}, “${title}”, with its written steps beside it.</span>
+                        <a class="showcase-control" href="${escapeHtml(block.exerciseHref)}">Open the written exercise</a>
                     </figcaption>
                 </figure>`;
 }
@@ -476,7 +490,6 @@ function renderShowcaseBlock(block, context) {
             return renderShowcaseSlot(
                 context.resolve(block.slot),
                 context.siteBase,
-                { cardActions: block.cardActions },
             );
         default:
             return "";
@@ -521,7 +534,7 @@ function renderShowcaseClosing(closing) {
  * visitor without JavaScript is never given an empty box. What the document
  * carries on its own is the caption and the link to the real slide.
  */
-function renderShowcaseSlot(entry, siteBase, { cardActions = false } = {}) {
+function renderShowcaseSlot(entry, siteBase) {
     if (!entry) return "";
     const { definition, resolved: slot } = entry;
     const animated = Boolean(definition.animated);
@@ -538,25 +551,23 @@ function renderShowcaseSlot(entry, siteBase, { cardActions = false } = {}) {
                             ${kind === "desktop" ? '<div class="device-base"></div>' : ""}
                         </div>`;
 
-    const controls = animated
-        ? `<div class="showcase-controls">
-                            <button class="showcase-control" type="button" data-toggle>Play</button>
-                            <span class="showcase-progress" data-progress></span>
-                        </div>`
-        : "";
-
     const sequence = definition.then
         ? ` data-then="${escapeHtml(definition.then)}" data-recording="${Boolean(definition.recording)}"`
         : "";
 
-    const caption = cardActions || animated
+    /*
+     * A playable example trades its visible caption for controls. The frames
+     * are hidden from assistive technology, so the caption stays in the
+     * accessibility tree to say what the figure shows.
+     */
+    const caption = animated
         ? `<figcaption class="showcase-card-actions">
-                        ${animated ? '<span class="showcase-progress" data-progress></span>' : ""}
-                        ${animated ? '<button class="showcase-control showcase-card-action" type="button" data-toggle>Play</button>' : ""}
-                        <a class="showcase-control showcase-card-action" href="${escapeHtml(href)}">Open this slide in the presentation</a>
+                        <span class="showcase-caption-hidden">${escapeHtml(week)}, “${title}”.</span>
+                        <span class="showcase-progress" data-progress></span>
+                        <button class="showcase-control" type="button" data-toggle>Play</button>
+                        <a class="showcase-control" href="${escapeHtml(href)}">Open this slide</a>
                     </figcaption>`
         : `<figcaption class="showcase-caption">
-                        ${controls}
                         <div class="showcase-caption-text">
                             ${week}, “${title}”. <a href="${escapeHtml(href)}">Open this slide in the presentation</a>.
                         </div>

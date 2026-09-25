@@ -16,6 +16,14 @@
  * sections, so reordering the page means renaming slots in deck sources; that
  * cost is accepted because reordering should be rare.
  */
+/**
+ * How much faster than real time the showcase plays its examples.
+ *
+ * Slide steps, the sequence dwell, and recording playback all scale by this
+ * one value. Published course decks are unaffected and play in real time.
+ */
+export const SHOWCASE_PLAYBACK_SPEED = 1.5;
+
 export const SHOWCASE_SLOTS = Object.freeze([
     Object.freeze({
         alias: "showcase-1-1",

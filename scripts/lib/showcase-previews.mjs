@@ -30,6 +30,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { run } from "./process.mjs";
+import { SHOWCASE_PLAYBACK_SPEED } from "./showcase-slots.mjs";
 
 const moduleUrl = fileURLToPath(import.meta.url);
 const SKIP_DIRECTORIES = new Set(["node_modules", "dist", ".cache", ".git"]);
@@ -75,12 +76,11 @@ export async function buildShowcasePreviews({
         return { directory: output, slots };
     }
 
-    await mkdir(directory, { recursive: true });
-    await mkdir(path.join(directory, "setup"), { recursive: true });
+    const setupDirectory = path.join(directory, "setup");
+    await mkdir(setupDirectory, { recursive: true });
     await writeFile(
-        path.join(directory, "setup", "main.ts"),
-        'import type { AppContext } from "@slidev/types";\n' +
-            'export default ({ app }: AppContext) => { app.provide("it230-recording-speed", 1.5); };\n',
+        path.join(setupDirectory, "main.ts"),
+        renderSetup(setupDirectory, themeDirectory),
     );
     const entry = path.join(directory, "slides.md");
     await writeFile(entry, renderDeck({ directory, slots, themeDirectory }));
@@ -205,6 +205,25 @@ function renderDeck({ directory, slots, themeDirectory }) {
     return `${headmatter}\n${imports}`;
 }
 
+/** Play the bundle's recordings at the showcase's pace. */
+function renderSetup(setupDirectory, themeDirectory) {
+    const key = toPosix(
+        path.relative(
+            setupDirectory,
+            path.join(themeDirectory, "setup", "recording-speed"),
+        ),
+    );
+    return [
+        'import type { AppContext } from "@slidev/types";',
+        `import { IT230_RECORDING_SPEED_KEY } from ${JSON.stringify(key)};`,
+        "",
+        "export default ({ app }: AppContext) => {",
+        `    app.provide(IT230_RECORDING_SPEED_KEY, ${SHOWCASE_PLAYBACK_SPEED});`,
+        "};",
+        "",
+    ].join("\n");
+}
+
 function renderGlobalBottom(directory, bridge) {
     const relative = toPosix(path.relative(directory, bridge));
     return [
@@ -243,6 +262,7 @@ async function fingerprintInputs({
     const hash = createHash("sha256");
     hash.update(
         JSON.stringify({
+            playbackSpeed: SHOWCASE_PLAYBACK_SPEED,
             siteBase,
             slots: slots.map((slot) => ({
                 alias: slot.alias,

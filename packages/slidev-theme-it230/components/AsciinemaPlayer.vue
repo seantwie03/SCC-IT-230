@@ -4,6 +4,8 @@ import { inject, onBeforeUnmount, onMounted, ref } from "vue";
 import * as AsciinemaPlayer from "asciinema-player";
 import "asciinema-player/dist/bundle/asciinema-player.css";
 
+import { IT230_RECORDING_SPEED_KEY } from "../setup/recording-speed";
+
 /**
  * Embed a terminal session recording as replayable text.
  *
@@ -38,7 +40,7 @@ const props = withDefaults(
 
 const host = ref<HTMLElement | null>(null);
 // An embedding app may choose its pace; ordinary course decks use real time.
-const playbackSpeed = inject<number>("it230-recording-speed", 1);
+const playbackSpeed = inject<number>(IT230_RECORDING_SPEED_KEY, 1);
 let player: { dispose?: () => void } | null = null;
 
 onMounted(() => {

@@ -22,11 +22,6 @@ import {
 const nav = useNav();
 
 let slot = "";
-let playing = false;
-let timer: ReturnType<typeof setTimeout> | undefined;
-
-/** How long a click state holds before the preview advances itself. */
-const STEP_MS = 2600 / 1.5;
 
 /*
  * How the recording is driven.
@@ -39,7 +34,15 @@ const STEP_MS = 2600 / 1.5;
  */
 const RECORDING_POLL_MS = 600;
 const RECORDING_STALL_POLLS = 4;
+/*
+ * How long a play request waits for the player to draw its controls. A frame
+ * that has only just loaded reports ready before its player has rendered, and
+ * a request that gave up at once would report the recording as ended.
+ */
+const RECORDING_CONTROL_POLL_MS = 100;
+const RECORDING_CONTROL_TIMEOUT_MS = 5000;
 let recordingTimer: ReturnType<typeof setInterval> | undefined;
+let controlTimer: ReturnType<typeof setTimeout> | undefined;
 let recordingPlaying = false;
 let recordingStarted = false;
 
@@ -48,7 +51,6 @@ function post(type: string, extra: Record<string, unknown> = {}) {
         {
             clicks: nav.clicks.value,
             no: nav.currentSlideNo.value,
-            playing,
             slot,
             total: nav.clicksTotal.value,
             type,
@@ -65,12 +67,6 @@ function applyAccent(name: unknown) {
     for (const [property, value] of Object.entries(accentCssVariables(accent)))
         document.documentElement.style.setProperty(property, value);
     document.documentElement.dataset.it230Accent = accent.name;
-}
-
-function stop() {
-    clearTimeout(timer);
-    timer = undefined;
-    playing = false;
 }
 
 function elapsed() {
@@ -115,7 +111,9 @@ function watchRecording() {
  * for the overlay again silently does nothing and leaves the page believing it
  * is playing.
  */
-function startRecording() {
+function startRecording(deadline = Date.now() + RECORDING_CONTROL_TIMEOUT_MS) {
+    clearTimeout(controlTimer);
+    controlTimer = undefined;
     if (recordingPlaying) return;
     const recording = currentRecording();
     const control = recordingStarted
@@ -124,7 +122,12 @@ function startRecording() {
               ".ap-overlay-start, .ap-play-button",
           ) ?? recording?.querySelector<HTMLElement>(".ap-playback-button"));
     if (!control) {
-        post("it230:recording-ended");
+        if (Date.now() < deadline)
+            controlTimer = setTimeout(
+                () => startRecording(deadline),
+                RECORDING_CONTROL_POLL_MS,
+            );
+        else post("it230:recording-ended");
         return;
     }
     control.click();
@@ -134,6 +137,8 @@ function startRecording() {
 }
 
 function pauseRecording() {
+    clearTimeout(controlTimer);
+    controlTimer = undefined;
     clearInterval(recordingTimer);
     recordingTimer = undefined;
     if (!recordingPlaying) return;
@@ -141,29 +146,6 @@ function pauseRecording() {
         ?.querySelector<HTMLElement>(".ap-playback-button")
         ?.click();
     recordingPlaying = false;
-}
-
-function schedule() {
-    clearTimeout(timer);
-    if (!playing) return;
-    /*
-     * Stop on the final state rather than looping. A preview that restarts
-     * forever competes with the page's text for attention, and the showcase
-     * offers an explicit replay instead.
-     */
-    if (nav.clicks.value >= nav.clicksTotal.value) {
-        stop();
-        post("it230:state");
-        return;
-    }
-    timer = setTimeout(async () => {
-        await nav.go(
-            slot,
-            Math.min(nav.clicks.value + 1, nav.clicksTotal.value),
-        );
-        post("it230:state");
-        schedule();
-    }, STEP_MS);
 }
 
 async function show(alias: string, clicks = 0) {
@@ -188,9 +170,6 @@ async function receive(event: MessageEvent) {
             if (typeof data.slot !== "string") return;
             if (data.slot !== slot) {
                 pauseRecording();
-                clearInterval(recordingTimer);
-                recordingTimer = undefined;
-                recordingPlaying = false;
                 recordingStarted = false;
             }
             applyAccent(data.accent);
@@ -202,18 +181,6 @@ async function receive(event: MessageEvent) {
             applyAccent(data.accent);
             post("it230:state");
             return;
-        case "it230:play":
-            if (nav.clicks.value >= nav.clicksTotal.value)
-                await nav.go(slot, 0);
-            playing = true;
-            post("it230:state");
-            schedule();
-            return;
-        case "it230:pause":
-            stop();
-            pauseRecording();
-            post("it230:state");
-            return;
         case "it230:recording-play":
             startRecording();
             return;
@@ -221,7 +188,6 @@ async function receive(event: MessageEvent) {
             pauseRecording();
             return;
         case "it230:step": {
-            stop();
             const next = Math.max(
                 0,
                 Math.min(
@@ -233,13 +199,6 @@ async function receive(event: MessageEvent) {
             post("it230:state");
             return;
         }
-        case "it230:replay":
-            stop();
-            await nav.go(slot, 0);
-            playing = true;
-            post("it230:state");
-            schedule();
-            return;
         default:
     }
 }
@@ -264,7 +223,7 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
-    stop();
+    clearTimeout(controlTimer);
     clearInterval(recordingTimer);
     window.removeEventListener("message", receive);
 });

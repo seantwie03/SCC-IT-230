@@ -49,10 +49,12 @@ const DESKTOP = { height: 1080, width: 1920 };
 const AXE_TAGS = ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"];
 const REVIEW_PORT = 3233;
 /**
- * Frames that hold a layout scaled down from a wider viewport. Clipping is
- * what makes them work rather than a fault in them.
+ * Elements whose clipping is deliberate rather than a loss of information:
+ * frames that hold a layout scaled down from a wider viewport, and captions
+ * hidden visually because they exist only for assistive technology.
  */
-const SCALED_FRAMES = ".device-screen, .doc-screen";
+const INTENTIONALLY_CLIPPED =
+    ".device-screen, .doc-screen, .showcase-caption-hidden";
 /** How long an example gets to build its frames and report them ready. */
 const FRAME_TIMEOUT_MS = 30_000;
 
@@ -395,7 +397,7 @@ async function checkReflow(page, viewport) {
                 document.body.scrollWidth,
             ),
         };
-    }, SCALED_FRAMES);
+    }, INTENTIONALLY_CLIPPED);
 
     const problems = [];
     if (overflow.scroll > overflow.client + 1)
