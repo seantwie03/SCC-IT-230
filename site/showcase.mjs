@@ -367,7 +367,12 @@ function playSequence(slot) {
     clearTimeout(slot.dwell);
     slot.dwell = setTimeout(() => {
         slot.stage = 1;
-        broadcast(slot, { clicks: 0, slot: slot.then, type: "it230:init" });
+        broadcast(slot, {
+            accent,
+            clicks: 0,
+            slot: slot.then,
+            type: "it230:init",
+        });
         slot.dwell = setTimeout(() => {
             broadcast(slot, { type: "it230:recording-play" });
         }, SETTLE_MS);
@@ -401,7 +406,12 @@ function replay(slot) {
     slot.clicks = 0;
     slot.finished = false;
     slot.stage = 0;
-    broadcast(slot, { clicks: 0, slot: slot.alias, type: "it230:init" });
+    broadcast(slot, {
+        accent,
+        clicks: 0,
+        slot: slot.alias,
+        type: "it230:init",
+    });
     play(slot);
 }
 

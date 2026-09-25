@@ -219,6 +219,8 @@ cache under `.cache/showcase-previews/`, published at `/showcase/previews/`,
 and embedded per example. `site/previews/ShowcaseBridge.vue` is the only way
 the page and an embedded slide talk to each other: the page sends it a slot to
 show, an accent, and step commands, and it reports back what it is showing.
+Every initialization message carries the currently selected accent, including
+replay and the transition from an opening slide to its recording.
 
 Stepping is driven by the page rather than inside each frame, because a device
 pair is two separate documents and two independent timers drift apart.
@@ -305,6 +307,8 @@ A separate browser pass enables motion and exercises initial autoplay, scrolling
 between examples, resuming on return, manual pause, both recording examples,
 changing the reduced-motion preference, and startup at narrow widths. It checks
 actual slide progress and recording clocks as well as the control labels.
+It also selects a nondefault accent and verifies that the page and preview
+colors retain it after replay and the transition into a recording.
 
 ## Known gaps
 

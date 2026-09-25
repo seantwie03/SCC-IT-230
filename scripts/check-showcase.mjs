@@ -213,6 +213,40 @@ async function checkAutoplay(browser) {
             { timeout: 10_000 },
         );
     };
+    const checkAccent = async (alias) => {
+        const matches = await page.evaluate((alias) => {
+            const selected = document.querySelector(
+                '[data-accent="purple"][aria-checked="true"]',
+            );
+            if (!selected) return false;
+            const frames = [
+                ...document.querySelectorAll(`[data-slot="${alias}"] iframe`),
+            ];
+            const roots = [
+                document.documentElement,
+                ...frames.map(
+                    (frame) => frame.contentDocument?.documentElement,
+                ),
+            ];
+            return (
+                frames.length > 0 &&
+                roots.every(
+                    (root) =>
+                        root &&
+                        ["Fill", "Text", "Wash"].every(
+                            (token) =>
+                                root.ownerDocument.defaultView
+                                    .getComputedStyle(root)
+                                    .getPropertyValue(
+                                        `--it230-color-accent-${token.toLowerCase()}`,
+                                    )
+                                    .trim() === selected.dataset[`var${token}`],
+                        ),
+                )
+            );
+        }, alias);
+        if (!matches) throw new Error(`${alias} lost the selected accent`);
+    };
 
     try {
         await page.goto(`http://localhost:${REVIEW_PORT}${route}`);
@@ -250,10 +284,22 @@ async function checkAutoplay(browser) {
         await page.waitForTimeout(2000);
         await waitLabel("showcase-1-1", "Play");
 
+        step = "replay preserves the selected accent in both hero frames";
+        await page.locator('[data-accent="purple"]').click();
+        await reveal("showcase-1-1");
+        await toggle("showcase-1-1").click();
+        await waitLabel("showcase-1-1", "Replay");
+        await checkAccent("showcase-1-1");
+        await toggle("showcase-1-1").click();
+        // Completion ensures the frames processed the restart and all steps.
+        await waitLabel("showcase-1-1", "Replay");
+        await checkAccent("showcase-1-1");
+
         step = "exercise sequence starts its recording";
         await reveal("showcase-5-1");
         await waitLabel("showcase-5-1", "Pause");
         await waitAdvance("showcase-5-1");
+        await checkAccent("showcase-5-1");
 
         step = "standalone recording takes over";
         await reveal("showcase-6-1");
