@@ -221,11 +221,12 @@ function buildFrame(container, { size, src, title }) {
 }
 
 function updateProgress(slot) {
-    if (slot.progress)
-        slot.progress.textContent =
-            slot.total > 0
-                ? `Step ${slot.clicks + 1} of ${slot.total + 1}`
-                : "";
+    if (slot.progress) {
+        const total = slot.total > 0 ? slot.total + 1 : slot.recording ? 1 : 0;
+        slot.progress.textContent = total
+            ? `Step ${Math.min(slot.clicks + 1, total)} of ${total}`
+            : "";
+    }
     updateToggle(slot);
 }
 

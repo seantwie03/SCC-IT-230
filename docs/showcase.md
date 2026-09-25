@@ -98,7 +98,7 @@ needs a paragraph of explanation is the wrong label.
 ### Heading levels
 
 The page title is `h1`, the four group labels are `h2`, and the sections are
-`h3`. No level is skipped.
+`h3`. The Deconstruction example title is an `h4`. No level is skipped.
 
 ### Visual composition
 
@@ -119,6 +119,18 @@ it on screens up to 40rem wide. Playback controls, progress, and the example
 caption share one wrapping row beneath the
 devices. The accent picker sits in a neutral panel, with named swatches and a
 visible selection ring. These treatments belong only to the showcase.
+
+The Deconstruction section groups its heading, prose, laptop preview, playback
+controls, and caption in one rounded card with a neutral border and shadow.
+Each card has a thin divider beneath its title. Progress sits directly below
+the Deconstruction laptop, followed by Pause/Replay and the presentation link
+as action buttons. Other playable examples use the same action-button footer;
+static examples keep their descriptive captions. Card padding reduces on
+narrow screens.
+
+Secondary showcase actions, including the PDF download, are centered button
+links with the site's neutral border treatment.
+The overview excerpt's destination link is centered beneath its card.
 
 ## Design and content rules
 

@@ -348,16 +348,11 @@ function renderShowcasePair(block, context) {
                             </div>
                         </div>
                     </div>
-                    <figcaption class="showcase-caption">
-                        <div class="showcase-controls">
-                            <button class="showcase-control" type="button" data-toggle>Play</button>
-                            <span class="showcase-progress" data-progress></span>
-                        </div>
-                        <div class="showcase-caption-text">
-                            ${escapeHtml(weekLabel(slot.weekId))}, \u201c${title}\u201d, with its written steps beside it.
-                            <a href="${escapeHtml(href)}">Open the recording</a> or
-                            <a href="${escapeHtml(block.exerciseHref)}">the written exercise</a>.
-                        </div>
+                    <figcaption class="showcase-card-actions">
+                        <span class="showcase-progress" data-progress></span>
+                        <button class="showcase-control showcase-card-action" type="button" data-toggle>Play</button>
+                        <a class="showcase-control showcase-card-action" href="${escapeHtml(href)}">Open the recording</a>
+                        <a class="showcase-control showcase-card-action" href="${escapeHtml(block.exerciseHref)}">Open the written exercise</a>
                     </figcaption>
                 </figure>`;
 }
@@ -481,6 +476,7 @@ function renderShowcaseBlock(block, context) {
             return renderShowcaseSlot(
                 context.resolve(block.slot),
                 context.siteBase,
+                { cardActions: block.cardActions },
             );
         default:
             return "";
@@ -525,7 +521,7 @@ function renderShowcaseClosing(closing) {
  * visitor without JavaScript is never given an empty box. What the document
  * carries on its own is the caption and the link to the real slide.
  */
-function renderShowcaseSlot(entry, siteBase) {
+function renderShowcaseSlot(entry, siteBase, { cardActions = false } = {}) {
     if (!entry) return "";
     const { definition, resolved: slot } = entry;
     const animated = Boolean(definition.animated);
@@ -553,17 +549,25 @@ function renderShowcaseSlot(entry, siteBase) {
         ? ` data-then="${escapeHtml(definition.then)}" data-recording="${Boolean(definition.recording)}"`
         : "";
 
+    const caption = cardActions || animated
+        ? `<figcaption class="showcase-card-actions">
+                        ${animated ? '<span class="showcase-progress" data-progress></span>' : ""}
+                        ${animated ? '<button class="showcase-control showcase-card-action" type="button" data-toggle>Play</button>' : ""}
+                        <a class="showcase-control showcase-card-action" href="${escapeHtml(href)}">Open this slide in the presentation</a>
+                    </figcaption>`
+        : `<figcaption class="showcase-caption">
+                        ${controls}
+                        <div class="showcase-caption-text">
+                            ${week}, “${title}”. <a href="${escapeHtml(href)}">Open this slide in the presentation</a>.
+                        </div>
+                    </figcaption>`;
+
     return `<figure class="showcase-slot" data-slot="${escapeHtml(slot.alias)}" data-animated="${animated}"${sequence}>
                     <div class="showcase-devices">
                         ${screen("desktop", "Laptop")}
                         ${pair ? screen("phone", "Phone") : ""}
                     </div>
-                    <figcaption class="showcase-caption">
-                        ${controls}
-                        <div class="showcase-caption-text">
-                            ${week}, “${title}”. <a href="${escapeHtml(href)}">Open this slide in the presentation</a>.
-                        </div>
-                    </figcaption>
+                    ${caption}
                 </figure>`;
 }
 

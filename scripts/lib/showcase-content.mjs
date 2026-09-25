@@ -65,7 +65,11 @@ export function buildShowcaseContent(
                                 text: "Left whole, an unfamiliar command gets copied rather than understood. This slide shows the finished command first, then names each part in turn, so attention lands on one piece at a time instead of all of them at once. When that student later meets a variation they have never seen, they can work out what changed rather than start over.",
                                 type: "paragraph",
                             },
-                            { slot: "showcase-2-1", type: "slot" },
+                            {
+                                cardActions: true,
+                                slot: "showcase-2-1",
+                                type: "slot",
+                            },
                         ],
                         heading:
                             "Deconstruction: show the whole thing, then take it apart",
@@ -138,26 +142,11 @@ export function buildShowcaseContent(
                     {
                         blocks: [
                             {
-                                text: "\u201cI need to see that command run again\u201d has no good answer in most courses. Asking an instructor to repeat a terminal session is not a plan, and a student will not ask twice.",
-                                type: "paragraph",
-                            },
-                            youDoExercise && {
-                                exerciseHref: href(
-                                    presentationResourceRoute(
-                                        youDoExercise.weekId,
-                                        youDoExercise.filename,
-                                    ),
-                                ),
-                                exerciseTitle: youDoExercise.title,
-                                slot: "showcase-6-1",
-                                type: "pair",
-                            },
-                            {
-                                text: "The demonstration and the steps are both still there, and a student can copy a command straight out of either one rather than retyping it from a screenshot.",
+                                text: "\u201cI need to see that command run again\u201d has no good answer in most courses. In this course the demonstrations are provided as a written exercise and recorded in Asciinema a student can copy a command straight out of either one rather than retyping it from a screenshot or zoom recording.",
                                 type: "paragraph",
                             },
                             featured && {
-                                text: "Each week also publishes as a PDF, for the student working somewhere with no network at all.",
+                                text: "Each presentation is also published as a PDF, for students working somewhere with no network at all.",
                                 type: "paragraph",
                             },
                             featured && {
@@ -174,11 +163,22 @@ export function buildShowcaseContent(
                                                 ),
                                             ),
                                         ),
-                                        text: "Download a week as PDF",
+                                        text: "Download a PDF of the slides",
                                         variant: "secondary",
                                     },
                                 ],
                                 type: "actions",
+                            },
+                            youDoExercise && {
+                                exerciseHref: href(
+                                    presentationResourceRoute(
+                                        youDoExercise.weekId,
+                                        youDoExercise.filename,
+                                    ),
+                                ),
+                                exerciseTitle: youDoExercise.title,
+                                slot: "showcase-6-1",
+                                type: "pair",
                             },
                         ].filter(Boolean),
                         heading: "The material is still there",
