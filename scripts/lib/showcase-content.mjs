@@ -50,16 +50,7 @@ export function buildShowcaseContent(
         hero: {
             eyebrow: "IT-230 Linux Administration",
             heading: "From Following Along to Working Alone",
-            lede: "Every topic in this course is demonstrated, then practiced together, then worked alone. These are the materials built for each of those three stages.",
-            note: "That sequence is the gradual release of responsibility, and the sections below follow it.",
-            actions: [
-                featured && {
-                    href: href(weekOverviewRoute(featured.id)),
-                    text: "Explore a week",
-                    variant: "primary",
-                },
-                { href: "#group-i-do", text: "Take the tour", variant: "link" },
-            ].filter(Boolean),
+            lede: "Every topic in this course is demonstrated, then practiced together, then worked alone. The materials below support each stage of that gradual release of responsibility.",
         },
         groups: [
             {

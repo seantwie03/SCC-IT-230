@@ -11,14 +11,14 @@
  * sending the same step to both is the only way they stay together.
  */
 
-const STEP_MS = 2600;
+const STEP_MS = 2600 / 1.5;
 
 /*
  * How long a sequence rests on its first slide before advancing. Long enough
  * to read a goal and a short workflow, short enough that a visitor does not
  * conclude the example is stuck.
  */
-const DWELL_MS = 4200;
+const DWELL_MS = 4200 / 1.5;
 const FRAME_SIZES = {
     desktop: { height: 1080, width: 1920 },
     phone: { height: 390, width: 844 },
@@ -50,9 +50,10 @@ function wirePageFrame(container) {
                     title: container.dataset.frameTitle ?? "Course page",
                 });
                 pageFrames.push(iframe);
-                iframe.addEventListener("load", () =>
-                    paintPageFrame(iframe, currentAccentVariables()),
-                );
+                iframe.addEventListener("load", () => {
+                    paintPageFrame(iframe, currentAccentVariables());
+                    styleExercisePreview(iframe);
+                });
                 observer.disconnect();
             }
         },
@@ -61,11 +62,27 @@ function wirePageFrame(container) {
     observer.observe(container);
 }
 
+/** Show the exercise itself without the surrounding course-page chrome. */
+function styleExercisePreview(frame) {
+    if (!frame.closest(".showcase-document")) return;
+    const source = frame.contentDocument;
+    if (!source?.querySelector(".exercise-document")) return;
+    const style = source.createElement("style");
+    style.dataset.showcaseDocument = "";
+    style.textContent = `
+        .site-header { display: none; }
+        main { width: 100%; margin: 0; padding: 0; }
+        .exercise-document { border: 0; border-radius: 0; box-shadow: none; }
+    `;
+    source.head.append(style);
+}
+
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 const slots = [];
 /* Framed web pages, kept so a later accent change can reach into them. */
 const pageFrames = [];
 let active;
+let autoplayTarget;
 let accent = "blue";
 
 const ACCENT_STORAGE = "it230:showcase-accent";
@@ -187,7 +204,9 @@ function fit(container, layoutWidth) {
 function buildFrame(container, { size, src, title }) {
     const iframe = document.createElement("iframe");
     iframe.title = title;
-    iframe.loading = "lazy";
+    // The outer observer already defers creation. Load paired frames together
+    // so native lazy loading cannot hold up playback while one is offscreen.
+    iframe.loading = "eager";
     iframe.setAttribute("scrolling", "no");
     iframe.setAttribute("aria-hidden", "true");
     iframe.setAttribute("tabindex", "-1");
@@ -220,7 +239,10 @@ function updateProgress(slot) {
  * once, drifted apart, and left a control reading Replay that resumed instead.
  */
 function isFinished(slot) {
-    return slot.finished || (slot.total > 0 && slot.clicks >= slot.total);
+    return (
+        slot.finished ||
+        (!slot.recording && slot.total > 0 && slot.clicks >= slot.total)
+    );
 }
 
 /*
@@ -230,11 +252,79 @@ function isFinished(slot) {
  */
 function updateToggle(slot) {
     if (!slot.toggle) return;
+    slot.toggle.disabled = !isReady(slot);
     slot.toggle.textContent = slot.playing
         ? "Pause"
         : isFinished(slot)
           ? "Replay"
           : "Play";
+}
+
+function isReady(slot) {
+    return (
+        slot.frames.length > 0 &&
+        slot.frames.every((frame) => frame.initialized)
+    );
+}
+
+function tryAutoplay(slot) {
+    if (
+        slot !== autoplayTarget ||
+        reduceMotion.matches ||
+        slot.manuallyPaused ||
+        isFinished(slot) ||
+        !isReady(slot)
+    )
+        return;
+    play(slot);
+}
+
+function selectAutoplay(slot) {
+    if (active && active !== slot) stop(active);
+    autoplayTarget = slot;
+    if (slot) {
+        load(slot);
+        tryAutoplay(slot);
+    }
+}
+
+/** Keep observing visibility after preload so returning examples can resume. */
+function watchPlayback() {
+    const playable = slots.filter((slot) => slot.animated);
+    let previousScroll = window.scrollY;
+    const observer = new IntersectionObserver(
+        (entries) => {
+            const entered = [];
+            for (const entry of entries) {
+                const slot = playable.find(
+                    (candidate) => candidate.element === entry.target,
+                );
+                if (!slot) continue;
+                const visible =
+                    entry.isIntersecting && entry.intersectionRatio >= 0.15;
+                if (visible && !slot.visible) entered.push(slot);
+                slot.visible = visible;
+            }
+            // Prefer the newly revealed example in the direction of travel.
+            const incoming = playable.filter((slot) => entered.includes(slot));
+            const next = incoming.length
+                ? window.scrollY > previousScroll
+                    ? incoming.at(-1)
+                    : incoming[0]
+                : autoplayTarget?.visible
+                  ? autoplayTarget
+                  : playable.find((slot) => slot.visible);
+            previousScroll = window.scrollY;
+            // Start the hero on initial load, including a short viewport where
+            // its first screenful is occupied by the introduction.
+            selectAutoplay(
+                next ?? (window.scrollY === 0 ? playable[0] : undefined),
+            );
+        },
+        { threshold: [0, 0.15], rootMargin: "-56px 0px 0px" },
+    );
+    for (const slot of playable) observer.observe(slot.element);
+    if (window.scrollY === 0) selectAutoplay(playable[0]);
 }
 
 function stop(slot) {
@@ -273,13 +363,17 @@ function playSequence(slot) {
 }
 
 function play(slot) {
-    if (slot.playing) return;
+    if (slot.playing || !isReady(slot)) return;
     if (slot.then) return playSequence(slot);
-    if (slot.total === 0) return;
+    if (slot.total === 0 && !slot.recording) return;
     if (active && active !== slot) stop(active);
     active = slot;
     slot.playing = true;
     updateToggle(slot);
+    if (slot.recording) {
+        broadcast(slot, { type: "it230:recording-play" });
+        return;
+    }
     clearInterval(slot.timer);
     slot.timer = setInterval(() => {
         if (slot.clicks >= slot.total) {
@@ -307,7 +401,7 @@ function createFrame(slot, screen) {
         src: `${document.body.dataset.previewsBase}#/${slot.alias}`,
         title: screen.dataset.frameTitle ?? "Slide preview",
     });
-    return { iframe, kind, ready: false };
+    return { iframe, kind, ready: false, initialized: false };
 }
 
 function load(slot) {
@@ -343,23 +437,14 @@ function receive(event) {
             return;
         }
         if (data.type === "it230:ready" || data.type === "it230:state") {
+            if (data.slot !== (slot.stage === 1 ? slot.then : slot.alias))
+                return;
+            frame.initialized = true;
             if (typeof data.clicks === "number") slot.clicks = data.clicks;
             if (typeof data.total === "number") slot.total = data.total;
+            if (slot.playing && isFinished(slot)) stop(slot);
             updateProgress(slot);
-            /*
-             * Start once the slide reports how many steps it has. That arrives
-             * after the frame is ready, because the directives that register
-             * clicks mount with the slide.
-             */
-            if (
-                slot.animated &&
-                !slot.started &&
-                (slot.total > 0 || slot.then) &&
-                slot.frames.every((candidate) => candidate.ready)
-            ) {
-                slot.started = true;
-                if (!reduceMotion.matches) play(slot);
-            }
+            tryAutoplay(slot);
         }
         return;
     }
@@ -378,16 +463,20 @@ function wire(element) {
         element,
         frames: [],
         loaded: false,
+        manuallyPaused: false,
         playing: false,
         progress: element.querySelector("[data-progress]"),
-        started: false,
+        visible: false,
         timer: undefined,
         toggle: element.querySelector("[data-toggle]"),
         total: 0,
     };
     slots.push(slot);
+    updateToggle(slot);
 
     slot.toggle?.addEventListener("click", () => {
+        slot.manuallyPaused = slot.playing;
+        autoplayTarget = slot;
         if (slot.playing) stop(slot);
         else if (isFinished(slot)) replay(slot);
         else play(slot);
@@ -415,8 +504,10 @@ function start() {
     for (const element of document.querySelectorAll("[data-frame-src]"))
         wirePageFrame(element);
     wireAccentPicker();
+    watchPlayback();
     reduceMotion.addEventListener("change", () => {
         if (reduceMotion.matches) for (const slot of slots) stop(slot);
+        else if (autoplayTarget) tryAutoplay(autoplayTarget);
     });
 }
 

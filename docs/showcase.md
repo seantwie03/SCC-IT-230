@@ -100,6 +100,26 @@ needs a paragraph of explanation is the wrong label.
 The page title is `h1`, the four group labels are `h2`, and the sections are
 `h3`. No level is skipped.
 
+### Visual composition
+
+The hero stacks its title and introduction above the live example, using the
+full content width with compact spacing. The introduction names gradual release
+of responsibility within the prose. Phase signposts use prominent accent-colored
+labels beside smaller explanatory text. A thick, rounded accent rule spans the
+heading and its introduction, separated from the text so it reads as a divider
+rather than a letter. Section titles, prose, and detailed slide examples share
+the full content width. On wide screens the weekly overview
+pairs its prose with the derived excerpt in two columns. It returns to source
+order in a single column on narrow screens, and the overview card grows to show
+all its content.
+
+Device frames use slim neutral bezels and a shallow laptop base. Where an example
+includes a phone, it overlaps the laptop on wide screens and sits centered below
+it on screens up to 40rem wide. Playback controls, progress, and the example
+caption share one wrapping row beneath the
+devices. The accent picker sits in a neutral panel, with named swatches and a
+visible selection ring. These treatments belong only to the showcase.
+
 ## Design and content rules
 
 The rules that hold whatever the page grows into:
@@ -123,6 +143,14 @@ The rules that hold whatever the page grows into:
   frames. The weekly overview is an excerpt built by `buildWeeklyView`, the same
   builder the real page uses, so it cannot describe a week differently from the
   week itself.
+
+The We Do exercise frame and its caption share a single rounded card, with
+padding around all four sides of the inset frame and the full-exercise link in
+the card footer. The frame shows the exercise document edge to edge. After it
+loads, preview-only styles hide its course header and remove the outer page
+gutters, border, rounding, and shadow. The exercise's own title, content padding,
+and instructional content remain. The standalone exercise and the portrait
+phone preview keep their normal page layout.
 
 ## Slide examples
 
@@ -173,6 +201,19 @@ show, an accent, and step commands, and it reports back what it is showing.
 
 Stepping is driven by the page rather than inside each frame, because a device
 pair is two separate documents and two independent timers drift apart.
+
+Showcase playback runs at 1.5×: slide steps hold for about 1.73 seconds and the
+opening exercise workflow for 2.8 seconds. The generated preview application's
+setup provides `it230-recording-speed: 1.5` to its recording players. Published
+course decks retain their normal recording speed. Pause, replay, and the
+reduced-motion behavior apply at the faster pace as well.
+
+Preloading and playback are separate. Frames may preload 300 pixels ahead of
+the viewport, but only the active visible example may autoplay. The hero starts
+as soon as its frames are ready on initial load. Revealing a new playable
+example pauses the previous one, and returning resumes an unfinished example.
+An explicit Pause remains paused until the visitor presses Play; completed
+examples retain Replay. Reduced motion suppresses autoplay throughout.
 
 The static fallback for a visitor without JavaScript is not built. It is
 recorded under Known gaps below.
@@ -236,6 +277,11 @@ documents reviewed by `pnpm run check:slides`. The page is read with reduced
 motion requested, which is both the steadier thing to measure and the state a
 visitor who asked not to be moved gets.
 
+A separate browser pass enables motion and exercises initial autoplay, scrolling
+between examples, resuming on return, manual pause, both recording examples,
+changing the reduced-motion preference, and startup at narrow widths. It checks
+actual slide progress and recording clocks as well as the control labels.
+
 ## Known gaps
 
 Recorded while building the page section by section. None of these block
@@ -257,11 +303,6 @@ The page script creates the preview frames, so with JavaScript unavailable a
 slot renders its caption and its link to the live slide but no picture. A still
 first frame would close this. The page stays usable and every claim still has a
 working link, so this is a degradation rather than a break.
-
-### Playback stops one step late
-
-An animated example stops on its final state, but the check happens on the
-following tick, so its controls briefly still read as playing. Cosmetic.
 
 ### Bundle weight is unmeasured
 

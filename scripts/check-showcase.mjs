@@ -87,6 +87,31 @@ try {
         });
 
         problems.push(...(await loadEveryExample(page)));
+        const exerciseFillsFrame = await page.evaluate(() => {
+            const frame = document.querySelector(".showcase-document iframe");
+            const source = frame?.contentDocument;
+            const header = source?.querySelector(".site-header");
+            const exercise = source?.querySelector(".exercise-document");
+            if (!header || !exercise) return false;
+            const bounds = exercise.getBoundingClientRect();
+            return (
+                frame.contentWindow.getComputedStyle(header).display ===
+                    "none" &&
+                Math.abs(bounds.left) < 1 &&
+                Math.abs(bounds.top) < 1 &&
+                Math.abs(bounds.width - frame.contentWindow.innerWidth) < 1
+            );
+        });
+        if (!exerciseFillsFrame)
+            problems.push(
+                "exercise preview retains its top bar or outer gutters",
+            );
+        if (
+            (await page.locator("[data-toggle]").allTextContents()).some(
+                (label) => label === "Pause",
+            )
+        )
+            problems.push("autoplay started with reduced motion requested");
 
         await page.addScriptTag({
             path: createRequire(import.meta.url).resolve("axe-core/axe.min.js"),
@@ -110,6 +135,7 @@ try {
         for (const message of diagnostics)
             problems.push(`console ${message.type}: ${message.text}`);
         await page.close();
+        problems.push(...(await checkAutoplay(browser)));
     });
 } finally {
     server.close();
@@ -128,6 +154,137 @@ if (problems.length > 0) {
     console.log(
         "\nShowcase review passed. Automated rules do not replace the manual review in docs/accessibility.md.",
     );
+}
+
+/** Exercise real scrolling and playback, independently of reduced-motion review. */
+async function checkAutoplay(browser) {
+    const page = await browser.newPage({
+        reducedMotion: "no-preference",
+        viewport: DESKTOP,
+    });
+    const diagnostics = collectPageDiagnostics(page);
+    const issues = [];
+    let step = "hero starts on load";
+    const selector = (alias) => `[data-slot="${alias}"]`;
+    const toggle = (alias) => page.locator(`${selector(alias)} [data-toggle]`);
+    const progress = (alias) =>
+        page.locator(`${selector(alias)} [data-progress]`);
+    const waitLabel = (alias, label) =>
+        page.waitForFunction(
+            ({ selector, label }) =>
+                document.querySelector(`${selector} [data-toggle]`)
+                    ?.textContent === label,
+            { selector: selector(alias), label },
+            { timeout: FRAME_TIMEOUT_MS },
+        );
+    const reveal = (alias) =>
+        page.locator(selector(alias)).evaluate((element) =>
+            element.scrollIntoView({
+                block: "center",
+                behavior: "instant",
+            }),
+        );
+    const clock = (alias) =>
+        page
+            .locator(`${selector(alias)} [data-frame="desktop"] iframe`)
+            .contentFrame()
+            .locator(".ap-time-elapsed:visible");
+    const waitAdvance = async (alias) => {
+        const locator = clock(alias);
+        await locator.waitFor();
+        const before = await locator.textContent();
+        await page.waitForFunction(
+            ({ alias, before }) => {
+                const frame = document.querySelector(
+                    `[data-slot="${alias}"] [data-frame="desktop"] iframe`,
+                );
+                const now = [
+                    ...(frame?.contentDocument?.querySelectorAll(
+                        ".ap-time-elapsed",
+                    ) ?? []),
+                ].find(
+                    (element) => element.getClientRects().length > 0,
+                )?.textContent;
+                return Boolean(now && now !== before);
+            },
+            { alias, before },
+            { timeout: 10_000 },
+        );
+    };
+
+    try {
+        await page.goto(`http://localhost:${REVIEW_PORT}${route}`);
+        await waitLabel("showcase-1-1", "Pause");
+        const initial = await progress("showcase-1-1").textContent();
+        await page.waitForFunction(
+            (before) => {
+                const now = document.querySelector(
+                    '[data-slot="showcase-1-1"] [data-progress]',
+                )?.textContent;
+                return Boolean(now && now !== before);
+            },
+            initial,
+            { timeout: 10_000 },
+        );
+
+        step = "scrolling transfers playback to the next example";
+        await reveal("showcase-2-1");
+        await waitLabel("showcase-2-1", "Pause");
+        await waitLabel("showcase-1-1", "Play");
+        const paused = await progress("showcase-1-1").textContent();
+        await page.waitForTimeout(2000);
+        if ((await progress("showcase-1-1").textContent()) !== paused)
+            throw new Error("offscreen hero kept advancing");
+
+        step = "returning resumes an unfinished example";
+        await reveal("showcase-1-1");
+        await waitLabel("showcase-1-1", "Pause");
+        await waitLabel("showcase-2-1", "Play");
+        await toggle("showcase-1-1").click();
+        await reveal("showcase-2-1");
+        await waitLabel("showcase-2-1", "Pause");
+        await reveal("showcase-1-1");
+        step = "manual pause survives scrolling";
+        await page.waitForTimeout(2000);
+        await waitLabel("showcase-1-1", "Play");
+
+        step = "exercise sequence starts its recording";
+        await reveal("showcase-5-1");
+        await waitLabel("showcase-5-1", "Pause");
+        await waitAdvance("showcase-5-1");
+
+        step = "standalone recording takes over";
+        await reveal("showcase-6-1");
+        await waitLabel("showcase-6-1", "Pause");
+        await waitLabel("showcase-5-1", "Play");
+        await waitAdvance("showcase-6-1");
+        const stoppedClock = await clock("showcase-5-1").textContent();
+        await page.waitForTimeout(2000);
+        if ((await clock("showcase-5-1").textContent()) !== stoppedClock)
+            throw new Error("offscreen recording kept playing");
+
+        step = "recording resumes on return";
+        await reveal("showcase-5-1");
+        await waitLabel("showcase-5-1", "Pause");
+        await waitAdvance("showcase-5-1");
+
+        step = "enabling reduced motion stops playback";
+        await page.emulateMedia({ reducedMotion: "reduce" });
+        await waitLabel("showcase-5-1", "Play");
+
+        step = "narrow-screen hero starts with stacked devices";
+        await page.setViewportSize(NARROW);
+        await page.emulateMedia({ reducedMotion: "no-preference" });
+        await page.goto(`http://localhost:${REVIEW_PORT}${route}`);
+        await waitLabel("showcase-1-1", "Pause");
+    } catch (error) {
+        issues.push(`autoplay (${step}): ${error.message}`);
+    } finally {
+        for (const message of diagnostics)
+            issues.push(`autoplay console ${message.type}: ${message.text}`);
+        await page.close();
+    }
+    return issues;
 }
 
 /**

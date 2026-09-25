@@ -535,6 +535,11 @@ Terminal colours come from the palette embedded in the recording, not from the
 theme, so a recording looks like the terminal it was made on. The monospace
 family is inherited from the theme, so recordings match the deck's code blocks.
 
+`AsciinemaPlayer` defaults to real-time playback. An embedding application may
+provide a numeric `it230-recording-speed` through Vue's application context to
+set the speed when players are created. This is an integration hook, not a
+course-authoring prop.
+
 The recording variant omits the hands-on eyebrow so the player can use more of
 the canvas. Both variants retain the visible `Exercise:` title prefix and accent
 rail. Use the exact source structure and link labels documented in

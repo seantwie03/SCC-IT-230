@@ -76,6 +76,12 @@ export async function buildShowcasePreviews({
     }
 
     await mkdir(directory, { recursive: true });
+    await mkdir(path.join(directory, "setup"), { recursive: true });
+    await writeFile(
+        path.join(directory, "setup", "main.ts"),
+        'import type { AppContext } from "@slidev/types";\n' +
+            'export default ({ app }: AppContext) => { app.provide("it230-recording-speed", 1.5); };\n',
+    );
     const entry = path.join(directory, "slides.md");
     await writeFile(entry, renderDeck({ directory, slots, themeDirectory }));
     await writeFile(

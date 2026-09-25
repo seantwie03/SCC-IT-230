@@ -299,7 +299,7 @@ function renderExerciseFrame(block) {
                     <div class="doc-frame">
                         <div class="doc-screen" data-loaded="false" data-frame-src="${escapeHtml(block.href)}" data-frame-size="wide" data-frame-title="${escapeHtml(block.title)}"></div>
                     </div>
-                    <figcaption>${escapeHtml(block.caption)} <a href="${escapeHtml(block.href)}">Open the written exercise</a>.</figcaption>
+                    <figcaption><span>${escapeHtml(block.caption)}</span><a href="${escapeHtml(block.href)}">Open the written exercise</a></figcaption>
                 </figure>`;
 }
 
@@ -348,14 +348,16 @@ function renderShowcasePair(block, context) {
                             </div>
                         </div>
                     </div>
-                    <div class="showcase-controls">
-                        <button class="showcase-control" type="button" data-toggle>Play</button>
-                        <span class="showcase-progress" data-progress></span>
-                    </div>
-                    <figcaption>
-                        ${escapeHtml(weekLabel(slot.weekId))}, \u201c${title}\u201d, with its written steps beside it.
-                        <a href="${escapeHtml(href)}">Open the recording</a> or
-                        <a href="${escapeHtml(block.exerciseHref)}">the written exercise</a>.
+                    <figcaption class="showcase-caption">
+                        <div class="showcase-controls">
+                            <button class="showcase-control" type="button" data-toggle>Play</button>
+                            <span class="showcase-progress" data-progress></span>
+                        </div>
+                        <div class="showcase-caption-text">
+                            ${escapeHtml(weekLabel(slot.weekId))}, \u201c${title}\u201d, with its written steps beside it.
+                            <a href="${escapeHtml(href)}">Open the recording</a> or
+                            <a href="${escapeHtml(block.exerciseHref)}">the written exercise</a>.
+                        </div>
                     </figcaption>
                 </figure>`;
 }
@@ -404,12 +406,12 @@ function renderAccentPicker() {
 
 function renderShowcaseHero(hero, context) {
     return `<section class="showcase-hero" aria-labelledby="showcase-title">
-                <p class="eyebrow">${escapeHtml(hero.eyebrow)}</p>
-                <h1 id="showcase-title">${escapeHtml(hero.heading)}</h1>
-                <p class="lede">${escapeHtml(hero.lede)}</p>
-                ${renderShowcaseActions(hero.actions)}
+                <div class="showcase-hero-intro">
+                    <p class="eyebrow">${escapeHtml(hero.eyebrow)}</p>
+                    <h1 id="showcase-title">${escapeHtml(hero.heading)}</h1>
+                    <p class="lede">${escapeHtml(hero.lede)}</p>
+                </div>
                 ${renderShowcaseSlot(context.resolve("showcase-1-1"), context.siteBase)}
-                <p class="showcase-evidence">${escapeHtml(hero.note)}</p>
             </section>`;
 }
 
@@ -433,7 +435,8 @@ function renderShowcaseGroup(group, context) {
 }
 
 function renderShowcaseSection(section, context) {
-    return `<section class="showcase-section" aria-labelledby="section-${escapeHtml(section.id)}">
+    const overview = section.blocks.some((block) => block.type === "overview");
+    return `<section class="showcase-section${overview ? " showcase-section-overview" : ""}" aria-labelledby="section-${escapeHtml(section.id)}">
                     <h3 id="section-${escapeHtml(section.id)}">${escapeHtml(section.heading)}</h3>
                     ${section.blocks.map((block) => renderShowcaseBlock(block, context)).join("")}
                 </section>`;
@@ -555,9 +558,11 @@ function renderShowcaseSlot(entry, siteBase) {
                         ${screen("desktop", "Laptop")}
                         ${pair ? screen("phone", "Phone") : ""}
                     </div>
-                    ${controls}
-                    <figcaption>
-                        ${week}, “${title}”. <a href="${escapeHtml(href)}">Open this slide in the presentation</a>.
+                    <figcaption class="showcase-caption">
+                        ${controls}
+                        <div class="showcase-caption-text">
+                            ${week}, “${title}”. <a href="${escapeHtml(href)}">Open this slide in the presentation</a>.
+                        </div>
                     </figcaption>
                 </figure>`;
 }

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onBeforeUnmount, onMounted, ref } from "vue";
+import { inject, onBeforeUnmount, onMounted, ref } from "vue";
 
 import * as AsciinemaPlayer from "asciinema-player";
 import "asciinema-player/dist/bundle/asciinema-player.css";
@@ -37,6 +37,8 @@ const props = withDefaults(
 );
 
 const host = ref<HTMLElement | null>(null);
+// An embedding app may choose its pace; ordinary course decks use real time.
+const playbackSpeed = inject<number>("it230-recording-speed", 1);
 let player: { dispose?: () => void } | null = null;
 
 onMounted(() => {
@@ -47,6 +49,7 @@ onMounted(() => {
         controls: true,
         fit: "both",
         poster: props.poster,
+        speed: playbackSpeed,
     });
 });
 

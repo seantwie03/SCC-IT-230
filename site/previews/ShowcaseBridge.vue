@@ -26,7 +26,7 @@ let playing = false;
 let timer: ReturnType<typeof setTimeout> | undefined;
 
 /** How long a click state holds before the preview advances itself. */
-const STEP_MS = 2600;
+const STEP_MS = 2600 / 1.5;
 
 /*
  * How the recording is driven.
@@ -74,7 +74,17 @@ function stop() {
 }
 
 function elapsed() {
-    return document.querySelector(".ap-time-elapsed")?.textContent ?? "";
+    return (
+        currentRecording()?.querySelector(".ap-time-elapsed")?.textContent ?? ""
+    );
+}
+
+function currentRecording() {
+    // Slidev retains neighboring slides in the DOM. Their players must never
+    // receive controls intended for the currently displayed recording.
+    return document.querySelector<HTMLElement>(
+        `[data-slidev-no="${nav.currentSlideNo.value}"] .it230-asciinema`,
+    );
 }
 
 function watchRecording() {
@@ -107,11 +117,12 @@ function watchRecording() {
  */
 function startRecording() {
     if (recordingPlaying) return;
+    const recording = currentRecording();
     const control = recordingStarted
-        ? document.querySelector<HTMLElement>(".ap-playback-button")
-        : (document.querySelector<HTMLElement>(
+        ? recording?.querySelector<HTMLElement>(".ap-playback-button")
+        : (recording?.querySelector<HTMLElement>(
               ".ap-overlay-start, .ap-play-button",
-          ) ?? document.querySelector<HTMLElement>(".ap-playback-button"));
+          ) ?? recording?.querySelector<HTMLElement>(".ap-playback-button"));
     if (!control) {
         post("it230:recording-ended");
         return;
@@ -126,7 +137,9 @@ function pauseRecording() {
     clearInterval(recordingTimer);
     recordingTimer = undefined;
     if (!recordingPlaying) return;
-    document.querySelector<HTMLElement>(".ap-playback-button")?.click();
+    currentRecording()
+        ?.querySelector<HTMLElement>(".ap-playback-button")
+        ?.click();
     recordingPlaying = false;
 }
 
@@ -174,6 +187,7 @@ async function receive(event: MessageEvent) {
         case "it230:init": {
             if (typeof data.slot !== "string") return;
             if (data.slot !== slot) {
+                pauseRecording();
                 clearInterval(recordingTimer);
                 recordingTimer = undefined;
                 recordingPlaying = false;
