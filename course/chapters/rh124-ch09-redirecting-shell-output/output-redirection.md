@@ -345,8 +345,44 @@ The command produces nothing on the screen.
 </v-click>
 
 ---
+layout: exercise
 ---
 
-# Exercise: Output Redirection vs Append
+# Output Redirection vs Append
 
-![Screen recording of the instructor comparing the > and >> redirection operators in a terminal.](./assets/output_redirection.gif)
+::goal::
+
+Compare replacing a file's contents with appending new lines
+
+::environment::
+
+**Host:** `servera`
+
+::workflow::
+
+1. Create a file in Vim and verify its contents
+2. Redirect output with `>` and inspect what remains
+3. Create a second file and add lines with `>>`
+4. Verify that appending preserves the existing content
+
+---
+layout: exercise
+variant: recording
+---
+
+<script setup>
+import castUrl from "./exercises/output-redirection-exercise.cast?url";
+</script>
+
+# Output Redirection vs Append
+
+::recording::
+
+<AsciinemaPlayer
+    :src="castUrl"
+    label="Screen recording of the instructor creating a file in Vim, overwriting its contents with the > operator, appending lines to a second file with >>, verifying the results, and removing the exercise files."
+/>
+
+::resources::
+
+<a href="../resources/output-redirection-exercise.html" target="_blank" rel="noopener noreferrer" aria-label="Read the written Output and Redirection exercise in a new tab">Written exercise</a>

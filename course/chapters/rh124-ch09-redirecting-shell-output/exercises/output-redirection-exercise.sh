@@ -1,6 +1,17 @@
 kitten @ set-font-size 30.0 && ssh servera
 clear
-#^ Task: Demonstrate Output Redirection (>) vs Append (>>)
+#@ pause 10
+#^ Exercise: Output Redirection (>) vs Append (>>)
+# Requirements
+#   Host: servera, logged in as student
+#   Start with no evil_plan.md or evil_plan-v2.md in your home directory
+#   Compare replacing a file with adding to its existing contents
+# Steps
+#   1. Create and verify a file in Vim
+#   2. Observe how > overwrites the file
+#   3. Build a new file with >> and verify the appended lines
+#   4. Remove the exercise files
+clear
 
 #^ Create a very important file
 vim evil_plan.md
@@ -13,14 +24,15 @@ i
 ...
 13. Poison the training data for all new AIs
 ...
+#@ pause 5
 96. Become the supreme-leader of the world!
 #! Press Escape to go back to 'normal' mode
-#@ noenter
-jj
+#@ key escape
 #! Press colon to enter 'command' mode. Then type wq for write and quit
 :wq
 
 #^ Verify our important work
+#@ pause 5
 cat evil_plan.md
 clear
 
@@ -40,12 +52,14 @@ echo "1. Invent a <Top Secret Information Redacted>" >> evil_plan-v2.md
 echo "2. Use the <Top Secret Information Redacted> to poison the minds of <Top Secret Information Redacted>" >> evil_plan-v2.md
 
 #^ Bask in the glory of an eviler plan
+#@ pause 5
 cat evil_plan-v2.md
 
 #^ The CORRECT way to add to a file: Append (>>)
 echo "3. Call mom and tell her the good news about world domination" >> evil_plan-v2.md
 
 #^ Verify the append worked
+#@ pause 5
 cat evil_plan-v2.md
 clear
 
