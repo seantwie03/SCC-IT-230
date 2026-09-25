@@ -190,6 +190,35 @@ Mermaid diagrams do not scale themselves to fit a slide. Set an explicit
 `{scale: n}` on the fence when a diagram is taller than its region, and verify
 with `pnpm run check:slides` rather than by eye.
 
+A Mermaid node may be drawn as an icon rather than a box, which is how a
+diagram shows a server, a switch, or a firewall without anyone hand-drawing
+one:
+
+```
+flowchart LR
+    SW@{ icon: "carbon:switch-layer-3", form: "square", label: "Switch", pos: "b" }
+    WEB@{ icon: "carbon:bare-metal-server", form: "square", label: "Web server", pos: "b" }
+    SW --> WEB
+```
+
+`packages/slidev-theme-it230/setup/mermaid.ts` registers the Carbon icon set
+(Apache-2.0) under the `carbon` prefix, so every deck can use it. Icons inherit
+the deck accent. Browse the set at <https://icones.js.org/collection/carbon>;
+it carries `bare-metal-server`, `firewall`, `router`, `switch-layer-3`,
+`network-1` through `network-4`, and `cloud`, among others.
+
+Two constraints come with it. The theme declares `mermaid` at the exact version
+Slidev depends on, because registration and rendering must happen on one module
+instance; bump that pin whenever the Slidev pin moves, or icon shapes silently
+fall back to a question mark. The icon set is 1.1 MB, so the loader is a dynamic
+import and only a deck that draws an icon shape pays for it.
+
+Prefer an icon shape to a drawn SVG when the subject is a stock piece of
+hardware. Keep a hand-built SVG for a drawing no icon set has, as
+`rh134-ch06-managing-security-with-selinux/assets/selinux-floor-plan.svg` is. In
+an inline SVG, set label sizes with `style="font-size:17px"` rather than the
+`font-size` attribute, which the theme's typography overrides.
+
 ### Deck accent selection
 
 A presentation may select one named Adwaita accent for its complete deck:
