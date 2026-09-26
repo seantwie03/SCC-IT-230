@@ -11,7 +11,7 @@ topicInfo:
       - chapter: "12"
         title: Scheduling Tasks
   exercises:
-    - title: Backing Up /etc/passwd Nightly Exercise
+    - title: Backing Up /etc Nightly Exercise
       source: ./exercises/backing-up-etc-nightly-exercise.html
 ---
 
@@ -112,11 +112,11 @@ The log says <AccentText>(root)</AccentText> instead of `(student)`, because the
 layout: exercise
 ---
 
-# Backing Up `/etc/passwd` Nightly
+# Backing Up `/etc` Nightly
 
 ::goal::
 
-Back up a file every night as `root`, from a system crontab rather than your own
+Back up `/etc` every night as `root`, from a system crontab rather than your own
 
 ::environment::
 
@@ -127,7 +127,7 @@ Back up a file every night as `root`, from a system crontab rather than your own
 1. Write a short backup script on `servera` and make it executable
 2. Schedule it in `/etc/cron.d/` and test it every minute
 3. Find out why nothing ran, then correct the entry
-4. Confirm in `/var/log/cron` that `root` ran it, and check both hosts
+4. Confirm in `/var/log/cron` that `root` ran it, and check the copy on `workstation`
 5. Set the real 10 p.m. schedule and read the entry back
 
 ---
@@ -139,15 +139,15 @@ variant: recording
 import castUrl from "./exercises/backing-up-etc-nightly-exercise.cast?url";
 </script>
 
-# Backing Up `/etc/passwd` Nightly
+# Backing Up `/etc` Nightly
 
 ::recording::
 
 <AsciinemaPlayer
     :src="castUrl"
-    label="Screen recording of the instructor writing a backup script on servera that copies /etc/passwd to a timestamped snapshot and sends it to workstation, scheduling it in /etc/cron.d, discovering that cron's PATH does not include /usr/local/bin, correcting the entry and setting the 10 p.m. schedule, then installing the same script into anacron on workstation and letting it catch up."
+    label="Screen recording of the instructor writing a backup script on servera that copies /etc to a timestamped directory on workstation, scheduling it in /etc/cron.d, discovering that cron's PATH does not include /usr/local/bin, correcting the entry, and setting the 10 p.m. schedule."
 />
 
 ::resources::
 
-<a href="../resources/backing-up-etc-nightly-exercise.html" target="_blank" rel="noopener noreferrer" aria-label="Read the written Backing Up `/etc/passwd` Nightly exercise in a new tab">Written exercise</a>
+<a href="../resources/backing-up-etc-nightly-exercise.html" target="_blank" rel="noopener noreferrer" aria-label="Read the written Backing Up /etc Nightly exercise in a new tab">Written exercise</a>

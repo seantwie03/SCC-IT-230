@@ -20,20 +20,26 @@ clear
 mkdir -p ~/Documents/notes
 echo "Kernel panic on servera, 03:14" > ~/Documents/incident_report.txt
 echo "Check disk usage weekly" > ~/Documents/notes/reminders.txt
+#@ pause 5
 ls -R ~/Documents
 clear
 
 #^ 2. Build and test the backup command
 date --iso-8601=minutes
 cp -r ~/Documents /tmp/documents_$(date --iso-8601=minutes)
+#@ pause 5
 ls -d /tmp/documents_*
 clear
 
 #^ 3. Schedule it one minute from now
 #! Every minute is a test schedule. The real one comes in step 5.
 crontab -e
+#@ pause 5
+#@ noenter
 i* * * * * cp -r /home/student/Documents /tmp/documents_$(date --iso-8601=minutes)
-jj:wq
+#@ key escape
+:wq
+#@ pause 5
 crontab -l
 #! A literal % in a crontab command means newline, so date +%F would need escaping. --iso-8601 avoids it.
 clear
@@ -41,18 +47,25 @@ clear
 #@ pause 70
 #^ 4. Confirm it ran
 #! Wait for the next minute to tick over before continuing
+#@ pause 5
 sudo less /var/log/cron
+#@ pause 6
 #@ noenter
 G
 #@ noenter
 q
+#@ pause 5
 ls -d /tmp/documents_*
 clear
 
 #^ 5. Set the real schedule
 crontab -e
+#@ pause 5
+#@ noenter
 C0 2 * * * cp -r /home/student/Documents /tmp/documents_$(date --iso-8601=minutes)
-jj:wq
+#@ key escape
+:wq
+#@ pause 5
 crontab -l
 clear
 

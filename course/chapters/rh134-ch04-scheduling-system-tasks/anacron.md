@@ -144,3 +144,25 @@ Give a daily backup to anacron on a machine that is asleep at night, then watch 
 3. Ask anacron to run what is due, and see that nothing is
 4. Backdate that record so the daily jobs are months overdue
 5. Ask again, then confirm the backup ran and the recorded date caught up
+
+---
+layout: exercise
+variant: recording
+---
+
+<script setup>
+import castUrl from "./exercises/backing-up-a-laptop-with-anacron-exercise.cast?url";
+</script>
+
+# Backing Up a Laptop with Anacron
+
+::recording::
+
+<AsciinemaPlayer
+    :src="castUrl"
+    label="Screen recording of the instructor writing a daily /etc backup script on workstation, checking the anacron date, backdating it to make the job overdue, and confirming the backup ran."
+/>
+
+::resources::
+
+<a href="../resources/backing-up-a-laptop-with-anacron-exercise.html" target="_blank" rel="noopener noreferrer" aria-label="Read the written Backing Up a Laptop with Anacron exercise in a new tab">Written exercise</a>

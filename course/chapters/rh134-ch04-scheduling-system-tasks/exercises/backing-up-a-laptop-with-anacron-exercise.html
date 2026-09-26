@@ -477,8 +477,8 @@
                 <section class="overview" aria-labelledby="overview-heading">
                     <h2 id="overview-heading">Task</h2>
                     <p>
-                        Back up <code>/etc/passwd</code> about once a day on a
-                        machine that is closed at night. Treat
+                        Back up <code>/etc</code> about once a day on a machine
+                        that is closed at night. Treat
                         <code>workstation</code> as a laptop: a crontab entry at
                         10 p.m. would never fire, because nothing is awake to
                         run it. Hand the job to anacron instead, then prove it
@@ -492,12 +492,12 @@
                         </div>
                         <div>
                             <dt>Back up</dt>
-                            <dd><code>/etc/passwd</code></dd>
+                            <dd><code>/etc</code></dd>
                         </div>
                         <div>
                             <dt>Destination</dt>
                             <dd>
-                                a timestamped snapshot under <code>/tmp</code>
+                                a timestamped directory under <code>/tmp</code>
                             </dd>
                         </div>
                         <div>
@@ -528,9 +528,7 @@ sudo -i</code></pre>
                         </p>
                         <pre><code>vim /etc/cron.daily/etc_backup.sh</code></pre>
                         <pre><code>#!/bin/bash
-SNAPSHOT="/tmp/passwd_$(date --iso-8601=minutes)"
-
-cp /etc/passwd "${SNAPSHOT}"</code></pre>
+cp -r /etc /tmp/$(hostname)_etc_backup_$(date --iso-8601=minutes)</code></pre>
                         <p>
                             Make it executable and confirm the mode. A script in
                             these directories that is not executable is skipped
@@ -556,7 +554,7 @@ ls -l /etc/cron.daily/etc_backup.sh</code></pre>
                         </p>
                         <pre><code>cat /var/spool/anacron/cron.daily
 anacron -n
-ls /tmp/passwd_*</code></pre>
+ls -ld /tmp/workstation.lab.example.com_etc_backup_*</code></pre>
                         <p>
                             No snapshot. Today's daily jobs are not overdue, so
                             anacron had nothing to do.
@@ -590,8 +588,12 @@ anacron -n</code></pre>
 
                     <li class="step">
                         <h2>Confirm the backup ran</h2>
-                        <p>Look for the snapshot, then read the date back.</p>
-                        <pre><code>ls -l /tmp/passwd_*
+                        <p>
+                            Look for the copied directory and its
+                            <code>passwd</code> file, then read the date back.
+                        </p>
+                        <pre><code>ls -ld /tmp/workstation.lab.example.com_etc_backup_*
+ls -l /tmp/workstation.lab.example.com_etc_backup_*/passwd
 cat /var/spool/anacron/cron.daily</code></pre>
                         <p>
                             The backup ran and the recorded date caught up to
@@ -603,10 +605,11 @@ cat /var/spool/anacron/cron.daily</code></pre>
                     <li class="step">
                         <h2>Clean up</h2>
                         <p>
-                            Remove the job and the snapshots it produced, then
+                            Remove the job and the directories it produced, then
                             leave the root shell.
                         </p>
-                        <pre><code>rm -f /etc/cron.daily/etc_backup.sh /tmp/passwd_*
+                        <pre><code>rm -f /etc/cron.daily/etc_backup.sh
+rm -rf /tmp/workstation.lab.example.com_etc_backup_*
 exit</code></pre>
                         <aside class="note">
                             <strong>Leave the date alone</strong>

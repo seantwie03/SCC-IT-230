@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Backing Up /etc/passwd Nightly Exercise</title>
+        <title>Backing Up /etc Nightly Exercise</title>
         <style>
             :root {
                 color-scheme: light;
@@ -472,15 +472,15 @@
             <article class="exercise-document">
                 <header class="exercise-header">
                     <p class="exercise-kicker">Exercise</p>
-                    <h1>Backing Up /etc/passwd Nightly Exercise</h1>
+                    <h1>Backing Up /etc Nightly Exercise</h1>
                 </header>
 
                 <section class="overview" aria-labelledby="overview-heading">
                     <h2 id="overview-heading">Task</h2>
                     <p>
-                        Back up <code>/etc/passwd</code> every night at 10 p.m.
-                        as <code>root</code>, copying each snapshot to another
-                        host so it is not lost with the machine.
+                        Back up <code>/etc</code> every night at 10 p.m. as
+                        <code>root</code>, copying each snapshot to another host
+                        so it is not lost with the machine.
                         <code>servera</code> is a server that never sleeps, so a
                         system crontab in <code>/etc/cron.d/</code> is the right
                         home for the job.
@@ -523,30 +523,27 @@
                         <pre><code>sudo -i
 vim /usr/local/bin/etc_backup.sh</code></pre>
                         <p>
-                            Give it a hashbang and keep its settings in
-                            variables, so the destination host is named once
-                            rather than buried in a command.
+                            Give it a hashbang and name the destination host
+                            once in a variable.
                         </p>
                         <pre><code>#!/bin/bash
-BACKUP_HOST="workstation"
-SNAPSHOT="/tmp/passwd_$(date --iso-8601=minutes)"
-
-cp /etc/passwd "${SNAPSHOT}"
-scp -q "${SNAPSHOT}" "${BACKUP_HOST}:/tmp/"</code></pre>
+backup_host="workstation"
+scp -r /etc "student@${backup_host}:/tmp/$(hostname)_etc_$(date --iso-8601=minutes)"</code></pre>
                         <p>
                             Make it executable and run it once by hand, then
-                            check both ends.
+                            check the copied directory on workstation.
                         </p>
                         <pre><code>chmod a+x /usr/local/bin/etc_backup.sh
 /usr/local/bin/etc_backup.sh
-ls -l /tmp/passwd_*
-ssh workstation 'ls -l /tmp/passwd_*'</code></pre>
+ssh student@workstation 'ls -ld /tmp/servera.lab.example.com_etc_*'
+ssh student@workstation 'ls -l /tmp/servera.lab.example.com_etc_*/passwd'</code></pre>
                         <aside class="note">
                             <strong
                                 >A backup on one machine is not a backup</strong
                             >
                             The <code>scp</code> line is what makes this useful.
-                            If servera dies, the snapshot dies with it.
+                            If servera dies, a copy stored only on servera dies
+                            with it.
                         </aside>
                     </li>
 
@@ -580,7 +577,7 @@ vim /etc/cron.d/backups</code></pre>
                             Wait for the next minute, then look for a new
                             snapshot.
                         </p>
-                        <pre><code>ls -l /tmp/passwd_*
+                        <pre><code>ssh student@workstation 'ls -ld /tmp/servera.lab.example.com_etc_*'
 grep etc_backup /var/log/cron</code></pre>
                         <p>No new snapshot, and the log says why:</p>
                         <pre><code>CROND[...]: (root) CMD (etc_backup.sh)
@@ -604,12 +601,12 @@ CROND[...]: (root) CMDOUT (/bin/bash: line 1: etc_backup.sh: command not found)<
                     <li class="step">
                         <h2>Confirm root ran it, then set the real schedule</h2>
                         <p>
-                            Wait another minute, then check the log and both
-                            hosts.
+                            Wait another minute, then check the log and the
+                            offsite copy on workstation.
                         </p>
                         <pre><code>grep etc_backup /var/log/cron
-ls -l /tmp/passwd_*
-ssh workstation 'ls -l /tmp/passwd_*'</code></pre>
+ssh student@workstation 'ls -ld /tmp/servera.lab.example.com_etc_*'
+ssh student@workstation 'ls -l /tmp/servera.lab.example.com_etc_*/passwd'</code></pre>
                         <p>The log names the user the job ran as:</p>
                         <pre><code>CROND[12124]: (root) CMD (/usr/local/bin/etc_backup.sh)
 CROND[12123]: (root) CMDEND (/usr/local/bin/etc_backup.sh)</code></pre>
@@ -626,18 +623,18 @@ CROND[12123]: (root) CMDEND (/usr/local/bin/etc_backup.sh)</code></pre>
                     <li class="step">
                         <h2>Clean up</h2>
                         <p>
-                            Remove the schedule, the script, and the snapshots
-                            on both ends, then leave the root shell.
+                            Remove the schedule and script on servera and the
+                            copied directories on workstation, then leave the
+                            root shell.
                         </p>
-                        <pre><code>rm -f /etc/cron.d/backups /usr/local/bin/etc_backup.sh /tmp/passwd_*
-ssh workstation 'rm -f /tmp/passwd_*'
+                        <pre><code>rm -f /etc/cron.d/backups /usr/local/bin/etc_backup.sh
+ssh student@workstation 'sudo rm -rf /tmp/servera.lab.example.com_etc_*'
 ls /etc/cron.d/
 exit</code></pre>
                         <aside class="note">
-                            <strong>Both ends</strong>
-                            The point of the <code>scp</code> line was that the
-                            snapshot outlives this host, so removing it here is
-                            only half the cleanup.
+                            <strong>Clean up the destination</strong>
+                            The <code>scp</code> command creates directories on
+                            workstation, so remove those directories there.
                         </aside>
                     </li>
                 </ol>
