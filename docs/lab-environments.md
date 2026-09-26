@@ -25,8 +25,9 @@ week opens with a slide reminding students to start their VMs before class.
 The instructor lab exists for delivery. Demonstrations are recorded with
 `kitty-demo` at presentation font sizes, and that needs a machine under the
 instructor's control to look the way it should. It doubles as the verification
-environment, reachable from this repository through `pnpm lab`. Students never
-see it, and no material should describe it as though they will.
+environment, reachable from this repository through `pnpm lab`. Students see
+this lab constantly, because it is the one in every recorded demonstration;
+they just never log in to it.
 
 ## What is the same everywhere
 
@@ -236,18 +237,36 @@ demonstration recorded on the instructor lab may therefore need an install step
 that students do not, which is worth checking before assuming a missing package
 is a student problem.
 
-## Writing material that works in all three
+## Writing material
+
+Material in this repository targets the SCC lab, and has to run on the
+instructor lab as well, because that is where it is verified and recorded. It
+does not have to run on the RHA lab: students go there for Red Hat's own
+exercises, which come with their own instructions. `sudo` and SSH are
+passwordless in both environments this repository targets, so material can rely
+on that.
+
+RHA still matters for what students carry between environments. A student who
+learns an interface name rather than how to look one up will be stuck the first
+time they open a Red Hat exercise, which is why the interface table appears in
+the week 7 material.
 
 - Look the interface up with `nmcli device status` rather than hard-coding it,
-  and say which environment a transcript came from when it shows one.
+  and say which environment a transcript came from when it shows one. The SCC
+  and instructor labs already disagree with each other here.
 - Use the blank `sdb` through `sdd` disks for storage work; leave the OS disk
-  alone.
-- Assume `sudo` may prompt.
-- Never name a key file.
-- Check a package is present before using it, or install it as a step.
+  alone. Device names differ between the two target environments.
+- Never name a key file. It is `id_rsa` on one and both `id_rsa` and `lab_rsa`
+  on the other.
+- Check a package is present before using it, or install it as a step. The
+  instructor lab starts leaner than the SCC lab.
 - Verify commands and output against a real host, per the `lab-verification`
-  skill, and remember that `pnpm lab` reaches the environment least like the
-  students'.
+  skill, and remember that `pnpm lab` reaches the instructor lab, which is the
+  one students watch but never log in to.
+- Write `kitty-demo` command files for the instructor lab, because that is
+  where they are recorded and replayed. A student following along translates
+  the device names to their own machine, which is a habit worth building: the
+  names differ again the moment they open a Red Hat exercise.
 
 ## Re-surveying the labs
 

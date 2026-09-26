@@ -725,6 +725,13 @@ Do not reproduce Red Hat Academy source material, guided exercises, labs,
 quizzes, instructor-guide content, transcripts, or extracted media. References
 to curriculum names are for alignment only.
 
+Write a command file for the instructor lab, since that is the machine the
+recording is made on. Interface and disk names in a recording therefore belong
+to that lab, and a student following along substitutes their own, which is the
+same translation they make when they open a Red Hat Academy exercise. The
+written exercise beside it should have the student look their names up rather
+than assume them.
+
 Keep an exercise's screen recording as the `.cast` file `kitty-demo.py` writes
 beside its command file, and embed it with `AsciinemaPlayer`. Do not generate a
 GIF: a looping raster of terminal text is an image of text with no pause
@@ -788,7 +795,11 @@ structure, or text.
 
 ## Presenter notes
 
-Treat presenter notes as public source. Notes may contain delivery cues,
-technical explanation, and anticipated questions, but no confidential
+Typically, new material does not carry presenter notes. The instructor does not
+display them while teaching, so a note is written for nobody and drifts out of step
+with the slide it sits under.
+
+Where notes do exist, treat them as public source. They may contain delivery
+cues, technical explanation, and anticipated questions, but no confidential
 information or material that would be inappropriate for a student to read.
 Production presentations omit notes from the published output.

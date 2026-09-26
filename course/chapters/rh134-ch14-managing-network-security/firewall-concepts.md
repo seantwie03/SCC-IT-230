@@ -30,10 +30,6 @@ Every firewall asks one question about a connection: <SuccessText>allow it</Succ
   - Where it is going <AccentText>to</AccentText>
   - Which <AccentText>port</AccentText> it is asking for
 
-<!--
-Keep this abstract for one slide. The next two slides show the same idea from the two places a firewall runs, and the difference between them is the whole reason the table after that looks the way it does.
--->
-
 ---
 layout: two-cols-header
 leftWidth: 45
@@ -158,12 +154,6 @@ Anything not specifically allowed is denied
 
 </Callout>
 
-<!--
-Default deny is the idea students carry into the zone material. Every zone but trusted works this way: a short allow list, and everything else rejected.
-
-Port 25,587 = SMTP
--->
-
 ---
 horizontal: center
 ---
@@ -171,7 +161,6 @@ horizontal: center
 # Why Multiple Firewalls?
 
 If we have network Firewalls why do we also need firewalls on the server?
-
 
 ```mermaid {scale: 0.68}
 flowchart LR
@@ -206,6 +195,27 @@ One server, two network interfaces, and each one can sit in a different zone
 Photograph by [ChrisDag](https://www.flickr.com/photos/8558461@N08/4524625686), [CC BY 2.0](https://creativecommons.org/licenses/by/2.0/), via Flickr
 
 ---
+listSpacing: padded
+---
+
+# Interface Names
+
+- The name describes where the card is, not what it does
+- Different hardware gives a different name, so look yours up with `nmcli device status`
+
+| Environment         | Interface to use | Also present           |
+|---------------------|------------------|------------------------|
+| SCC lab             | `enp0s8`         | `enp0s3`, the NAT link |
+| Red Hat Academy lab | `ens3`           | `tun0`, the VPN        |
+| Slides in this deck | `enp1s0`         | none                   |
+
+<Callout type="warning" title="Leave the others alone">
+
+Recommend leaving the **"Also present"** interfaces alone when working on assignments
+
+</Callout>
+
+---
 layout: two-cols-header
 leftWidth: 60
 ---
@@ -217,7 +227,7 @@ leftWidth: 60
 - Traffic arrives on an <AccentText>interface</AccentText>
     - enp1s0
     - enp2s0
-- The interface belongs to a <AccentText>zone</AccentText>
+- The interface belongs to a <AccentText>Firewalld zone</AccentText>
     - public
     - internal
 - The zone decides what is <AccentText>allowed</AccentText>

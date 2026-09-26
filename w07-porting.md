@@ -15,22 +15,25 @@ the firewall material that surrounds it is planned for the first time.
 ## Answer in brief
 
 **Seven topic fragments** in one chapter directory, with **five exercises** and
-a deck of **45 slides**: 29 of the 30 source slides, the two entry slides, five
-recording slides, two section slides, and the seven additions the instructor
-accepted. Forty render before the casts are recorded. Fragment 1 is built and
+a deck of **43 slides**: 26 of the 30 source slides, the two entry slides, five
+recording slides, two section slides, and the additions the instructor
+accepted. Thirty-eight render before the casts are recorded.
+
+Fragments 1, 2, and 3 are built: 20 slides on disk, plus the two entry slides.
+The recording slide for fragment 2 waits on its cast. Fragment 1 is built and
 signed off; its slide list below is what shipped rather than what was planned.
 
 | # | Fragment                          | Section title                  | Slides | Exercises |
 |--:|-----------------------------------|--------------------------------|-------:|----------:|
-| 1 | `firewall-concepts.md`            | Firewalls                      |      9 |         0 |
-| 2 | `firewall-zones.md`               | Assign the Interface to a Zone |     12 |         1 |
+| 1 | `firewall-concepts.md`            | Firewalls                      |     10 |         0 |
+| 2 | `firewall-zones.md`               | Assign the Interface to a Zone |      8 |         1 |
 | 3 | `firewall-configuration.md`       | Permanent and Runtime Config   |      3 |         0 |
 | 4 | `firewall-services.md`            | Open Services                  |      5 |         1 |
 | 5 | `firewall-ports.md`               | Open Ports                     |      5 |         1 |
 | 6 | `selinux-port-labels.md`          | SELinux Port Labels            |      6 |         1 |
 | 7 | `network-security-practice.md`    | Practice                       |      3 |         1 |
 |   | Entry file: cover and VM reminder |                                |      2 |           |
-|   | **Total**                         |                                | **45** |     **5** |
+|   | **Total**                         |                                | **43** |     **5** |
 
 Every slide is described under "Topic fragments", each with its own heading. An
 added slide carries a letter, such as 1.5a, so the numbering of the slides that
@@ -101,10 +104,16 @@ This plan is written for option 1, and marks the affected slides.
 
 The source deck teaches firewalld as a numbered procedure, and the section
 slides are the spine: "Step 1: Assign the Interface to a Zone", "Permanent
-Config vs Runtime Config", "Step 2: Open Services", "Step 3: Open Ports". The
-2-step pattern slide states the whole procedure before any of it is explained,
-and each section then fills one step in. That framing is worth keeping intact,
-so the fragments follow those section breaks exactly.
+Config vs Runtime Config", "Step 2: Open Services", "Step 3: Open Ports". Each
+section fills one step in, and the fragments follow those section breaks
+exactly.
+
+The source previewed the whole procedure on a 2-step pattern slide before
+explaining any of it. That slide is cut: it jumped from the high-level picture
+straight to the nitty-gritty with nothing in between (instructor, 2026-09-26).
+The numbered section titles stay as they are. Slide 1.8, "Traffic Flow", is
+what anchors them, because it already spells out interface, then zone, then
+decision, which is the order the sections then work through.
 
 The week lands after w06, which means:
 
@@ -154,7 +163,7 @@ The week lands after w06, which means:
 |            3 | Network diagram (image only)                      | 1.3     |
 |            4 | Server ports (image only)                         | 1.4     |
 |            5 | Traffic Flow                                      | 1.5     |
-|            6 | The 2-Step Pattern of Firewalld Configuration     | 1.6     |
+|            6 | The 2-Step Pattern of Firewalld Configuration     | cut     |
 |            7 | Section: Step 1, Assign the Interface to a Zone   | 2.1     |
 |            8 | Firewalld Predefined Zones                        | 2.2     |
 |            9 | Check Active Zones                                | 2.3     |
@@ -181,8 +190,8 @@ The week lands after w06, which means:
 |           30 | Exercise: Serve HTTP Traffic on Port 3456         | 7.2     |
 
 Slides with no source row: 2.10, 4.5, 5.5, 6.5, and 7.3 are the recording
-slides; 6.1 and 7.1 are the proposed section slides; and 1.1a, 1.5a, 2.2a,
-2.8a, 6.3, and 6.3a are additions.
+slides; 6.1 and 7.1 are the proposed section slides; and 1.2, 1.3, 1.4, 1.9,
+2.2a, 2.8a, 6.3, and 6.3a are additions.
 
 ## File inventory
 
@@ -190,8 +199,8 @@ New, under `course/chapters/rh134-ch14-managing-network-security/`:
 
 | File                           | Slides | Exercise                                |
 |--------------------------------|-------:|-----------------------------------------|
-| `firewall-concepts.md`         |      9 | none                                    |
-| `firewall-zones.md`            |     12 | Change an Interface to the Drop Zone    |
+| `firewall-concepts.md`         |     10 | none                                    |
+| `firewall-zones.md`            |      8 | Move an Interface to Another Zone       |
 | `firewall-configuration.md`    |      3 | none                                    |
 | `firewall-services.md`         |      5 | Allow HTTP Traffic                      |
 | `firewall-ports.md`            |      5 | Configure Apache to Listen on 8888      |
@@ -201,6 +210,10 @@ New, under `course/chapters/rh134-ch14-managing-network-security/`:
 Also new: `exercises/` with five `.sh` command files and five `.html` written
 exercises, `assets/` for whatever survives the image review, and
 `course/w07-draft.md`.
+
+Fragment 1 was planned at seven slides and shipped at nine. If the other
+fragments grow at the same rate the deck lands nearer 50 than 45, which is
+fine: the instructor trims after the port rather than before it.
 
 ## Third-party images
 
@@ -277,7 +290,7 @@ and `topicInfo` alignments. In the component lists, a "fixed" `TerminalWindow`
 shows a transcript that never changes and takes no `rows`; a "Magic Move"
 terminal grows across clicks and takes `rows` equal to its final line count.
 
-### 1. `firewall-concepts.md` (9 slides, built 2026-09-26)
+### 1. `firewall-concepts.md` (10 slides, built 2026-09-26)
 
 `routeAlias: firewall-concepts`. Alignments: RH134 chapter 14, cert guide
 chapter 23. No exercise.
@@ -353,6 +366,21 @@ the server itself, showing two RJ-45 jacks.
 Components: default layout, Markdown image with descriptive alt text, and the
 attribution line beneath it: photograph by ChrisDag, CC BY 2.0, via Flickr.
 
+##### 1.7a Interface Names
+
+**Addition**, 2026-09-26, after the three lab environments were surveyed.
+Placed straight after the rear-panel photograph, where a student has just seen
+two physical jacks. Two lines on why a name describes where the card sits
+rather than what it does, a table naming the interface to use in each
+environment, and a warning to leave the others alone because only one carries
+the session.
+
+Needed because the three environments disagree: `ens3` on RHA, `enp0s8` on the
+SCC lab, `enp1s0` in this deck's transcripts. See `docs/lab-environments.md`.
+
+Components: default layout, `listSpacing: padded`, Markdown table,
+`Callout type="warning"`.
+
 ##### 1.8 Traffic Flow
 
 Source slide 5. Traffic arrives on an interface, the interface belongs to a
@@ -375,138 +403,136 @@ Components: default layout, `listSpacing: padded`, nested list.
 ##### Not ported from this fragment
 
 Source slide 6, "The 2-Step Pattern of Firewalld Configuration", was built and
-then removed by the instructor. The two steps it previewed are each taught in
-full by fragments 2 and 4, and the section slides already announce them.
+then removed by the instructor: it jumped from the high-level picture straight
+to the nitty-gritty with nothing in between. Slide 1.8 carries the framing the
+numbered sections need, and fragments 2 and 4 teach each step in full.
 
-### 2. `firewall-zones.md` (12 slides)
+### 2. `firewall-zones.md` (8 slides, restructured 2026-09-26)
 
-`routeAlias: firewall-zones`. Exercise: Change an Interface to the Drop Zone.
+`routeAlias: firewall-zones`. Exercise: Move an Interface to Another Zone.
+
+**Restructured twice, and cut.** The first build followed the source deck:
+change the default zone, watch the interface follow it, run a command against
+another zone, then lock the host out with `drop`. Verifying that raised two
+problems. An interface follows the default zone only while nothing has claimed
+it, and what claims it is NetworkManager rather than `firewalld`, which is
+deeper than RHCSA needs and reads as arbitrary to a student. The lockout
+exercise then spends its time on recovery rather than on the commands.
+
+A second version added a service and a default-zone change, which failed for a
+different reason: `--add-service` has not been taught yet at this point in the
+week, and `--set-default-zone` writes the permanent configuration, so the
+reload at the end did not wipe what the slide claimed it wiped.
+
+The fragment now does one thing. Everything about the default zone is cut
+except reading it, because the week is 2.5 hours and this is the material that
+pays least (instructor, 2026-09-26).
+
+1. Look at the zones: what exists, what is active, which is the default.
+2. Inspect what the active zone allows.
+3. Move the interface into `dmz` and watch the allowed services change from
+   `cockpit dhcpv6-client ssh` to `ssh`.
+4. In the exercise, `--reload` puts it all back, which is the question fragment
+   3 answers.
 
 ##### 2.1 Step 1: Assign the Interface to a Zone
 
-Source slide 7, a section slide with the step number on one line and the step on
-the next.
+Source slide 7, a section slide.
 
 Components: `section`.
 
 ##### 2.2 Firewalld Predefined Zones
 
-Source slide 8, which is the screenshot of the RHA zone table. Rebuilt as our
-own table in our own words. Propose carrying six rows rather than nine:
-`trusted`, `internal`, `public`, `dmz`, `block`, and `drop`, with a line saying
-`home` and `work` start as copies of `internal` and `external` adds
-masquerading. The source pointed arrows at `internal`, `public`, and `dmz`,
-which the exercises use, so those three keep emphasis.
+Source slide 8, the screenshot of the RHA zone table, rebuilt as our own table
+in our own words: `trusted`, `internal`, `public`, `dmz`, `block`, and `drop`,
+with a line saying `home` and `work` start as near copies of `internal` and
+`external` adds masquerading.
 
-Components: default layout, Markdown table, and the source's closing line
-"see the `firewalld.zones`(5) man page for a list of all the zones".
+Keep this table distinct from the one on slide 1.8. That one is "these two
+zones, on this host, allow these ports". This one is "these are the zones
+firewalld ships, and here is what each starts with".
 
-##### 2.2a Zone Selection Logic
+Components: default layout, Markdown table, `SuccessText` and `DangerText` in
+the allow column.
 
-**Addition**, accepted 2026-09-25, from RH134 ch14 section 01. `firewalld`
-picks a zone for every packet in a fixed order: a source address bound to a
-zone wins, then the zone of the incoming interface, then the default zone. The
-source deck never states it, and it is why the drop-zone exercise behaves as it
-does.
+##### 2.3 View the Zones
 
-Components: default layout, Mermaid `flowchart TD` with a scale value.
-Presenter note: `lo` starts in `trusted`, which is why a locked-down host still
-answers `curl http://localhost`.
+Sources slides 9 and 11, merged. Three read-only questions in one transcript:
+`--get-zones` for what exists, `--get-active-zones` for what is in use, and
+`--get-default-zone` for where an unassigned interface lands. On `servera` the
+answers are the ten shipped zones, `public (default)` holding `enp1s0`, and
+`public`.
 
-##### 2.3 Check Active Zones
-
-Source slide 9. `firewall-cmd --get-active-zones` and its output. Captured from
-`servera`, where the answer today is `public (default)` with `interfaces:
-enp1s0`, rather than the source's two zones.
-
-Components: `TerminalWindow` (fixed). Affected by the two-interface problem.
-
-##### 2.4 Inspect the Active Configuration
-
-Source slide 10. "By default, commands target the default zone (public)", then
-`firewall-cmd --list-all` and its sixteen lines. The source walked the output
-with click highlighting in the order zone name, interfaces, services and ports,
-target.
-
-Components: `TerminalWindow` (fixed) plus `TextExplainer` in the theme, which is
-how this deck does "point at four parts of one transcript" now. Real output from
-`servera` today shows `services: cockpit dhcpv6-client ssh` and an empty
-`ports:` line, so the ports line is worth pointing at precisely because it is
-empty, and slide 5.2 fills it.
-
-##### 2.5 Default Zone for `firewall-cmd`
-
-Source slide 11. `firewall-cmd --get-default-zone` returning `public`, then
-`--set-default-zone=internal` and the same query returning `internal`.
-
-Components: `TerminalWindow` as a Magic Move, so the second answer lands after
-the change rather than beside it.
-
-##### 2.6 Now Commands Show Internal Zone
-
-Source slide 12. `firewall-cmd --list-all` again, now reporting
-`internal (default, active)`. The source marked the changed line with an arrow
-of equals signs.
-
-Components: `TerminalWindow` (fixed), with the changed line marked by the
-theme's highlighting rather than ASCII arrows.
-
-##### 2.7 Run Commands Against Non-Default Zone
-
-Source slide 13. `firewall-cmd --list-all --zone=public` while `internal` is the
-default, showing that the flag beats the default.
+One line carries what the cut zone-selection slide would have said: an
+interface nobody has assigned belongs to the default zone.
 
 Components: `TerminalWindow` (fixed).
 
-##### 2.8 Add an Interface to a Zone
+##### 2.4 Inspect the Active Configuration
 
-Source slide 14. `firewall-cmd --zone=dmz --change-interface=enp1s0`, then
-`--get-active-zones` showing `dmz` holding the interface, then
-`--list-all --zone=dmz` abridged to its interfaces and services lines.
+Source slide 10. `firewall-cmd --list-all` abridged, with the zone line, the
+interface line, the services line, and the empty ports line pointed at in turn.
 
-Components: `TerminalWindow` as a Magic Move across the three commands.
-Presenter note: `dmz` permits `ssh`, which is why this does not end the class.
+Components: `TextExplainer` (`size="md"`) carrying the command and four output
+lines. The first build had a `TerminalWindow` as well and overflowed; one block
+does both jobs.
 
-##### 2.8a `firewall-cmd` Options
+##### 2.5 Move an Interface to Another Zone
 
-**Addition**, accepted 2026-09-25. A reference table of the options the week
-uses: `--get-default-zone`, `--set-default-zone`, `--get-zones`,
-`--get-active-zones`, `--change-interface`, `--list-all`, `--add-service`,
-`--add-port`, `--remove-service`, `--remove-port`, `--reload`, and
-`--runtime-to-permanent`, each with one line of explanation in our own wording.
-The slide students photograph.
+Source slide 14, and the point of the fragment. `firewall-cmd --zone=dmz
+--change-interface=enp1s0`, then `--get-active-zones` showing two active zones,
+then `--list-all --zone=dmz` showing `services: ssh` where `public` allowed
+`cockpit dhcpv6-client ssh`.
 
-Components: default layout, Markdown table. It may need `vertical: start` and a
-trimmed list to fit; check with `check:slides`.
+The services list shrinking is the observable result, and it needs no command
+the week has not taught.
 
-**Rich rules exist** was accepted as an addition too, but it is one sentence,
-not a slide: a `Callout` on this slide saying that complex matching is possible
-through rich rules and is out of scope for this course.
+Components: `TerminalWindow` as a Magic Move with `#^` step banners.
 
-##### 2.9 Exercise: Change an Interface to the Drop Zone
+##### 2.6 `firewall-cmd` Options
 
-Source slide 15. Hosts `workstation` to `servera`. Six steps: identify the
-interface, inspect the current zone, inspect the drop zone, change to the drop
-zone, attempt to connect, then "turn it off and back on again".
+**Addition.** The option table, split across two columns: zone options on the
+left, contents and persistence on the right. `--set-default-zone` appears here
+as a row, which is the only place the week spends on it, so the name is not new
+if a student meets it on an exam.
+
+Components: `two-cols-header`, two Markdown tables.
+
+##### 2.7 Exercise: Move an Interface to Another Zone
+
+Replaces the source's drop-zone exercise. Hosts `workstation` to `servera`.
+Steps: list the zones, inspect the active one, move `enp1s0` into `dmz`, see
+the allowed services shrink, then `firewall-cmd --reload` and find everything
+back where it started.
+
+The last step is the hand-off into fragment 3, so the class needs to have run
+it before that section opens.
 
 Components: `exercise`.
 
-##### 2.10 Exercise recording
+##### 2.8 Exercise recording (pending)
 
-New slide, matching w06, where every exercise has a cast beside it. Command file
-from `change_interface_to_drop_zone.sh`.
+Command file `move-interface-to-another-zone.sh`. Recorded after the slides,
+with the rest of the casts.
 
 Components: `exercise` with `variant: recording`, `AsciinemaPlayer`.
 
-**Decided 2026-09-25:** the source's final step reboots the VM from the
-hypervisor, which a cast cannot do, so the exercise ends with
-`firewall-cmd --reload` instead. The reload discards the runtime zone change
-and restores access without touching the hypervisor, and it teaches the
-runtime-versus-permanent distinction that fragment 3 covers. The command file
-and the written exercise both change: "turn it off and back on again" becomes
-"reload the firewall".
+##### Not ported from this fragment
+
+- **Source slide 15, "Exercise: Change an Interface to Drop Zone".** The
+  lockout and the console recovery are the wrong shape for this week, and a
+  cast cannot reboot a VM. `drop` and `block` stay on slide 2.2 as table rows.
+- **Source slide 12, "Now Commands Show Internal Zone"** and **source slide 13,
+  "Run Commands Against Non-Default Zone".** Both exist to demonstrate changing
+  the default zone, which is cut.
+- **The planned zone-selection-logic slide**, cut on 2026-09-26. The week never
+  binds a source address, so two thirds of it covered a case students do not
+  meet. Its one useful line lives on 2.3.
 
 ### 3. `firewall-configuration.md` (3 slides)
+
+Opens on the question slide 2.8 leaves hanging: the service vanished on reload
+and the default zone did not.
 
 `routeAlias: firewall-configuration`
 
@@ -740,7 +766,7 @@ Components: `exercise` with `variant: recording`, `AsciinemaPlayer`.
 
 | # | Title                                   | Host      | Fragment | Command file                            |
 |--:|-----------------------------------------|-----------|----------|-----------------------------------------|
-| 1 | Change an Interface to the Drop Zone    | `servera` | 2        | `change_interface_to_drop_zone.sh`      |
+| 1 | Move an Interface to Another Zone       | `servera` | 2        | `move_interface_to_another_zone.sh`     |
 | 2 | Allow HTTP Traffic                      | `servera` | 4        | `allow_http_traffic.sh`                 |
 | 3 | Configure Apache to Listen on 8888      | `servera` | 5        | `configure_apache_to_listen_on_8888.sh` |
 | 4 | Configure SELinux to Allow HTTP on 8888 | `servera` | 6        | `configure_selinux_for_http_on_8888.sh` |
@@ -766,7 +792,7 @@ State to settle when the exercises are written:
 
 **Decided 2026-09-25: all five are accepted**, and can be trimmed after the port
 if the deck runs long. Four become slides, described in place under "Topic
-fragments" as 1.5a, 2.2a, 2.8a, and 6.3a. The fifth, rich rules, is one sentence
+fragments" as 1.9, 2.2a, 2.8a, and 6.3a. The fifth, rich rules, is one sentence
 and becomes a `Callout` on 2.8a rather than a slide of its own.
 
 - **Zone selection logic.** RH134 ch14 section 01 gives the order: source
@@ -840,8 +866,52 @@ Still to verify, before the slides are written:
   Slide 6.3's `Callout` waits on this.
 - The `Listen 80` line in `httpd.conf` on `httpd` 2.4.63.
 - Whether `serverb` needs `firewalld` started before exercise 5.
+
+Verified on `servera` while building fragments 2 and 3 (2026-09-26), and
+recorded here because the slides carry no presenter notes.
+
+The happy path on fragment 2, traced end to end:
+
+| Step | `--get-active-zones` after it |
+| --- | --- |
+| baseline | `public (default)` holding `enp1s0` |
+| `--zone=dmz --change-interface=enp1s0` | `dmz` holding `enp1s0`, plus `public (default)` |
+| `--zone=dmz --add-service=http` | unchanged; `--list-services --zone=dmz` reports `http ssh` |
+| `--set-default-zone=dmz` | `dmz (default)` holding `enp1s0`, one entry |
+| `--reload` | unchanged, and `--list-services --zone=dmz` reports `ssh` |
+
+So the reload erases the service and keeps the default zone. The interface also
+stays in `dmz`, because `dmz` is now the default, which is why the slide points
+at the service rather than the interface.
+
+Zone assignment, tested three ways, and the reason the lockout exercise was
+dropped:
+
+- `firewall-cmd --set-default-zone` writes the runtime and the permanent
+  configuration in one step, and prints `success`.
+- `firewall-cmd --change-interface` is runtime only, so `--reload` drops the
+  binding.
+- `firewall-cmd --permanent --zone=dmz --change-interface=enp1s0` does persist,
+  and survives a default-zone change. It prints "The interface is under control
+  of NetworkManager, setting zone to 'dmz'" and writes nothing to
+  `/etc/firewalld/zones/`, because firewalld hands the assignment to the
+  NetworkManager connection profile.
+- `nmcli connection modify enp1s0 connection.zone dmz` is the same thing by
+  hand, and behaves identically.
+- An interface moved with the runtime form still follows a later
+  `--set-default-zone`, which is the behaviour that made the original slide
+  sequence confusing and is now out of the deck.
+- An interface that was never assigned by name follows the default zone: with
+  the default set to `internal`, `--list-all` reported `internal (default,
+  active)` holding `enp1s0`.
+- `dmz` allows `ssh`, which is why moving an interface there does not end the
+  session. `drop` has `target: DROP` and no services at all.
+- `public` stays listed by `--get-active-zones` while it is the default, even
+  with no interface in it.
+- The ten zones on RHEL 10 are `block`, `dmz`, `drop`, `external`, `home`,
+  `internal`, `nm-shared`, `public`, `trusted`, and `work`.
 - The default value of `httpd_can_network_connect` on `servera`, for slide 6.3a.
-- The three layers named on slide 1.5a against RHEL 10: that `nftables` is the
+- The three layers named on slide 1.9 against RHEL 10: that `nftables` is the
   firewall core and `firewalld` the front end.
 
 ## Authoring notes
@@ -854,6 +924,37 @@ Still to verify, before the slides are written:
 - Recording slides come last, after `kitty-demo.py --record` and
   `pnpm run casts`.
 - Keep everything unstaged. The instructor stages and commits.
+
+**No presenter notes.** The instructor does not display them while teaching
+(2026-09-26), so w07 carries none and the ten written during fragments 1
+through 3 were removed. A fact worth keeping goes on the slide, or into this
+document under "Verification" if it is something checked on the lab.
+
+Learned while building fragment 1:
+
+- **`check:slides` cannot see overflow inside a code block.** A fenced block
+  sits in its own scrolling container, which the measurement skips, so a
+  terminal or rule block can run through the footer while the check passes.
+  Capture every slide that carries a fence and look at it. Fragments 2 and 3
+  are seven terminal slides and two Magic Moves, so this is most of the work.
+- **Give icon diagrams headroom.** Their measured height varies by a few pixels
+  between runs, because the icon pack loads asynchronously, so a diagram that
+  exactly fills its box passes and fails on identical runs. Keep icon diagrams
+  at roughly `scale: 0.7` or below, and re-run the check two or three times
+  before calling a slide done.
+- **`--verbose` prints no clearance line for some `two-cols-header` slides**,
+  so absence of a number there is not a pass.
+
+House style fragment 1 set, which the rest of the port follows:
+
+- Topology diagrams are Mermaid with Carbon icon shapes. `stroke` colours the
+  glyph, `fill` the box, `color` the label, and `<br/>` adds a second line to a
+  label, which is where a node's allowed ports go.
+- Infrastructure that belongs to somebody else is drawn in neutral grey; the
+  thing under discussion carries the accent.
+- A firewall rule is a titled `text` fence with `FROM / TO / PORT / ACTION`
+  columns rather than prose.
+- `SuccessText` for allowed, `DangerText` for blocked, in tables and in prose.
 
 ## Decisions
 
@@ -890,6 +991,24 @@ Settled since this plan was written:
 20. **Source slide 6 is not ported** (2026-09-26). "The 2-Step Pattern of
     Firewalld Configuration" was built and then cut; fragments 2 and 4 teach
     both steps in full.
+21. **Fragment 2 is a happy path** (2026-09-26). Move an interface, make that
+    zone the default to stop typing `--zone`, open a service, reload, and let
+    the reload raise the runtime-versus-permanent question that fragment 3
+    answers. Source slides 12 and 13 fold into that sequence rather than
+    standing alone.
+22. **The drop-zone lockout exercise is not ported** (2026-09-26). It is
+    replaced by "Move an Interface and Change the Default Zone", which follows
+    the same path the slides take. `drop` and `block` stay on the zone table.
+23. **NetworkManager's ownership of zone assignment stays out of the deck**
+    (2026-09-26). It is accurate, it is recorded under "Verification", and it
+    is deeper than RHCSA needs.
+24. **The default zone is read but never changed** (2026-09-26). The week is
+    2.5 hours and has been running out of time, so `--set-default-zone` and the
+    two source slides that demonstrate it are cut. It survives as a row in the
+    option table on 2.6.
+25. **The zone-selection-logic addition is cut** (2026-09-26), for the same
+    reason. Its one useful line, that an unassigned interface uses the default
+    zone, moves onto 2.3.
 15. **The drop-zone exercise ends with `firewall-cmd --reload`** rather than a
     hypervisor reboot (2026-09-25).
 16. **`httpd` is removed at the end of the week** on both `servera` and
