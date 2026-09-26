@@ -1,6 +1,7 @@
 kitten @ set-font-size 30.0 && ssh servera
 clear
 
+#@ pause 10
 #^ Exercise: Creating Users from a File
 # Requirements
 #   Host: servera
@@ -25,16 +26,22 @@ cd ~/scripts
 vim new_users.txt
 ithufir_hawat
 lady_jessica
+#@ pause 5
+#@ noenter
 paul_atreides
-jj:wq
+#@ key escape
+:wq
+#@ pause 5
 cat new_users.txt
 
 #^ 2. Create a basic script file and make it executable
 vim user_creator.sh
 #! Press enter, backspace, enter after the next command.
 i#!/bin/bash
+#@ pause 5
 echo "Starting $0"
-jj:wq
+#@ key escape
+:wq
 chmod a+x user_creator.sh
 sudo ./user_creator.sh
 clear
@@ -42,13 +49,15 @@ clear
 #^ 3. Read the file line by line
 vim user_creator.sh
 /Starting \$0
-#@ noenter
 o
 while read -r new_user; do
     echo "Processing: $new_user"
     useradd "$new_user"
+#@ pause 5
+#@ noenter
 done < "new_users.txt"
-jj:wq
+#@ key escape
+:wq
 sudo ./user_creator.sh
 #! Now run it again. Every useradd fails because the accounts already exist.
 sudo ./user_creator.sh
@@ -58,12 +67,20 @@ clear
 #! useradd returns 0 on success. Branch on that so the output tells the truth.
 vim user_creator.sh
 /useradd "\$new_user"
-iif jjA; then
+#@ noenter
+iif
+#@ key space
+#@ key escape
+A; then
         echo "User created."
     else
         echo "User NOT created."
+#@ pause 5
+#@ noenter
     fi
-jj:wq
+#@ key escape
+:wq
+#@ pause 5
 cat user_creator.sh
 echo "feyd_rautha" >> new_users.txt
 sudo ./user_creator.sh
@@ -81,8 +98,10 @@ o
 if [[ $EUID -ne 0 ]]; then
     echo "You must be root to run this script!"
     exit 9
+#@ pause 5
 fi
-jj:wq
+#@ key escape
+:wq
 #! Without sudo the script now stops immediately instead of failing halfway.
 ./user_creator.sh
 echo $?
@@ -94,9 +113,11 @@ clear
 vim new_users.txt
 #@ noenter
 G
+#@ pause 5
 #@ noenter
 o
-jj:wq
+#@ key escape
+:wq
 sudo ./user_creator.sh
 vim user_creator.sh
 /Processing:
@@ -105,8 +126,10 @@ O
     if [[ -z "$new_user" ]]; then
         echo "Skipping empty line"
         continue
+#@ pause 5
     fi
-jj:wq
+#@ key escape
+:wq
 sudo ./user_creator.sh
 clear
 
@@ -117,4 +140,4 @@ sudo userdel -r lady_jessica
 sudo userdel -r paul_atreides
 sudo userdel -r feyd_rautha
 rm ~/scripts/user_creator.sh ~/scripts/new_users.txt
-cd ~
+y

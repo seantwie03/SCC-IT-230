@@ -1,6 +1,7 @@
 kitten @ set-font-size 30.0 && ssh servera
 clear
 
+#@ pause 10
 #^ Exercise: Collecting Disk Data
 # Requirements
 #   Hosts: servera and workstation
@@ -24,8 +25,10 @@ cd ~/scripts
 vim collect_disk_data.sh
 #! Press enter, backspace, enter after the next command.
 i#!/bin/bash
+#@ pause 5
 echo "Starting $0"
-jj:wq
+#@ key escape
+:wq
 bash collect_disk_data.sh
 
 #^ 2. Make it executable
@@ -40,8 +43,10 @@ vim collect_disk_data.sh
 o
 for host in workstation servera; do
     echo $host
+#@ pause 5
 done
-jj:wq
+#@ key escape
+:wq
 ./collect_disk_data.sh
 clear
 
@@ -51,17 +56,23 @@ mkdir -p /tmp/disk-data
 ssh student@servera lsblk > /tmp/disk-data/servera-disk-data.txt
 ssh student@servera df -h >> /tmp/disk-data/servera-disk-data.txt
 ls -l /tmp/disk-data
+#@ pause 5
 cat /tmp/disk-data/servera-disk-data.txt
 clear
 vim collect_disk_data.sh
 /echo \$host
 A > /tmp/disk-data/$host-disk-data.txt
     ssh student@$host lsblk >> /tmp/disk-data/$host-disk-data.txt
+#@ pause 5
+#@ noenter
     ssh student@$host df -h >> /tmp/disk-data/$host-disk-data.txt
-jj:wq
+#@ key escape
+:wq
 clear
+#@ pause 10
 ./collect_disk_data.sh
 ls -l /tmp/disk-data
+#@ pause 5
 cat /tmp/disk-data/workstation-disk-data.txt
 clear
 
@@ -71,20 +82,27 @@ vim collect_disk_data.sh
 /for host in
 #! w 3 times to move forward three words
 #@ noenter
+#@ pause 3
 www
 #! Change to ;
 #@ noenter
 ct;
+#@ pause 5
+#@ noenter
 "$@"
-jj:wq
+#@ key escape
+:wq
+#@ pause 5
 cat collect_disk_data.sh
 rm -f /tmp/disk-data/*
+#@ pause 10
 ./collect_disk_data.sh workstation servera
 ls -l /tmp/disk-data
+#@ pause 5
 cat /tmp/disk-data/servera-disk-data.txt
 clear
 
 #^ 6. Clean up
 rm -rf /tmp/disk-data
 rm ~/scripts/collect_disk_data.sh
-cd ~
+y

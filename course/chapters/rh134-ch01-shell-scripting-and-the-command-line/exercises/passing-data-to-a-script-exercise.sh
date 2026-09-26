@@ -1,6 +1,7 @@
 kitten @ set-font-size 30.0 && ssh servera
 clear
 
+#@ pause 10
 #^ Exercise: Passing Data to a Script
 # Requirements
 #   Host: servera
@@ -20,8 +21,10 @@ cd ~/scripts
 vim shift_report.sh
 #! Press enter, backspace, enter after the next command.
 i#!/bin/bash
+#@ pause 5
 echo "Shift report filed"
-jj:wq
+#@ key escape
+:wq
 chmod a+x shift_report.sh
 ./shift_report.sh
 clear
@@ -33,8 +36,10 @@ vim shift_report.sh
 dd
 #@ noenter
 o
+#@ pause 5
 echo "Shift report filed by $1"
-jj:wq
+#@ key escape
+:wq
 #! With no argument $1 is empty and the line reads badly. That is worth seeing.
 ./shift_report.sh
 ./shift_report.sh "Jon Luc Picard"
@@ -48,8 +53,11 @@ G
 o
 echo "Which starship did you command?"
 read -r system_name
+#@ pause 5
 echo "The $system_name"
-jj:wq
+#@ key escape
+:wq
+#@ pause 5
 cat shift_report.sh
 ./shift_report.sh "Jon Luc Picard"
 USS Enterprise
@@ -69,9 +77,12 @@ G
 #@ noenter
 o
 log_file=$(basename /var/log/audit/audit.log)
+#@ pause 5
 echo "Recorded in $log_file"
-jj:wq
+#@ key escape
+:wq
 #! $( ) runs the command first, then substitutes its output.
+#@ pause 5
 ./shift_report.sh "Jon Luc Picard" < worked_system.txt
 clear
 

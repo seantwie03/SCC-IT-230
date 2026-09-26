@@ -2,6 +2,7 @@ kitten @ set-font-size 30.0 && ssh workstation
 ssh servera
 clear
 
+#@ pause 8
 #^ Exercise: Aliasing Away Typos
 # Requirements
 #   Hosts: workstation, then servera
@@ -14,6 +15,7 @@ clear
 clear
 
 #^ 1. List the aliases the shell already defines
+#@ pause 5
 alias
 #! RHEL predefines only a handful, mostly --color wrappers around grep.
 clear
@@ -31,6 +33,8 @@ alias rm='rm -i'
 touch scratch_file.txt
 #! rm now asks first. Answer n to keep the file.
 rm scratch_file.txt
+#@ key n
+#@ key enter
 #! A backslash runs the real command, with no prompt.
 \rm scratch_file.txt
 ls scratch_file.txt
@@ -40,6 +44,7 @@ clear
 #! Log out of servera and log back in.
 exit
 ssh servera
+#@ pause 5
 alias
 sl
 clear
@@ -52,10 +57,13 @@ vim ~/.bashrc.d/aliases
 #@ noenter
 i
 alias sl='ls'
+#@ pause 5
 alias rm='rm -i'
-jj:wq
+#@ key escape
+:wq
 exit
 ssh servera
+#@ pause 5
 alias
 sl
 clear

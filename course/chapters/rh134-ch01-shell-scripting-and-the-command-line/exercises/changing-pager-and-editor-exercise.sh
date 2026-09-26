@@ -2,6 +2,7 @@ kitten @ set-font-size 30.0 && ssh workstation
 ssh servera
 clear
 
+#@ pause 8
 #^ Exercise: Changing the Pager and Editor
 # Requirements
 #   Hosts: workstation, then servera
@@ -20,16 +21,19 @@ clear
 
 #^ 2. Export PAGER so man prints straight to the terminal
 #! Press q to leave less.
+#@ pause 5
 man ls
 #@ noenter
 q
 export PAGER=cat
 #! Now the whole page prints instead of paging.
+#@ pause 6
 man ls
 clear
 
 #^ 3. Install nano and export EDITOR so it opens instead of vi
 #! vi is not installed by default on every system, and not everyone wants it.
+#@ pause 6
 sudo dnf install -y nano
 #! crontab -e asks EDITOR which program to open. Without EDITOR you get vi.
 crontab -e

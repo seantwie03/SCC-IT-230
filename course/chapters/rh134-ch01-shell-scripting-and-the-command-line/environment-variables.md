@@ -247,3 +247,25 @@ Choose which programs open your manual pages and your text
 2. Export `PAGER` so that `man` prints straight to the terminal
 3. Install `nano` and export `EDITOR` so it opens instead of `vi`
 4. Confirm both are gone in a new session
+
+---
+layout: exercise
+variant: recording
+---
+
+<script setup>
+import castUrl from "./exercises/changing-pager-and-editor-exercise.cast?url";
+</script>
+
+# Changing the Pager and Editor
+
+::recording::
+
+<AsciinemaPlayer
+    :src="castUrl"
+    label="Screen recording of the instructor checking PAGER and EDITOR, using PAGER to print a manual page, installing nano, and confirming the variables reset in a new session."
+/>
+
+::resources::
+
+<a href="../resources/changing-pager-and-editor-exercise.html" target="_blank" rel="noopener noreferrer" aria-label="Read the written Changing the Pager and Editor exercise in a new tab">Written exercise</a>

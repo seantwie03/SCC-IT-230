@@ -2,6 +2,7 @@ kitten @ set-font-size 30.0 && ssh workstation
 ssh servera
 clear
 
+#@ pause 8
 #^ Exercise: Putting Scripts on the PATH
 # Requirements
 #   Hosts: workstation, then servera
@@ -21,6 +22,7 @@ clear
 #^ 2. Find where PATH is already set in ~/.bashrc
 #! Red Hat already customizes PATH here. You are about to do the same thing.
 less ~/.bashrc
+#@ pause 6
 /PATH
 #@ noenter
 q
@@ -42,11 +44,14 @@ clear
 
 #^ 5. Persist it in ~/.bashrc
 vim ~/.bashrc
+#@ noenter
 Gzz
 #@ noenter
 o
+#@ pause 5
 PATH=$PATH:~/scripts
-jj:wq
+#@ key escape
+:wq
 exit
 ssh servera
 echo $PATH

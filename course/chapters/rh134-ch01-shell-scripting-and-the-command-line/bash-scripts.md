@@ -241,3 +241,25 @@ Write a script, make it runnable, and get it to run by name from anywhere
 3. Run it with `./`
 4. Find out why the bare name does not work
 5. Move it onto your `PATH` and run it by name
+
+---
+layout: exercise
+variant: recording
+---
+
+<script setup>
+import castUrl from "./exercises/our-first-bash-script-exercise.cast?url";
+</script>
+
+# Our First Bash Script
+
+::recording::
+
+<AsciinemaPlayer
+    :src="castUrl"
+    label="Screen recording of the instructor writing a Bash script, making it executable, running it by path, and moving it onto PATH to run by name."
+/>
+
+::resources::
+
+<a href="../resources/our-first-bash-script-exercise.html" target="_blank" rel="noopener noreferrer" aria-label="Read the written Our First Bash Script exercise in a new tab">Written exercise</a>

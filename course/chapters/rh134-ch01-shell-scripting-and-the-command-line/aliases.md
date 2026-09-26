@@ -248,3 +248,25 @@ Turn a typo you keep making into a working command, in every shell from now on
 3. Bypass the alias once without removing it
 4. Confirm the alias is gone in a new session
 5. Put it in `~/.bashrc.d/aliases` and confirm a new session loads it
+
+---
+layout: exercise
+variant: recording
+---
+
+<script setup>
+import castUrl from "./exercises/aliasing-away-typos-exercise.cast?url";
+</script>
+
+# Aliasing Away Typos
+
+::recording::
+
+<AsciinemaPlayer
+    :src="castUrl"
+    label="Screen recording of the instructor creating and bypassing shell aliases, then saving them in ~/.bashrc.d/aliases for future sessions."
+/>
+
+::resources::
+
+<a href="../resources/aliasing-away-typos-exercise.html" target="_blank" rel="noopener noreferrer" aria-label="Read the written Aliasing Away Typos exercise in a new tab">Written exercise</a>

@@ -237,3 +237,25 @@ Change your prompt for one shell, then keep the change
 3. Move into a deeply nested directory and judge the result
 4. Confirm the change disappears in a new session
 5. Persist the prompt you prefer in `~/.bashrc`
+
+---
+layout: exercise
+variant: recording
+---
+
+<script setup>
+import castUrl from "./exercises/customizing-the-prompt-exercise.cast?url";
+</script>
+
+# Customizing the Prompt
+
+::recording::
+
+<AsciinemaPlayer
+    :src="castUrl"
+    label="Screen recording of the instructor changing the Bash prompt to show the full working directory, checking it in a nested directory, and saving the prompt in ~/.bashrc."
+/>
+
+::resources::
+
+<a href="../resources/customizing-the-prompt-exercise.html" target="_blank" rel="noopener noreferrer" aria-label="Read the written Customizing the Prompt exercise in a new tab">Written exercise</a>

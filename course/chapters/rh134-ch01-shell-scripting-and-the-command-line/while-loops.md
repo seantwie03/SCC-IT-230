@@ -179,6 +179,28 @@ Create a user account for every name listed in an input file
 6. Remove the accounts the script created
 
 ---
+layout: exercise
+variant: recording
+---
+
+<script setup>
+import castUrl from "./exercises/creating-users-from-a-file-exercise.cast?url";
+</script>
+
+# Creating Users from a File
+
+::recording::
+
+<AsciinemaPlayer
+    :src="castUrl"
+    label="Screen recording of the instructor writing a Bash script that reads account names from a file, creates users, checks for root privileges, and skips blank lines."
+/>
+
+::resources::
+
+<a href="../resources/creating-users-from-a-file-exercise.html" target="_blank" rel="noopener noreferrer" aria-label="Read the written Creating Users from a File exercise in a new tab">Written exercise</a>
+
+---
 
 # Remember This?
 

@@ -1,6 +1,7 @@
 kitten @ set-font-size 30.0 && ssh servera
 clear
 
+#@ pause 10
 #^ Exercise: Determining Host Status
 # Requirements
 #   Host: servera
@@ -21,8 +22,10 @@ cd ~/scripts
 vim pinger.sh
 #! Press enter, backspace, enter after the next command.
 i#!/bin/bash
+#@ noenter
 echo "Starting $0"
-jj:wq
+#@ key escape
+:wq
 
 #^ 2. Make it executable
 chmod a+x pinger.sh
@@ -37,9 +40,12 @@ vim pinger.sh
 o
 finance_app_ips="172.25.250.9 19.19.19.18 172.25.250.10 19.19.19.19 172.25.250.11"
 for host in $finance_app_ips; do
+#@ noenter
     echo "Checking $host..."
+#@ pause 5
 done
-jj:wq
+#@ key escape
+:wq
 ./pinger.sh
 clear
 
@@ -53,8 +59,12 @@ o
         echo "$host is UP"
     else
         echo "$host is DOWN"
+#@ pause 5
+#@ noenter
     fi
-jj:wq
+#@ key escape
+:wq
+#@ pause 10
 ./pinger.sh
 clear
 
@@ -62,16 +72,22 @@ clear
 #! The report is buried in ping's own output. Send that output to /dev/null.
 vim pinger.sh
 /if ping -c1
+#@ noenter
 f;
 #@ noenter
 i
+#@ pause 5
+#@ noenter
  > /dev/null
-jj:wq
+#@ key escape
+:wq
+#@ pause 5
 cat pinger.sh
 clear
+#@ pause 10
 ./pinger.sh
 clear
 
 #^ 6. Clean up
 rm ~/scripts/pinger.sh
-cd ~
+y

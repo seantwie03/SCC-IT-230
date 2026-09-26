@@ -2,6 +2,7 @@ kitten @ set-font-size 30.0 && ssh workstation
 ssh servera
 clear
 
+#@ pause 8
 #^ Exercise: Customizing the Prompt
 # Requirements
 #   Hosts: workstation, then servera
@@ -22,11 +23,12 @@ clear
 #^ 2. Change \W to \w to show the full working directory
 cd /var/log
 #! \W showed log. \w shows /var/log.
-PS1='\\u@\h:\w\$ '
+PS1='\u@\h:\w\$ '
 clear
 
 #^ 3. Judge the result from a deeply nested directory
 mkdir -p ~/app/backend/config/db_settings
+#@ pause 5
 cd ~/app/backend/config/db_settings
 #! A full path is informative until it eats half the line.
 #! Going back to \W would show only db_settings. Pick whichever you can live with.
@@ -42,11 +44,14 @@ clear
 #^ 5. Persist the prompt you prefer in ~/.bashrc
 cd ~
 vim ~/.bashrc
+#@ noenter
 Gzz
 #@ noenter
 o
-PS1='\\u@\h:\w\$ '
-jj:wq
+#@ pause 5
+PS1='\u@\h:\w\$ '
+#@ key escape
+:wq
 exit
 ssh servera
 echo $PS1

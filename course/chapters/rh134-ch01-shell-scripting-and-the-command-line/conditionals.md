@@ -200,6 +200,28 @@ Report which hosts on a list are reachable and which are not
 6. Confirm that both a reachable and an unreachable address are reported correctly
 
 ---
+layout: exercise
+variant: recording
+---
+
+<script setup>
+import castUrl from "./exercises/determining-host-status-exercise.cast?url";
+</script>
+
+# Determining Host Status
+
+::recording::
+
+<AsciinemaPlayer
+    :src="castUrl"
+    label="Screen recording of the instructor writing a Bash script that loops over host addresses, tests each with ping, and reports whether each host is reachable."
+/>
+
+::resources::
+
+<a href="../resources/determining-host-status-exercise.html" target="_blank" rel="noopener noreferrer" aria-label="Read the written Determining Host Status exercise in a new tab">Written exercise</a>
+
+---
 layout: two-cols-header
 leftWidth: 65
 ---
@@ -369,3 +391,25 @@ Report whether each item in a list is a file, a directory, or neither
 4. Report the paths that are regular files
 5. Add a branch for directories, then a final branch for everything else
 6. Confirm that every item in the list produces exactly one message
+
+---
+layout: exercise
+variant: recording
+---
+
+<script setup>
+import castUrl from "./exercises/item-inspector-exercise.cast?url";
+</script>
+
+# Item Inspector
+
+::recording::
+
+<AsciinemaPlayer
+    :src="castUrl"
+    label="Screen recording of the instructor writing a Bash script that loops over paths and reports whether each item is a regular file, a directory, or neither."
+/>
+
+::resources::
+
+<a href="../resources/item-inspector-exercise.html" target="_blank" rel="noopener noreferrer" aria-label="Read the written Item Inspector exercise in a new tab">Written exercise</a>

@@ -217,3 +217,25 @@ Give yourself a scripts directory that every new session can find
 3. Confirm it disappears in a new session
 4. Add the same line to `~/.bashrc`
 5. Confirm a new session now finds the directory
+
+---
+layout: exercise
+variant: recording
+---
+
+<script setup>
+import castUrl from "./exercises/putting-scripts-on-path-exercise.cast?url";
+</script>
+
+# Putting Scripts on the `PATH`
+
+::recording::
+
+<AsciinemaPlayer
+    :src="castUrl"
+    label="Screen recording of the instructor inspecting PATH, adding a scripts directory for one shell, and saving the PATH change in ~/.bashrc for new sessions."
+/>
+
+::resources::
+
+<a href="../resources/putting-scripts-on-path-exercise.html" target="_blank" rel="noopener noreferrer" aria-label="Read the written Putting Scripts on the PATH exercise in a new tab">Written exercise</a>

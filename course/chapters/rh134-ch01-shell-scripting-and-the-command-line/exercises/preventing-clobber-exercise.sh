@@ -2,6 +2,7 @@ kitten @ set-font-size 30.0 && ssh workstation
 ssh servera
 clear
 
+#@ pause 8
 #^ Exercise: Preventing Clobber
 # Requirements
 #   Hosts: workstation, then servera
@@ -20,9 +21,11 @@ cat finance_report.txt
 clear
 
 #^ 2. Enable noclobber and try to overwrite it
+#@ pause 5
 set -o
 set -o noclobber
 #! This is the accident noclobber exists to prevent.
+#@ pause 5
 echo "oops, wrong file" > finance_report.txt
 echo $?
 cat finance_report.txt
@@ -46,11 +49,14 @@ clear
 
 #^ 5. Persist noclobber in ~/.bashrc
 vim ~/.bashrc
+#@ noenter
 Gzz
 #@ noenter
 o
+#@ pause 5
 set -o noclobber
-jj:wq
+#@ key escape
+:wq
 exit
 ssh servera
 set -o | grep noclobber

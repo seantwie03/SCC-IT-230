@@ -202,8 +202,11 @@ flowchart LR
 ```
 
 `packages/slidev-theme-it230/setup/mermaid.ts` registers the Carbon icon set
-(Apache-2.0) under the `carbon` prefix, so every deck can use it. Icons inherit
-the deck accent. Browse the set at <https://icones.js.org/collection/carbon>;
+(Apache-2.0) under the `carbon` prefix, so every deck can use it. Icons do not
+inherit the deck accent: an unstyled icon renders in Mermaid's own palette.
+Style the node to control it, where `stroke` colours the glyph, `fill` the box
+behind it, and `color` the label. Leave `color` alone when the label sits
+outside the box, because a light label is unreadable against the slide. Browse the set at <https://icones.js.org/collection/carbon>;
 it carries `bare-metal-server`, `firewall`, `router`, `switch-layer-3`,
 `network-1` through `network-4`, and `cloud`, among others.
 

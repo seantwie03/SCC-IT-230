@@ -258,3 +258,25 @@ Build a second script and feed it data as an argument, as typed input, and from 
 3. Read the starship name from **stdin**
 4. Supply that input from a file instead of the keyboard
 5. Add a value produced by another command
+
+---
+layout: exercise
+variant: recording
+---
+
+<script setup>
+import castUrl from "./exercises/passing-data-to-a-script-exercise.cast?url";
+</script>
+
+# Passing Data to a Script
+
+::recording::
+
+<AsciinemaPlayer
+    :src="castUrl"
+    label="Screen recording of the instructor passing an argument to a Bash script, reading standard input, redirecting input from a file, and using command substitution."
+/>
+
+::resources::
+
+<a href="../resources/passing-data-to-a-script-exercise.html" target="_blank" rel="noopener noreferrer" aria-label="Read the written Passing Data to a Script exercise in a new tab">Written exercise</a>

@@ -1,6 +1,7 @@
 kitten @ set-font-size 30.0 && ssh servera
 clear
 
+#@ pause 10
 #^ Exercise: Our First Bash Script
 # Requirements
 #   Host: servera
@@ -20,8 +21,11 @@ vim take_inventory.sh
 #! Press enter, backspace, enter after the next command.
 i#!/bin/bash
 echo "Taking inventory"
+#@ pause 5
 ls > inventory
-jj:wq
+#@ key escape
+:wq
+#@ pause 5
 cat take_inventory.sh
 #! Line 1 is the hashbang. It names the interpreter that will run the file.
 clear
@@ -37,6 +41,7 @@ clear
 #^ 3. Run it with ./
 #! ./ means run the file at this path.
 ./take_inventory.sh
+#@ pause 5
 cat inventory
 clear
 

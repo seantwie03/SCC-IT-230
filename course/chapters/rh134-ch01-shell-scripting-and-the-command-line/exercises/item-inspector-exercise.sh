@@ -1,6 +1,7 @@
 kitten @ set-font-size 30.0 && ssh servera
 clear
 
+#@ pause 10
 #^ Exercise: Item Inspector
 # Requirements
 #   Host: servera
@@ -23,8 +24,11 @@ cd ~/scripts
 vim backup_auditor.sh
 #! Press enter, backspace, enter after the next command.
 i#!/bin/bash
+#@ pause 5
+#@ noenter
 echo "Starting $0"
-jj:wq
+#@ key escape
+:wq
 
 #^ 2. Make it executable
 chmod a+x backup_auditor.sh
@@ -35,12 +39,14 @@ clear
 #! The backup job lists a directory, a file, and a path that no longer exists.
 vim backup_auditor.sh
 /Starting \$0
-#@ noenter
 o
 for item in /etc/skel /etc/passwd /srv/nightly-backup; do
     echo "$item"
+#@ pause 5
+#@ noenter
 done
-jj:wq
+#@ key escape
+:wq
 ./backup_auditor.sh
 clear
 
@@ -54,8 +60,11 @@ dd
 O
     if [[ -f "$item" ]]; then
         echo "$item is a file"
+#@ pause 5
+#@ noenter
     fi
-jj:wq
+#@ key escape
+:wq
 ./backup_auditor.sh
 #! Only one path is reported. The other two produce no message at all.
 clear
@@ -63,23 +72,33 @@ clear
 #^ 5. Add branches for directories and everything else
 vim backup_auditor.sh
 /is a file
-jo
+#@ noenter
+o
     elif [[ -d "$item" ]]; then
+#@ pause 5
+#@ noenter
         echo "$item is a directory"
-jj:wq
+#@ key escape
+:wq
 ./backup_auditor.sh
 clear
 vim backup_auditor.sh
 /is a directory
-jo
+#@ noenter
+o
     else
+#@ pause 5
+#@ noenter
         echo "$item is neither a file nor a directory"
-jj:wq
+#@ key escape
+:wq
+#@ pause 5
 cat backup_auditor.sh
+#@ pause 5
 ./backup_auditor.sh
 #! Now every path produces exactly one message, which is what the requirement asked for.
 clear
 
 #^ 6. Clean up
 rm ~/scripts/backup_auditor.sh
-cd ~
+y

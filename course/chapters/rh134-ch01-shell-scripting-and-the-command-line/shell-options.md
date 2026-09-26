@@ -145,3 +145,25 @@ Protect an existing file from being overwritten, in this shell and in every shel
 3. Add to the file with `>>`, then overwrite it deliberately with `>|`
 4. Confirm the option is off again in a new session
 5. Persist `noclobber` in `~/.bashrc` and confirm it applies at next login
+
+---
+layout: exercise
+variant: recording
+---
+
+<script setup>
+import castUrl from "./exercises/preventing-clobber-exercise.cast?url";
+</script>
+
+# Preventing Clobber
+
+::recording::
+
+<AsciinemaPlayer
+    :src="castUrl"
+    label="Screen recording of the instructor protecting a file with noclobber, appending and deliberately overwriting it, then saving the shell option in ~/.bashrc."
+/>
+
+::resources::
+
+<a href="../resources/preventing-clobber-exercise.html" target="_blank" rel="noopener noreferrer" aria-label="Read the written Preventing Clobber exercise in a new tab">Written exercise</a>

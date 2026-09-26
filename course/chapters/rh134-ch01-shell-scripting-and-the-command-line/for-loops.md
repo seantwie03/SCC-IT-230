@@ -292,3 +292,25 @@ Gather disk information from every host named on the command line into one file 
 4. Get the disk commands working on one host, then move them into the loop
 5. Replace the fixed list with `"$@"` so the caller chooses the hosts
 6. Verify the collected files and remove them
+
+---
+layout: exercise
+variant: recording
+---
+
+<script setup>
+import castUrl from "./exercises/collecting-disk-data-exercise.cast?url";
+</script>
+
+# Collecting Disk Data
+
+::recording::
+
+<AsciinemaPlayer
+    :src="castUrl"
+    label="Screen recording of the instructor writing a Bash loop that collects disk information from remote hosts, then accepting host names as script arguments."
+/>
+
+::resources::
+
+<a href="../resources/collecting-disk-data-exercise.html" target="_blank" rel="noopener noreferrer" aria-label="Read the written Collecting Disk Data exercise in a new tab">Written exercise</a>
