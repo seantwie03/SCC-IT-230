@@ -37,17 +37,21 @@ cat /usr/lib/tuned/profiles/network-latency/tuned.conf
 clear
 
 #^ 4. Activate it
+#@ pause 6
 sudo tuned-adm profile network-latency
+#@ pause 5
 tuned-adm active
 clear
 
 #^ 5. Verify it took effect
 #@ pause 5
 tuned-adm verify
-#@ pause 5
+#@ pause 30
 sudo reboot
 ssh servera
+#@ pause 5
 tuned-adm verify
+#@ pause 5
 sudo tail -n5 /var/log/tuned/tuned.log
 clear
 
@@ -57,4 +61,3 @@ tuned-adm active
 sudo systemctl disable --now tuned
 #@ pause 6
 sudo dnf remove -y tuned
-

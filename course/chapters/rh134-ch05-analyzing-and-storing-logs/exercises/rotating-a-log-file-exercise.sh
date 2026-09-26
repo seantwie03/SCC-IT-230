@@ -1,6 +1,7 @@
 kitten @ set-font-size 30.0 && ssh servera
 clear
 
+#@ pause 10
 #^ Exercise: Rotating a Log File by Size
 # Requirements
 #   Host: servera
@@ -25,10 +26,12 @@ i/var/log/demo.log {
     rotate 2
     compress
     missingok
+#@ pause 5
 #@ noenter
 }
 #@ key escape
 :wq
+#@ pause 5
 cat /etc/logrotate.d/demo
 clear
 
@@ -41,6 +44,7 @@ clear
 #^ 3. Rotate it by hand
 #! --force rotates now instead of waiting for logrotate.timer
 logrotate --force /etc/logrotate.d/demo
+#@ pause 5
 ls -lh /var/log/demo.log*
 clear
 
@@ -61,4 +65,3 @@ clear
 
 #^ 6. Clean up
 rm -f /etc/logrotate.d/demo /var/log/demo.log*
-

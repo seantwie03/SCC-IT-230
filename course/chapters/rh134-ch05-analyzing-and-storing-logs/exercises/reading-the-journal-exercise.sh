@@ -17,7 +17,9 @@ clear
 clear
 
 #^ 1. Read the journal for one service
+#@ pause 5
 journalctl -u sshd.service
+#@ pause 6
 #@ noenter
 G
 #@ noenter
@@ -25,15 +27,19 @@ q
 clear
 
 #^ 2. Narrow it to a time window
+#@ pause 5
 journalctl --since "30 minutes ago"
+#@ pause 6
 #@ noenter
 G
 #@ noenter
 q
+#@ pause 5
 journalctl -u sshd.service --since "30 minutes ago" --no-pager
 clear
 
 #^ 3. See how many boots are recorded
+#@ pause 5
 journalctl --list-boots
 #! Only boot 0, because the journal lives in memory and is lost on reboot
 ls -d /run/log/journal
@@ -47,11 +53,14 @@ clear
 
 #^ 5. Reboot and read the previous boot
 #! Wait for servera to come back before continuing
-#@ pause 10
+#@ pause 30
 sudo reboot
 ssh servera
+#@ pause 5
 journalctl --list-boots
+#@ pause 5
 journalctl -b -1
+#@ pause 6
 #@ noenter
 G
 #@ noenter
@@ -62,5 +71,5 @@ clear
 #! Removing the directory sends journald back to memory-only storage
 sudo rm -rf /var/log/journal
 sudo systemctl restart systemd-journald
+#@ pause 5
 journalctl --list-boots
-

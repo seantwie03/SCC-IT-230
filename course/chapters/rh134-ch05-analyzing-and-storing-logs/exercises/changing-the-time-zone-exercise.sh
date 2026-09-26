@@ -1,6 +1,7 @@
 kitten @ set-font-size 30.0 && ssh servera
 clear
 
+#@ pause 10
 #^ Exercise: Changing the Time Zone
 # Requirements
 #   Host: servera
@@ -14,6 +15,7 @@ clear
 clear
 
 #^ 1. Record the current configuration
+#@ pause 5
 timedatectl
 date
 clear
@@ -28,6 +30,7 @@ sudo timedatectl set-timezone Europe/Amsterdam
 clear
 
 #^ 4. Confirm only the display changed
+#@ pause 5
 timedatectl
 date
 date -u
@@ -36,4 +39,5 @@ clear
 
 #^ 5. Put the original back
 sudo timedatectl set-timezone Etc/UTC
+#@ pause 5
 timedatectl

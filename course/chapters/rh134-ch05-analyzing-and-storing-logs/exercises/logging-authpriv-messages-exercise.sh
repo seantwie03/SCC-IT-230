@@ -1,6 +1,7 @@
 kitten @ set-font-size 30.0 && ssh servera
 clear
 
+#@ pause 10
 #^ Exercise: Logging authpriv.info Messages
 # Requirements
 #   Host: servera
@@ -19,6 +20,7 @@ clear
 sudo -i
 #! Drop-in files in /etc/rsyslog.d are read alongside /etc/rsyslog.conf
 vim /etc/rsyslog.d/authpriv-info.conf
+#@ pause 5
 #@ noenter
 iauthpriv.info /var/log/authpriv-info
 #@ key escape
@@ -29,6 +31,7 @@ clear
 #^ 2. Restart rsyslog
 #! rsyslog reads its configuration at startup, so a new rule needs a restart
 systemctl restart rsyslog
+#@ pause 5
 systemctl status rsyslog --no-pager
 clear
 
@@ -41,11 +44,12 @@ clear
 #! A rule naming info catches everything more severe than info
 logger -p authpriv.alert "Houston, we have an alert!"
 logger -p authpriv.emerg "Houston, we have an EMERGENCY!"
+#@ pause 5
 tail -n3 /var/log/authpriv-info
 clear
 
 #^ 5. Clean up
 rm -f /etc/rsyslog.d/authpriv-info.conf /var/log/authpriv-info
 systemctl restart rsyslog
+#@ pause 5
 ls /etc/rsyslog.d/
-
