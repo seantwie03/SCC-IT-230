@@ -606,15 +606,15 @@ clear
 ```
 
 Write file edits as literal keystrokes: `i`, the text to insert, then
-`#@ key escape` to leave insert mode and `:wq` to save. Existing exercises
-instead type `jj:wq`, which works because lab hosts map `jj` to <kbd>Esc</kbd>.
-Prefer the key directive in new material, because it does not depend on that
-mapping being present on the host being demonstrated. An exercise must be self-contained because students follow it
-on their own VMs in real time: include prerequisites, the expected environment,
-required setup, safe execution guidance, verification, and cleanup when
-needed. Target the SCC Lab, defaulting to `servera` and `workstation` unless the
-topic explicitly needs more nodes. Nothing may depend on pre-staged student
-machines.
+`#@ key escape` to leave insert mode and `:wq` to save. Use the key directive
+instead of `jj:wq`; the latter depends on a Vim mapping that may not exist on
+the host being demonstrated.
+
+An exercise must be self-contained because students follow it on their own VMs
+in real time: include prerequisites, the expected environment, required setup,
+safe execution guidance, verification, and cleanup when needed. Target the SCC
+Lab, defaulting to `servera` and `workstation` unless the topic explicitly
+needs more nodes. Nothing may depend on pre-staged student machines.
 
 Write a companion `html` file that mirrors the command file but convert the
 keystrokes, `#^` and `#!` lines into prose that would make sense when read
@@ -636,6 +636,9 @@ administrator might use it. Reuse the same core workflow, but choose meaningful
 resources, filenames, data, or outcomes that require learners to transfer the
 idea to a new situation. Avoid realism that introduces tools or troubleshooting
 unrelated to the learning goal.
+
+Recording authors should avoid adding untaught commands or flags solely for the
+recording, using `#@` directives for pacing and keystrokes.
 
 ### Recording an exercise
 
@@ -676,9 +679,10 @@ from wasting a take. `kitty-demo.py --check <file>` runs that same validation
 and nothing else, which is useful while drafting because it needs no Kitty
 window and starts no demonstration.
 
-Changing a command file invalidates its recording. Adding or removing a step
-changes the press count and the total runtime, which can strand `#@ pause`
-values tuned for a wait.
+Changing a command file, including its `#@` directives, invalidates its
+recording. Adding or removing a step changes the press count and the total
+runtime, which can strand `#@ pause` values tuned for a wait. Keep the command
+file unchanged when retaining an existing recording.
 
 #### Pausing for the audience
 
