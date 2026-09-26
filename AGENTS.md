@@ -81,6 +81,7 @@ Read the relevant document before changing files in its area:
 | Project structure, workspace boundaries, presentation catalog, routes, or build output     | `docs/architecture.md`     |
 | Theme tokens, global styles, layouts, shared components, or the theme gallery              | `docs/design-system.md`    |
 | Accessibility standards, audits, remediation, or cross-cutting accessibility work          | `docs/accessibility.md`    |
+| Lab environments, their hosts, interfaces, disks, or the differences between them          | `docs/lab-environments.md` |
 | The public `/showcase/` page, its content, or the slides it features                       | `docs/showcase.md`         |
 | Staging, committing, pushing, deployment, publication checks, or production corrections    | `docs/publishing.md`       |
 

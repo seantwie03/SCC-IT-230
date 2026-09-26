@@ -40,6 +40,26 @@ an interactive shell.
 Never add a password, key, or other credential to repository files. The wrapper
 relies on the maintainer's existing SSH configuration.
 
+## Three environments, and only one of them is yours
+
+`pnpm lab` reaches the **instructor lab**, which is neither machine a student
+sits in front of. Students use the **SCC lab** on the VDI for this repository's
+material and the **RHA lab** for Red Hat Academy's own exercises.
+`docs/lab-environments.md` describes all three and lists the differences that
+reach the screen.
+
+Two of those differences bite transcripts:
+
+- **Interface names.** `enp1s0` here, `enp0s8` on the SCC lab, `ens3` on the
+  RHA lab. Nothing renames them; the hardware differs.
+- **Disk names.** `/dev/vd[a-z]` here and on the RHA lab, `/dev/sd[a-z]` on the
+  SCC lab. This lab also carries a udev rule adding `sd` symlinks, which the
+  student labs do not have.
+
+So a name captured through `pnpm lab` is not always a name a student can type.
+Say which environment a transcript came from, or have the exercise look the
+name up first with `nmcli device status` or `lsblk`.
+
 ### When the lab is unreachable
 
 The VMs are not always running. Check before concluding that a command hangs:

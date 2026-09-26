@@ -37,8 +37,8 @@ in the material.
   gallery, and theme-specific validation.
 - `site/` contains the landing, weekly-detail, and Canvas-authoring HTML
   templates, the build-time site and Canvas renderers, and the stylesheet.
-- `docs/` explains the project architecture, course-authoring conventions, and
-  publishing workflow.
+- `docs/` explains the project architecture, course-authoring conventions,
+  publishing workflow, and the three lab environments the course runs on.
 - `scripts/` supports repository-wide validation, rendered review, and
   publication.
 
