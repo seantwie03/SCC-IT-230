@@ -730,7 +730,7 @@ not overlap even when one is a whole line, so a line marked whole cannot also
 have a token marked inside it.
 
 Size is chosen from the content, so the same input renders at the same scale in
-the browser, in CI, and in the exported PDF: `lg` for one line up to 44 columns,
+the browser, in CI, and in the exported PDF: `lg` for one line up to 41 columns,
 `md` for up to four lines of up to 64 columns, and `sm` for anything larger,
 such as `systemctl status` output. Columns count a tab as its advance to the
 next tab stop. Set `size` explicitly to override. There is no auto-fitting to

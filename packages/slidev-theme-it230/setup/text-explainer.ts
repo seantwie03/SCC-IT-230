@@ -67,7 +67,7 @@ export function selectSize(lines: string[]): TextExplainerSize {
         0,
     );
 
-    if (lines.length === 1 && longest <= 44) return "lg";
+    if (lines.length === 1 && longest <= 41) return "lg";
     if (lines.length <= 4 && longest <= 64) return "md";
     return "sm";
 }

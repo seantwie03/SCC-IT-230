@@ -92,7 +92,6 @@ listSpacing: padded
 # Labeling a Port
 
 <TextExplainer
-  size="md"
   :lines="[
     'semanage port -a -t http_port_t -p tcp 8888',
   ]"

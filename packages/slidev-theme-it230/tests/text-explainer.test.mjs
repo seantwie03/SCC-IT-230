@@ -162,7 +162,7 @@ test("sizes one short line large and a wide block small", () => {
 });
 
 test("keeps a lone line off the large size once it grows wide", () => {
-    assert.equal(selectSize(["x".repeat(44)]), "lg");
-    assert.equal(selectSize(["x".repeat(45)]), "md");
+    assert.equal(selectSize(["x".repeat(41)]), "lg");
+    assert.equal(selectSize(["x".repeat(42)]), "md");
     assert.equal(selectSize(["x".repeat(65)]), "sm");
 });
