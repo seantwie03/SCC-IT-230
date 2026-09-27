@@ -112,7 +112,7 @@ success
 #^ 1. Move it
 student@servera:~$ sudo firewall-cmd --zone=dmz --change-interface=enp1s0
 success
-#^ 2. Two zones are active now
+#^ 2. Two zones are active now, but the interface has moved to dmz
 student@servera:~$ sudo firewall-cmd --get-active-zones
 dmz
   interfaces: enp1s0
@@ -122,7 +122,7 @@ public (default)
 #^ 1. Move it
 student@servera:~$ sudo firewall-cmd --zone=dmz --change-interface=enp1s0
 success
-#^ 2. Two zones are active now
+#^ 2. Two zones are active now, but the interface has moved to dmz
 student@servera:~$ sudo firewall-cmd --get-active-zones
 dmz
   interfaces: enp1s0
@@ -174,7 +174,7 @@ layout: exercise
 
 ::goal::
 
-Move `servera`'s interface into `dmz`, watch what it allows shrink, then put it back
+Move `servera`'s interface into `dmz`, notice the impacts to what is allowed
 
 ::environment::
 
@@ -185,6 +185,28 @@ Move `servera`'s interface into `dmz`, watch what it allows shrink, then put it 
 1. List the zones that exist, the ones in use, and the default
 2. Inspect what the active zone allows
 3. Move `enp1s0` into `dmz`
-4. Confirm two zones are active and the service list is shorter
+4. Confirm the interface moved and the service list is shorter
 5. Run `firewall-cmd --reload`
 6. Look again, and see what is left
+
+---
+layout: exercise
+variant: recording
+---
+
+<script setup>
+import castUrl from "./exercises/move-interface-to-another-zone-exercise.cast?url";
+</script>
+
+# Move an Interface to Another Zone
+
+::recording::
+
+<AsciinemaPlayer
+    :src="castUrl"
+    label="Screen recording of the instructor finding servera's interface with nmcli, listing the zones, the active zones, and the default zone, inspecting what the public zone allows, moving enp1s0 into dmz with --change-interface, confirming the move and the shorter dmz service list, then reloading the firewall and seeing the interface back in public with every service restored."
+/>
+
+::resources::
+
+<a href="../resources/move-interface-to-another-zone-exercise.html" target="_blank" rel="noopener noreferrer" aria-label="Read the written Move an Interface to Another Zone exercise in a new tab">Written exercise</a>

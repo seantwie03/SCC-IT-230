@@ -130,3 +130,25 @@ Label port 8888 so `httpd` can bind to it, then reach the page from `workstation
 2. Label 8888 with `http_port_t`
 3. Start `httpd` and request the page from `workstation`
 4. Put `servera` back the way you found it
+
+---
+layout: exercise
+variant: recording
+---
+
+<script setup>
+import castUrl from "./exercises/configure-selinux-for-http-on-8888-exercise.cast?url";
+</script>
+
+# Configure SELinux to Allow HTTP on 8888
+
+::recording::
+
+<AsciinemaPlayer
+    :src="castUrl"
+    label="Screen recording of the instructor listing the http port labels with semanage, labeling tcp port 8888 as http_port_t, starting httpd and loading the page on port 8888 from workstation, then removing the port label, firewall rules, Listen change, and packages to put servera back the way it started."
+/>
+
+::resources::
+
+<a href="../resources/configure-selinux-for-http-on-8888-exercise.html" target="_blank" rel="noopener noreferrer" aria-label="Read the written Configure SELinux to Allow HTTP on 8888 exercise in a new tab">Written exercise</a>

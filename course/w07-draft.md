@@ -56,3 +56,7 @@ src: ./chapters/rh134-ch14-managing-network-security/firewall-ports.md
 ---
 src: ./chapters/rh134-ch14-managing-network-security/selinux-port-labels.md
 ---
+
+---
+src: ./chapters/rh134-ch14-managing-network-security/network-security-practice.md
+---

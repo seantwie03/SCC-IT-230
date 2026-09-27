@@ -79,3 +79,25 @@ Move the web server on `servera` to port 8888, and find out what stops it
 3. Restart `httpd` and watch it fail
 4. Confirm SELinux is the cause, then put it back
 5. Read what `sealert` recommends
+
+---
+layout: exercise
+variant: recording
+---
+
+<script setup>
+import castUrl from "./exercises/configure-apache-to-listen-on-8888-exercise.cast?url";
+</script>
+
+# Configure Apache to Listen on 8888
+
+::recording::
+
+<AsciinemaPlayer
+    :src="castUrl"
+    label="Screen recording of the instructor permanently opening 8888/tcp in the firewall, changing Apache's Listen line to 8888 in vim, restarting httpd and reading the permission denied error in its status, switching SELinux to permissive to show httpd starts and back to enforcing, then installing setroubleshoot-server and reading the sealert report that recommends modifying the port type."
+/>
+
+::resources::
+
+<a href="../resources/configure-apache-to-listen-on-8888-exercise.html" target="_blank" rel="noopener noreferrer" aria-label="Read the written Configure Apache to Listen on 8888 exercise in a new tab">Written exercise</a>

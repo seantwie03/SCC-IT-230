@@ -56,6 +56,10 @@
   connection to a host outside the lab, which the wrapper's allowlist exists to
   prevent. Verify course commands and output against the lab rather than
   trusting a source deck; see the `lab-verification` skill.
+- When porting a week from the instructor's source deck, follow
+  `.agents/skills/week-porting/SKILL.md`, which covers the plan, the
+  fragment-by-fragment build, exercises, recordings, and publication. Claude
+  Code discovers it as the `week-porting` skill.
 - Treat the existence of a canonical `course/w01.md` through `course/w16.md`
   file as publication approval. Keep incomplete weeks in noncanonical files
   such as `course/w02-draft.md`; do not add a publication flag.

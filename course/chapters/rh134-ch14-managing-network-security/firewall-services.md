@@ -86,3 +86,25 @@ Install a web server on `servera` and let `workstation` reach it
 5. Allow the `http` service
 6. Request the page again
 7. Keep the change with `--runtime-to-permanent`
+
+---
+layout: exercise
+variant: recording
+---
+
+<script setup>
+import castUrl from "./exercises/allow-http-traffic-exercise.cast?url";
+</script>
+
+# Allow HTTP Traffic
+
+::recording::
+
+<AsciinemaPlayer
+    :src="castUrl"
+    label="Screen recording of the instructor installing httpd on servera and writing a page, enabling and starting the service, getting connection refused from curl on workstation, listing the zone's services and finding no http, adding the http service, loading the page from workstation, then keeping the change with --runtime-to-permanent."
+/>
+
+::resources::
+
+<a href="../resources/allow-http-traffic-exercise.html" target="_blank" rel="noopener noreferrer" aria-label="Read the written Allow HTTP Traffic exercise in a new tab">Written exercise</a>
