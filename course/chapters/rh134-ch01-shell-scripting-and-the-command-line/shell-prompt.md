@@ -66,15 +66,15 @@ Bash provides special character sequences. The ones below build the prompt you h
 
 **<AccentText>student@workstation:~$</AccentText>**
 
-<CommandExplainer
-  command="PS1='\u@\h:\W\$'"
+<TextExplainer
+  :lines="[`PS1='\\u@\\h:\\W\\$'`]"
   :steps="[
-    { active: '\\u', explanation: 'The current username' },
-    { active: '@', explanation: 'A literal @ sign' },
-    { active: '\\h', explanation: 'The hostname, short form' },
-    { active: ':', explanation: 'A literal colon :' },
-    { active: '\\W', explanation: 'The working directory, shortened' },
-    { active: '\\$', explanation: 'A # for root and a $ for everyone else' },
+    { text: '\\u', explanation: 'The current username' },
+    { text: '@', explanation: 'A literal @ sign' },
+    { text: '\\h', explanation: 'The hostname, short form' },
+    { text: ':', explanation: 'A literal colon :' },
+    { text: '\\W', explanation: 'The working directory, shortened' },
+    { text: '\\$', explanation: 'A # for root and a $ for everyone else' },
   ]"
 />
 

@@ -74,12 +74,12 @@ Written by <AccentText>Ken Thompson</AccentText> at Bell Labs and first released
 
 Prints every <AccentText>line</AccentText> of its input that matches a pattern
 
-<CommandExplainer
-  command="grep PATH ~/.bashrc"
+<TextExplainer
+  :lines="['grep PATH ~/.bashrc']"
   :steps="[
-    { active: 'grep', explanation: 'Print matching lines' },
-    { active: 'PATH', explanation: 'The pattern: here, the simplest possible regular expression, an exact string' },
-    { active: '~/.bashrc', explanation: 'The file to search' },
+    { text: 'grep', explanation: 'Print matching lines' },
+    { text: 'PATH', explanation: 'The pattern: here, the simplest possible regular expression, an exact string' },
+    { text: '~/.bashrc', explanation: 'The file to search' },
   ]"
 />
 

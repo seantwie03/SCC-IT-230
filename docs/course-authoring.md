@@ -193,10 +193,8 @@ section for the concept it covers ("Physical Volumes"), not one procedure
 Keep a slide focused on one concept or tightly related procedure. Use
 `TerminalWindow` for terminal interaction, `TextExplainer` for the anatomy of a
 command, configuration line, or captured output, and `Callout` for a genuinely
-supplemental caveat. `CommandExplainer` is deprecated: it is still rendered for
-the decks that use it, but write new slides with `TextExplainer`, which covers
-the same single-line case and also handles multiple lines and repeated tokens. Use a click sequence only when progressive disclosure helps explain a
-procedure; do not hide unrelated commands in one sequence.
+supplemental caveat. Use a click sequence only when progressive disclosure
+helps explain a procedure; do not hide unrelated commands in one sequence.
 
 Do not begin a line with `AccentText` or another color-text component when more
 text follows it on that line. The line loses its paragraph and breaks into

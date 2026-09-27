@@ -140,12 +140,12 @@ layout: center
 
 # `get` is Named From Your Side
 
-<CommandExplainer
-  command="sftp> get /etc/passwd"
+<TextExplainer
+  :lines="['sftp> get /etc/passwd']"
   :steps="[
-    { active: 'sftp>', explanation: 'Secure File Transfer Protocol prompt' },
-    { active: 'get', explanation: 'Download the file from the remote host to the local host' },
-    { active: '/etc/passwd', explanation: 'Read from the remote working directory, written into the local working directory' },
+    { text: 'sftp>', explanation: 'Secure File Transfer Protocol prompt' },
+    { text: 'get', explanation: 'Download the file from the remote host to the local host' },
+    { text: '/etc/passwd', explanation: 'Read from the remote working directory, written into the local working directory' },
   ]"
 />
 
@@ -155,12 +155,12 @@ layout: center
 
 # `put` is Named From Your Side
 
-<CommandExplainer
-  command="sftp> put /etc/passwd"
+<TextExplainer
+  :lines="['sftp> put /etc/passwd']"
   :steps="[
-    { active: 'sftp>', explanation: 'Secure File Transfer Protocol prompt' },
-    { active: 'put', explanation: 'Upload the file from the local host to the remote host' },
-    { active: '/etc/passwd', explanation: 'Read from the local working directory, written into the remote working directory' },
+    { text: 'sftp>', explanation: 'Secure File Transfer Protocol prompt' },
+    { text: 'put', explanation: 'Upload the file from the local host to the remote host' },
+    { text: '/etc/passwd', explanation: 'Read from the local working directory, written into the remote working directory' },
   ]"
 />
 

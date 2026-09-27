@@ -289,12 +289,12 @@ vertical: start
 
 This is how you label a directory <AccentText>and everything inside it</AccentText>
 
-<CommandExplainer
-  command="/website(/.*)?"
+<TextExplainer
+  :lines="['/website(/.*)?']"
   :steps="[
-    { active: '/website', explanation: 'The literal directory name' },
-    { active: '(/.*)', explanation: 'A group: a slash followed by anything at all, treated as one unit like parentheses in algebra' },
-    { active: '?', explanation: 'Applies to the whole group, so the group is optional' },
+    { text: '/website', explanation: 'The literal directory name' },
+    { text: '(/.*)', explanation: 'A group: a slash followed by anything at all, treated as one unit like parentheses in algebra' },
+    { text: '?', explanation: 'Applies to the whole group, so the group is optional' },
   ]"
 />
 

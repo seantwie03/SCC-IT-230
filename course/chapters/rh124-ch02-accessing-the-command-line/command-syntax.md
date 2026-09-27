@@ -28,42 +28,50 @@ layout: center
 
 # Command Syntax
 
-<CommandExplainer
-  command="ls -l /home/student"
+<TextExplainer
+  :lines="['ls -l /home/student']"
   :steps="[
-    { active: 'ls', explanation: 'The name of the command' },
-    { active: '-l', explanation: 'Short option begins with a single dash' },
-    { active: '/home/student', explanation: 'Arguments do not begin with a dash' },
-    {
-      command: 'ls -l -a /home/student',
-      active: '-a',
-      explanation: 'Multiple options can be supplied',
-    },
-    {
-      command: 'ls -la /home/student',
-      active: '-la',
-      explanation: 'Short options can be combined',
-    },
-    {
-      command: 'ls -al /home/student',
-      active: '-al',
-      explanation: 'In any order',
-    },
-    {
-      command: 'ls --all /home/student',
-      active: '--all',
-      explanation: 'Long options begin with a double dash',
-    },
-    {
-      command: 'ls --sort time /home/student',
-      active: '--sort time',
-      explanation: 'Options can take arguments',
-    },
-    {
-      command: 'ls --sort=time /home/student',
-      active: '--sort=time',
-      explanation: 'Option arguments can use equal sign',
-    },
+    { text: 'ls', explanation: 'The name of the command' },
+    { text: '-l', explanation: 'Short option begins with a single dash' },
+    { text: '/home/student', explanation: 'Arguments do not begin with a dash' },
+  ]"
+/>
+
+---
+layout: center
+---
+
+# Command Syntax: Short Options
+
+<TextExplainer
+  :lines="[
+    'ls -l -a /home/student',
+    'ls -la /home/student',
+    'ls -al /home/student',
+  ]"
+  :steps="[
+    { line: 1, text: '-a', explanation: 'Multiple options can be supplied' },
+    { line: 2, text: '-la', explanation: 'Short options can be combined' },
+    { line: 3, text: '-al', explanation: 'In any order' },
+  ]"
+/>
+
+---
+layout: center
+---
+
+# Command Syntax: Long Options
+
+<TextExplainer
+  :lines="[
+    'ls --all /home/student',
+    'ls --sort time /home/student',
+    'ls --sort=time /home/student',
+  ]"
+  :steps="[
+    { line: 1, text: '--all', explanation: 'Long options begin with a double dash' },
+    { line: 2, text: '--sort time', explanation: 'Options can take arguments' },
+    { line: 3, text: '--sort=time', explanation: 'Option arguments can use equal sign' },
   ]"
 />
 
@@ -124,7 +132,7 @@ total 0
 
 # Demo: Command Syntax
 
-<div class="mx-auto w-[650px]">
+<div class="mx-auto w-[620px]">
 
 ![Screen recording of the instructor running ls with several short and long option combinations in a terminal.](./assets/command_syntax.gif)
 

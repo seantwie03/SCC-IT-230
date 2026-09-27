@@ -675,10 +675,9 @@ apart, so the rule and the footer text hold still as it comes and goes.
 
 ### `TextExplainer`
 
-`TextExplainer` reveals parts of any fixed text one step at a time without
-moving it: a command a student types, a crontab line they write by hand, a
-configuration file excerpt, or captured command output. It supersedes
-`CommandExplainer`, which remains only for the slides that already use it.
+`TextExplainer` reveals parts of fixed text one step at a time: a command a
+student types, a crontab line they write by hand, a configuration file excerpt,
+or captured command output.
 
 `lines` supplies the text verbatim, one array entry per rendered line. Each
 ordered `steps` entry marks one range and supplies its `explanation`. Every line
@@ -729,38 +728,6 @@ reporting it; content that will not fit at `sm` overflows and
 
 Explanations appear beneath the text, so keep a block short enough that the
 caption stays near what it describes.
-
-### `CommandExplainer`
-
-**Deprecated. Use `TextExplainer` instead.** `TextExplainer` covers everything
-this component does and also handles multiple lines and repeated tokens.
-`CommandExplainer` remains only so the decks that already use it keep
-rendering, and it is intentionally absent from the theme gallery. Do not add
-new usages; convert the remaining ones when their week is next revised. The
-rest of this section documents the existing call sites.
-
-It reveals parts of one selectable prompt or command without moving the text.
-`command` supplies the base string; each ordered `steps` entry supplies
-`active`, `explanation`, and optionally a replacement `command` or one-based
-`occurrence` for repeated text.
-
-```md
-<CommandExplainer
-  command="student@workstation:/etc$ ls -l"
-  :steps="[
-    { active: 'student', explanation: 'The logged-in user' },
-    { active: 'workstation', explanation: 'The current host' },
-    { active: '/etc', explanation: 'The working directory' },
-  ]"
-/>
-```
-
-An active substring must resolve unambiguously; invalid, missing, overlapping,
-or ambiguous matches produce an authoring error. The low-level `segments` plus
-`explanation` form handles one unusual explicit state and requires exactly one
-active segment.
-
-The component owns the slide's click progression, as `TextExplainer` does.
 
 ### `TerminalWindow`
 

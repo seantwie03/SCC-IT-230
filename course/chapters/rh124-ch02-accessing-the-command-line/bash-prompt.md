@@ -30,14 +30,14 @@ layout: center
 
 # Bash Prompt
 
-<CommandExplainer
-  command="student@workstation:/etc$ ls -l"
+<TextExplainer
+  :lines="['student@workstation:/etc$ ls -l']"
   :steps="[
-    { active: 'student', explanation: 'The user you are logged in as' },
-    { active: 'workstation', explanation: 'The host you are logged into' },
-    { active: '/etc', explanation: 'Your current working directory' },
-    { active: '$', explanation: 'Indicates a non-root user' },
-    { active: 'ls -l', explanation: 'The command you typed' },
+    { text: 'student', explanation: 'The user you are logged in as' },
+    { text: 'workstation', explanation: 'The host you are logged into' },
+    { text: '/etc', explanation: 'Your current working directory' },
+    { text: '$', explanation: 'Indicates a non-root user' },
+    { text: 'ls -l', explanation: 'The command you typed' },
   ]"
 />
 

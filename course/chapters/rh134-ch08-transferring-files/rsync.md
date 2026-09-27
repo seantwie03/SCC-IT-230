@@ -135,14 +135,14 @@ layout: center
 
 # Reading an `rsync` Command
 
-<CommandExplainer
-  command="rsync -av servera:/var/log /tmp"
+<TextExplainer
+  :lines="['rsync -av servera:/var/log /tmp']"
   :steps="[
-    { active: 'rsync', explanation: 'File Synchronization tool' },
-    { active: '-av', explanation: 'Archive mode,  with verbose output' },
-    { active: 'servera:', explanation: 'Pull from this host. The colon marks the remote side, same as scp' },
-    { active: '/var/log', explanation: 'The source directory on servera' },
-    { active: '/tmp', explanation: 'The destination directory on local' },
+    { text: 'rsync', explanation: 'File Synchronization tool' },
+    { text: '-av', explanation: 'Archive mode,  with verbose output' },
+    { text: 'servera:', explanation: 'Pull from this host. The colon marks the remote side, same as scp' },
+    { text: '/var/log', explanation: 'The source directory on servera' },
+    { text: '/tmp', explanation: 'The destination directory on local' },
   ]"
 />
 

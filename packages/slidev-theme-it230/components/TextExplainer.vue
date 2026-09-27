@@ -109,7 +109,7 @@ const size = computed(() => props.size ?? selectSize(props.lines));
 }
 
 /*
- * A block `code` element rather than `pre`, matching CommandExplainer. The
+ * A block `code` element rather than `pre`. The
  * theme gives `.slidev-layout pre` a surface background with `!important`,
  * which is right for a fenced code block and wrong for this flat presentation.
  */

@@ -87,14 +87,14 @@ layout: center
 
 # Uploading a File
 
-<CommandExplainer
-  command="scp file.txt student@servera:/tmp"
+<TextExplainer
+  :lines="['scp file.txt student@servera:/tmp']"
   :steps="[
-    { active: 'scp', explanation: 'Securely Copy Files' },
-    { active: 'file.txt', explanation: 'The source — an ordinary local path' },
-    { active: 'student@servera', explanation: 'The remote user and host (same syntax as ssh)' },
-    { active: ':', explanation: 'The colon separates hostname and path' },
-    { active: '/tmp', explanation: 'The destination directory on that host' },
+    { text: 'scp', explanation: 'Securely Copy Files' },
+    { text: 'file.txt', explanation: 'The source — an ordinary local path' },
+    { text: 'student@servera', explanation: 'The remote user and host (same syntax as ssh)' },
+    { text: ':', explanation: 'The colon separates hostname and path' },
+    { text: '/tmp', explanation: 'The destination directory on that host' },
   ]"
 />
 
@@ -104,14 +104,14 @@ layout: center
 
 # Download a File
 
-<CommandExplainer
-  command="scp student@servera:/tmp/notes.txt ~"
+<TextExplainer
+  :lines="['scp student@servera:/tmp/notes.txt ~']"
   :steps="[
-    { active: 'scp', explanation: 'Securely Copy Files' },
-    { active: 'student@servera', explanation: 'The user and host on the remote machine' },
-    { active: ':', explanation: 'The colon separates hostname and path' },
-    { active: '/tmp/notes.txt', explanation: 'The source path on the remote host' },
-    { active: '~', explanation: 'The destination local path (your home directory)' }
+    { text: 'scp', explanation: 'Securely Copy Files' },
+    { text: 'student@servera', explanation: 'The user and host on the remote machine' },
+    { text: ':', explanation: 'The colon separates hostname and path' },
+    { text: '/tmp/notes.txt', explanation: 'The source path on the remote host' },
+    { text: '~', explanation: 'The destination local path (your home directory)' }
   ]"
 />
 

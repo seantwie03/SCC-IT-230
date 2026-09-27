@@ -49,12 +49,12 @@ layout: center
 
 # Aliases are created using the `alias` builtin
 
-<CommandExplainer
-  command="alias lt='ls -lAtr'"
+<TextExplainer
+  :lines="[`alias lt='ls -lAtr'`]"
   :steps="[
-    { active: 'alias', explanation: 'The shell builtin that defines the shortcut' },
-    { active: 'lt', explanation: 'The short name you will type instead' },
-    { active: '\'ls -lAtr\'', explanation: 'The command it expands into.\nMust be quoted so the shell stores it intact' },
+    { text: 'alias', explanation: 'The shell builtin that defines the shortcut' },
+    { text: 'lt', explanation: 'The short name you will type instead' },
+    { text: '\'ls -lAtr\'', explanation: 'The command it expands into.\nMust be quoted so the shell stores it intact' },
   ]"
 />
 
