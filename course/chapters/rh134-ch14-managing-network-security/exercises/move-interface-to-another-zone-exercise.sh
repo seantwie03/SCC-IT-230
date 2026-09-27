@@ -5,12 +5,12 @@ clear
 #^ Exercise: Move an Interface to Another Zone
 # Requirements
 #   Host: servera, from workstation
-#   Move servera's interface into dmz, watch what it allows shrink, then put it back
+#   Move servera's interface into dmz, notice the impacts to what is allowed
 # Steps
 #   1. List the zones
 #   2. Inspect what the active zone allows
 #   3. Move enp1s0 into dmz
-#   4. Confirm two zones are active and the service list is shorter
+#   4. Confirm the interface moved and the service list is shorter
 #   5. Reload the firewall
 #   6. Look again
 clear
@@ -38,7 +38,7 @@ sudo firewall-cmd --zone=dmz --change-interface=enp1s0
 #@ pause 5
 clear
 
-#^ 4. Confirm two zones are active and the service list is shorter
+#^ 4. Confirm the interface moved and the service list is shorter
 sudo firewall-cmd --get-active-zones
 #@ pause 5
 sudo firewall-cmd --list-all --zone=dmz

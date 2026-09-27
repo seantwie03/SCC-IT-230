@@ -479,8 +479,8 @@
                     <h2 id="overview-heading">Task</h2>
                     <p>
                         Move <code>servera</code>'s network interface from the
-                        <code>public</code> zone into <code>dmz</code>, watch
-                        the list of allowed services shrink, then reload the
+                        <code>public</code> zone into <code>dmz</code>, notice
+                        the impacts to what is allowed, then reload the
                         firewall and see what is left.
                     </p>
 
@@ -549,9 +549,8 @@ sudo firewall-cmd --get-default-zone</code></pre>
                         <pre><code>sudo firewall-cmd --get-active-zones
 sudo firewall-cmd --list-all --zone=dmz</code></pre>
                         <p>
-                            Two zones are active now:
-                            <code>dmz</code> holding the interface you moved,
-                            and <code>public</code>, still the default.
+                            <code>dmz</code> now holds the interface you moved,
+                            and <code>public</code> is still the default.
                             <code>dmz</code> allows <code>ssh</code> alone,
                             where <code>public</code> allowed three services.
                         </p>

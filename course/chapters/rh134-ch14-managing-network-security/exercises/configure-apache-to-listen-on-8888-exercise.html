@@ -577,23 +577,23 @@ sudo setenforce 1</code></pre>
                     <li class="step">
                         <h2>Read what sealert recommends</h2>
                         <pre><code>sudo dnf install -y setroubleshoot-server
-sudo systemctl restart httpd.service
-sudo grep 'sealert -l' /var/log/messages | tail -n 1</code></pre>
+sudo systemctl restart httpd.service</code></pre>
                         <p>
                             With <code>setroubleshoot-server</code> installed,
-                            each denial leaves one summary line in the log:
-                            <code
-                                >SELinux is preventing /usr/sbin/httpd from
-                                name_bind access on the tcp_socket port
-                                8888</code
-                            >. Read the whole report the same way you did in
+                            the restart fails again and leaves a fresh denial
+                            to analyze. Read the report the same way you did in
                             week 6:
                         </p>
                         <pre><code>sudo sealert -a /var/log/audit/audit.log | less</code></pre>
                         <p>
                             Search for <code>/port 8888</code> to jump to the
-                            alert, then press <kbd>q</kbd> to leave the pager.
-                            The first suggestion is the one that matters:
+                            alert, which reads
+                            <code
+                                >SELinux is preventing /usr/sbin/httpd from
+                                name_bind access on the tcp_socket port
+                                8888</code
+                            >, then press <kbd>q</kbd> to leave the pager. The
+                            first suggestion is the one that matters:
                         </p>
                         <pre><code>If you want to allow /usr/sbin/httpd to bind to network port 8888
 Then you need to modify the port type.

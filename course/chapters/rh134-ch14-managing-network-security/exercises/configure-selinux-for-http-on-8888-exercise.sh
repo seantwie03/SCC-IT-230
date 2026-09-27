@@ -54,9 +54,8 @@ sudo vim /etc/httpd/conf/httpd.conf
 #@ pause 5
 /^Listen 8888
 #@ noenter
-C
+CListen 80
 #@ pause 5
-Listen 80
 #@ key escape
 :wq
 #! Undo the edit before removing the package, so nothing is left behind in /etc/httpd

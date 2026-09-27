@@ -30,9 +30,8 @@ sudo vim /etc/httpd/conf/httpd.conf
 #@ pause 5
 /^Listen 80
 #@ noenter
-C
+CListen 8888
 #@ pause 5
-Listen 8888
 #@ key escape
 :wq
 grep ^Listen /etc/httpd/conf/httpd.conf
@@ -62,8 +61,6 @@ clear
 sudo dnf install -y setroubleshoot-server
 clear
 sudo systemctl restart httpd.service
-#@ pause 5
-sudo grep 'sealert -l' /var/log/messages | tail -n 1
 #@ pause 8
 sudo sealert -a /var/log/audit/audit.log | less
 #@ pause 6
