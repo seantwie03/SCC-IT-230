@@ -44,3 +44,7 @@ src: ./chapters/rh134-ch14-managing-network-security/firewall-zones.md
 ---
 src: ./chapters/rh134-ch14-managing-network-security/firewall-configuration.md
 ---
+
+---
+src: ./chapters/rh134-ch14-managing-network-security/firewall-services.md
+---
