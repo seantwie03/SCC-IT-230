@@ -39,6 +39,7 @@ const { error, value: columnWidths } = guardAuthoring("two-cols-header", () => {
 <template>
     <div
         class="slidev-layout it230-two-cols-header"
+        :data-bottom="$slots.bottom ? 'true' : null"
         :data-horizontal="horizontal"
         :data-list-spacing="listSpacing"
         :data-vertical="vertical"
@@ -63,6 +64,9 @@ const { error, value: columnWidths } = guardAuthoring("two-cols-header", () => {
                 <slot name="right" />
             </div>
         </div>
+        <div v-if="$slots.bottom" class="it230-two-cols-header__bottom">
+            <slot name="bottom" />
+        </div>
     </div>
 </template>
 
@@ -73,8 +77,18 @@ const { error, value: columnWidths } = guardAuthoring("two-cols-header", () => {
     grid-template-rows: auto minmax(0, 1fr);
 }
 
+/*
+ * A third track is declared only when the slot is filled. Declaring it
+ * unconditionally would add a second row gap to every existing slide and take
+ * that space from the columns.
+ */
+.it230-two-cols-header[data-bottom="true"] {
+    grid-template-rows: auto minmax(0, 1fr) auto;
+}
+
 .it230-two-cols-header__header,
-.it230-two-cols-header__column {
+.it230-two-cols-header__column,
+.it230-two-cols-header__bottom {
     min-width: 0;
 }
 
@@ -85,7 +99,8 @@ const { error, value: columnWidths } = guardAuthoring("two-cols-header", () => {
 }
 
 .it230-two-cols-header__header :deep(> :last-child),
-.it230-two-cols-header__column :deep(> :last-child) {
+.it230-two-cols-header__column :deep(> :last-child),
+.it230-two-cols-header__bottom :deep(> :last-child) {
     margin-bottom: 0;
 }
 

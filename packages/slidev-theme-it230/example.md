@@ -109,6 +109,29 @@ vertical: evenly
 ![Three connected systems](./assets/image-right-example.svg)
 
 ---
+layout: two-cols-header
+---
+
+# Columns with one shared closing line
+
+::left::
+
+## Compare
+
+- Hold the parts that differ in their own column.
+
+::right::
+
+## Contrast
+
+- Let each column keep its own vertical rhythm.
+
+::bottom::
+
+The `bottom` slot runs the full width beneath both columns, for a line that
+belongs to neither one. A slide that omits it reserves no space for it.
+
+---
 layout: section
 ---
 
