@@ -84,6 +84,14 @@ const size = computed(() => props.size ?? selectSize(props.lines));
                     ></span
                 ></code
             >
+            <!-- Hidden captions reserve the height of the tallest click state. -->
+            <span
+                v-for="(captionState, captionIndex) in states"
+                :key="captionIndex"
+                aria-hidden="true"
+                class="it230-text-explainer__explanation it230-text-explainer__caption-sizer"
+                >{{ captionState.explanation }}</span
+            >
             <figcaption class="it230-text-explainer__explanation">
                 {{ state.explanation }}
             </figcaption>
@@ -163,17 +171,29 @@ const size = computed(() => props.size ?? selectSize(props.lines));
 }
 
 .it230-text-explainer__explanation {
+    /*
+     * Reserved space is the tallest caption, so a shorter one is centered in it
+     * and its own edges move between click states. Anchor the top instead: a
+     * caption grows downward and its first line stays where the eye left it.
+     */
+    align-self: start;
     background: var(--it230-color-surface);
     border: 1px solid var(--it230-color-accent-fill);
     border-radius: var(--it230-radius-sm);
     color: var(--it230-color-accent-text);
     font-size: 1.75rem;
     font-weight: var(--it230-font-weight-black);
+    grid-column: 1;
+    grid-row: 2;
     justify-self: center;
     line-height: 1.35;
     padding: var(--it230-space-2) var(--it230-space-3);
     text-align: center;
     white-space: pre-line;
+}
+
+.it230-text-explainer__caption-sizer {
+    visibility: hidden;
 }
 
 .it230-text-explainer--sm .it230-text-explainer__explanation {

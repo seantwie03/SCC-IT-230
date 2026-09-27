@@ -76,6 +76,8 @@ listSpacing: padded
 
 # Centered 60/40 comparison columns
 
+## Everything below the title follows `horizontal`
+
 ::left::
 
 ## Inspect
@@ -283,7 +285,7 @@ layout: center
     { line: 2, text: '*/2', explanation: 'Minutes, every second minute' },
     { line: 2, text: '*', occurrence: 2, explanation: 'Hours, 0 through 23' },
     { line: 2, text: '*', occurrence: 5, explanation: 'Day of week, 0 through 7' },
-    { line: 2, text: '/usr/local/bin/collect_stats', explanation: 'The command to run' },
+    { line: 2, text: '/usr/local/bin/collect_stats', explanation: 'The command to run\nwhen all five fields match' },
   ]"
 />
 

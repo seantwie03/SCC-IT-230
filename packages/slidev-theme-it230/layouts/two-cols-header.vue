@@ -92,6 +92,12 @@ const { error, value: columnWidths } = guardAuthoring("two-cols-header", () => {
     min-width: 0;
 }
 
+.it230-two-cols-header__header,
+.it230-two-cols-header__bottom {
+    display: flex;
+    flex-direction: column;
+}
+
 .it230-two-cols-header__columns {
     display: grid;
     gap: var(--it230-space-7);
@@ -125,6 +131,31 @@ const { error, value: columnWidths } = guardAuthoring("two-cols-header", () => {
 .it230-two-cols-header[data-horizontal="end"]
     .it230-two-cols-header__column
     :deep(> *) {
+    max-width: 100%;
+}
+
+/*
+ * The header and the closing band follow the same alignment as the columns, so
+ * the prop means one thing for the whole slide. As in the default layout, the
+ * leading heading keeps its left anchor and only what follows it moves.
+ */
+.it230-two-cols-header[data-horizontal="center"]
+    .it230-two-cols-header__header
+    :deep(> :is(h1, h2, h3):first-child ~ *),
+.it230-two-cols-header[data-horizontal="center"]
+    .it230-two-cols-header__bottom
+    :deep(> *) {
+    align-self: center;
+    max-width: 100%;
+}
+
+.it230-two-cols-header[data-horizontal="end"]
+    .it230-two-cols-header__header
+    :deep(> :is(h1, h2, h3):first-child ~ *),
+.it230-two-cols-header[data-horizontal="end"]
+    .it230-two-cols-header__bottom
+    :deep(> *) {
+    align-self: flex-end;
     max-width: 100%;
 }
 

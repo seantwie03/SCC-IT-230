@@ -15,13 +15,14 @@ the firewall material that surrounds it is planned for the first time.
 ## Answer in brief
 
 **Seven topic fragments** in one chapter directory, with **five exercises** and
-a deck of **43 slides**: 26 of the 30 source slides, the two entry slides, five
+a deck of **44 slides**: 26 of the 30 source slides, the two entry slides, five
 recording slides, two section slides, and the additions the instructor
 accepted. Thirty-eight render before the casts are recorded.
 
-Fragments 1, 2, and 3 are built: 20 slides on disk, plus the two entry slides.
-The recording slide for fragment 2 waits on its cast. Fragment 1 is built and
-signed off; its slide list below is what shipped rather than what was planned.
+Fragments 1 through 6 are built: 34 slides on disk, plus the two entry slides.
+The recording slides for fragments 2, 4, 5, and 6 wait on their casts.
+Fragment 1 is built and signed off; its slide list below is what shipped rather
+than what was planned.
 
 | # | Fragment                          | Section title                  | Slides | Exercises |
 |--:|-----------------------------------|--------------------------------|-------:|----------:|
@@ -30,10 +31,10 @@ signed off; its slide list below is what shipped rather than what was planned.
 | 3 | `firewall-configuration.md`       | Permanent and Runtime Config   |      3 |         0 |
 | 4 | `firewall-services.md`            | Open Services                  |      5 |         1 |
 | 5 | `firewall-ports.md`               | Open Ports                     |      5 |         1 |
-| 6 | `selinux-port-labels.md`          | SELinux Port Labels            |      6 |         1 |
+| 6 | `selinux-port-labels.md`          | SELinux Port Labels            |      7 |         1 |
 | 7 | `network-security-practice.md`    | Practice                       |      3 |         1 |
 |   | Entry file: cover and VM reminder |                                |      2 |           |
-|   | **Total**                         |                                | **43** |     **5** |
+|   | **Total**                         |                                | **44** |     **5** |
 
 Every slide is described under "Topic fragments", each with its own heading. An
 added slide carries a letter, such as 1.5a, so the numbering of the slides that
@@ -563,7 +564,7 @@ Components: `two-cols-header`, one approach per column, each with a
 stacked pair, because the slide's point is that the two orders reach the same
 place.
 
-### 4. `firewall-services.md` (5 slides)
+### 4. `firewall-services.md` (5 slides, built 2026-09-27)
 
 `routeAlias: firewall-services`. Exercise: Allow HTTP Traffic.
 
@@ -576,15 +577,20 @@ Components: `section`.
 ##### 4.2 Firewalld Services
 
 Source slide 20. `firewall-cmd --get-services`, whose real output is a single
-wall of about 400 service names, then where the definitions live:
-`/usr/lib/firewalld/services/*.xml` for the shipped ones and
-`/etc/firewalld/services/*.xml` for local ones.
+wall of service names, then where the definitions live:
+`/usr/lib/firewalld/services/` for the shipped ones and
+`/etc/firewalld/services/` for local ones.
 
-Components: `TerminalWindow` (fixed) with the output abridged to two lines and
-`...output omitted...`, which is this deck's convention and the only way the
-wall fits. Propose adding `firewall-cmd --get-services | wc -w` so the count is
-stated rather than implied, the way w06 counted booleans before that slide was
-rewritten.
+Built as two columns. The left holds a fixed `TerminalWindow` with the output
+abridged to two lines and `...output omitted...`, then
+`firewall-cmd --get-services | wc -w`, which answers 259 on the lab rather than
+the source's "about 400". The right holds `http.xml` as a titled `xml` block, so
+a service name and the file behind it sit beside each other. The two directory
+paths run the full width underneath, where they read as belonging to both
+columns rather than to the terminal.
+
+Components: `two-cols-header` with `leftWidth: 64` and `::bottom::`,
+`TerminalWindow` (fixed), fenced `xml`.
 
 ##### 4.3 Some Predefined Services
 
@@ -592,23 +598,29 @@ Source slide 21. Table of `ssh` 22/tcp, `http` 80/tcp, `https` 443/tcp,
 `cockpit` 9090/tcp, `dns` 53/tcp and udp, `dhcpv6-client` 546/udp, with a
 description column.
 
-Components: default layout, Markdown table. Presenter note: the three services
-already open on `servera` are `cockpit`, `dhcpv6-client`, and `ssh`, which the
-students saw on slide 2.4.
+Built as planned. The three services already open on `servera`, `cockpit`,
+`dhcpv6-client`, and `ssh`, close the slide as a line of text rather than a
+presenter note; the students last saw them on slide 2.4.
+
+Components: default layout, Markdown table.
 
 ##### 4.4 Exercise: Allow HTTP Traffic
 
 Source slide 22. From `workstation`, connect to the web server on `servera`.
-Seven steps: install `httpd`, start and enable it, attempt access, troubleshoot
-the failure, inspect the firewalld configuration, update it temporarily, then
-update it permanently.
+Seven steps: install `httpd` and write a page, enable and start it, request the
+page and watch it fail, inspect what the zone allows, allow the `http` service,
+request the page again, then keep the change with `--runtime-to-permanent`.
+
+Built with `exercises/allow-http-traffic-exercise.html` and its 75-line command
+file, both on disk. Every command and every line of output was traced on the lab
+first, and `servera` was restored afterwards.
 
 Components: `exercise`.
 
-##### 4.5 Exercise recording
+##### 4.5 Exercise recording (pending)
 
 Source slide 23 is the source's own demo slide, a GIF linked to asciinema. It
-becomes a recording slide. Command file from `allow_http_traffic.sh`.
+becomes a recording slide, recorded with the rest of the casts at the end. Command file from `allow_http_traffic.sh`.
 
 Components: `exercise` with `variant: recording`, `AsciinemaPlayer`. The command
 file's troubleshooting sequence is worth keeping exactly: it rules out SELinux
@@ -616,7 +628,7 @@ with `setenforce 0`, re-enables it, then moves the interface to `trusted` to
 prove the firewall is the blocker, then reverts with `--reload`. That is the
 method, not just the answer.
 
-### 5. `firewall-ports.md` (5 slides)
+### 5. `firewall-ports.md` (5 slides, built 2026-09-27)
 
 `routeAlias: firewall-ports`. Exercise: Configure Apache to Listen on 8888.
 
@@ -633,9 +645,13 @@ port, and one server may run several web services. Then
 `firewall-cmd --add-port=8888/tcp` and `--list-all` abridged to the line where
 `ports: 8888/tcp` now appears.
 
-Components: default layout with the bullets and a `TerminalWindow` (fixed). The
-source used `image-right` with `ports_hero.jpg`; without a license for that
-image the slide is text and terminal at full width.
+Built as planned: two bullets, a fixed `TerminalWindow` holding the verified
+`--add-port` and `--list-all` transcript, and a closing line that a port is
+written `port/protocol`. The source used `image-right` with `ports_hero.jpg`;
+without a license for that image the slide is text and terminal at full width.
+
+Components: default layout with `listSpacing: padded` and a `TerminalWindow`
+(fixed).
 
 ##### 5.3 Specifying a Port in a URL
 
@@ -651,25 +667,35 @@ it.
 
 ##### 5.4 Exercise: Configure Apache to Listen on 8888
 
-Source slide 27. Hosts `workstation` to `servera`. Four steps: configure
-firewalld to allow 8888/tcp, modify `httpd` to listen on 8888, attempt access on
-8888, and troubleshoot the failed service startup. The exercise is designed to
+Source slide 27. Hosts `workstation` to `servera`. The exercise is designed to
 fail, and the failure is SELinux.
+
+Built with five steps rather than the source's four, because the source's fourth
+step holds two separate ideas. Allow `8888/tcp` permanently and reload, point
+the `Listen` line at 8888, restart and read the bind failure, prove the cause by
+dropping to permissive and putting it straight back, then read the `sealert`
+report that names `semanage port -a`. It ends one command short of the fix,
+which is fragment 6's exercise.
+
+`exercises/configure-apache-to-listen-on-8888-exercise.html` and its 75-line
+command file are on disk. Every command was run on the lab first, and the
+failure output on slide 5.4's HTML is quoted from that run.
 
 Components: `exercise`.
 
-##### 5.5 Exercise recording
+##### 5.5 Exercise recording (pending)
 
-New slide. Command file from `configure_apache_to_listen_on_8888.sh`, which ends
-at the `sealert` diagnosis, "SELinux is preventing httpd from binding to port
-8888", and hands off to fragment 6.
+New slide, recorded with the rest of the casts at the end. Command file from
+`configure_apache_to_listen_on_8888.sh`, which ends at the `sealert` diagnosis,
+"SELinux is preventing /usr/sbin/httpd from name_bind access on the tcp_socket
+port 8888", and hands off to fragment 6.
 
 Components: `exercise` with `variant: recording`, `AsciinemaPlayer`.
 Correction: the file's header says "workstation ---> servera" but it never
 connects to `servera` before its `firewall-cmd` and `httpd.conf` steps. It needs
 `ssh student@servera` at the start.
 
-### 6. `selinux-port-labels.md` (6 slides)
+### 6. `selinux-port-labels.md` (7 slides, built 2026-09-27)
 
 `routeAlias: selinux-port-labels`. Exercise: Configure SELinux to Allow HTTP on
 8888. Covers the RHCSA objective "manage SELinux port labels".
@@ -683,17 +709,44 @@ fragment 5 gets fixed.
 
 Components: `section`.
 
-##### 6.2 Guess Who's Back, Back Again. SELinux
+##### 6.1a Guess Who's Back, Back Again. SELinux
+
+**Addition**, accepted 2026-09-27. Repeats w06 slide 10, "SELinux Policy", so
+the week opens on a shape the students already know, and puts a second diagram
+under it where the target is a port instead of a file. The left column keeps
+w06's rule bullets with "Or a port" added under Target Domain. The instructor
+took the title from 6.2 for this slide and made both diagrams concrete:
+`httpd` to `/web/index.html`, from w06's own exercise, and `httpd` to port 80.
+
+The `bottom` slot closes the slide in plain language: SELinux policy allows the
+`httpd` process to reach ports like 80 and 443. The draft carried the policy
+rule itself there, `allow httpd_t http_port_t:tcp_socket name_bind;`, and the
+instructor replaced it with the sentence. The rule stays under "Verification",
+where it is confirmed on the lab; its `name_bind` is what the students meet in
+the denial during fragment 5's exercise.
+
+Components: `two-cols-header` with `::bottom::`, `vertical: center`,
+`horizontal: center`, and two Mermaid diagrams drawn with Carbon icon shapes
+rather than w06's emoji: `carbon:gears` for the source, `carbon:document` and
+`carbon:plug` for the two targets, both at full scale.
+
+##### 6.2 (continues 6.1a)
 
 Source slide 28. SELinux controls what processes can access, ports are a target
 domain just as files are, and target domains need labels so source domains can
 reach them. Then "view port labels" with `semanage port -l | grep http` and its
 abridged output.
 
-Components: default layout with a `TerminalWindow` (fixed), or
-`two-cols-header` with the dial photograph on the right if that image gets a
-license. Correction: "whose" becomes "Who's". The output was confirmed on the
-lab and is quoted under "Verification".
+Built as text and terminal at full width: three bullets, the verified
+`semanage port -l | grep ^http` transcript, and a closing line that 8888 is on
+none of those lines. The dial photograph was not licensed, so there is no second
+column. Correction: "whose" becomes "Who's".
+
+The title now sits on 6.1a, so this slide carries none and reads as the second
+half of that one.
+
+Components: default layout with `listSpacing: padded` and a `TerminalWindow`
+(fixed).
 
 ##### 6.3 Labeling a Port
 
@@ -704,7 +757,14 @@ the protocol, and the port. It takes effect immediately, with no `restorecon`
 step, which is the contrast with w06's file labels. `semanage port -l -C` lists
 local changes and `-d` removes one.
 
-Components: `TextExplainer` (`lg`), `Callout type="warning"`.
+Built with the explainer over the bare command rather than a prompt line, so
+the text fits at the automatic `md` size; at `lg` with a prompt it ran off the
+slide. Three bullets close it: the rule applies with no `restorecon`, `-m`
+changes an existing label and `-d` removes one, and `semanage port -l -C` lists
+local changes alone. No `Callout`: the `-m` question is settled under
+"Verification" and reads as one bullet rather than a warning.
+
+Components: `TextExplainer` (automatic size).
 
 ##### 6.3a When SELinux Blocks the Other Direction
 
@@ -713,22 +773,34 @@ cover a service listening on a port, and `httpd_can_network_connect` covers the
 opposite case, a service making an outbound connection. One slide, so students
 know which tool answers which failure.
 
-Components: default layout, short list, `TerminalWindow` (fixed) with
-`getsebool httpd_can_network_connect`. Verify the default value on `servera`
-before writing it.
+Built as planned. `httpd_can_network_connect` is `off` on `servera`, confirmed
+on the lab.
+
+Components: default layout with `listSpacing: padded`, short list,
+`TerminalWindow` (fixed).
 
 ##### 6.4 Exercise: Configure SELinux to Allow HTTP on 8888
 
-Source slide 29. Hosts `workstation` to `servera`. Three steps: inspect the
-SELinux configuration, allow `http` on 8888, verify.
+Source slide 29. Hosts `workstation` to `servera`. Three steps in the source:
+inspect the SELinux configuration, allow `http` on 8888, verify.
+
+Built with a fourth step, the cleanup that decision 16 calls for. It disables and
+removes `httpd`, deletes the port label, closes the port and the `http` service
+in the firewall, and undoes the `Listen` edit before the package is removed, so
+`/etc/httpd` goes with the package instead of leaving an `.rpmsave` file behind.
+Verified on the lab: after the cleanup, `servera` has no `httpd`, no local port
+label, and a firewall allowing `cockpit`, `dhcpv6-client`, and `ssh`.
+
+`exercises/configure-selinux-for-http-on-8888-exercise.html` and its 68-line
+command file are on disk.
 
 Components: `exercise`.
 
-##### 6.5 Exercise recording
+##### 6.5 Exercise recording (pending)
 
-New slide. Command file from `configure_selinux_for_http_on_8888.sh`, whose
-final `curl http://servera:8888` runs from `workstation` and is the moment the
-whole chain pays off.
+New slide, recorded with the rest of the casts at the end. Command file from
+`configure_selinux_for_http_on_8888.sh`, whose `curl http://servera:8888` runs
+from `workstation` and is the moment the whole chain pays off.
 
 Components: `exercise` with `variant: recording`, `AsciinemaPlayer`.
 
@@ -855,17 +927,9 @@ today:
 
 Still to verify, before the slides are written:
 
-- `firewall-cmd --get-services` output and word count on RHEL 10.
-- `--list-all --zone=dmz`, `--zone=drop`, and `--zone=internal` output.
-- That moving `enp1s0` to `dmz` keeps `ssh` reachable, and that `--reload`
-  restores `public`.
-- The `systemctl status httpd` lines for a bind failure on 8888.
-- The `sealert` `bind_ports` plugin text on RHEL 10.
-- Whether `semanage port -m` can relabel a port the base policy already labels.
-  The cert guide says use `-m`; RHA says default port labels cannot be changed.
-  Slide 6.3's `Callout` waits on this.
-- The `Listen 80` line in `httpd.conf` on `httpd` 2.4.63.
-- Whether `serverb` needs `firewalld` started before exercise 5.
+- Whether `serverb` needs `firewalld` started before exercise 5. It is the only
+  question left; the zone output, the `dmz` session survival, and the `--reload`
+  restore were all answered while fragment 2 was built.
 
 Verified on `servera` while building fragments 2 and 3 (2026-09-26), and
 recorded here because the slides carry no presenter notes.
@@ -913,6 +977,58 @@ dropped:
 - The default value of `httpd_can_network_connect` on `servera`, for slide 6.3a.
 - The three layers named on slide 1.9 against RHEL 10: that `nftables` is the
   firewall core and `firewalld` the front end.
+
+Verified on `servera` while building fragment 4 (2026-09-27):
+
+- `firewall-cmd --get-services | wc -w` reports 259, and the list begins
+  `0-AD RH-Satellite-6 afp amanda-client amqp audit bacula bgp bitcoin ceph`.
+- `/usr/lib/firewalld/services/http.xml` holds the `short`, `description`, and
+  `port protocol="tcp" port="80"` elements quoted on slide 4.2.
+- With `http` closed, `curl http://servera` from `workstation` fails with
+  `curl: (7) Failed to connect to servera port 80 after 0 ms`, not the timeout
+  w05 shows, because `public` rejects rather than drops. See "Corrections".
+- `--add-service=http` then serves the page, and `--runtime-to-permanent`
+  keeps it across `--reload`.
+- `servera` was restored afterwards: `httpd` removed, `index.html` deleted, and
+  the runtime and permanent services back to `cockpit dhcpv6-client ssh`.
+
+Verified on `servera` while building fragments 5 and 6 (2026-09-27), with the
+host restored to that same baseline afterwards:
+
+- `httpd` is 2.4.63-1.el10 and its `Listen 80` line is line 47 of
+  `/etc/httpd/conf/httpd.conf`.
+- With `Listen 8888`, `systemctl restart httpd` fails and the status output
+  reads `(13)Permission denied: AH00072: make_sock: could not bind to address
+  0.0.0.0:8888` followed by `no listening sockets available, shutting down`.
+- The denial is `avc: denied { name_bind }` with `tcontext=...
+  unreserved_port_t`, which is the label 8888 carries by default.
+- `setenforce 0` lets the same restart succeed, which is the proof step in the
+  exercise. The host goes straight back to enforcing.
+- With `setroubleshoot-server` installed, `/var/log/messages` gets one summary
+  line: `SELinux is preventing /usr/sbin/httpd from name_bind access on the
+  tcp_socket port 8888`.
+- `sealert -a /var/log/audit/audit.log` reports `found 1 alerts` on this host,
+  and the `bind_ports` plugin leads at 92.2 confidence with
+  `semanage port -a -t PORT_TYPE -p tcp 8888`, listing `http_port_t` among the
+  types.
+- After `semanage port -a -t http_port_t -p tcp 8888`, the port joins the front
+  of the `http_port_t` line, `semanage port -l -C` shows that one row, `httpd`
+  starts, and `curl http://servera:8888` from `workstation` returns the page.
+- **`semanage port -m` does relabel a port the base policy already labels.**
+  `-m -t http_port_t -p tcp 8080` succeeds and shows up under `-l -C`, and `-d`
+  puts 8080 back to `http_cache_port_t`. `semanage port -a` on a defined port
+  prints `Port tcp/8009 already defined, modifying instead` and succeeds. The
+  cert guide's advice holds on RHEL 10; RHA's claim that default port labels
+  cannot be changed does not.
+- `getsebool httpd_can_network_connect` reports `off`, for slide 6.3a.
+- `sesearch -A -s httpd_t -t http_port_t -c tcp_socket` reports
+  `allow httpd_t http_port_t:tcp_socket name_bind;`, which is the rule behind
+  slide 6.1a's closing line. `setools-console` is not installed by default and
+  was removed again afterwards.
+- Restoring `Listen 80` before `dnf remove httpd` leaves no `/etc/httpd` at all.
+  Removing the package with the edit still in place leaves
+  `/etc/httpd/conf/httpd.conf.rpmsave` behind, which is why the cleanup undoes
+  the edit first.
 
 ## Authoring notes
 
@@ -1009,6 +1125,16 @@ Settled since this plan was written:
 25. **The zone-selection-logic addition is cut** (2026-09-26), for the same
     reason. Its one useful line, that an unassigned interface uses the default
     zone, moves onto 2.3.
+26. **`two-cols-header` gained an optional `bottom` slot** (2026-09-27), added
+    for slide 4.2 so a closing line can run the full width under both columns.
+    The slot renders nothing when a slide omits it, and the 75 published slides
+    on that layout were measured before and after to confirm they did not move.
+27. **`horizontal` now governs the whole `two-cols-header` slide** (2026-09-27),
+    not the columns alone. The instructor centered slide 6.1a and found its
+    subtitle and closing band still left-aligned. The leading heading keeps its
+    left anchor, as in the default layout, so only what follows it moves. Two
+    published slides shift: w01's "Console" and "Terminal", whose subtitles are
+    long enough that the change is a few pixels.
 15. **The drop-zone exercise ends with `firewall-cmd --reload`** rather than a
     hypervisor reboot (2026-09-25).
 16. **`httpd` is removed at the end of the week** on both `servera` and

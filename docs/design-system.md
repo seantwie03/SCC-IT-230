@@ -627,14 +627,18 @@ listSpacing: padded
 Use when two related ideas need to be compared beneath one full-width title or
 shared introduction. The default, `left`, `right`, and `bottom` slots stay in
 that source order. `vertical`, `horizontal`, and `listSpacing` have the same
-values and defaults as the default layout but apply independently within each
-column. `leftWidth` accepts a number greater than 0 and less than 100, defaults
-to `50`, and determines the remaining right-column share.
+values and defaults as the default layout. `vertical` and `listSpacing` apply
+independently within each column. `horizontal` governs the whole slide: the
+columns, whatever follows the leading heading in the header, and the closing
+band. As in the default layout, the leading heading keeps its left anchor, so a
+centered slide still reads from a title in the same place as every other slide.
+`leftWidth` accepts a number greater than 0 and less than 100, defaults to `50`,
+and determines the remaining right-column share.
 
 `bottom` is optional. It runs the full width beneath both columns, sized to its
 content, for a closing line that belongs to both columns rather than either one.
-The column alignment and list-spacing props do not reach it. A slide that omits
-the slot renders no element and no third grid track, so the columns keep the
+It follows `horizontal` and ignores `vertical` and `listSpacing`. A slide that
+omits the slot renders no element and no third grid track, so the columns keep the
 full height they had before the slot existed, and adding the slot to a slide
 takes that height from the columns. Do not use it for a running footer: the
 theme's footer is a separate component that every layout already gets.
@@ -735,7 +739,11 @@ reporting it; content that will not fit at `sm` overflows and
 `pnpm run check:slides` reports it, and the fix is to shorten or split it.
 
 Explanations appear beneath the text, so keep a block short enough that the
-caption stays near what it describes.
+caption stays near what it describes. The component reserves room for the
+tallest explanation across its click states, keeping the text in place when a
+caption wraps or contains a line break. The caption is anchored at the top of
+that space and grows downward, so its first line stays put as well. Only the
+active caption is exposed to assistive technology.
 
 ### `TerminalWindow`
 

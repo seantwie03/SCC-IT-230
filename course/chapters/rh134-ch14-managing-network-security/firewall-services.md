@@ -18,53 +18,10 @@ topicInfo:
 # Open Services
 
 ---
-layout: two-cols-header
-leftWidth: 64
----
-
-# Firewalld Services
-
-A service is a name for the ports one program needs
-
-::left::
-
-<TerminalWindow title="student@servera:~">
-
-```bash-session
-student@servera:~$ sudo firewall-cmd --get-services
-0-AD RH-Satellite-6 afp amanda-client
-amqp audit bacula bgp bitcoin ceph
-...output omitted...
-student@servera:~$ sudo firewall-cmd --get-services | wc -w
-259
-```
-
-</TerminalWindow>
-
-::right::
-
-```xml [http.xml]
-<service>
-  <short>WWW (HTTP)</short>
-  <description>HTTP is the
-  protocol used to serve
-  Web pages. ...</description>
-  <port protocol="tcp"
-        port="80"/>
-</service>
-```
-
-::bottom::
-
-Shipped definitions live in `/usr/lib/firewalld/services/`
-
-User-created services go in `/etc/firewalld/services/`
-
----
 
 # Some Predefined Services
 
-You open a service by name, and `firewalld` knows the ports
+Firewalld has `services` so you don't have to memorize ports
 
 | Service         | Ports          | What it is            |
 |-----------------|----------------|-----------------------|
@@ -75,6 +32,36 @@ You open a service by name, and `firewalld` knows the ports
 | `dns`           | 53/tcp, 53/udp | Name server           |
 
 The three already open on `servera` are `cockpit`, `dhcpv6-client`, and `ssh`
+
+---
+
+# Firewalld Services
+
+A service is a name for the ports one program needs
+
+<TerminalWindow title="student@servera:~">
+
+```bash-session
+student@servera:~$ sudo firewall-cmd --get-services
+cockpit dhcp dhcpv6-client dns dns-over-tls docker-registry factorio ftp git grafana http http3 https imap libvirt mosh
+minecraft mountd mqtt mysql nfs nfs3 ntp opentelemetry pop3 rpc-bind samba smtp ssh syncthing syslog telnet vnc-server
+...output omitted...
+```
+
+</TerminalWindow>
+
+Builtin definitions live in `/usr/lib/firewalld/services/`
+
+```xml [/usr/lib/firewalld/services/http.xml]
+<service>
+  <short>WWW (HTTP)</short>
+  <description>HTTP is the protocol used to serve Web pages. ...</description>
+  <port protocol="tcp" port="80"/>
+</service>
+```
+
+
+User-created services go in `/etc/firewalld/services/`
 
 ---
 layout: exercise
