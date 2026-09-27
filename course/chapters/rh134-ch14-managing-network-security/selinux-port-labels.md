@@ -92,13 +92,14 @@ listSpacing: padded
 # Labeling a Port
 
 <TextExplainer
+  size="md"
   :lines="[
     'semanage port -a -t http_port_t -p tcp 8888',
   ]"
   :steps="[
     { line: 1, text: 'semanage port', explanation: 'Manage SELinux Ports' },
     { line: 1, text: '-a', explanation: 'Add a port to the policy' },
-    { line: 1, text: '-t http_port_t', explanation: 'The label to give it, from the list httpd may bind to' },
+    { line: 1, text: '-t http_port_t', explanation: 'The label to give it' },
     { line: 1, text: '-p tcp', explanation: 'The protocol' },
     { line: 1, text: '8888', explanation: 'The port itself' },
   ]"
