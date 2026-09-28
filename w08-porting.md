@@ -275,6 +275,15 @@ as it does in week 1), and `check:exercises` (no violations) all pass for
 `prettier --check`. Every slide was captured at 1920x1080 and the study guide
 at 1280 wide.
 
+After the rename, `pnpm check` passed (exit 0), including the links check
+across 8 presentations. The built site was served from `dist/` and reviewed:
+the landing page shows Week 07 in pink and Week 08 in yellow; the Week 08 page
+lists "Midterm Exam" with the "IT-230 - Midterm Study Guide" link; the
+published study guide carries the injected yellow accent and does not scroll
+sideways at 375 CSS pixels; the deck's study guide link resolves (HTTP 200) and
+opens in a new tab; and the Canvas fragment links to the study guide at its
+public URL.
+
 ## Authoring notes
 
 - The study guide's link text on the week page is its declared title. The
@@ -290,6 +299,17 @@ guide before exam day.
 2. Added `"w08"` to the published-week list in `tests/site.test.mjs` (the
    production metadata test enumerates canonical weeks).
 3. Ran `pnpm check`.
+
+The first push (`726c6e1`) failed CI twice, deploying nothing: `check:slides`
+reported "the navigation controls are not where the theme styles them" for
+`course/w08.md` only. Locally the same check passed every time on the working
+clone, and failed once, not repeatably, on the first run in a brand-new clone.
+The check measures the controls straight after walking the deck, and w08 is
+short enough (seven slides, no clicks) to finish while a slow runner's page is
+still settling. `scripts/check-slides.mjs` now waits up to ten seconds for the
+controls and the current slide before measuring, and names the missing
+elements if they never appear. `check:slides -- --all` passes locally with the
+change; CI confirms it on the next push.
 
 ## Decisions
 

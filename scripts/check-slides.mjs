@@ -153,6 +153,26 @@ async function measureSlide(page, slide) {
  */
 async function measureControls(page) {
     await page.setViewportSize(PHONE_VIEWPORT);
+    // A short deck finishes its walk within a few seconds of loading, which on
+    // a slow runner can be before the page has settled: w08, seven slides with
+    // no clicks, failed here in CI while every longer deck passed. Wait, with a
+    // bound, for the controls and the current slide to exist. Markup the theme
+    // no longer recognizes still fails below once the wait runs out.
+    await page
+        .waitForFunction(
+            () =>
+                Boolean(
+                    document.querySelector(
+                        "#slide-container > div:has(> nav) nav > div .slidev-icon-btn",
+                    ),
+                ) &&
+                [...document.querySelectorAll(".slidev-layout")].some(
+                    (element) => element.getBoundingClientRect().height > 0,
+                ),
+            undefined,
+            { timeout: 10_000 },
+        )
+        .catch(() => {});
     // Slidev transitions the bar into place. Waiting out the animation would
     // work, but removing it makes the measurement immediate and exact. The
     // page is closed straight afterwards.
@@ -183,9 +203,12 @@ function measureControlsInPage({ clearance }) {
     );
     const bar = wrapper?.querySelector("nav > div");
     const button = bar?.querySelector(".slidev-icon-btn");
-    if (!wrapper || !container || !layout || !bar || !button)
+    const missing = Object.entries({ wrapper, container, layout, bar, button })
+        .filter(([, element]) => !element)
+        .map(([name]) => name);
+    if (missing.length)
         return [
-            "the navigation controls are not where the theme styles them, so the theme no longer styles them",
+            `the navigation controls are not where the theme styles them, so the theme no longer styles them (not found: ${missing.join(", ")})`,
         ];
 
     const problems = [];
