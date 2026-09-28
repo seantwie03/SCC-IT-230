@@ -138,11 +138,13 @@ The week lands after w06, which means:
 
 - **Entry file:** `course/w07-draft.md` while it is being built, renamed to
   `course/w07.md` at publication.
-- **Accent:** `red`, chosen by the instructor (2026-09-25). Two consequences to
-  watch while building: `red` is also the theme's danger colour, so check that
-  `DangerText` and `Callout type="danger"` still read as warnings beside it,
-  and the Carbon icons on slide 1.3 inherit the accent, so that diagram needs
-  re-rendering in red before class. The preview reviewed on 2026-09-25 was
+- **Accent:** `pink`, changed from `red` by the instructor (2026-09-28) so
+  that `red` is free for the Final and `yellow` for the Midterm. `red` was
+  chosen on 2026-09-25, with two consequences to watch while building: `red` is
+  also the theme's danger colour, so check that `DangerText` and
+  `Callout type="danger"` still read as warnings beside it, and the Carbon
+  icons on slide 1.3 inherit the accent, so that diagram needs re-rendering in
+  the current accent before class. The preview reviewed on 2026-09-25 was
   purple.
 - **Title:** "Managing Network Security".
 - **Cover agenda:** six lines, decided 2026-09-25. Seven fragments is one more
@@ -1077,7 +1079,8 @@ House style fragment 1 set, which the rest of the port follows:
 Proposed here, each reversible, listed so the instructor can say no:
 
 1. Seven fragments, split on the source's own section slides.
-2. Accent `red`, chosen by the instructor. See "Deck-level decisions".
+2. Accent `pink` (was `red` until 2026-09-28), chosen by the instructor. See
+   "Deck-level decisions".
 3. Source slide 1's hero image becomes a section slide.
 4. Source slides 3 and 4 gain titles.
 5. The zone table is rebuilt in our own words, trimmed to six rows.
