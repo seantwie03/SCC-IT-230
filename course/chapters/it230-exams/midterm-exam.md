@@ -28,6 +28,7 @@ Essentially a shortened RHCSA practice exam
 - Taken in the <AccentText>SCC Lab</AccentText> on the SCC VDI
 - <AccentText>Open "book"</AccentText>: Red Hat Academy website
 - <AccentText>Open notes</AccentText>: hand-written or hand-typed only
+- <AccentText>Camera ON</AccentText> with face centered in the frame
 
 <Callout type="danger">
 
@@ -47,7 +48,7 @@ listSpacing: padded
 
 - The professor cannot access your lab environment
 - Every item needs a screenshot that proves it is done
-  - Created a directory? Show a command that proves it exists
+  - Completed and item? Run a command that proves it and take a screenshot
   - Edited a file? Show the edited content
 
 <Callout type="danger">
