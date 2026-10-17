@@ -4,8 +4,11 @@ Three RHEL 10.0 environments carry this course. Students use two of them; the
 third exists so material can be verified and recorded before it ships.
 
 Everything below was measured on 2026-09-26 by running a read-only survey on
-`workstation`, `servera`, and `serverb` in each environment. Where a statement
-is about how an environment is built rather than what it reports, it says so.
+`workstation`, `servera`, and `serverb` in each environment. The instructor lab
+was rebuilt on 2026-10-17 to match the SCC lab's disk names, interface name,
+and key files, and was re-checked through `pnpm lab` the same day. Where a
+statement is about how an environment is built rather than what it reports, it
+says so.
 
 ## Why there are three
 
@@ -123,25 +126,23 @@ repository through `pnpm lab`. It exists so commands and their output can be
 checked against a real RHEL 10 host before they reach a slide, and so
 demonstrations can be recorded at presentation font sizes.
 
-Its disks are virtio, so the kernel names them `vda` through `vdd`. A udev rule
-adds an `sd` symlink for every device and partition:
+Its virtual hardware is laid out so the kernel names devices the way the SCC
+lab does. The disks sit on the SATA controller, so they are `sda` through `sdd`
+natively, and the lab interface sits directly on PCI bus 0 at slot 8, so it is
+`enp0s8`. Nothing renames anything: `/etc/udev/rules.d/` is empty, and no
+environment renames its interfaces.
 
-```text
-# KVM uses /dev/vd[a-z]. Demos and students use /dev/sd[a-z].
-# Create symlinks so drives are accessible via either vd[a-z] or sd[a-z].
-KERNEL=="vda", SYMLINK+="sda"
-...
-```
-
-That rule is the only file in `/etc/udev/rules.d/`. Nothing renames interfaces
-in any environment.
+Before the 2026-10-17 rebuild the disks were virtio, named `vda` through `vdd`
+with a udev rule adding `sd` symlinks, and the interface was `enp1s0`.
+Transcripts and recordings made before then show those names.
 
 ### How it is built
 
 From the same repository as the SCC lab, automated through
-[`create_vms.yml`](https://github.com/seantwie03/rhel-lab/blob/ansible_kickstart/create_vms.yml).
-Because it is rebuilt from source rather than exported once, it is the
-environment that most closely matches what the kickstart currently describes.
+[`create_vms.yml`](https://github.com/seantwie03/rhel-lab/blob/ansible_kickstart/create_vms.yml),
+which also sets the disk bus and the interface's PCI slot. Because it is
+rebuilt from source rather than exported once, it is the environment that most
+closely matches what the kickstart currently describes.
 
 ## Differences that reach the screen
 
@@ -157,7 +158,10 @@ hardware differs.
 |-------------|--------------------------------|---------------------------------------------------------------|
 | RHA         | `ens3`                         | `ens4`, disconnected, on the servers; `tun0` on `workstation` |
 | SCC         | `enp0s8`                       | `enp0s3`, the NAT link at 10.0.2.15                           |
-| Instructor  | `enp1s0`                       | none                                                          |
+| Instructor  | `enp0s8`                       | none                                                          |
+
+The instructor lab's interface sits where VirtualBox puts the SCC lab's, so the
+two share `enp0s8`. Only SCC also carries the NAT link.
 
 On RHA every interface also answers to altnames, so `ens3` is also `enp0s3`.
 That makes a bare `enp0s3` ambiguous: on RHA it is an altname for the lab
@@ -171,14 +175,17 @@ unconfigured spare, and moving them teaches nothing.
 
 ### Disks and partitioning
 
-Both student environments present SATA-style names. Only the instructor lab is
-virtio.
+All three environments present SATA-style names.
 
 | Environment | OS disk | Blank disks | OS layout |
 | --- | --- | --- | --- |
 | RHA | `sda` | `sdb`, `sdc`, `sdd` | 1 MB, a 200 MB EFI partition at `/boot/efi`, then root. No LVM, no swap partition, no separate `/boot` |
 | SCC | `sda` | `sdb`, `sdc`, `sdd` | 1 MB, 1 GB `/boot`, then LVM holding root and swap |
-| Instructor | `vda`, symlinked `sda` | `vdb`, `vdc`, `vdd`, symlinked `sdb`-`sdd` | Same as SCC |
+| Instructor | `sda` | `sdb`, `sdc`, `sdd` | Same as SCC |
+
+On the instructor lab each name stays on the same SATA port across reboots. The
+one part of `parted print` that still differs from SCC is the `Model:` line,
+which reads `ATA QEMU HARDDISK` there; VirtualBox reports its own model name.
 
 Every environment boots BIOS, yet the RHA image carries an EFI partition
 mounted at `/boot/efi`. A student running `lsblk` there sees an ESP that is not
@@ -218,7 +225,7 @@ both users reach every other host without one, so the difference is in how.
 | --- | --- | --- | --- |
 | RHA | `~/.ssh/lab_rsa`, named in `~/.ssh/config` | `without-password` | `/etc/.rht_authorized_keys` then `.ssh/authorized_keys` |
 | SCC | `~/.ssh/id_rsa` and `~/.ssh/lab_rsa` | `yes` | `.ssh/authorized_keys` |
-| Instructor | `~/.ssh/id_rsa` | `yes` | `.ssh/authorized_keys` |
+| Instructor | `~/.ssh/id_rsa` and `~/.ssh/lab_rsa`, one key under both names | `yes` | `.ssh/authorized_keys` |
 
 On RHA, `/root/.ssh/authorized_keys` is empty; root logins work because
 `/etc/.rht_authorized_keys` supplies the key. No environment runs an SSH agent,
@@ -237,6 +244,9 @@ demonstration recorded on the instructor lab may therefore need an install step
 that students do not, which is worth checking before assuming a missing package
 is a student problem.
 
+The gap is deliberate. The install step shows students the package name, and
+the machines in the RHCSA exam may not have these packages installed either.
+
 ## Writing material
 
 Material in this repository targets the SCC lab, and has to run on the
@@ -253,20 +263,23 @@ the week 7 material.
 
 - Look the interface up with `nmcli device status` rather than hard-coding it,
   and say which environment a transcript came from when it shows one. The SCC
-  and instructor labs already disagree with each other here.
+  and instructor labs agree on `enp0s8`, but RHA does not, and SCC also carries
+  a NAT link.
 - Use the blank `sdb` through `sdd` disks for storage work; leave the OS disk
-  alone. Device names differ between the two target environments.
-- Never name a key file. It is `id_rsa` on one and both `id_rsa` and `lab_rsa`
-  on the other.
+  alone. Both target environments name them the same way.
+- Never name a key file. SCC and the instructor lab carry both `id_rsa` and
+  `lab_rsa`, while RHA carries only `lab_rsa`, so `ssh` finds its key
+  differently in each.
 - Check a package is present before using it, or install it as a step. The
-  instructor lab starts leaner than the SCC lab.
+  instructor lab starts leaner than the SCC lab, on purpose.
 - Verify commands and output against a real host, per the `lab-verification`
   skill, and remember that `pnpm lab` reaches the instructor lab, which is the
   one students watch but never log in to.
 - Write `kitty-demo` command files for the instructor lab, because that is
-  where they are recorded and replayed. A student following along translates
-  the device names to their own machine, which is a habit worth building: the
-  names differ again the moment they open a Red Hat exercise.
+  where they are recorded and replayed. Its disk and interface names now match
+  the SCC lab, so a student following along types what the recording shows.
+  The names still differ the moment they open a Red Hat exercise, so the habit
+  of looking names up is still worth building.
 
 ## Re-surveying the labs
 
@@ -282,7 +295,8 @@ the other hosts, key files present, whether `sudo` prompts, the sudoers rules
 that decide it, password status for `root` and `student`, and the effective
 `sshd` settings.
 
-Both live in the `rhel-lab` repository alongside the build automation. Two
+They are meant to live in the `rhel-lab` repository beside the build
+automation, but as of 2026-10-17 neither is committed there, in any branch. Two
 cautions when running them. Run `sudo -k` before the `sudo` probe, or a cached
 timestamp from an earlier command reports passwordless when it is not. And
 paste them into a browser terminal in one piece: a dropped character during a
@@ -293,24 +307,29 @@ with its `END` marker.
 
 The SCC and instructor labs are under the instructor's control, so the
 differences between them, and between them and RHA, are choices rather than
-facts. In rough order of payoff:
+facts.
 
-**Cheap, no rebuild.** Rename the lab interface with a systemd `.link` file so
-the instructor lab stops being the only place called `enp1s0`; matching `ens3`
-in both student-facing directions would let one transcript serve every
-environment, which is the single biggest source of friction in this course.
-Standardise on one key name, `lab_rsa`, so material can name it. Set
-`PermitRootLogin prohibit-password` on SCC and the instructor lab to match RHA.
-Keep patch levels in step: RHA currently runs a newer kernel than the other
-two.
+**Done on 2026-10-17.** The instructor lab was rebuilt with its disks on the
+SATA bus, which retired the `sd` symlink rule; with its lab interface on PCI
+bus 0 at slot 8, so it is `enp0s8` like SCC's; and with `lab_rsa` beside
+`id_rsa` for both users. SCC's NAT link was not copied, because libvirt cannot
+give every VM the same 10.0.2.15 address the way VirtualBox does. The packages
+the student labs carry and the instructor lab does not stay uninstalled on
+purpose (see "Installed packages").
 
-**Needs a rebuild or a VM setting.** Attach the instructor lab's disks on a
-SATA or SCSI bus so they appear as `sda` through `sdd` natively, which would
-retire the `sd` symlink rule, a difference that exists only to paper over
-another difference. Add a second, disconnected interface to `servera` and
-`serverb` in both labs, matching RHA's `ens4`, so network configuration
-exercises have something safe to configure. Consider switching to UEFI, which
-would match both the RHA image's ESP and modern hardware.
+What remains, in rough order of payoff:
+
+**Cheap, no rebuild.** Matching RHA's `ens3` in both labs would let one
+transcript serve every environment, which is the single biggest source of
+friction in this course. Set `PermitRootLogin prohibit-password` on SCC and the
+instructor lab to match RHA. Keep patch levels in step: RHA currently runs a
+newer kernel than the other two.
+
+**Needs a rebuild or a VM setting.** Add a second, disconnected interface to
+`servera` and `serverb` in both labs, matching RHA's `ens4`, so network
+configuration exercises have something safe to configure. Consider switching to
+UEFI, which would match the RHA image's ESP and modern hardware, though every
+SCC host boots BIOS, so it would move the instructor lab away from SCC.
 
 **Judgement calls.** Making `sudo` prompt on SCC and the instructor lab would
 match RHA and catch assumptions early, at the cost of slowing every recording.

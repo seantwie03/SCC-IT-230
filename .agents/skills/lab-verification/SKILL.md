@@ -48,17 +48,20 @@ material and the **RHA lab** for Red Hat Academy's own exercises.
 `docs/lab-environments.md` describes all three and lists the differences that
 reach the screen.
 
-Two of those differences bite transcripts:
+Since the 2026-10-17 rebuild, the instructor lab's virtual hardware matches the
+SCC lab where it reaches transcripts most often:
 
-- **Interface names.** `enp1s0` here, `enp0s8` on the SCC lab, `ens3` on the
-  RHA lab. Nothing renames them; the hardware differs.
-- **Disk names.** `/dev/vd[a-z]` here and on the RHA lab, `/dev/sd[a-z]` on the
-  SCC lab. This lab also carries a udev rule adding `sd` symlinks, which the
-  student labs do not have.
+- **Interface names.** `enp0s8` here and on the SCC lab, `ens3` on the RHA lab.
+  The SCC lab also carries `enp0s3`, a NAT link this lab does not have. Nothing
+  renames them; the hardware differs.
+- **Disk names.** `/dev/sd[a-z]` in all three environments. Material and
+  recordings made before the rebuild show this lab's old `/dev/vd[a-z]` names
+  and `enp1s0`.
 
-So a name captured through `pnpm lab` is not always a name a student can type.
-Say which environment a transcript came from, or have the exercise look the
-name up first with `nmcli device status` or `lsblk`.
+So a name captured through `pnpm lab` is a name an SCC student can type, but
+not always one an RHA student can. Say which environment a transcript came
+from, or have the exercise look the name up first with `nmcli device status`
+or `lsblk`.
 
 ### When the lab is unreachable
 
