@@ -454,6 +454,17 @@ the letterbox around the rail still advances the deck when tapped, as the rest
 of the letterbox does. A phone whose landscape viewport is 16/9 has no
 letterbox to move into and keeps the bar at the bottom.
 
+Slides fade from one to the next. The theme sets `transition: fade-out` among
+its Slidev defaults, so every deck gets the same transition, with no movement,
+without declaring anything: the outgoing slide fades out, then the incoming
+slide fades in, in about 0.7 seconds altogether. It applies only between slides: click reveals and
+Magic Move animate as before, and exported PDFs are unaffected. Slidev does not
+consult the reader's motion preference itself, so the theme sets the transition
+duration to zero under `prefers-reduced-motion: reduce`, and those readers see
+an instant change. Do not override the transition per deck or per slide; a deck
+that moves differently from the others draws attention to the navigation rather
+than the content.
+
 Use ordinary fenced code for source and short commands. Use `TerminalWindow`
 when a terminal frame clarifies that the content is an interactive session or
 captured command output. Use a `bash-session` fence inside `TerminalWindow`
@@ -744,6 +755,73 @@ tallest explanation across its click states, keeping the text in place when a
 caption wraps or contains a line break. The caption is anchored at the top of
 that space and grows downward, so its first line stays put as well. Only the
 active caption is exposed to assistive technology.
+
+### `IconGrid`
+
+`IconGrid` shows a few short facts at a glance, each as an icon above a
+caption, laid out in a row or a grid. Use it for a concept slide that
+summarizes three to six facts about one thing, such as what defines a
+partition scheme or what swap space costs, where a bulleted list would read as
+a wall of text.
+
+```md
+<IconGrid
+  :items="[
+    { icon: 'time', caption: 'An older partitioning scheme' },
+    { icon: 'chip', caption: 'Used with BIOS firmware' },
+    { icon: 'ruler', caption: 'Disks up to 2 TiB' },
+  ]"
+/>
+```
+
+`items` is required and holds one to eight entries, each with an `icon` and a
+`caption`. `columns` is optional and accepts a whole number from 1 to 4. Without
+it, up to four items share one row, five or six become rows of three, and seven
+or eight rows of four, so no row is left with a single straggler beside a full
+one. A shorter last row is centered. A single item is valid when one icon and
+caption belong in a column of a `two-cols-header` slide.
+
+`clicks` reveals the items one per click, in order, using Slidev's `v-click`.
+A hidden item keeps its place, so the grid never shifts as items appear, and
+the footer's `NEXT` cue arrives with the last one. The reveal is all items in
+order: the component offers no per-item ordering or partial reveal, so a slide
+that needs one belongs in a click sequence of its own.
+
+```md
+<IconGrid
+  clicks
+  :items="[
+    { icon: 'dashboard', caption: 'Used when RAM is full' },
+    { icon: 'face-dissatisfied', caption: 'Much slower than RAM' },
+  ]"
+/>
+```
+
+Icons come from the Carbon set (Apache-2.0), the same pack Mermaid's icon
+shapes draw from. Name an icon by its bare Carbon name, such as `data-base` or
+`partition-collection`, without a `carbon:` prefix; names are listed at
+<https://icon-sets.iconify.design/carbon/>. The component loads the set through
+the same dynamic import as the Mermaid setup, so the 1.1 MB chunk is fetched
+once per deck and only by a deck that uses an icon. Until it arrives each icon
+box renders empty at its final size, so nothing shifts when the icons appear.
+
+Icons render in the accent fill, the bright shade the theme gives list markers,
+the title rule, and borders. They are decorative: they are hidden from
+assistive technology, and the caption must carry the meaning on its own. Write
+captions as short phrases, about five words, in plain text. The grid renders as
+a list inside a wrapper, so it is one body item in the `default` and
+`two-cols-header` layouts and is unaffected by `listSpacing: padded`.
+
+A missing icon or caption, an item count outside one to eight, a `columns`
+value outside 1 to 4, and an icon name the Carbon set does not contain are
+authoring errors. Names are checked as soon as the set loads, and an unknown
+name reports where to look names up, or tells the author to drop a `carbon:`
+prefix.
+
+Do not use it for steps that happen in order, which belong in an ordered list,
+a click sequence, or the `exercise` layout's workflow. Do not use it to
+decorate an ordinary list, or for captions long enough to need a sentence;
+those belong in body text.
 
 ### `TerminalWindow`
 

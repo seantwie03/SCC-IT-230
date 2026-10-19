@@ -171,6 +171,20 @@
         0 0.125rem 0.25rem rgb(0 0 6 / 10%), 0 1.2rem 3rem rgb(0 0 6 / 10%);
 }
 
+/*
+ * Slides fade from one to the next, a theme default set in package.json.
+ * Slidev drives every slide transition from this one variable and does not
+ * consult the reader's motion preference itself, so a reader who asks the
+ * system to reduce motion gets an instant change instead. `html:root` outranks
+ * the `:root` rule Slidev declares the variable in, whichever stylesheet loads
+ * last.
+ */
+@media (prefers-reduced-motion: reduce) {
+    html:root {
+        --slidev-transition-duration: 0s;
+    }
+}
+
 html,
 body,
 #app {

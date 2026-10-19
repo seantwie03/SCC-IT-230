@@ -27,7 +27,8 @@
             "favicon": "./favicon.svg",
             "lineNumbers": true,
             "preloadImages": false,
-            "selectable": true
+            "selectable": true,
+            "transition": "fade-out"
         }
     },
     "dependencies": {

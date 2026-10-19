@@ -192,7 +192,8 @@ section for the concept it covers ("Physical Volumes"), not one procedure
 
 Keep a slide focused on one concept or tightly related procedure. Use
 `TerminalWindow` for terminal interaction, `TextExplainer` for the anatomy of a
-command, configuration line, or captured output, and `Callout` for a genuinely
+command, configuration line, or captured output, `IconGrid` for three to six
+short facts that summarize a concept at a glance, and `Callout` for a genuinely
 supplemental caveat. Use a click sequence only when progressive disclosure
 helps explain a procedure; do not hide unrelated commands in one sequence.
 

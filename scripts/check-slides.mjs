@@ -69,7 +69,14 @@ await withBrowser(async (browser) => {
             root,
         });
         try {
-            const page = await browser.newPage({ viewport: VIEWPORT });
+            // The theme fades between slides, and turns the fade off for a
+            // reader who prefers reduced motion. Checking as that reader
+            // keeps each navigation instant; navigate() also waits out any
+            // transition, so a measurement never lands on the outgoing slide.
+            const page = await browser.newPage({
+                viewport: VIEWPORT,
+                reducedMotion: "reduce",
+            });
             const diagnostics = collectPageDiagnostics(page);
             await page.goto(server.url, { waitUntil: "networkidle" });
             await page.waitForFunction(() => Boolean(window.__slidev__?.nav), {
@@ -264,6 +271,18 @@ async function navigate(page, slide, clicks) {
             window.__slidev__.nav.currentSlideNo === no &&
             window.__slidev__.nav.clicks === click,
         [slide, clicks],
+        { timeout: 15_000 },
+    );
+    // During a slide transition the outgoing slide stays in the page beside
+    // the incoming one, and measureInPage() would pick whichever comes first.
+    // Vue marks both with `<name>-leave-active` or `<name>-enter-active`
+    // until the transition ends, whatever the configured transition is.
+    await page.waitForFunction(
+        () =>
+            !document.querySelector(
+                '.slidev-page[class*="-leave-active"], .slidev-page[class*="-enter-active"]',
+            ),
+        undefined,
         { timeout: 15_000 },
     );
     await page.waitForTimeout(90);

@@ -1,0 +1,780 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Install RHEL Manually Exercise</title>
+        <style>
+            :root {
+                color-scheme: light;
+                --it230-color-canvas: #fafafb;
+                --it230-color-surface: #ffffff;
+                --it230-color-raised: #ebebed;
+                --it230-color-line: #b9b9bf;
+                --it230-color-text: #25252b;
+                --it230-color-muted: #55555b;
+                --it230-color-accent-text: #0461be;
+                --it230-color-accent-fill: #3584e4;
+                --it230-color-accent-wash: rgb(53 132 228 / 14%);
+                --it230-color-warning: #905400;
+                --it230-font-sans:
+                    "Lato", "Segoe UI", "Noto Sans", "Liberation Sans",
+                    sans-serif;
+                --it230-font-mono:
+                    "Cascadia Code", "JetBrains Mono", "Noto Sans Mono",
+                    "DejaVu Sans Mono", monospace;
+                --it230-space-1: 0.25rem;
+                --it230-space-2: 0.5rem;
+                --it230-space-3: 0.75rem;
+                --it230-space-4: 1rem;
+                --it230-space-5: 1.5rem;
+                --it230-space-6: 2rem;
+                --it230-space-7: 3rem;
+                --it230-radius-sm: 0.5rem;
+                --it230-radius-md: 0.75rem;
+                --it230-radius-lg: 0.9375rem;
+                --it230-shadow-raised:
+                    0 0.125rem 0.25rem rgb(0 0 6 / 10%),
+                    0 1.2rem 3rem rgb(0 0 6 / 10%);
+                line-height: 1.6;
+                color: var(--it230-color-text);
+                background: var(--it230-color-canvas);
+            }
+
+            * {
+                box-sizing: border-box;
+            }
+
+            body {
+                min-width: 20rem;
+                margin: 0;
+                color: var(--it230-color-text);
+                background:
+                    radial-gradient(
+                        circle at 95% 5%,
+                        var(--it230-color-accent-wash),
+                        transparent 40%
+                    ),
+                    radial-gradient(
+                            circle,
+                            rgb(0 0 6 / 2%) 0 0.035rem,
+                            transparent 0.04rem
+                        )
+                        0 0 / 0.22rem 0.22rem,
+                    linear-gradient(
+                        145deg,
+                        var(--it230-color-surface),
+                        #f5f6f8 72%
+                    );
+                /*
+                 * The accent wash is pinned to the viewport so it stays in the
+                 * corner as a long exercise scrolls under it. Only the wash is
+                 * fixed; the dot texture and the base gradient still travel
+                 * with the content.
+                 */
+                background-attachment: fixed, scroll, scroll;
+                font-family: var(--it230-font-sans);
+                font-feature-settings:
+                    "liga" 0,
+                    "calt" 0;
+                font-variant-ligatures: none;
+                text-rendering: optimizeLegibility;
+            }
+
+            ::selection {
+                color: var(--it230-color-text);
+                background: color-mix(
+                    in srgb,
+                    var(--it230-color-accent-fill) 22%,
+                    white
+                );
+            }
+
+            :focus-visible {
+                border-radius: var(--it230-radius-sm);
+                outline: 0.18rem solid var(--it230-color-accent-fill);
+                outline-offset: 0.16rem;
+            }
+
+            a {
+                color: var(--it230-color-accent-text);
+                text-decoration: underline;
+                text-decoration-thickness: 0.08em;
+                text-underline-offset: 0.16em;
+            }
+
+            a:hover {
+                text-decoration-thickness: 0.14em;
+            }
+
+            .skip-link {
+                position: fixed;
+                z-index: 10;
+                top: var(--it230-space-3);
+                left: var(--it230-space-3);
+                padding: var(--it230-space-3) var(--it230-space-4);
+                border: 1px solid var(--it230-color-line);
+                border-radius: var(--it230-radius-sm);
+                background: var(--it230-color-surface);
+                box-shadow: var(--it230-shadow-raised);
+                transform: translateY(-200%);
+            }
+
+            .skip-link:focus {
+                transform: translateY(0);
+            }
+
+            .site-header {
+                position: sticky;
+                z-index: 5;
+                top: 0;
+                border-bottom: 1px solid var(--it230-color-line);
+                background: color-mix(
+                    in srgb,
+                    var(--it230-color-surface) 92%,
+                    transparent
+                );
+                box-shadow: 0 0.125rem 0.35rem rgb(0 0 6 / 8%);
+                backdrop-filter: blur(0.75rem);
+            }
+
+            .header-inner,
+            main,
+            footer {
+                width: min(64rem, calc(100% - 2rem));
+                margin-inline: auto;
+            }
+
+            .header-inner {
+                display: flex;
+                min-height: 3.5rem;
+                align-items: center;
+                gap: var(--it230-space-3);
+            }
+
+            .header-inner p {
+                margin: 0;
+            }
+
+            /*
+             * The course identity is chrome, not prose, so it keeps the
+             * surrounding text color and takes its underline on hover. It
+             * appears in the header and again in the footer, and both lead to
+             * the course home.
+             */
+            .header-inner a,
+            footer a {
+                color: inherit;
+                text-decoration: none;
+            }
+
+            .header-inner a:hover,
+            footer a:hover {
+                text-decoration: underline;
+            }
+
+            .course-code,
+            .course-code a {
+                color: var(--it230-color-accent-text);
+                font-weight: 800;
+                letter-spacing: 0.04em;
+            }
+
+            .course-code {
+                display: flex;
+                align-items: center;
+            }
+
+            .course-code::after {
+                content: "";
+                display: inline-block;
+                width: 1px;
+                height: 1.1em;
+                margin-left: var(--it230-space-3);
+                background: var(--it230-color-line);
+            }
+
+            h1,
+            h2 {
+                line-height: 1.2;
+            }
+
+            h1 {
+                max-width: 30ch;
+                margin: 0;
+                font-size: clamp(2rem, 6vw, 3rem);
+            }
+
+            main {
+                padding-block: clamp(2.1rem, 5.6vw, 3.85rem)
+                    var(--it230-space-7);
+                scroll-margin-top: 4rem;
+            }
+
+            .exercise-document {
+                overflow: hidden;
+                border: 1px solid var(--it230-color-line);
+                border-radius: var(--it230-radius-lg);
+                background: var(--it230-color-surface);
+                box-shadow: var(--it230-shadow-raised);
+            }
+
+            .exercise-header {
+                padding: clamp(1.5rem, 4vw, 2.25rem);
+                border-bottom: 0.25rem solid var(--it230-color-accent-fill);
+                background: var(--it230-color-accent-wash);
+            }
+
+            .exercise-kicker {
+                margin: 0 0 var(--it230-space-2);
+                color: var(--it230-color-accent-text);
+                font-size: 0.82rem;
+                font-weight: 800;
+                letter-spacing: 0.06em;
+                text-transform: uppercase;
+            }
+
+            .overview {
+                padding: var(--it230-space-5);
+                border-bottom: 1px solid var(--it230-color-line);
+            }
+
+            .overview h2,
+            .step h2 {
+                margin: 0 0 var(--it230-space-4);
+                padding-left: var(--it230-space-3);
+                border-left: 0.22rem solid var(--it230-color-accent-fill);
+                font-size: clamp(1.35rem, 3vw, 1.65rem);
+            }
+
+            .requirements {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+                margin: var(--it230-space-5) 0;
+                border-block: 1px solid var(--it230-color-line);
+            }
+
+            .requirements div {
+                padding-block: var(--it230-space-3);
+            }
+
+            .requirements dt {
+                color: var(--it230-color-muted);
+                font-weight: 700;
+            }
+
+            .requirements dd {
+                margin: 0.25rem 0 0;
+            }
+
+            .steps {
+                margin: 0;
+                padding: 0;
+                list-style: none;
+                counter-reset: exercise-step;
+            }
+
+            .step {
+                counter-increment: exercise-step;
+                padding: var(--it230-space-5);
+                border-bottom: 1px solid var(--it230-color-line);
+            }
+
+            .step:last-child {
+                border-bottom: 0;
+            }
+
+            .step h2::before {
+                content: "Step " counter(exercise-step);
+                display: block;
+                margin-bottom: var(--it230-space-1);
+                color: var(--it230-color-accent-text);
+                font-size: 0.72rem;
+                font-weight: 800;
+                letter-spacing: 0.06em;
+                text-transform: uppercase;
+            }
+
+            code,
+            kbd {
+                font-family: var(--it230-font-mono);
+                font-weight: 600;
+            }
+
+            code:not(pre code) {
+                overflow-wrap: anywhere;
+                color: var(--it230-color-accent-text);
+            }
+
+            kbd {
+                padding: 0.1rem 0.3rem;
+                color: var(--it230-color-text);
+                background: var(--it230-color-raised);
+                border: 1px solid var(--it230-color-line);
+                border-radius: 0.25rem;
+                box-shadow: 0 1px 0 var(--it230-color-line);
+            }
+
+            pre {
+                max-width: 100%;
+                padding: var(--it230-space-4);
+                overflow-x: auto;
+                overflow-wrap: anywhere;
+                color: var(--it230-color-text);
+                border: 1px solid var(--it230-color-line);
+                border-radius: var(--it230-radius-md);
+                background: #f7f7f8;
+                box-shadow: inset 0 1px 0 rgb(255 255 255 / 80%);
+                tab-size: 4;
+                white-space: pre-wrap;
+            }
+
+            pre code {
+                font-size: 0.95rem;
+            }
+
+            .note,
+            .warning {
+                margin-block: var(--it230-space-5);
+                padding: var(--it230-space-3) var(--it230-space-4);
+                border-left: 0.3rem solid;
+            }
+
+            .note {
+                background: var(--it230-color-accent-wash);
+                border-color: var(--it230-color-accent-fill);
+            }
+
+            .note strong {
+                color: var(--it230-color-accent-text);
+            }
+
+            .warning {
+                background: color-mix(
+                    in srgb,
+                    var(--it230-color-warning) 9%,
+                    var(--it230-color-canvas)
+                );
+                border-color: var(--it230-color-warning);
+            }
+
+            .warning strong {
+                color: var(--it230-color-warning);
+            }
+
+            .note strong,
+            .warning strong {
+                display: block;
+            }
+
+            .exercise-navigation {
+                margin-top: var(--it230-space-6);
+                padding-top: var(--it230-space-4);
+            }
+
+            .exercise-navigation a {
+                font-weight: 700;
+            }
+
+            footer {
+                padding-block: 0 var(--it230-space-7);
+                color: var(--it230-color-muted);
+            }
+
+            footer::before {
+                display: block;
+                width: 100%;
+                height: 0.125rem;
+                margin-bottom: 0.35rem;
+                border-radius: 999px;
+                background: linear-gradient(
+                    90deg,
+                    var(--it230-color-line) 0 52%,
+                    color-mix(
+                            in srgb,
+                            var(--it230-color-accent-fill) 25%,
+                            transparent
+                        )
+                        100%
+                );
+                content: "";
+            }
+
+            footer p {
+                margin: 0;
+            }
+
+            @media (max-width: 32rem) {
+                .header-inner,
+                main,
+                footer {
+                    width: min(100% - 1.5rem, 64rem);
+                }
+
+                .header-inner {
+                    min-height: 3.25rem;
+                }
+
+                .overview,
+                .step {
+                    padding: var(--it230-space-4);
+                }
+
+                h1 {
+                    overflow-wrap: anywhere;
+                }
+            }
+
+            @media print {
+                :root {
+                    background: #ffffff;
+                }
+
+                body {
+                    background: #ffffff;
+                }
+
+                .skip-link,
+                .site-header {
+                    display: none;
+                }
+
+                main {
+                    width: 100%;
+                    padding: 0;
+                }
+
+                .exercise-document {
+                    border: 0;
+                    box-shadow: none;
+                }
+
+                .step {
+                    break-inside: avoid;
+                }
+            }
+        </style>
+    </head>
+
+    <body>
+        <a class="skip-link" href="#main-content">Skip to exercise</a>
+
+        <header class="site-header">
+            <div class="header-inner">
+                <p class="course-code"><a href="../../../">IT-230</a></p>
+                <p class="course-title">
+                    <a href="../../../">Linux Administration</a>
+                </p>
+            </div>
+        </header>
+
+        <main id="main-content">
+            <article class="exercise-document">
+                <header class="exercise-header">
+                    <p class="exercise-kicker">Exercise</p>
+                    <h1>Install RHEL Manually Exercise</h1>
+                </header>
+
+                <section class="overview" aria-labelledby="overview-heading">
+                    <h2 id="overview-heading">Task</h2>
+                    <p>
+                        Create a new VirtualBox virtual machine named
+                        <code>serverc</code> on your VDI and install Red Hat
+                        Enterprise Linux 10.0 on it by hand from the DVD ISO,
+                        with standard partitions and the lab's network settings.
+                        The values to use are on the "Install Settings for
+                        serverc" slide; this page repeats them except for the
+                        passwords, which are the lab's usual ones.
+                    </p>
+                    <aside class="note">
+                        <strong>Start the installer early</strong>
+                        On the VDI, the installer takes a long time to load and
+                        install. In class, you create the virtual machine and
+                        select the Install entry (steps 1 and 2) at the start of
+                        the topic, so it loads while the slides are presented;
+                        the remaining steps come after them.
+                    </aside>
+
+                    <dl class="requirements">
+                        <div>
+                            <dt>Host</dt>
+                            <dd>
+                                A new VirtualBox virtual machine,
+                                <code>serverc</code>, on your VDI
+                            </dd>
+                        </div>
+                        <div>
+                            <dt>Installation media</dt>
+                            <dd>
+                                <code
+                                    >C:\Temp\VMs\IT-230\rhel-10.0-x86_64-dvd.iso</code
+                                >
+                            </dd>
+                        </div>
+                        <div>
+                            <dt>Prerequisite</dt>
+                            <dd>None</dd>
+                        </div>
+                    </dl>
+                </section>
+
+                <ol class="steps">
+                    <li class="step">
+                        <h2>
+                            Create the serverc virtual machine in VirtualBox
+                        </h2>
+                        <p>
+                            In VirtualBox Manager, click <strong>New</strong>.
+                            Name the machine <code>serverc</code>, set
+                            <strong>VM Folder</strong> to
+                            <code>C:\Temp\VMs\IT-230\IT-230</code>, and select
+                            the DVD ISO above as its <strong>ISO Image</strong>.
+                            Leave
+                            <strong
+                                >Proceed with Unattended Installation</strong
+                            >
+                            unchecked: this exercise installs by hand.
+                        </p>
+                        <p>
+                            Under <strong>Specify virtual hardware</strong>,
+                            give it 2048 MB of memory and 2 CPUs, and leave
+                            <strong>Use EFI</strong> unchecked. Under
+                            <strong>Specify virtual hard disk</strong>, create a
+                            new 10 GB virtual hard disk; VirtualBox places it in
+                            the VM's folder, at
+                            <code
+                                >C:\Temp\VMs\IT-230\IT-230\serverc\serverc.vdi</code
+                            >. Click <strong>Finish</strong>. 2048 MB is enough
+                            for the installer and leaves room on the VDI for
+                            <code>workstation</code> and <code>servera</code>.
+                        </p>
+                        <p>
+                            Before starting it, open its
+                            <strong>Settings</strong> and then
+                            <strong>Network</strong>. Leave
+                            <strong>Adapter 1</strong> attached to
+                            <strong>NAT</strong>. Enable
+                            <strong>Adapter 2</strong>, attach it to
+                            <strong>Internal Network</strong>, and set its name
+                            to <code>intnet</code>, the same network as Adapter
+                            2 of <code>servera</code>.
+                        </p>
+                        <aside class="note">
+                            <strong>Why two adapters</strong>
+                            Adapter 1 reaches the internet through VirtualBox's
+                            NAT. Adapter 2 joins the private network that
+                            <code>servera</code> and <code>workstation</code>
+                            share, where the lab's addresses live.
+                        </aside>
+                    </li>
+                    <li class="step">
+                        <h2>Boot it from the RHEL 10.0 DVD</h2>
+                        <p>
+                            Start <code>serverc</code>. At the boot menu, select
+                            <strong
+                                >Install Red Hat Enterprise Linux 10.0</strong
+                            >. On the welcome screen, keep English (United
+                            States) and click <strong>Continue</strong>. The
+                            <strong>Installation Summary</strong> opens: every
+                            later step starts from it, and
+                            <strong>Done</strong> returns you to it.
+                        </p>
+                        <aside class="warning">
+                            <strong>Mouse drift</strong>
+                            During the installation you may see two mouse
+                            pointers, the VDI's and the virtual machine's, that
+                            do not line up. Move slowly and click where the
+                            virtual machine's own pointer is.
+                        </aside>
+                    </li>
+                    <li class="step">
+                        <h2>Set the time zone and software selection</h2>
+                        <p>
+                            In <strong>Time &amp; Date</strong>, set
+                            <strong>Region</strong> to <strong>Etc</strong> and
+                            <strong>City</strong> to
+                            <strong>Coordinated Universal Time</strong>. In
+                            <strong>Software Selection</strong>, choose
+                            <strong>Minimal Install</strong>, which installs
+                            only what a server needs to run.
+                        </p>
+                    </li>
+                    <li class="step">
+                        <h2>
+                            Create standard partitions for /boot, swap, and /
+                        </h2>
+                        <p>
+                            Open <strong>Installation Destination</strong>,
+                            select the 10 GiB disk, choose
+                            <strong>Custom</strong> under
+                            <strong>Storage Configuration</strong>, and click
+                            <strong>Done</strong>. On the
+                            <strong>Manual Partitioning</strong> screen, set
+                            <strong
+                                >New mount points will use the following
+                                partitioning scheme</strong
+                            >
+                            to <strong>Standard Partition</strong> before adding
+                            anything; the default is LVM, which next week
+                            covers. Then click <strong>+</strong> to add each
+                            mount point:
+                        </p>
+                        <ul>
+                            <li>
+                                <code>biosboot</code>: 1 MiB, which Anaconda
+                                lists as BIOS Boot
+                            </li>
+                            <li>
+                                <code>/boot</code>: 1 GiB, file system
+                                <code>xfs</code>
+                            </li>
+                            <li>
+                                <code>swap</code>: 1 GiB, file system
+                                <code>swap</code>
+                            </li>
+                            <li>
+                                <code>/</code>: leave the size empty so it takes
+                                the rest of the disk, file system
+                                <code>xfs</code>
+                            </li>
+                        </ul>
+                        <p>
+                            Check that each one shows
+                            <strong>Standard Partition</strong> as its
+                            <strong>Device Type</strong>, then click
+                            <strong>Done</strong>. The
+                            <strong>Summary of Changes</strong> dialog lists a
+                            new GPT partition table and the four partitions;
+                            click <strong>Accept Changes</strong>.
+                        </p>
+                        <aside class="note">
+                            <strong>Why a BIOS boot partition</strong>
+                            The VM boots with BIOS, since
+                            <strong>Use EFI</strong> is unchecked, and Anaconda
+                            gives the disk a GPT partition table. That
+                            combination needs a small BIOS boot partition to
+                            hold part of the boot loader.
+                        </aside>
+                    </li>
+                    <li class="step">
+                        <h2>Configure the network and host name</h2>
+                        <p>
+                            Open <strong>Network &amp; Host Name</strong>. Two
+                            interfaces are listed: <code>enp0s3</code> is
+                            Adapter 1 (NAT) and <code>enp0s8</code> is Adapter 2
+                            (the lab network).
+                        </p>
+                        <ul>
+                            <li>
+                                <code>enp0s3</code> is already connected and
+                                gets its address automatically.
+                            </li>
+                            <li>
+                                Select <code>enp0s8</code> and click
+                                <strong>Configure</strong>. On the
+                                <strong>IPv4 Settings</strong> tab, set
+                                <strong>Method</strong> to
+                                <strong>Manual</strong>, click
+                                <strong>Add</strong>, and enter the address
+                                <code>172.25.250.12</code> with netmask
+                                <code>24</code>. Leave the gateway and
+                                <strong>DNS servers</strong> empty, click
+                                <strong>Save</strong>, and turn the interface
+                                on.
+                            </li>
+                            <li>
+                                Set <strong>Host Name</strong> to
+                                <code>serverc</code> and click
+                                <strong>Apply</strong>.
+                            </li>
+                        </ul>
+                        <aside class="note">
+                            <strong>No gateway on the lab network</strong>
+                            The internal network has no router, so a gateway
+                            there would point at nothing. Internet traffic goes
+                            out through <code>enp0s3</code> instead.
+                        </aside>
+                    </li>
+                    <li class="step">
+                        <h2>
+                            Enable root and create the student administrator
+                        </h2>
+                        <p>
+                            In <strong>Root Account</strong>, select
+                            <strong>Enable root account</strong>, set the lab's
+                            root password, and select
+                            <strong>Allow root SSH login with password</strong>.
+                            RHEL 10 disables <code>root</code> unless you enable
+                            it, and refuses password logins as
+                            <code>root</code> over SSH unless you allow them.
+                        </p>
+                        <p>
+                            In <strong>User Creation</strong>, enter the full
+                            name <code>Student User</code> and user name
+                            <code>student</code>, select
+                            <strong
+                                >Add administrative privileges to this user
+                                account (wheel group membership)</strong
+                            >, keep
+                            <strong
+                                >Require a password to use this account</strong
+                            >
+                            selected, and set the lab's student password. An
+                            administrator is added to the
+                            <code>wheel</code> group and can use
+                            <code>sudo</code>.
+                        </p>
+                        <aside class="note">
+                            <strong>Weak passwords need Done twice</strong>
+                            The lab passwords are short, so Anaconda rates them
+                            weak and asks you to press <strong>Done</strong>
+                            again to use the password anyway. Do so here; never
+                            do this outside a lab.
+                        </aside>
+                    </li>
+                    <li class="step">
+                        <h2>Begin the installation and reboot</h2>
+                        <p>
+                            When no item on the summary shows a warning
+                            triangle, click
+                            <strong>Begin Installation</strong>. Nothing is
+                            written to the disk before this. When the progress
+                            screen reports that the installation is complete,
+                            click <strong>Reboot System</strong>.
+                        </p>
+                    </li>
+                    <li class="step">
+                        <h2>Verify with hostname, ip addr, and lsblk</h2>
+                        <p>Log in on the console as <code>student</code>.</p>
+                        <pre><code>hostname
+ip addr
+lsblk</code></pre>
+                        <p>
+                            <code>hostname</code> prints <code>serverc</code>.
+                            <code>ip addr</code> shows
+                            <code>172.25.250.12/24</code> on
+                            <code>enp0s8</code> and <code>10.0.2.15/24</code>,
+                            from VirtualBox's NAT, on <code>enp0s3</code>.
+                            <code>lsblk</code> shows <code>sda</code> with four
+                            partitions: <code>sda1</code> (1M, the BIOS boot
+                            partition), <code>sda2</code> on <code>/boot</code>,
+                            <code>sda3</code> as <code>[SWAP]</code>, and
+                            <code>sda4</code> on <code>/</code>, with no LVM
+                            volumes.
+                        </p>
+                    </li>
+                </ol>
+            </article>
+            <nav class="exercise-navigation" aria-label="Exercise navigation">
+                <a href="../">← Back to week overview</a>
+            </nav>
+        </main>
+
+        <footer>
+            <p>
+                <a href="../../../">IT-230</a> ·
+                <a href="../../../">Linux Administration</a>
+            </p>
+        </footer>
+    </body>
+</html>

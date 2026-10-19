@@ -293,6 +293,26 @@ Every line renders the same. Only the marked range is embellished, and `line`
 says which line a step searches.
 
 ---
+vertical: center
+---
+
+# Facts at a glance
+
+<IconGrid
+  clicks
+  :items="[
+    { icon: 'time', caption: 'An older partitioning scheme' },
+    { icon: 'chip', caption: 'Used with BIOS firmware' },
+    { icon: 'partition-collection', caption: 'At most four primary partitions' },
+    { icon: 'ruler', caption: 'Disks up to 2 TiB' },
+    { icon: 'warning-alt', caption: 'One copy of the partition table' },
+    { icon: 'add-alt', caption: 'Extended partitions hold more' },
+  ]"
+/>
+
+Six items in rows of three, one per click. The caption carries the meaning.
+
+---
 
 # Semantic emphasis and labeled callouts
 

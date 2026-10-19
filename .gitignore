@@ -35,3 +35,8 @@ Thumbs.db
 
 # Abandoned screen recordings
 *.cast.*.partial
+
+# Placeholder images whose publication rights are unclear. A draft may show
+# them while it is built, but they must never be committed, since a replaced
+# image would stay in Git history.
+*.placeholder.*

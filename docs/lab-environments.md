@@ -96,7 +96,9 @@ and exercises.
 Each machine has two interfaces. `enp0s3` is a NAT link at 10.0.2.15, the same
 address on every machine, which is how the VM reaches the internet.  `enp0s8`
 is the lab interface on 172.25.250.0/24, and it is the one that carries a
-student's SSH session. Both sit in the `public` firewall zone, so
+student's SSH session. They are VirtualBox's adapter 1, attached to NAT, and
+adapter 2, attached to the Internal Network named `intnet`, which every lab VM
+joins. Both sit in the `public` firewall zone, so
 `firewall-cmd --get-active-zones` there lists two interfaces where the other
 environments list one.
 
