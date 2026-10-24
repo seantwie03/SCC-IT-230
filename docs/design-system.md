@@ -897,6 +897,8 @@ color because the palette has no separate info hue.
 Each also accepts three boolean props: `normal` explicitly uses normal font
 weight for a one-off span, `italic` adds italic emphasis, and `code` selects the
 monospace face with no chip, matching inline code elsewhere. Combine as needed.
+`AccentText` also takes an optional `hue`, described under "Giving recurring
+terms a hue" below.
 
 ```md
 # Effortful practice is required <DangerText>to pass the RHCSA exam</DangerText>
@@ -942,6 +944,57 @@ Two ways to keep the paragraph, either of which is acceptable:
 
 Wrapping the line in literal `<p>` tags does not work: the line then parses as
 raw HTML, and inline markdown such as backtick code is left untouched.
+
+#### Giving recurring terms a hue
+
+`AccentText` draws in the deck accent unless `hue` names another hue from the
+accent palette. Use it when a deck gives two to four recurring terms colors of
+their own and keeps each term on the same hue on every slide and in every
+diagram, such as LVM's physical volumes, volume groups, and logical volumes.
+
+```md
+<AccentText hue="blue">Physical Volume (PV)</AccentText>
+```
+
+`hue` takes an accent name: `blue`, `teal`, `green`, `yellow`, `orange`,
+`red`, `pink`, `purple`, or `slate`. The text is drawn in that hue's text color
+from `setup/accent.ts`, which clears the theme's normal-text contrast floor on
+the canvas whatever the deck accent is. An unknown hue is an authoring error.
+Without `hue`, nothing changes.
+
+- Name the term in words every time. The hue repeats the name; it must never
+  be the only thing that identifies the term.
+- Keep one hue per term for the whole deck, and choose hues that differ
+  clearly. Check the set under a color-vision simulation: teal and slate, for
+  example, are distinct for most readers but nearly merge for protanopia and
+  deuteranopia, which the name in words covers.
+- Avoid the deck accent's hue, which already colors inline code, links, and
+  list markers, and avoid green, yellow, orange, and red, which read as the
+  success, warning, and danger states.
+- Reserve `hue` for such a key. Plain emphasis stays in the deck accent.
+
+In a Mermaid diagram, style a node for the same term with the hue's fill from
+`setup/accent.ts` as a 2px `stroke` and that fill at 22% over white as its
+`fill`, keeping the label in the theme's text color, `#25252b`:
+
+```
+classDef pv fill:#d3e4f9,stroke:#3584e4,stroke-width:2px,color:#25252b
+```
+
+| Hue    | Stroke    | Fill      |
+| ------ | --------- | --------- |
+| blue   | `#3584e4` | `#d3e4f9` |
+| teal   | `#2190a4` | `#cee7eb` |
+| green  | `#3a944a` | `#d4e7d7` |
+| yellow | `#bd8000` | `#f0e3c7` |
+| orange | `#ed5b00` | `#fbdbc7` |
+| red    | `#e62d42` | `#fad1d5` |
+| pink   | `#d56199` | `#f6dce9` |
+| purple | `#9141ac` | `#e7d5ed` |
+| slate  | `#6f8396` | `#dfe4e8` |
+
+The 22% fill is stronger than the accent's 14% wash on purpose: at 14%, blue
+and teal nodes are hard to tell apart at diagram size.
 
 ## Adding shared patterns
 

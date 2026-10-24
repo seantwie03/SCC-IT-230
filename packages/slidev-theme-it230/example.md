@@ -332,6 +332,13 @@ Six items in rows of three, one per click. The caption carries the meaning.
   <AccentText code>monospace text</AccentText>.
 </p>
 
+<p>
+  Recurring terms:
+  <AccentText hue="blue">physical volume</AccentText> ·
+  <AccentText hue="teal">volume group</AccentText> ·
+  <AccentText hue="slate">logical volume</AccentText>
+</p>
+
 <div class="grid grid-cols-2 gap-4">
 
 <Callout type="accent">

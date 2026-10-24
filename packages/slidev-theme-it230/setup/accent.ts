@@ -71,6 +71,24 @@ export function resolveIt230Accent(value?: unknown): It230Accent {
     return IT230_ACCENTS[value as It230AccentName];
 }
 
+/**
+ * Resolve the palette hue named by `AccentText`'s `hue` prop to its text color.
+ *
+ * Each hue's text color already clears the theme's normal-text contrast floor
+ * on the canvas, so any hue may be named whatever the deck accent is. That is
+ * what lets a deck keep a recurring term on one hue from slide to slide.
+ */
+export function resolveHueTextColor(hue: unknown): string {
+    if (typeof hue !== "string" || !accentNames.has(hue)) {
+        throw new TypeError(
+            `Invalid hue ${JSON.stringify(hue)}. ` +
+                `Choose one of: ${IT230_ACCENT_NAMES.join(", ")}.`,
+        );
+    }
+
+    return IT230_ACCENTS[hue as It230AccentName].text;
+}
+
 export function accentCssVariables(
     accent: It230Accent,
 ): Readonly<Record<string, string>> {

@@ -1,20 +1,33 @@
 <script setup lang="ts">
-withDefaults(
+import { resolveHueTextColor } from "../setup/accent.ts";
+import { guardAuthoring } from "../setup/authoring-error.ts";
+import AuthoringError from "./AuthoringError.vue";
+
+const props = withDefaults(
     defineProps<{
         code?: boolean;
+        /** A palette hue to draw in instead of the deck accent. */
+        hue?: string;
         italic?: boolean;
         normal?: boolean;
     }>(),
     {
         code: false,
+        hue: undefined,
         italic: false,
         normal: false,
     },
 );
+
+const { error, value: hueColor } = guardAuthoring("AccentText", () =>
+    props.hue === undefined ? null : resolveHueTextColor(props.hue),
+);
 </script>
 
 <template>
+    <AuthoringError v-if="error" component="AccentText" :message="error" />
     <span
+        v-else
         :class="[
             'it230-color-text',
             {
@@ -23,6 +36,7 @@ withDefaults(
                 'it230-color-text--normal': normal,
             },
         ]"
+        :style="hueColor ? { color: hueColor } : undefined"
         ><slot
     /></span>
 </template>
