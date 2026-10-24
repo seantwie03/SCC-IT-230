@@ -27,7 +27,6 @@ Week 11
 - Extending LVM
 - Removing LVM
 - Swap Space on Logical Volumes
-- LVM Practice
 
 ---
 layout: section

@@ -155,7 +155,9 @@ Forced changes, not choices:
   (w03), green (w04), slate (w05), pink (w07), yellow (w08). `red` is reserved
   for the Final; `orange` is unused but warm.
 - **Title:** "Managing Storage with LVM", the source's own (Decision 4).
-- **Cover agenda:** eight lines, one per fragment (Decision 5).
+- **Cover agenda:** seven lines, one per fragment from 1 to 7 (Decision 5,
+  accepted 2026-10-24). "LVM Practice" is left off the cover; the week page's
+  agenda still lists it, since that comes from the topics.
 - **Cover summary:**
 
   ```yaml
@@ -430,7 +432,11 @@ prefix rolls (`pv`, `vg`, `lv`, in the same hues) while the ending stays still
 move together in a 500 ms ease. The visible strips are hidden from screen
 readers, and one sentence inside the grid gives them all nine commands and
 says that only the first two letters change. `check:slides`: 218.14px
-clearance in each click state.
+clearance in each click state. The endings first used UnoCSS `font-mono`, which
+is the system monospace stack rather than the theme's Cascadia Mono, and with
+`gap-x-16` the 244px columns were narrower than `pvdisplay` (253px in Cascadia
+Mono), so the middle column wrapped. They now take `font-family:
+var(--it230-font-mono)`, `whitespace-nowrap`, and `gap-x-8` (fixed 2026-10-24).
 
 How it is built, since the theme has no component for it: each strip is a
 column of three items inside a one-line window with `overflow: hidden`, moved
@@ -1421,6 +1427,10 @@ devices-file entries are cleared by a snapshot revert or by hand.
 - Capture every slide with a fence at 1920x1080; `check:slides` cannot see
   overflow inside a code block. `lvs` (about 85 columns), `pvdisplay`, and the
   six-state procedure on 4.8 are the likeliest.
+- **UnoCSS `font-mono` is not the theme font.** It resolves to the system
+  monospace stack, so its width changes from machine to machine. Use
+  `font-family: var(--it230-font-mono)` for monospace text outside a code
+  component.
 - A line that starts with `AccentText` loses its paragraph; start such lines
   with text.
 - `TextExplainer` on 3.5 is more than four lines, so the component picks `sm`;
@@ -1440,11 +1450,11 @@ All proposed on 2026-10-24 and waiting on the instructor. Each is reversible.
 3. **Accent `purple`** (alternatives: `green`, `slate`, or the unused
    `orange`).
 4. **Title** "Managing Storage with LVM".
-5. **Cover agenda** of eight lines, one per fragment. Checked 2026-10-24 in
-   `course/w11-draft.md`: eight lines run 3 canvas pixels past the cover's
-   content box (scroll height 555 against 552; w10's five-line cover measures
-   552 against 552). Nothing is visibly clipped, but it is overflow. Seven
-   lines fit, for example by merging two into "Extending and Removing LVM".
+5. **Cover agenda of seven lines.** Accepted 2026-10-24: the instructor
+   removed "LVM Practice" from the cover. Eight lines, one per fragment, ran
+   3.19 canvas pixels past the cover's content box; seven pass
+   `check:slides`. The week page's agenda comes from the topics, so it still
+   lists fragment 8.
 6. **VM reminder** "Start `workstation` and `servera` on your VDI".
 7. **Combine the two decks**: Slidev sequence, commands, and exercises; ODP
    concept slides 1.3a, 1.3b, and 5.1a and O3's diagram details. The ODP's two
@@ -1598,9 +1608,8 @@ reverted to its snapshot afterwards.
      nested list instead (see "Authoring notes").
    - The ten-slide count before exercise 1 is now eight content slides, with
      2.2a included.
-3. Open decisions: everything not marked accepted, including Decision 5 (the
-   cover's eight-line agenda overflows by 3.19px; seven lines fit), Decision
-   30 (exercise 5a's design).
+3. Open decisions: everything not marked accepted, including Decision 30
+   (exercise 5a's design).
 4. Before the recordings: the SCC volume group name (Open question 6).
 
 **On another machine:**
