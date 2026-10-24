@@ -171,6 +171,12 @@ back to their original lines. Recording is then one live pass in order and one
 recording pass in order, with no resets between. Capture slide transcripts
 from the same chain, so device names and UUIDs agree from slide to slide.
 
+The instructor runs `start-latest-snapshot -a` between weeks, so a week's
+material can assume the lab starts from the snapshot, not from where the
+previous week's exercises left it. The script is never used in student-facing
+material, so the last exercise's cleanup is still written with commands the
+week teaches; the `lab-verification` skill covers the script itself.
+
 An exercise that only works in the SCC lab, such as installing a virtual
 machine in VirtualBox, has a written version and no command file or recording.
 Ask the instructor early for a dry run on the VDI with screenshots. A dry run

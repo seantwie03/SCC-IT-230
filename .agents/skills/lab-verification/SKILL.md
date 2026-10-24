@@ -127,6 +127,28 @@ paths students hit by accident:
 - the blank-line, missing-argument, and already-exists cases
 - the cleanup steps, so the host returns to its starting state
 
+## Restoring the lab
+
+Restore every host you change in the same session, then confirm it matches the
+baseline you recorded before you started.
+
+`start-latest-snapshot`, installed in `/usr/local/bin`, is available for agent
+use. It reverts lab VMs to their newest snapshot, which the instructor took
+just after configuring the lab, and starts them. Run `start-latest-snapshot -h`
+for its options. Name the hosts you changed, such as
+`start-latest-snapshot servera`, or pass `-a` for all of them; `-n` shows what
+would be reverted without changing anything. Use it when a revert is faster
+than cleaning up by hand, then check the baseline again.
+
+The snapshots were taken with the VMs running, so a reverted guest resumes
+with its clock at the snapshot's time, and dates in captured output show that
+day.
+
+The script is for the instructor and agents only. **Never use
+`start-latest-snapshot` in student-facing material**: not in slides, command
+files, recordings, written exercises, or anything else students see. Students
+have no snapshots, so every exercise cleans up with the commands it teaches.
+
 ## Boundary
 
 Verify against the lab; never copy Red Hat Academy source material, guided

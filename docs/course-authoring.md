@@ -415,6 +415,9 @@ highlighting and line-number options also work on ordinary code fences outside
 Place exercise slides at the **end of the section it belongs to**, not at the end
 of the whole presentation. It covers only what that section taught.
 
+Keep no more than about ten content slides between one exercise and the next.
+Section, title, reminder, and exercise slides do not count as content slides.
+
 Each exercise has two slides that use the `exercise` layout. The first slide uses
 the default workflow variant and describes *what* to accomplish, not the commands
 to copy. Keep the goal to one short sentence so that the workflow has as much room
