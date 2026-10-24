@@ -34,3 +34,7 @@ layout: section
 ---
 
 Start `workstation` and `servera` on your VDI
+
+---
+src: ./chapters/rh134-ch11-managing-storage-with-logical-volume-manager/logical-volume-manager.md
+---

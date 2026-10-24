@@ -9,13 +9,13 @@ produce this plan. Nothing is built until the plan is approved.
 ## Answer in brief
 
 **Eight topic fragments** in one chapter directory, **eight exercises**, and a
-deck of **53 slides**: 41 from the source (39 content slides plus the cover and
-VM reminder), 4 added slides (1.3a, 2.2a, 5.1a, and the new exercise slide
-7.3), and 8 recording slides that wait on the casts.
+deck of **54 slides**: 41 from the source (39 content slides plus the cover and
+VM reminder), 5 added slides (1.3a, 1.3b, 2.2a, 5.1a, and the new exercise
+slide 7.3), and 8 recording slides that wait on the casts.
 
 | # | Fragment                    | Section title                  | Slides | Exercises |
 |--:|-----------------------------|--------------------------------|-------:|----------:|
-| 1 | `logical-volume-manager.md` | Logical Volume Manager (LVM)   |      4 |         0 |
+| 1 | `logical-volume-manager.md` | Logical Volume Manager (LVM)   |      5 |         0 |
 | 2 | `physical-volumes.md`       | Physical Volumes               |      7 |         1 |
 | 3 | `volume-groups.md`          | Volume Groups                  |      8 |         1 |
 | 4 | `logical-volumes.md`        | Logical Volumes                |      9 |         1 |
@@ -24,7 +24,7 @@ VM reminder), 4 added slides (1.3a, 2.2a, 5.1a, and the new exercise slide
 | 7 | `lvm-swap-space.md`         | Swap Space on Logical Volumes  |      4 |         1 |
 | 8 | `lvm-practice.md`           | LVM Practice                   |      5 |         2 |
 |   | Entry file                  |                                |      2 |           |
-|   | **Total**                   |                                | **53** |     **8** |
+|   | **Total**                   |                                | **54** |     **8** |
 
 Slide counts include the recording slides. The fragments follow the Slidev
 deck's eight sections one for one. The LibreOffice deck contributes two concept
@@ -98,7 +98,8 @@ Proposed (Decision 7), following what w10 settled on 2026-10-17:
 - **The Slidev deck supplies the sequence, the command slides, and all seven
   exercises.** Its sections become the fragments.
 - **The ODP supplies concept slides.** Its "LVM Components - Create" table
-  becomes 1.3a, a map of all twelve create, inspect, and remove commands. Its
+  becomes 1.3a, the twelve create, inspect, and remove commands at once,
+  followed by an animation (1.3b) showing they are one pattern. Its
   "Extend Logical Volume" diagram and "LVM Components - Extend" table become
   5.1a, the section intro the Slidev deck's Extending section lacks. Its
   "Layers" slide adds disks under the physical volumes and mount points over
@@ -229,7 +230,7 @@ From `ManageStorageStack.odp`:
 |       O2 | Logical Volume Management (LVM)       | 1.2                 |
 |       O3 | Layers                                | 1.3                 |
 |       O4 | Create Logical Volume (flow diagram)  | not ported          |
-|       O5 | LVM Components - Create (table)       | 1.3a, new           |
+|       O5 | LVM Components - Create (table)       | 1.3a, 1.3b, new     |
 |       O6 | Exercise: Create a Logical Volume     | not ported          |
 |   O7, O8 | Demo link and GIF                     | not ported          |
 |       O9 | Extend Logical Volume (flow diagram)  | 5.1a, new           |
@@ -242,7 +243,7 @@ O4's flow (device, PV, VG, LV, mount) is what 1.3's diagram and 4.8's steps
 already show, so it is not proposed as a slide of its own. Say if you want it
 back; it would sit before 4.8 as a Mermaid flowchart.
 
-Slides with no source row: 1.3a, 2.2a, and 5.1a (additions), 7.3 (the swap
+Slides with no source row: 1.3a, 1.3b, 2.2a, and 5.1a (additions), 7.3 (the swap
 exercise the instructor asked for), and the eight recording slides 2.5a, 3.7a,
 4.7a, 5.4a, 6.7a, 7.3a, 8.2a, and 8.3a.
 
@@ -253,7 +254,7 @@ New, under
 
 | File                        | Slides | Exercises |
 |-----------------------------|-------:|----------:|
-| `logical-volume-manager.md` |      4 |         0 |
+| `logical-volume-manager.md` |      5 |         0 |
 | `physical-volumes.md`       |      7 |         1 |
 | `volume-groups.md`          |      8 |         1 |
 | `logical-volumes.md`        |      9 |         1 |
@@ -269,8 +270,13 @@ placeholder (`lvm-storage-illustration.placeholder.jpg`) until it is replaced.
 Also new: `course/w11-draft.md`. At publication, `tests/site.test.mjs` gains
 `"w11"` in its published-week list.
 
-No theme change is planned. Mermaid flowcharts with cylinder nodes and Carbon
-icon shapes are both already in use (w06, w07, w10).
+Theme change (Decision 31): `AccentText` takes an optional `hue` naming a
+palette hue, validated by `resolveHueTextColor` in `setup/accent.ts`, with
+`tests/accent-text-hue.test.mjs`, a gallery line in `example.md`, and a
+"Giving recurring terms a hue" section in `docs/design-system.md`. A separate
+`HueText` component was built first and folded into `AccentText` at the
+instructor's suggestion. Dev servers started before a theme component is
+added must be restarted to see it.
 
 ## Third-party images
 
@@ -285,8 +291,9 @@ volume group). Proposed (Decision 9): rebuild it as our own Mermaid
 `flowchart BT` with cylinder nodes, adding O3's disks under the physical
 volumes (Carbon icon shapes) and its mount points, `/home` and `/`, over the
 file systems. No placeholder is needed. The same diagram then serves 1.3, 2.2,
-3.2, and 4.2, with the layer each slide is about filled in the accent and the
-others in grey, so students see where they are in the stack.
+3.2, and 4.2, with the layer each slide is about in its hue from the week's
+color key (Decision 31) and the others white, so students see where they are
+in the stack. 1.3 shows all three layers in their hues.
 
 **`lvm_storage_illustration.png` and O2's 1024 by 1024 JPEG, no recorded
 source, replace.** The same isometric illustration of coloured disk stacks
@@ -332,10 +339,13 @@ Where the source shows output, the slide shows recaptured output in a
 nothing when its output was only left out (Decision 13). Two exceptions are
 proposed under Decision 14.
 
-### 1. `logical-volume-manager.md` (4 slides)
+### 1. `logical-volume-manager.md` (5 slides), built 2026-10-24
 
 `routeAlias: logical-volume-manager`. Alignments: RH134 chapter 11, cert guide
-chapter 15. No exercise.
+chapter 15. No exercise. Built after the instructor accepted Decisions 9 to 11,
+and checked with `check:entry` and `check:slides`; each slide was also
+captured at 1920x1080. The entries below describe what shipped, and it waits on
+the instructor's review.
 
 ##### 1.1 Logical Volume Manager (LVM)
 
@@ -346,47 +356,94 @@ Components: `section`.
 
 ##### 1.2 What Is LVM?
 
-Sources L2 and O2. "**Logical Volume Manager** is a storage abstraction layer
-between physical devices and file systems", then "Why use LVM?" over L2's four
-reasons: resize volumes **without downtime**; **combine** several disks into
-one mount point; **replace** a failing disk without downtime; consistent LV
-names across servers. O2 says the same in fewer words ("Abstraction over
-storage devices", "Resize volumes without stopping applications") and adds the
-illustration.
+Sources L2 and O2. Left column: "**Logical Volume Manager** is a storage
+abstraction layer between physical devices and file systems", then "Why use
+LVM?" over L2's four reasons: resize volumes **without downtime**;
+**combine** several disks into one mount point; **replace** a failing disk
+without downtime; consistent LV names across servers ("LV" in slate,
+Decision 31). Right column: O2's
+illustration as `assets/lvm-storage-illustration.placeholder.jpg` (Decision
+10), with empty alt text as a decorative image, filling the column height.
+`check:slides`: 38.45px clearance.
 
-Components: `two-cols-header`, list on the left, the illustration placeholder
-on the right (Decision 10), filling the column height as w10's hard drive does
-on its 1.2.
+Components: `two-cols-header` with `leftWidth: 60` and `vertical: center`.
+`center` keeps "Why use LVM?" near its list; the default spreads the three
+items evenly and leaves the heading floating between them.
 
 ##### 1.3 LVM: Three Layers
 
-Sources L3 and O3. Three headed definitions: **Physical Volume (PV)**, a
-storage device initialized for LVM; **Volume Group (VG)**, a storage pool
-built from one or more PVs; **Logical Volume (LV)**, a flexible slice of a VG
-that you format and mount. On the right, the rebuilt layers diagram (Decision
-9): three disks, three PVs, one VG, two LVs, two file systems mounted at
-`/home` and `/`. Nothing highlighted on this slide.
+Sources L3 and O3. Left column, a padded list with each term in bold and its
+definition nested under it: **Physical Volume (PV)**, a storage device
+initialized for LVM; **Volume Group (VG)**, a storage pool built from one or
+more PVs; **Logical Volume (LV)**, a flexible slice of a VG that you format
+and mount. The source's heading-and-paragraph pairs were tried first and read
+wrongly: the theme leaves 24px under an `h3` and 16px under a paragraph, so
+each definition sat closer to the next term than to its own.
 
-Components: `two-cols-header`, Mermaid `flowchart BT` with cylinder nodes and
-Carbon disk icon shapes.
+Right column, the rebuilt layers diagram (Decision 9), bottom to top: three
+disks (Carbon `vmdk-disk` icons labelled "Disk"), three PVs, one VG, two LVs,
+and two file systems labelled "File system /home" and "File system /". The
+three LVM layers use the week's color key (Decision 31): PVs blue, the VG
+teal, LVs slate, each a 2px stroke in the hue's fill with a 22% fill; the file
+systems and disks are white. The terms on the left, and "PVs" and "VG" in the
+definitions, are `AccentText` in the same hues. A first version put
+`/home` and `/` on nodes of their own above the file systems and overflowed
+the slide by a whole row; folding them into the labels, setting Mermaid's
+`rankSpacing` and `nodeSpacing` to 24 with an `init` directive, and a `scale`
+of 0.72 left 28.84px of clearance with room for the icons to load.
+
+Components: `two-cols-header` with `vertical: center` and `listSpacing:
+padded`, Mermaid `flowchart BT` with cylinder nodes, Carbon icon shapes, and
+`classDef` colours from the table in `docs/design-system.md`, and
+`AccentText` with `hue`.
 
 ##### 1.3a LVM Commands
 
-**Addition, from O5** (Decision 11). "Every LVM command is a layer and an
-action", over a table with a row per layer and a column per action:
+**Addition, from O5** (Decision 11, accepted 2026-10-24). The full table
+comes first on purpose (instructor, 2026-10-24): twelve commands at once look
+like a lot to remember, and 1.3b then shows that they are one pattern.
+"These commands manage each layer in the LVM stack" (the instructor's wording),
+over a table with a row per layer ("Physical volume (PV)", "Volume group
+(VG)", "Logical volume (LV)") and a column per action (create, summary,
+details, remove), holding the twelve commands from `pvcreate` to `lvremove`.
+Each row, label and commands, is in its layer's hue (Decision 31). Closing line from the Cert Guide's tip: "Type `pv`,
+`vg`, or `lv` and press Tab twice to list the rest". It previews the week:
+fragments 2 to 4 create and inspect, fragment 6 removes. O5 arranged the same
+twelve commands in three coloured rows. `check:slides`: 39.98px clearance.
 
-| Layer | Create     | Summary | Details     | Remove     |
-|-------|------------|---------|-------------|------------|
-| PV    | `pvcreate` | `pvs`   | `pvdisplay` | `pvremove` |
-| VG    | `vgcreate` | `vgs`   | `vgdisplay` | `vgremove` |
-| LV    | `lvcreate` | `lvs`   | `lvdisplay` | `lvremove` |
+Components: default layout with `horizontal: center`, Markdown table,
+`<kbd>`, `AccentText` with `hue` on the layer names, on the commands (with
+`code normal`, so they keep inline code's weight), and on the `pv`, `vg`, and
+`lv` prefixes in the closing line.
 
-Closing line from the Cert Guide's tip: type `pv`, `vg`, or `lv` and press
-<kbd>Tab</kbd> twice to list the rest. It previews the week: fragments 2 to 4
-create and inspect, fragment 6 removes. O5 arranged the same twelve commands
-in three coloured rows.
+##### 1.3b LVM Commands
 
-Components: default layout with `horizontal: center`, Markdown table.
+**Addition, from O5, at the instructor's request (2026-10-24).** The relief
+after 1.3a's table: an animation showing that the twelve commands are one
+pattern, layer prefix plus action. The instructor first asked for it in place
+of the table, which they called an eye test as a first view, then put the
+table back first so the animation answers it. The layer name rolls at the top in its hue
+("Physical Volume", "Volume Group", "Logical Volume"). Beneath it, three
+columns headed Create, Details, and Remove each show a large command whose
+prefix rolls (`pv`, `vg`, `lv`, in the same hues) while the ending stays still
+(`create`, `display`, `remove`). Two clicks, one per layer; all four strips
+move together in a 500 ms ease. The visible strips are hidden from screen
+readers, and one sentence inside the grid gives them all nine commands and
+says that only the first two letters change. `check:slides`: 218.14px
+clearance in each click state.
+
+How it is built, since the theme has no component for it: each strip is a
+column of three items inside a one-line window with `overflow: hidden`, moved
+by `v-motion` with `:initial` at `y: '0%'` and `:click-1` and `:click-2` at
+`-33.3333%` and `-66.6667%`, each with a `tween` transition. The slide sets
+`clicks: 2`, because `v-motion` click states respond to clicks but do not
+create them. A `v-switch` with `unmount` and a transition was tried first and
+dropped: Slidev stops animating it after the first leave.
+
+Components: default layout with `horizontal: center`, `vertical: center`,
+and `clicks: 2`; `AccentText` with `hue`; UnoCSS utility classes for the
+windows, the grid, and the sizes (`text-4xl` and `text-5xl`, each with
+`leading-[1.3]`); `v-motion`; an `sr-only` paragraph.
 
 ### 2. `physical-volumes.md` (7 slides)
 
@@ -404,7 +461,8 @@ Components: `section`.
 Source L5. A block device (a partition, a whole disk, or RAID) initialized for
 LVM use. "Why PVs are needed": LVM cannot use raw storage directly; creating a
 PV gives the device a **UUID** and lets it join a volume group. On the right,
-the layers diagram with the PV layer in the accent.
+the layers diagram with the PV layer in blue and the others white (Decision
+31). "PV" in the text is blue too.
 
 Components: `two-cols-header`, Mermaid diagram.
 
@@ -484,7 +542,8 @@ Source L10. A storage pool made of one or more PVs. "Why VGs are needed":
 combines PVs into one block of storage; divides them into 4 MiB chunks called
 **physical extents (PEs)**; the PE size can be set when the VG is created and
 is the same on every PV in the VG. 4 MiB is the default (Cert Guide chapter
-15). On the right, the layers diagram with the VG layer in the accent.
+15). On the right, the layers diagram with the VG layer in teal and the others
+white (Decision 31).
 
 Components: `two-cols-header`, `AccentText` on the term, Mermaid diagram.
 
@@ -562,7 +621,8 @@ Source L17, with its typo ("Partiton"). A flexible block device, created from
 free PEs in the VG; the OS sees just another block device, like a partition or
 disk. "Why LVs are needed": the size is not bound to one disk, because an LV is
 made of extents; resize **without unmounting**, growing a file system while it
-is in use. On the right, the layers diagram with the LV layer in the accent.
+is in use. On the right, the layers diagram with the LV layer in slate and the
+others white (Decision 31).
 
 Components: `two-cols-header`, Mermaid diagram.
 
@@ -680,7 +740,8 @@ Components: `section`.
 lacks. Left, O10's three rows as a table of layer and command: volume group,
 `vgextend`; logical volume, `lvextend`; file system, `xfs_growfs` or
 `resize2fs`. Right, O9's picture rebuilt in Mermaid: the layers diagram with a
-second disk and PV joining the VG, the new parts in the accent, and the LV and
+second disk and PV joining the VG, the new PV in blue, the VG in teal, the LV
+in slate (Decision 31), and the LV and
 file system above them marked as growing. O9 highlighted the new disk in a
 green box.
 
@@ -1078,7 +1139,9 @@ and instructor labs both say `sdb`.
 
 Proposed, each one cuttable:
 
-1. **Slide 1.3a, LVM Commands** (O5), with the Cert Guide's Tab tip.
+1. **Slides 1.3a and 1.3b, LVM Commands** (O5): the full table with the
+   Cert Guide's Tab tip, then an animation showing that only the layer prefix
+   changes.
 2. **Slide 2.2a, Prepare a Partition for LVM.** Teaches the flag exercise 1
    needs. Accepted 2026-10-24.
 3. **Slide 5.1a, Extend a Logical Volume** (O9 and O10), the Extending
@@ -1322,9 +1385,39 @@ devices-file entries are cleared by a snapshot revert or by hand.
   every `TerminalWindow` is fixed and takes none.
 - Mermaid cylinder nodes and Carbon icon shapes load icons asynchronously, so
   leave headroom on 1.3, 2.2, 3.2, 4.2, and 5.1a rather than tuning `scale`
-  to the pixel. The four layer slides share one diagram; check that it reads at
-  the column width before building the rest of fragment 1 around it. Carbon
-  icon names are checked at build time.
+  to the pixel. The layers diagram on 1.3 is the one to copy for 2.2, 3.2, and
+  4.2: `scale: 0.72`, `rankSpacing` and `nodeSpacing` 24, mount points inside
+  the file system labels. Only the `class` lines change from slide to slide.
+- **`check:slides` missed a Mermaid overflow.** The first version of 1.3 ran
+  its bottom row and all three disks off the slide in the browser, while
+  `check:slides` reported 18.66px of clearance. Look at every Mermaid slide in
+  the review browser at 1920x1080, not just the checker's number.
+- **The review server misses saves on this share.** After an edit, the deck
+  kept serving an older version of the fragment, once a version from between
+  two edits. `touch` the file after editing, then reload with a new query
+  string (`?fresh=N#/5`), since the browser keeps an open deck. The first
+  screenshot after a reload can come back blank; wait and take it again.
+- **Animating part of a word.** Magic Move cannot split one shell token, and
+  `v-switch` with a transition animates only its first click. 1.3b's recipe
+  works: a column of options in a one-line `overflow: hidden` window, moved by
+  `v-motion` click states, with `clicks: N` in the slide's frontmatter. Give
+  `:initial` the same unit as the click states (`'0%'`, not `0`), or nothing
+  moves. Give the window's text a line height above 1 (`leading-[1.3]`):
+  `text-4xl` and larger set it to about 1, and descenders then poke into the
+  neighbouring slot.
+- **An absolutely positioned last item breaks centering.** The default layout
+  centers with automatic margins on its first and last body items, so an
+  `sr-only` paragraph as the last item sank the slide to the bottom. Put such
+  text inside another item.
+- **A theme component added while a dev server runs is not picked up** until
+  the server restarts; the tag renders as plain text, uncolored.
+- **`check:slides --verbose` sometimes leaves a slide out of its report.**
+  Slide 5 was missing twice and present on every rerun; rerun before treating
+  a missing line as a pass.
+- **The theme's `h3` spacing.** An `h3` has 24px below it and a paragraph 16px,
+  so a heading followed by one short paragraph reads as belonging to the
+  content above it. 1.3 uses a padded nested list instead; 1.2 shows a milder
+  form of the same thing between its paragraph and "Why use LVM?".
 - Capture every slide with a fence at 1920x1080; `check:slides` cannot see
   overflow inside a code block. `lvs` (about 85 columns), `pvdisplay`, and the
   six-state procedure on 4.8 are the likeliest.
@@ -1354,18 +1447,19 @@ All proposed on 2026-10-24 and waiting on the instructor. Each is reversible.
    lines fit, for example by merging two into "Extending and Removing LVM".
 6. **VM reminder** "Start `workstation` and `servera` on your VDI".
 7. **Combine the two decks**: Slidev sequence, commands, and exercises; ODP
-   concept slides 1.3a and 5.1a and O3's diagram details. The ODP's two
+   concept slides 1.3a, 1.3b, and 5.1a and O3's diagram details. The ODP's two
    exercises are not ported.
 8. **Stratis is not ported** (O14 to O24): RHEL 10's RH134 and Cert Guide
    chapters do not teach it.
 9. **The layers diagram is rebuilt in Mermaid** and reused on 1.3, 2.2, 3.2,
-   and 4.2, each highlighting its own layer.
+   and 4.2, each highlighting its own layer. Accepted 2026-10-24; built on 1.3.
 10. **The storage illustration is a placeholder on 1.2**, replaced before
     publication by a Gemini image, a Commons image, or nothing. Accepted
     2026-10-24: placeholder now, replacement chosen later (Open question 5).
-11. **Add slides 1.3a, 2.2a, and 5.1a.** 2.2a accepted 2026-10-24: flags are
-    introduced this week, with no reference to w10's swap partition. 1.3a and
-    5.1a still wait.
+11. **Add slides 1.3a, 2.2a, and 5.1a.** All three accepted 2026-10-24. For
+    2.2a, flags are introduced this week, with no reference to w10's swap
+    partition. 1.3a and 1.3b are built: the table (1.3a) is followed by an
+    animation (1.3b) the instructor asked for, showing the pattern behind it.
 12. **Move 4.8, the procedure, ahead of exercise 4.7**, so the section ends
     with its exercise.
 13. **Procedure slides keep commands-only `bash` fences**; slides where the
@@ -1425,6 +1519,30 @@ Added on 2026-10-24 from the instructor's answers:
     `lv_data`'s old signature here, and 8.2's ask about this exercise's swap
     signature instead of the ext4 one.
 
+31. **A color key for the three layers**, used in text and diagrams all week:
+    PV blue, VG teal, LV slate. Chosen by the instructor on 2026-10-24; pink
+    was tried for LV and rejected as too loud. Teal and slate nearly merge for
+    red-green color blindness, which the names in words cover. Text uses
+    `AccentText hue="..."`, a theme addition the instructor suggested in place
+    of a separate component. The instructor's rule (2026-10-24): keep it
+    consistent across all of this week's material, exercises included, so a
+    PV is always blue, a VG teal, and an LV slate, in text or diagram:
+    - **Slides,** exercise slides included: wherever text names a layer
+      (terms, headings, lists, tables, exercise titles and workflow steps), it
+      uses `AccentText` with that layer's hue, and every diagram node for a
+      layer takes its hue.
+    - **Written exercises:** each page's inline `<style>` block gains three
+      classes named and colored like `AccentText`'s hues, `hue-blue`
+      (`#0461be`), `hue-teal` (`#006e80`), and `hue-slate` (`#526678`), bold,
+      used as `<span class="hue-blue">physical volume</span>`. To build with
+      fragment 2's first written exercise and check against
+      `check:exercises`, including that a colored `h1` still matches the
+      declared exercise title; the declared titles and the page `<title>`
+      stay plain text. Once it holds, record the classes under "Exercise
+      documents" in `docs/design-system.md`.
+    - **Not covered:** command files and recordings, whose terminal text the
+      key cannot reach.
+
 ## Open questions
 
 1. ~~**The lab.**~~ Answered 2026-10-24: the instructor started it.
@@ -1439,7 +1557,8 @@ Added on 2026-10-24 from the instructor's answers:
 4. ~~**Exercise 2.**~~ Answered 2026-10-24: keep it separate. The instructor
    wants no more than about ten content slides between exercises; section,
    title, reminder, and exercise slides do not count. This plan's longest run
-   is seven (1.2 to 2.4, before exercise 1); the others are 0 to 6.
+   is eight (1.2 to 2.4, before exercise 1, since 1.3b was added); the others
+   are 0 to 6.
 5. ~~**The 1.2 image.**~~ Answered 2026-10-24: a placeholder now, replaced
    later (Decision 10).
 6. **SCC volume group name.** The instructor lab's OS volume group is
@@ -1448,7 +1567,51 @@ Added on 2026-10-24 from the instructor's answers:
    **remind the instructor before the recordings**, since 2.4, 3.4, and 4.6
    show the name.
 
-## Ready to build
+## Status
 
-Not yet. The build starts with fragment 1 once the decisions are answered.
-The lab is at its snapshot and ready.
+As of 2026-10-24.
+
+**Done:** this plan; `course/w11-draft.md` (cover, VM reminder, and fragment
+1's import); fragment 1, `logical-volume-manager.md`, five slides built and
+checked, including the commands table (1.3a) and the animation that follows it
+(1.3b); the week's color key (Decision 31) and `AccentText`'s `hue` prop in
+the theme, with its test, gallery line, and documentation. The
+lab checks behind every correction are under "Verification", and `servera` was
+reverted to its snapshot afterwards.
+
+**Next, in order:**
+
+1. The instructor reviews fragment 1.
+2. Fragment 2, `physical-volumes.md`, the first with transcripts, so it needs
+   the lab. What fragment 1 settled that reaches it:
+   - Capture from the slide chain under "Verification".
+   - Copy 1.3's diagram for 2.2 and change only the `class` lines: PVs blue,
+     the rest white (Decisions 9 and 31).
+   - Color every PV mention that names the layer with `AccentText hue="blue"`
+     (Decision 31), including 2.2's definitions, 2.4's `pvs` caption, and
+     exercise 1's slide.
+   - Build exercise 1's written version with the `hue-blue` class (Decision
+     31) and confirm `check:exercises` accepts it before the other exercises
+     copy it.
+   - Where a slide pairs a short heading with one paragraph, as 2.2's "Why PVs
+     are needed" does, check the spacing in the browser; 1.3 needed a padded
+     nested list instead (see "Authoring notes").
+   - The ten-slide count before exercise 1 is now eight content slides, with
+     2.2a included.
+3. Open decisions: everything not marked accepted, including Decision 5 (the
+   cover's eight-line agenda overflows by 3.19px; seven lines fit), Decision
+   30 (exercise 5a's design).
+4. Before the recordings: the SCC volume group name (Open question 6).
+
+**On another machine:**
+
+- The placeholder image is ignored by Git, so it does not travel. Recreate
+  `assets/lvm-storage-illustration.placeholder.jpg` from the instructor's
+  source repository: unzip `~/s/IT-230/w11/slides/ManageStorageStack.odp` into
+  an empty scratch directory and copy
+  `Pictures/100000000000040000000400C4BC7452.jpg` (1024 by 1024, 204,774
+  bytes) to that name. Without it, slide 1.2's image fails to load.
+- Restart any running dev or review server after pulling, since the theme's
+  `AccentText` changed.
+- If the review server keeps serving an old version after an edit, `touch` the
+  file (see "Authoring notes").
