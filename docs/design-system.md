@@ -101,6 +101,15 @@ Exercise source uses the global blue accent as a direct-open fallback. Each
 published week injects its resolved fill, text, and wash properties after the
 source styles, allowing a reused exercise to match every importing week.
 
+A week that gives recurring terms their own hues on its slides (see "Giving
+recurring terms a hue") carries the same key into its exercises. Each
+exercise's style block defines one bold class per hue it uses, named for the
+hue and colored with that hue's text color from `setup/accent.ts`, such as
+`.hue-blue { color: #0461be; font-weight: 700; }`, and wraps each term in a
+`<span class="hue-blue">`. Headings and the document `<title>` stay plain, as
+slide titles do. The colors keep their contrast on the exercise surface, and
+the term in words carries the meaning.
+
 The exercise document surface hides its overflow, so content wider than the
 viewport is clipped rather than scrolled. Inline code therefore wraps anywhere,
 because a long unbreakable path or assignment would otherwise be cut off at a

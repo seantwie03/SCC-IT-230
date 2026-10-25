@@ -10,6 +10,9 @@ topicInfo:
     rhcsaCertGuide:
       - chapter: "15"
         title: Managing Logical Volumes
+  exercises:
+    - title: Initialize a Physical Volume Exercise
+      source: ./exercises/initialize-physical-volume-exercise.html
 ---
 
 # Physical Volumes
@@ -176,13 +179,10 @@ root@servera:~# pvcreate /dev/sdb1 /dev/sdb2
 </div>
 
 ---
+vertical: center
 ---
 
 # Inspect Physical Volumes
-
-<v-switch at="1">
-
-<template #0>
 
 `pvs` gives a summary of all <AccentText hue="blue">PV</AccentText>s on the system
 
@@ -198,15 +198,15 @@ root@servera:~# pvs
 
 </TerminalWindow>
 
-</template>
+---
 
-<template #1>
+# Inspect Physical Volumes
 
 `pvdisplay` shows the details of one <AccentText hue="blue">PV</AccentText>
 
 <TerminalWindow title="root@servera:~">
 
-```bash-session
+```bash-session {all|2-4,6,12|5,7-11}
 root@servera:~# pvdisplay /dev/sdb1
   "/dev/sdb1" is a new physical volume of "255.00 MiB"
   --- NEW Physical volume ---
@@ -223,9 +223,7 @@ root@servera:~# pvdisplay /dev/sdb1
 
 </TerminalWindow>
 
-</template>
-
-</v-switch>
+A <AccentText hue="blue">PV</AccentText> that has not been added to a <AccentText hue="teal">volume group</AccentText> and no extents yet
 
 ---
 layout: exercise
