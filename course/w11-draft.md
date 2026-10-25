@@ -45,3 +45,7 @@ src: ./chapters/rh134-ch11-managing-storage-with-logical-volume-manager/physical
 ---
 src: ./chapters/rh134-ch11-managing-storage-with-logical-volume-manager/volume-groups.md
 ---
+
+---
+src: ./chapters/rh134-ch11-managing-storage-with-logical-volume-manager/logical-volumes.md
+---

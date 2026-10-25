@@ -20,11 +20,11 @@ slides that wait on the casts.
 | 1 | `logical-volume-manager.md` | Logical Volume Manager (LVM)   |      5 |         0 |
 | 2 | `physical-volumes.md`       | Physical Volumes               |      8 |         1 |
 | 3 | `volume-groups.md`          | Volume Groups                  |      7 |         1 |
-| 4 | `logical-volumes.md`        | Logical Volumes                |     10 |         1 |
+| 4 | `logical-volumes.md`        | Logical Volumes                |      9 |         1 |
 | 5 | `extending-lvm.md`          | Extending LVM                  |      7 |         1 |
 | 6 | `removing-lvm.md`           | Removing LVM                   |      8 |         1 |
 | 7 | `lvm-swap-space.md`         | Swap Space on Logical Volumes  |      4 |         1 |
-| 8 | `lvm-practice.md`           | LVM Practice                   |      5 |         2 |
+| 8 | `lvm-practice.md`           | LVM Practice                   |      6 |         2 |
 |   | Entry file                  |                                |      2 |           |
 |   | **Total**                   |                                | **56** |     **8** |
 
@@ -226,7 +226,8 @@ From `managing_storage_with_lvm.md`:
 |    L38 | Exercise: Large LV Spanning Two Disks     | 8.2       |
 |    L39 | Exercise: Persistent Swap on an LV        | 8.3       |
 
-3.6 keeps its number but sits in fragment 5, after 5.1a (Decision 34).
+3.6 keeps its number but sits in fragment 5, after 5.1a (Decision 34), and
+4.8 keeps its number but sits in fragment 8, after 8.1 (Decision 38).
 
 From `ManageStorageStack.odp`:
 
@@ -263,11 +264,11 @@ New, under
 | `logical-volume-manager.md` |      5 |         0 |
 | `physical-volumes.md`       |      8 |         1 |
 | `volume-groups.md`          |      7 |         1 |
-| `logical-volumes.md`        |     10 |         1 |
+| `logical-volumes.md`        |      9 |         1 |
 | `extending-lvm.md`          |      7 |         1 |
 | `removing-lvm.md`           |      8 |         1 |
 | `lvm-swap-space.md`         |      4 |         1 |
-| `lvm-practice.md`           |      5 |         2 |
+| `lvm-practice.md`           |      6 |         2 |
 
 Plus `exercises/` with eight `.sh` command files, eight `.html` written
 exercises, and eight `.cast` recordings, and `assets/` holding the one
@@ -495,10 +496,10 @@ with `hue` on the layer terms; Mermaid.
 ##### 2.2a Prepare a Partition for LVM
 
 **Addition, accepted 2026-10-24** (Decision 11). Exercise 1's first step asks
-for "a 256 MiB GPT partition with the `lvm` flag", and no source slide shows
-the flag until the procedure recap, 4.8, two sections later. W10 never showed
-`parted`'s `set` command. The instructor chose to introduce flags here, on
-their own terms, with no reference back to w10.
+for "a 256 MiB GPT partition with the `lvm` flag", and no source slide shows the
+flag until the procedure recap, 4.8, now in the practice fragment (Decision 38).
+W10 never showed `parted`'s `set` command. The instructor chose to introduce
+flags here, on their own terms, with no reference back to w10.
 
 "The `lvm` flag marks a partition for LVM", then two click states, since one
 transcript of all three commands would not fit:
@@ -680,14 +681,14 @@ Components: default layout, fixed `TerminalWindow` with line highlights,
 
 ##### 3.5 Physical Extents in `pvdisplay` (removed 2026-10-25)
 
-Source L13: a `TextExplainer` over `pvdisplay /dev/sdb1` once `sdb1` belonged
-to `vg01`, stepping through PE Size, Total PE, Free PE, and Allocated PE. The
+Source L13: a `TextExplainer` over `pvdisplay /dev/sdb1` once `sdb1` belonged to
+`vg01`, stepping through PE Size, Total PE, Free PE, and Allocated PE. The
 instructor found a `pvdisplay` right after 3.4's `vgdisplay` jarring, and
 `vgdisplay` already shows the same four fields for the whole VG, which is the
-level fragment 4 builds on (`lvcreate -l`, `100%FREE`, Current LE). Removed;
-its lesson moved to 3.4a's highlighted lines (Decision 32). Lost: the per-PV
-view, 63 extents per 255 MiB PV with 3 MiB not usable, and the Allocatable NO
-to yes contrast with 2.4a, which 2.4a's highlights now carry from the other side.
+level fragment 4 builds on (`lvcreate -l`, `100%FREE`, Current LE). Removed; its
+lesson moved to 3.4a's highlighted lines (Decision 32). Lost: the per-PV view,
+63 extents per 255 MiB PV with 3 MiB not usable, and the Allocatable NO to yes
+contrast with 2.4a, which 2.4a's highlights now carry from the other side.
 
 ##### 3.7 Exercise: Create a Volume Group
 
@@ -721,10 +722,20 @@ Components: `exercise`, `AccentText` with `hue`.
 
 **Addition.** Recording variant for `create-volume-group-exercise.cast`.
 
-### 4. `logical-volumes.md` (10 slides)
+### 4. `logical-volumes.md` (9 slides), built 2026-10-25
 
 `routeAlias: logical-volumes`. Alignments: RH134 chapter 11, cert guide
-chapter 15. Exercise: Create a Logical Volume Exercise.
+chapter 15. Exercise: Create a Logical Volume Exercise, declared in
+`topicInfo`, its files built with the slides (the porting skill's rule since
+2026-10-25). Built and checked with `check:entry`, `check:slides`, and
+`check:exercises`, and every slide and click state captured at 1920x1080; it
+waits on the instructor's review. Built to fragments 2 and 3's conventions:
+`<div>` groups, a terminal with output for every command, LV terms slate, VG
+terms teal, PV terms blue, plain titles. Its procedure slide, 4.8, was built
+here and moved to fragment 8 the same day (Decision 38).
+Transcripts on 4.5, 4.6, and 4.6a come from the round 1 slide chain; 4.3's
+second terminal and 4.4's rounding fact come from the 2026-10-25 side test
+under "The exercise chain".
 
 ##### 4.1 Logical Volumes
 
@@ -734,119 +745,134 @@ Components: `section`.
 
 ##### 4.2 Logical Volumes (LVs)
 
-Source L17, with its typo ("Partiton"). A flexible block device, created from
-free PEs in the VG; the OS sees just another block device, like a partition or
-disk. "Why LVs are needed": the size is not bound to one disk, because an LV is
-made of extents; resize **without unmounting**, growing a file system while it
-is in use. On the right, the layers diagram with the LV layer in slate and the
-others white (Decision 31).
+Source L17, with its typo ("Partiton") fixed. Two `<div>` groups: "A logical
+volume is a flexible block device", created from free physical extents in a
+VG, seen by the OS as just another block device (like a partition, a disk, or
+a RAID device); then "Why LVs are needed": size not bound to one physical
+disk (made up of physical extents), and resize **without unmounting** (grow a
+file system while it is in use). On the right, the layers diagram with the LVs
+in slate (stroke `#6f8396`, fill `#dfe4e8`) and the rest white (Decision 31).
+`check:slides`: 18.89px clearance.
 
-Components: `two-cols-header`, Mermaid diagram.
+Components: `two-cols-header`, `<div>` groups, Mermaid diagram, `AccentText`
+with `hue`.
 
 ##### 4.3 Create a Logical Volume
 
-Source L18. "`lvcreate` creates an LV from free extents in a VG", "Create a
-100 MiB LV" over `lvcreate --name lv01 --size 100M vg01` and its output; then
-"Use all remaining free extents" over `lvcreate --name lv01 --extents 100%FREE
-vg01` as a command.
+Source L18. Two `<div>` groups, as on 3.3: "`lvcreate` creates a logical
+volume from free extents in a VG" over `lvcreate --name lv01 --size 100M
+vg01` and its output; then "Use all the free extents left in the VG" over
+`lvcreate --name lv01 --extents 100%FREE vg01` and its output, which the
+source showed as a command only (captured on a fresh `vg01` in the side
+test). `check:slides`: 61.67px clearance.
 
-Components: default layout, fixed `TerminalWindow`, `bash` fence.
+Components: default layout, `<div>` groups, two fixed `TerminalWindow`s,
+`AccentText` with `hue`.
 
 ##### 4.4 Specifying LV Size
 
-Source L19. Two click states, each a table of form and meaning. First,
-`-l` / `--extents`, a count or percentage of extents: `32` (exactly 32
-extents, 128 MiB at 4 MiB each), `+50` (50 more), `100%FREE` (every free
-extent in the VG). Then `-L` / `--size`, in units: `300M`, `2G`, `+500M`. A
-`Callout` closes the second state: `M` is MiB and `G` is GiB, and LVM rounds a
-size up to the next extent (RH134).
-
-Two fixes (Decision 17): the `+` rows add to an existing LV, so they belong to
-`lvextend`, which fragment 5 uses; the slide labels them so. And the table
-says "LEs" without defining them; a line above it says that an LV's
-**logical extents** map one to one onto physical extents (RH134).
+Source L19. "An LV is made of **logical extents (LEs)**, each mapped to one
+physical extent in the VG" (Decision 17's definition, RH134), then two click
+states. First, "`-l` / `--extents` takes a count or percentage of extents"
+over `32` (exactly 32 LEs, 128 MiB at 4 MiB per PE) and `100%FREE` (every
+free extent left in the VG). Then "`-L` / `--size` takes a size in
+human-readable units" over `300M` and `2G`, and a `Callout`: "`M` is MiB and
+`G` is GiB. LVM rounds a size up to a whole extent, so `--size 10M` makes a
+12 MiB LV" (verified: "Rounding up size to full physical extent 12.00 MiB";
+`--extents 32` made 128.00m). The source's `+50` and `+500M` rows moved to
+5.2 (Decision 35). The headings first had a colon after the inline code,
+which left the same visible gap 2.4 dropped, and a separate description line
+that pushed the second state 12.98px off the slide; folding the description
+into the heading fixed both. The instructor then removed `vertical: start`
+and changed "An LV" to "A LV" (2026-10-25). `check:slides`: 75.73px and 57px
+clearance.
 
 Components: default layout, `v-switch at="1"` with two templates, Markdown
-tables, `Callout`.
+tables, `Callout`, `AccentText` with `hue`.
 
 ##### 4.5 LV Device Paths
 
-Source L20. "LVM creates two equivalent paths for every LV", over the source's
-table: `/dev/vgname/lvname` (`/dev/vg01/lv01`) and `/dev/mapper/vgname-lvname`
-(`/dev/mapper/vg01-lv01`). Then, proposed (Decision 16): `ls -l` on both
-paths, showing that both are links to the same `dm-` device (the Cert Guide's
-example 15-7 does the same), and the line "An LV path never changes between
-reboots, so `/etc/fstab` can use it in place of a UUID" (RH134: mount an LV by
-name or by UUID), which settles the contradiction with w10's best practice.
+Source L20. "LVM creates two equivalent paths for every LV" over the source's
+table (`/dev/vgname/lvname`, `/dev/mapper/vgname-lvname`, with `vg01` and
+`lv01` examples). The source's closing note that either path points to the
+same device becomes "Use either; both link to the same device" over `ls -l`
+on both paths,
+each `-> ../dm-2` (Decision 16), and the slide ends "The path stays the same
+across reboots, so `/etc/fstab` can use it in place of a UUID" (RH134).
+`check:slides`: 13.14px clearance.
 
-Components: default layout, Markdown table, fixed `TerminalWindow`.
+Components: default layout, Markdown table, fixed `TerminalWindow`,
+`AccentText` with `hue`.
 
 ##### 4.6 Inspect Logical Volumes
 
 Source L21, split in two like 2.4 and 3.4 (Decision 33). "`lvs` gives a
-summary of all LVs on the system" over `lvs`, listing the OS volumes `root`
-and `swap` and `lv01` at 100 MiB, centered vertically like 2.4 and 3.4.
-`lvs` prints about 85 columns, so check it for overflow at 1920x1080. "LV" is
-slate (Decision 31).
+summary of all LVs on the system" over `lvs`: `root` and `swap` in
+`rhel_servera`, and `lv01` in `vg01` at 100.00m, with the trailing spaces of
+its 90-column header trimmed. Centered vertically. `check:slides`: 120.89px
+clearance.
 
-Components: default layout, fixed `TerminalWindow`, `AccentText` with `hue`.
+Components: default layout with `vertical: center`, fixed `TerminalWindow`,
+`AccentText` with `hue`.
 
 ##### 4.6a Inspect Logical Volumes
 
 The second half of L21. "`lvdisplay` shows the details of one LV" over
-`lvdisplay /dev/vg01/lv01`, trimmed as on 3.4a. Its highlights follow 2.4a
-(click-through, likely LV Path, LV Size, and Current LE, which ties back to
-3.4a's extents) or 3.4a (fixed, dimming only the omitted markers); the
-instructor's call.
+`lvdisplay /dev/vg01/lv01` trimmed to LV Path, LV Name, VG Name, LV UUID, LV
+Status, LV Size, and Current LE, with `...output omitted...` where the rest
+is left out. The source's abridged output also kept Segments and Allocation;
+dropped, since nothing teaches them and the twelve lines then match 3.4a.
+Built with click-through highlights (`{all|3-5|10-11}`), as first chosen;
+the instructor then replaced them with fixed ones, `{1-6,8,10-11}`, that dim
+only the `...output omitted...` markers, as on 3.4a (2026-10-25). Beneath it:
+"25 logical extents × 4.00 MiB = 100 MiB, taken from the VG's free extents",
+which ties back to 3.4a's arithmetic. `check:slides`: 23.2px clearance.
 
 Components: default layout, fixed `TerminalWindow` with line highlights,
 `AccentText` with `hue`.
-
-##### 4.8 Procedure: Create a Logical Volume
-
-Source L23, which follows the exercise in the source. Proposed: move it ahead
-of 4.7, so the section ends with its exercise and students see the whole
-procedure, including the `mkfs` and `/etc/fstab` steps, before they need it
-(Decision 12). Six click states, each a heading, two short lines where the
-source has them, and a `bash` fence:
-
-1. Create a partition: `parted /dev/sdb mklabel gpt`, `mkpart primary 1MiB
-   512MiB`, `set 1 lvm on`, `udevadm settle`, with the note that `udevadm
-   settle` waits until the new partition's device file exists
-2. Create the PV: `pvcreate /dev/sdb1`, `pvdisplay /dev/sdb1`
-3. Create the VG: `vgcreate vg01 /dev/sdb1`, `vgdisplay vg01`
-4. Create the LV: `lvcreate --name lv01 --size 300M vg01`, `lvdisplay
-   /dev/vg01/lv01`
-5. Create the file system: `mkfs.ext4 /dev/vg01/lv01`, with the note that
-   XFS needs more than 300 MB, which is why exercise 3's 252 MiB volume uses
-   ext4. Verified: on a 252 MiB LV `mkfs.xfs` stops with "Filesystem must be
-   larger than 300MB." and exits 1; a 300 MiB LV formats.
-6. Mount it persistently: `mkdir /data`, `echo "/dev/vg01/lv01 /data ext4
-   defaults 0 0" >> /etc/fstab`, `systemctl daemon-reload`, `mount /data`
-
-Corrections: the source numbers two steps "Step 4"; its `/etc/fstab` line says
-`xfs` for the ext4 file system it just made; and it says `udevadm settle`
-waits for the kernel to register the partition.
-
-Components: default layout with `vertical: start`, `v-switch at="1"` with six
-templates, `bash` fences, `Callout` for the two notes.
 
 ##### 4.7 Exercise: Create a Logical Volume
 
 Source L22.
 
-- **Goal:** Carve a logical volume from `vg_data` and mount it at boot
+- **Goal:** Carve a logical volume (slate) from `vg_data` and mount it at
+  boot
 - **Environment:** **Host:** `servera`; **Prerequisite exercise:** Create a
   Volume Group
-- **Workflow:** 1. Create a logical volume named `lv_data` using all available
-  space in `vg_data`; 2. Format `lv_data` with an ext4 file system;
-  3. Persistently mount `lv_data` on `/data`; 4. Verify with `lsblk`, `df`, and
-  `lvdisplay`
+- **Workflow:** 1. Create a logical volume (slate) named `lv_data` using all
+  available space in `vg_data`; 2. Format `lv_data` with an ext4 file system;
+  3. Persistently mount `lv_data` on `/data`; 4. Verify with `lsblk`, `df`,
+  and `lvdisplay`
 
 `/data` is both 4.8's mount point and this exercise's, as in the source
-(Decision 21).
+(Decision 21). `check:slides`: 144.84px clearance.
 
-Components: `exercise`.
+Exercise files, written 2026-10-25 and run on `servera` from exercise 2's end
+state (see "The exercise chain"):
+
+- `create-logical-volume-exercise.sh`, 46 presses (`kitty-demo --check`), the
+  source's `create_logical_volume.sh` in the current format: `lvcreate --name
+  lv_data --extents 100%FREE vg_data`, `lvs`, `mkfs.ext4`, `mkdir /data`, the
+  `/etc/fstab` edit in `vim` (`G` and `o` with `#@ noenter`, the line typed
+  with `#@ noenter` and held 5 seconds, `#@ key escape`, `:wq`, in place of
+  the source's `jj:wq`), `cat /etc/fstab`, `systemctl daemon-reload`, `mount
+  /data`, then `lsblk`, `df -h /data`, and `lvdisplay`, each cleared before
+  the next (the source ran the three together). `#!` notes give the 63
+  extents behind 252 MiB, why ext4, why the LV path can stand in for a UUID,
+  and Current LE 63. Pauses: 8 on the intro, 5 on `lvs`, `mkfs.ext4`, the
+  typed line, `cat`, and each verification. No cleanup: exercise 4 fills and
+  grows `lv_data`.
+- `create-logical-volume-exercise.html`, built from exercise 2's page with the
+  hue classes. It gives the `vim` keys in prose (<kbd>G</kbd>, <kbd>o</kbd>,
+  the line, <kbd>Esc</kbd>, `:wq`), quotes `mkfs.xfs`'s refusal ("Filesystem
+  must be larger than 300MB."), and gives the expected results: `lvs` at
+  252.00m; `lsblk` with `vg_data-lv_data` under `sdb1`; `df` naming
+  `/dev/mapper/vg_data-lv_data` at 231M, since ext4's inode tables and journal
+  take about 20 MiB (64,512 inodes and a 4 MiB journal, from `mkfs.ext4`'s
+  output); and `lvdisplay` with 252.00 MiB and 63 LEs. `check:exercises`
+  passes it.
+
+Components: `exercise`, `AccentText` with `hue`.
 
 ##### 4.7a Exercise recording (pending)
 
@@ -911,9 +937,9 @@ root@servera:~# vgextend vg01 /dev/sdc1
 `````
 
 5.2's first state, "Add another PV to the VG, if needed", repeats the
-`pvcreate` and `vgextend` that 3.6 now teaches one slide earlier. Proposed
-when fragment 5 is built: shorten that state to point back to 3.6, or keep
-it so 5.2 stays the whole procedure on one slide.
+`pvcreate` and `vgextend` that 3.6 now teaches one slide earlier. The
+instructor's call (2026-10-25): keep both for now, and decide once fragment 5
+is built whether to combine them.
 
 Components: default layout, `<div>` group, fixed `TerminalWindow`,
 `AccentText` with `hue`.
@@ -927,7 +953,9 @@ where it has them, and a `bash` fence:
    `mkpart primary 1MiB 256MiB`, `set 1 lvm on`, `udevadm settle`, `pvcreate
    /dev/sdc1`, `vgextend vg01 /dev/sdc1`. The source's heading names `udevadm
    settle` but its fence leaves it out; added.
-2. Extend the LV: `lvextend --size +100M /dev/vg01/lv01`
+2. Extend the LV: `lvextend --size +100M /dev/vg01/lv01`, and the `+` size
+   forms that 4.4 no longer shows (Decision 35): `-l +50` / `--extents +50`
+   adds 50 LEs, and `-L +500M` / `--size +500M` adds 500 MiB
 3. Grow the file system: XFS, `xfs_growfs /data` (takes the mount point,
    online only); ext4, `resize2fs /dev/vg01/lv01` (takes the device, online or
    offline). The source's heading says `xfs_grow`.
@@ -1145,7 +1173,7 @@ Components: `exercise`.
 
 **Addition.** Recording variant for `create-lvm-swap-space-exercise.cast`.
 
-### 8. `lvm-practice.md` (5 slides)
+### 8. `lvm-practice.md` (6 slides)
 
 `routeAlias: lvm-practice`. Alignments: RH134 chapter 11, cert guide chapter
 15. Exercises: Create a Large LV Spanning Two Disks Exercise, Create
@@ -1157,6 +1185,139 @@ Source L37 ("Practice"), retitled so the week page's agenda line says what it
 practices (Decision 2). Section slide.
 
 Components: `section`.
+
+##### 4.8 Procedure: Create a Logical Volume
+
+Source L23, **moved to fragment 8** (Decision 38). It was built in fragment 4
+on 2026-10-25, ahead of exercise 3 (Decision 12), and removed the same day,
+before fragment 8 existed, so its source is kept below to drop in after 8.1.
+In fragment 8 it opens the practice: exercise 6 follows the same recipe,
+from partition to persistent mount, on two disks with XFS.
+
+Six click states, each an
+`h3` step heading over a commands-only `bash` fence (Decision 13), with layer
+terms colored:
+
+1. "Step 1: Create a partition": `parted /dev/sdb mklabel gpt`, `mkpart
+   primary 1MiB 512MiB`, `set 1 lvm on`, `udevadm settle`, and a `Callout`:
+   "`udevadm settle` waits until udev has finished with the new partition, so
+   `/dev/sdb1` exists before the next command needs it" (the source said it
+   waits for the kernel to register the partition)
+2. "Step 2: Create a physical volume from the partition": `pvcreate`,
+   `pvdisplay`
+3. "Step 3: Create a volume group from the PV": `vgcreate vg01 /dev/sdb1`,
+   `vgdisplay vg01`
+4. "Step 4: Create a logical volume in the VG": `lvcreate --name lv01 --size
+   300M vg01`, `lvdisplay /dev/vg01/lv01`
+5. "Step 5: Create a file system on the LV": `mkfs.ext4 /dev/vg01/lv01`, and a
+   `Callout`: "XFS needs a volume larger than 300 MB, so the smaller volumes in
+   this week's exercises use ext4" (the source said "at least 300MiB")
+6. "Step 6: Mount it persistently": `mkdir /data`, `echo "/dev/vg01/lv01 /data
+   ext4 defaults 0 0" >> /etc/fstab`, `systemctl daemon-reload`, `mount /data`
+
+Corrections: the source numbers two steps "Step 4", and its `/etc/fstab` line
+says `xfs` for the ext4 file system it just made. The whole procedure ran on
+`sdd` in the side test (a 511 MiB PV, a 508 MiB VG, a 300 MiB LV of 75 LEs,
+ext4, mounted on `/data` through the appended line), so every command is
+verified; the slide keeps the source's `/dev/sdb`. `check:slides` in
+fragment 4: 143.44px clearance or more in every state. Step 5's `Callout`
+still holds in fragment 8, where exercise 6's 6 GiB volume gets XFS.
+
+`````md
+---
+vertical: start
+---
+
+# Procedure: Create a Logical Volume
+
+<v-switch at="1">
+
+<template #0>
+
+### Step 1: Create a partition
+
+```bash
+parted /dev/sdb mklabel gpt
+parted /dev/sdb mkpart primary 1MiB 512MiB
+parted /dev/sdb set 1 lvm on
+udevadm settle
+```
+
+<Callout>
+
+`udevadm settle` waits until udev has finished with the new partition, so `/dev/sdb1` exists before the next command needs it
+
+</Callout>
+
+</template>
+
+<template #1>
+
+### Step 2: Create a <AccentText hue="blue">physical volume</AccentText> from the partition
+
+```bash
+pvcreate /dev/sdb1
+pvdisplay /dev/sdb1
+```
+
+</template>
+
+<template #2>
+
+### Step 3: Create a <AccentText hue="teal">volume group</AccentText> from the <AccentText hue="blue">PV</AccentText>
+
+```bash
+vgcreate vg01 /dev/sdb1
+vgdisplay vg01
+```
+
+</template>
+
+<template #3>
+
+### Step 4: Create a <AccentText hue="slate">logical volume</AccentText> in the <AccentText hue="teal">VG</AccentText>
+
+```bash
+lvcreate --name lv01 --size 300M vg01
+lvdisplay /dev/vg01/lv01
+```
+
+</template>
+
+<template #4>
+
+### Step 5: Create a file system on the <AccentText hue="slate">LV</AccentText>
+
+```bash
+mkfs.ext4 /dev/vg01/lv01
+```
+
+<Callout>
+
+XFS needs a volume larger than 300 MB, so the smaller volumes in this week's exercises use ext4
+
+</Callout>
+
+</template>
+
+<template #5>
+
+### Step 6: Mount it persistently
+
+```bash
+mkdir /data
+echo "/dev/vg01/lv01 /data ext4 defaults 0 0" >> /etc/fstab
+systemctl daemon-reload
+mount /data
+```
+
+</template>
+
+</v-switch>
+`````
+
+Components: default layout with `vertical: start`, `v-switch at="1"` with six
+templates, `bash` fences, two `Callout`s, `AccentText` with `hue`.
 
 ##### 8.2 Exercise: Create a Large LV Spanning Two Disks
 
@@ -1591,10 +1752,33 @@ baseline:
    (252.00 MiB, 4.00 MiB extents, 63 total and free); `pvdisplay /dev/sdb1`
    now shows `vg_data`, Allocatable yes, and 4.00 MiB not usable.
 
-**`servera` is now at the end of exercise 2.** Exercise 3 runs from here. A
-side test that needs `sdb` or `vg_data` puts them back to this state, not to
-the snapshot; the slide chain's transcripts for fragment 4 were captured in
-round 1, so none should be needed.
+3. A side test for fragment 4, on `sdd`, with `/etc/fstab`, LVM's devices
+   file, and its archive and backup listings copied first: 4.8's procedure
+   end to end (`parted` `1MiB` to `512MiB`, a 511 MiB PV, `vg01` at 508 MiB
+   and 127 extents, `lv01` at 300 MiB and 75 LEs, `mkfs.ext4`, the appended
+   `/etc/fstab` line, `daemon-reload`, `mount /data`); then, after unmounting
+   and restoring `/etc/fstab`, 4.3's `lvcreate --name lv01 --extents 100%FREE
+   vg01` and 4.4's rounding (`--size 10M` printed "Rounding up size to full
+   physical extent 12.00 MiB"; `--extents 32` made 128.00m). The first
+   `100%FREE` attempt hit the removed ext4 LV's signature and stopped at
+   "Wipe it? [y/n]" (aborting with exit 5, as already recorded), so the
+   signature was wiped with a throwaway `lvcreate --yes` and the capture
+   retaken. Teardown: LVs, `vg01`, and the PV removed, `sdd` wiped and its
+   first 4 MiB zeroed, the devices file restored from the copy, and the new
+   archive and backup files deleted. Both hashes and all three listings
+   matched the copies, `sdd` showed no signatures, `/data` was gone, and
+   `vg_data` was untouched.
+4. Exercise 3, as its command file runs it, with the `vim` keystrokes typed
+   through a terminal: `lvcreate --name lv_data --extents 100%FREE vg_data`
+   (252.00m), `mkfs.ext4`, `mkdir /data`, one line added to `/etc/fstab`
+   (`/dev/vg_data/lv_data /data ext4 defaults 0 0`, checked by `diff`),
+   `daemon-reload`, `mount /data` (no output); `lsblk` shows
+   `vg_data-lv_data` 252M on `/data`, `df -h` 231M, and `lvdisplay` 63 LEs.
+
+**`servera` is now at the end of exercise 3**: `lv_data` mounted on `/data`
+and in `/etc/fstab`. Exercise 4 runs from here. A side test that needs `sdb`,
+`vg_data`, `/data`, or `/etc/fstab` puts them back to this state, not to the
+snapshot.
 
 ## Authoring notes
 
@@ -1688,17 +1872,21 @@ All proposed on 2026-10-24 and waiting on the instructor. Each is reversible.
     partition. 1.3a and 1.3b are built: the table (1.3a) is followed by an
     animation (1.3b) the instructor asked for, showing the pattern behind it.
 12. **Move 4.8, the procedure, ahead of exercise 4.7**, so the section ends
-    with its exercise.
+    with its exercise. Built that way on 2026-10-25, then superseded the same
+    day by Decision 38.
 13. **Procedure slides keep commands-only `bash` fences**; slides where the
-    source shows output get recaptured output in `TerminalWindow`.
+    source shows output get recaptured output in `TerminalWindow`. Built that
+    way on 4.8 on 2026-10-25, for review; its commands were all run in the
+    side test.
 14. **Real output where the output is the point**: 5.3 (`dd` hitting a full
     disk) and 6.6 (`wipefs` listing what it erased). Optional: states 2 to 4
     of 5.2 (`lvextend`, `resize2fs`) and the `swapon --show` states of 7.2.
 15. **3.6 shows `pvcreate /dev/sdc1`** before `vgextend`.
 16. **4.5 gains `ls -l` on both paths** and the line that an LV path is stable
-    enough for `/etc/fstab`.
+    enough for `/etc/fstab`. Built on 2026-10-25, for review.
 17. **4.4 labels the `+` forms as `lvextend` forms** and defines logical
-    extents.
+    extents. The `+` forms moved to 5.2 instead (Decision 35); the definition
+    was built on 4.4 on 2026-10-25.
 18. **6.3's note is reworded to match the lab**: `vgremove` asks before
     removing a VG that still holds LVs, and removes them too.
 19. **The slide's swap LV is `swap01` at 512 MiB**, a generic name that fits
@@ -1795,14 +1983,24 @@ Decided by the instructor on 2026-10-25:
     Fragment 4's transcripts show no VG capacity, so capturing them after
     `vgextend` in the slide chain does not show on screen.
 
-Proposed 2026-10-25, following Decision 34:
+Decided by the instructor on 2026-10-25, following Decision 34:
 
-35. **4.4's `+` rows move to fragment 5.** `+50` (`-l`) and `+500M` (`-L`)
+35. **4.4's `+` rows move to fragment 5.** Accepted 2026-10-25 and built on
+    4.4; they wait on 5.2's second state. `+50` (`-l`) and `+500M` (`-L`)
     add to an existing LV, so only `lvextend` takes them; Decision 17 labels
     them on 4.4 for now. Proposed: 4.4 keeps the create-time forms (`32`,
     `100%FREE`, `300M`, `2G`), and the two `+` forms go to 5.2's "Extend the
     LV" state beside `lvextend --size +100M`, where they are used. Lost: the
     side-by-side view of every form in one table.
+36. **4.6a's highlights click through**, like 2.4a's, not fixed like 3.4a's.
+    Built so; the instructor then made them fixed, as on 3.4a, in review.
+37. **5.2 keeps its "Add another PV" state** beside 3.6 for now; whether to
+    combine them is decided once fragment 5 is built.
+38. **The procedure, 4.8, moves to the practice fragment**, after 8.1 and
+    before exercise 6, which follows the same recipe. Fragment 4 drops to nine
+    slides and fragment 8 grows to six. Fragment 4 now ends its concepts at
+    4.6a and goes straight to exercise 3; the procedure becomes a recap where
+    students put every layer together on their own.
 
 ## Open questions
 
@@ -1835,7 +2033,7 @@ As of 2026-10-25.
 **Done:**
 
 - This plan, and `course/w11-draft.md` with the cover, the VM reminder, and
-  the imports for fragments 1 to 3.
+  the imports for fragments 1 to 4.
 - Fragment 1, `logical-volume-manager.md`, five slides built and checked,
   including the commands table (1.3a) and the animation that follows it
   (1.3b).
@@ -1845,26 +2043,27 @@ As of 2026-10-25.
 - Fragment 3, `volume-groups.md`, six slides built and checked (the same),
   and exercise 2's command file and written version. Its Extend a Volume
   Group slide moved to fragment 5 (Decision 34).
+- Fragment 4, `logical-volumes.md`, eight slides built and checked (the
+  recording slide waits on the cast), and exercise 3's command file and
+  written version. Its procedure slide moved to fragment 8 (Decision 38).
 - The week's color key (Decision 31) and `AccentText`'s `hue` prop in the
   theme, with its test, gallery line, and documentation.
 - The lab checks behind every correction, under "Verification". `servera` is
-  at the end of exercise 2 ("The exercise chain").
+  at the end of exercise 3 ("The exercise chain").
 
 **Next, in order:**
 
-1. The instructor reviews fragment 3 and exercise 2's files.
-2. Fragment 4, `logical-volumes.md`, with exercise 3's command file and
-   written version built alongside its slides and run on `servera` from
-   exercise 2's end state:
-   - Transcripts from the round 1 slide chain: `lvcreate --name lv01 --size
-     100M vg01`, `ls -l` on both LV paths (both `../dm-2`), `lvs`, and
-     `lvdisplay /dev/vg01/lv01`.
-   - 4.2's diagram: 2.2's with only the LVs in slate.
-   - 4.6 and 4.6a as two slides, worded like 2.4 and 3.4, LV terms slate,
-     4.6 centered; 4.6a's highlights click-through like 2.4a or fixed like
-     3.4a, the instructor's call (Decision 33).
-   - Procedure slide 4.8 keeps commands-only fences (Decision 13) unless the
-     instructor prefers terminals with output there too, as on 2.3 and 3.3.
+1. The instructor reviews exercise 3's files, and Decisions 13 and 16 as
+   built.
+2. Fragment 5, `extending-lvm.md`, with exercise 4's command file and written
+   version built alongside its slides and run on `servera` from exercise 3's
+   end state:
+   - 5.1a's overview table and diagram, then 3.6 from the source kept in its
+     entry, then 5.2 with the `+` size forms in its second state (Decision
+     35) and its first state kept (Decision 37), then 5.3.
+   - Real output where Decision 14 settles it (5.3's `dd` to a full volume,
+     and optionally 5.2's `lvextend` and `resize2fs`), captured in a side
+     test that returns `servera` to exercise 3's state.
 3. Open decisions: everything not marked accepted, including Decision 30
    (exercise 5a's design).
 4. Before the recordings: the SCC volume group name (Open question 6).
