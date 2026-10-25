@@ -451,26 +451,42 @@ and `clicks: 2`; `AccentText` with `hue`; UnoCSS utility classes for the
 windows, the grid, and the sizes (`text-4xl` and `text-5xl`, each with
 `leading-[1.3]`); `v-motion`; an `sr-only` paragraph.
 
-### 2. `physical-volumes.md` (7 slides)
+### 2. `physical-volumes.md` (7 slides), built 2026-10-25
 
 `routeAlias: physical-volumes`. Alignments: RH134 chapter 11, cert guide
-chapter 15. Exercise: Initialize a Physical Volume Exercise.
+chapter 15. Exercise: Initialize a Physical Volume Exercise, declared in
+`topicInfo` once its written version exists (`check:entry` requires the file).
+Built and checked with `check:entry` and `check:slides`; every slide and click
+state was also captured at 1920x1080. It waits on the instructor's review. The
+transcripts are real output from the slide-chain run on `servera` on
+2026-10-24 (round 1 under "Verification"), the same run fragment 3 draws on,
+so the PV UUID on 2.4 comes back on 3.5. Trailing spaces in the output were
+dropped. The colors follow Decision 31; slide titles stay plain, because they
+feed the week page's agenda and Slidev's navigation as raw text.
 
 ##### 2.1 Physical Volumes
 
-Source L4. Section slide.
+Source L4. Section slide carrying the `topicInfo` alignments.
 
 Components: `section`.
 
 ##### 2.2 Physical Volumes (PVs)
 
-Source L5. A block device (a partition, a whole disk, or RAID) initialized for
-LVM use. "Why PVs are needed": LVM cannot use raw storage directly; creating a
-PV gives the device a **UUID** and lets it join a volume group. On the right,
-the layers diagram with the PV layer in blue and the others white (Decision
-31). "PV" in the text is blue too.
+Source L5. Left column, two groups: "A physical volume is a block device
+initialized for LVM", with "A partition, a whole disk, or a RAID device"
+beneath it and, nested under that, "**Recommendation**: Use a partition" (the
+instructor's addition, 2026-10-25, in the deck accent, since it is emphasis
+rather than a layer; the basis is round 5 under "Verification"); then "Why PVs
+are needed": LVM cannot use raw storage directly;
+creating a PV gives the device a **UUID**; only a PV can join a volume group.
+Each group is wrapped in a `<div>` so its parts stay together, the
+instructor's fix from 1.2. "physical volume" and "PV" are blue, "volume group"
+teal. Right column, 1.3's diagram with the PVs in blue and everything else
+white. `check:slides`: 87.83px clearance.
 
-Components: `two-cols-header`, Mermaid diagram.
+Components: `two-cols-header` with `listSpacing: padded` and `leftWidth: 60`
+(the instructor dropped `vertical: center`); `<div>` groups; `AccentText`,
+with `hue` on the layer terms; Mermaid.
 
 ##### 2.2a Prepare a Partition for LVM
 
@@ -478,37 +494,62 @@ Components: `two-cols-header`, Mermaid diagram.
 for "a 256 MiB GPT partition with the `lvm` flag", and no source slide shows
 the flag until the procedure recap, 4.8, two sections later. W10 never showed
 `parted`'s `set` command. The instructor chose to introduce flags here, on
-their own terms, with no reference back to w10. "The `lvm` flag marks a
-partition for LVM", then a
-fixed `TerminalWindow`: `parted /dev/sdb set 1 lvm on` and `parted /dev/sdb
-print`, whose Flags column reads `lvm` on both partitions (captured in round 1).
-Closing line: the flag is a label, not a requirement; use it so people and
-tools can see what the partition holds (Cert Guide chapter 15).
+their own terms, with no reference back to w10.
+
+"The `lvm` flag marks a partition for LVM", then two click states, since one
+transcript of all three commands would not fit:
+
+1. "Set the flag in interactive mode (partition 1) or in one command
+   (partition 2)" over an interactive `parted /dev/sdb` session (its banner,
+   then `set` answered `1`, `lvm`, and `on`, then `quit` and the "You may need
+   to update /etc/fstab." line), followed by command-mode `parted /dev/sdb set
+   2 lvm on`. Both modes on one slide, at the instructor's request
+   (2026-10-25); exercise 1 uses the interactive form. Captured fresh from
+   `servera` the same day, on partitions matching the slide chain, and the
+   `print` that followed matched state 2 exactly.
+2. "Verify: `print` lists `lvm` in the Flags column" over `parted /dev/sdb
+   print`, both partitions flagged `lvm`, then "The flag is a label, not a
+   requirement; use it so people and tools can see what the partition holds"
+   (Cert Guide chapter 15).
 
 Verified: on GPT the flag changes the partition type from "Linux filesystem"
 to "Linux LVM" (`lsblk -o PARTTYPENAME`), and `pvcreate` accepts an unflagged
 partition without complaint. Interactive `parted`, as exercise 1 uses it,
 asks `Partition number?`, `Flag to Invert?`, and `New state?  [on]/off?`
-after `set`.
-
-Components: default layout, fixed `TerminalWindow`.
-
-##### 2.3 Initialize a Physical Volume
-
-Source L6. "`pvcreate` creates a physical volume", over `pvcreate /dev/sdb1`
-and its output; then "Create several at once" over `pvcreate /dev/sdb1
-/dev/sdb2` as a command.
-
-Components: default layout, fixed `TerminalWindow`, `bash` fence.
-
-##### 2.4 Inspect Physical Volumes
-
-Source L7, with its typo ("Physoical"). Two click states: `pvs`, a summary of
-every PV (`sda3` in the OS volume group, `sdb1` and `sdb2` unassigned); then
-`pvdisplay /dev/sdb1`, the detail of one new PV.
+after `set`. `check:slides`: 23.8px clearance on the first state and 27.7px on
+the second.
 
 Components: default layout with `vertical: start`, `v-switch at="1"` with two
 templates, each a fixed `TerminalWindow`.
+
+##### 2.3 Initialize a Physical Volume
+
+Source L6. Two groups: "`pvcreate` creates a physical volume" over
+`pvcreate /dev/sdb1` and its output; then "Create several at once" over
+`pvcreate /dev/sdb1 /dev/sdb2` and its two "successfully created" lines, a
+terminal at the instructor's request (2026-10-25) in place of the source's
+command-only block. The second transcript is a separate run on fresh
+partitions matching the slide chain, captured that day, since in the chain
+`sdb1` was already a PV by then; `servera` was reverted afterwards. Each group
+is a `<div>`, so the label sits with what it introduces. `check:slides`:
+55.67px clearance.
+
+Components: default layout, `<div>` groups, two fixed `TerminalWindow`s,
+`AccentText` with `hue`.
+
+##### 2.4 Inspect Physical Volumes
+
+Source L7, with its typo ("Physoical"). Two click states: "`pvs` gives a
+summary of all PVs on the system" (the instructor's wording, 2026-10-25) over
+`pvs` (`sda3` in `rhel_servera`, `sdb1` and `sdb2` unassigned at 255.00m);
+then "`pvdisplay` shows the details of one PV" over `pvdisplay /dev/sdb1`, a
+new PV with no extents yet. The source's "pvs: a summary" form put a visible
+gap between the inline code and the colon. `check:slides`: 86.8px clearance on
+the second state.
+
+Components: default layout (the instructor dropped `vertical: start`),
+`v-switch at="1"` with two templates, each a fixed `TerminalWindow`,
+`AccentText` with `hue`.
 
 ##### 2.5 Exercise: Initialize a Physical Volume
 
@@ -517,14 +558,15 @@ Source L8.
 - **Goal:** Prepare a partition on a blank disk for LVM
 - **Environment:** **Host:** `servera`
 - **Workflow:** 1. Create a 256 MiB GPT partition with the `lvm` flag on
-  `/dev/sdb`; 2. Initialize `/dev/sdb1` as a physical volume; 3. Verify with
-  `pvs` and `pvdisplay`
+  `/dev/sdb`; 2. Initialize `/dev/sdb1` as a physical volume (blue);
+  3. Verify with `pvs` and `pvdisplay`
 
 The source command file ends the partition at `256MiB`, which makes it 255
 MiB; proposed: end it at `257MiB` (Decision 22). Either way the PV holds 63
-extents, 252 MiB (verified), so nothing later changes.
+extents, 252 MiB (verified), so nothing later changes. The command file and
+written exercise are still to write.
 
-Components: `exercise`.
+Components: `exercise`, `AccentText` with `hue`.
 
 ##### 2.5a Exercise recording (pending)
 
@@ -563,13 +605,15 @@ Components: default layout, fixed `TerminalWindow`, `bash` fence.
 
 ##### 3.4 Inspect Volume Groups
 
-Source L12. Two click states: `vgs`, with the OS volume group and `vg01` (two
-PVs, no LVs); then `vgdisplay vg01`, trimmed to the source's eight fields with
-`...output omitted...` lines where fields are left out, in place of the
-source's "Abridged Output" fence title.
+Source L12. Two click states, worded like 2.4: "`vgs` gives a summary of all
+VGs on the system" over `vgs`, with the OS volume group and `vg01` (two PVs,
+no LVs); then "`vgdisplay` shows the details of one VG" over `vgdisplay vg01`,
+trimmed to the source's eight fields with `...output omitted...` lines where
+fields are left out, in place of the source's "Abridged Output" fence title.
+"VG" is teal (Decision 31).
 
-Components: default layout with `vertical: start`, `v-switch at="1"` with two
-templates, each a fixed `TerminalWindow`.
+Components: default layout, as on 2.4; `v-switch at="1"` with two templates,
+each a fixed `TerminalWindow`; `AccentText` with `hue`.
 
 ##### 3.5 Physical Extents in `pvdisplay`
 
@@ -672,12 +716,14 @@ Components: default layout, Markdown table, fixed `TerminalWindow`.
 
 ##### 4.6 Inspect Logical Volumes
 
-Source L21. Two click states: `lvs`, listing the OS volumes `root` and `swap`
-and `lv01` at 100 MiB; then `lvdisplay /dev/vg01/lv01`, trimmed as on 3.4.
+Source L21. Two click states, worded like 2.4: "`lvs` gives a summary of all
+LVs on the system" over `lvs`, listing the OS volumes `root` and `swap` and
+`lv01` at 100 MiB; then "`lvdisplay` shows the details of one LV" over
+`lvdisplay /dev/vg01/lv01`, trimmed as on 3.4. "LV" is slate (Decision 31).
 `lvs` prints about 85 columns; to check for overflow.
 
-Components: default layout with `vertical: start`, `v-switch at="1"` with two
-templates, each a fixed `TerminalWindow`.
+Components: default layout, as on 2.4; `v-switch at="1"` with two templates,
+each a fixed `TerminalWindow`; `AccentText` with `hue`.
 
 ##### 4.8 Procedure: Create a Logical Volume
 
@@ -1348,6 +1394,33 @@ baseline, `/etc/lvm/archive` and `/etc/lvm/devices` held only their original
 files, `sdb` to `sdd` had no signatures, there was no `/data`, the root file
 system was at 17%, and no unit had failed.
 
+**Round 5**, 2026-10-25, a PV on a whole disk against one on a flagged
+partition, for 2.2's "a partition, a whole disk, or a RAID device". `pvcreate
+/dev/sdc` on the bare disk and `pvcreate /dev/sdb1` on a 256 MiB partition
+flagged `lvm`:
+
+- `parted /dev/sdc print`: "Error: /dev/sdc: unrecognised disk label",
+  "Partition Table: unknown", exit 1. `sdb` lists partition 1 with the `lvm`
+  flag.
+- `fdisk -l /dev/sdc` prints only the disk's size and geometry, the same as a
+  blank disk. `sdb` shows "Disklabel type: gpt" and `/dev/sdb1 ... 256M Linux
+  LVM`.
+- Plain `lsblk` shows `sdc` as a bare disk with nothing under it; only
+  `lsblk -f` and `blkid` report `LVM2_member`. `sdb` shows `sdb1` beneath it.
+- `fdisk /dev/sdc`, opened interactively, warns "The device contains
+  'LVM2_member' signature and it will be removed by a write command", then
+  offers a new DOS label. On `sdb` it opens the GPT quietly.
+- **`parted` destroys a whole-disk PV without asking.** Interactive `mklabel
+  gpt` on `sdc` wrote the label at once; afterwards `pvs /dev/sdc` reported
+  "Failed to find physical volume". On `sdb` it asked "The existing disk label
+  on /dev/sdb will be destroyed ... Yes/No?", and on `No` the PV survived.
+
+Both course references put their own hands-on PVs on partitions: RH134's
+examples, guided exercise, and lab (whose partitions run `1MiB` to `257MiB`,
+as Decision 22 proposes), and the Cert Guide's exercise 15-1, which calls
+partitions "recommended practice". `servera` was reverted to its snapshot
+afterwards, and the baseline checks matched.
+
 Still to verify during the build:
 
 - `vgremove` answered `y` while an LV is mounted.
@@ -1538,9 +1611,11 @@ Added on 2026-10-24 from the instructor's answers:
     consistent across all of this week's material, exercises included, so a
     PV is always blue, a VG teal, and an LV slate, in text or diagram:
     - **Slides,** exercise slides included: wherever text names a layer
-      (terms, headings, lists, tables, exercise titles and workflow steps), it
-      uses `AccentText` with that layer's hue, and every diagram node for a
-      layer takes its hue.
+      (terms, lists, tables, captions, and workflow steps), it uses
+      `AccentText` with that layer's hue, and every diagram node for a layer
+      takes its hue. Slide titles stay plain, exercise titles included:
+      Slidev passes a title on as raw text, so a colored section title would
+      put `<AccentText ...>` tags into the week page's agenda.
     - **Written exercises:** each page's inline `<style>` block gains three
       classes named and colored like `AccentText`'s hues, `hue-blue`
       (`#0461be`), `hue-teal` (`#006e80`), and `hue-slate` (`#526678`), bold,
@@ -1579,38 +1654,52 @@ Added on 2026-10-24 from the instructor's answers:
 
 ## Status
 
-As of 2026-10-24.
+As of 2026-10-25.
 
-**Done:** this plan; `course/w11-draft.md` (cover, VM reminder, and fragment
-1's import); fragment 1, `logical-volume-manager.md`, five slides built and
-checked, including the commands table (1.3a) and the animation that follows it
-(1.3b); the week's color key (Decision 31) and `AccentText`'s `hue` prop in
-the theme, with its test, gallery line, and documentation. The
-lab checks behind every correction are under "Verification", and `servera` was
-reverted to its snapshot afterwards.
+**Done:**
+
+- This plan, and `course/w11-draft.md` with the cover, the VM reminder, and
+  the imports for fragments 1 and 2.
+- Fragment 1, `logical-volume-manager.md`, five slides built and checked,
+  including the commands table (1.3a) and the animation that follows it
+  (1.3b).
+- Fragment 2, `physical-volumes.md`, six slides built and checked (the
+  recording slide waits on the cast). Its exercise files are not written yet.
+- The week's color key (Decision 31) and `AccentText`'s `hue` prop in the
+  theme, with its test, gallery line, and documentation.
+- The lab checks behind every correction, under "Verification". `servera` was
+  reverted to its snapshot afterwards.
 
 **Next, in order:**
 
-1. The instructor reviews fragment 1.
-2. Fragment 2, `physical-volumes.md`, the first with transcripts, so it needs
-   the lab. What fragment 1 settled that reaches it:
-   - Capture from the slide chain under "Verification".
-   - Copy 1.3's diagram for 2.2 and change only the `class` lines: PVs blue,
-     the rest white (Decisions 9 and 31).
-   - Color every PV mention that names the layer with `AccentText hue="blue"`
-     (Decision 31), including 2.2's definitions, 2.4's `pvs` caption, and
-     exercise 1's slide.
-   - Build exercise 1's written version with the `hue-blue` class (Decision
-     31) and confirm `check:exercises` accepts it before the other exercises
-     copy it.
-   - Where a slide pairs a short heading with one paragraph, as 2.2's "Why PVs
-     are needed" does, check the spacing in the browser; 1.3 needed a padded
-     nested list instead (see "Authoring notes").
-   - The ten-slide count before exercise 1 is now eight content slides, with
-     2.2a included.
-3. Open decisions: everything not marked accepted, including Decision 30
+1. The instructor reviews fragments 1 and 2.
+2. Exercise 1, Initialize a Physical Volume: the command file and the
+   written version, each command verified on the lab as it is written. The
+   written version is the first to carry the `hue-blue` class (Decision 31);
+   confirm `check:exercises` accepts it, including a colored `h1`, before the
+   other exercises copy it. Then declare it in fragment 2's `topicInfo`.
+   Decision 22 (`257MiB`) applies. The written version can give the reason
+   behind 2.2's "Use a partition" (round 5): a PV on a bare disk looks empty
+   to `parted` and `lsblk`, and `parted mklabel` overwrites it without
+   asking.
+3. Fragment 3, `volume-groups.md`, with what fragments 1 and 2 settled:
+   - Transcripts from the round 1 slide chain under "Verification":
+     `vgcreate`, `vgs`, `vgdisplay vg01`, `pvdisplay /dev/sdb1` in the VG
+     (same PV UUID as 2.4), `pvcreate /dev/sdc1`, and `vgextend`.
+   - Copy 2.2's diagram for 3.2 and change only the `class` lines: the VG
+     teal, the rest white.
+   - Color VG mentions teal and PV mentions blue in the body text; leave
+     slide titles plain.
+   - Wrap a short heading and its list, or a label and its transcript, in a
+     `<div>` so they stay together, as on 1.2, 2.2, and 2.3.
+   - Word 3.4 like the instructor's 2.4: "`vgs` gives a summary of all VGs on
+     the system" and "`vgdisplay` shows the details of one VG", in the default
+     layout without `vertical: start`. 4.6 follows the same pattern.
+   - The new partitions on 3.6 (`sdc1`) and 5.2 already follow 2.2's
+     "Use a partition" recommendation; nothing to change.
+4. Open decisions: everything not marked accepted, including Decision 30
    (exercise 5a's design).
-4. Before the recordings: the SCC volume group name (Open question 6).
+5. Before the recordings: the SCC volume group name (Open question 6).
 
 **On another machine:**
 
