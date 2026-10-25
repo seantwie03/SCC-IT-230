@@ -9,11 +9,11 @@ produce this plan. Nothing is built until the plan is approved.
 ## Answer in brief
 
 **Eight topic fragments** in one chapter directory, **eight exercises**, and a
-deck of **56 slides**: 40 from the source (38 content slides plus the cover and
+deck of **58 slides**: 40 from the source (38 content slides plus the cover and
 VM reminder; L13 was removed on 2026-10-25, Decision 32), 3 more from splitting
-the inspect slides in two (2.4a, 3.4a, 4.6a, Decision 33), 5 added slides
-(1.3a, 1.3b, 2.2a, 5.1a, and the new exercise slide 7.3), and 8 recording
-slides that wait on the casts.
+the inspect slides in two (2.4a, 3.4a, 4.6a, Decision 33), 7 added slides
+(1.3a, 1.3b, 2.2a, 5.1a, 5.2a, 5.2b, and the new exercise slide 7.3), and 8
+recording slides that wait on the casts.
 
 | # | Fragment                    | Section title                  | Slides | Exercises |
 |--:|-----------------------------|--------------------------------|-------:|----------:|
@@ -21,12 +21,12 @@ slides that wait on the casts.
 | 2 | `physical-volumes.md`       | Physical Volumes               |      8 |         1 |
 | 3 | `volume-groups.md`          | Volume Groups                  |      7 |         1 |
 | 4 | `logical-volumes.md`        | Logical Volumes                |      9 |         1 |
-| 5 | `extending-lvm.md`          | Extending LVM                  |      7 |         1 |
+| 5 | `extending-lvm.md`          | Extending LVM                  |      8 |         1 |
 | 6 | `removing-lvm.md`           | Removing LVM                   |      8 |         1 |
 | 7 | `lvm-swap-space.md`         | Swap Space on Logical Volumes  |      4 |         1 |
-| 8 | `lvm-practice.md`           | LVM Practice                   |      6 |         2 |
+| 8 | `lvm-practice.md`           | LVM Practice                   |      7 |         2 |
 |   | Entry file                  |                                |      2 |           |
-|   | **Total**                   |                                | **56** |     **8** |
+|   | **Total**                   |                                | **58** |     **8** |
 
 Slide counts include the recording slides. The fragments follow the Slidev
 deck's eight sections one for one. The LibreOffice deck contributes two concept
@@ -227,7 +227,8 @@ From `managing_storage_with_lvm.md`:
 |    L39 | Exercise: Persistent Swap on an LV        | 8.3       |
 
 3.6 keeps its number but sits in fragment 5, after 5.1a (Decision 34), and
-4.8 keeps its number but sits in fragment 8, after 8.1 (Decision 38).
+4.8 keeps its number but sits in fragment 8, after 8.1 (Decision 38), and 5.2
+sits there too, after 4.8 (Decision 40).
 
 From `ManageStorageStack.odp`:
 
@@ -265,10 +266,10 @@ New, under
 | `physical-volumes.md`       |      8 |         1 |
 | `volume-groups.md`          |      7 |         1 |
 | `logical-volumes.md`        |      9 |         1 |
-| `extending-lvm.md`          |      7 |         1 |
+| `extending-lvm.md`          |      8 |         1 |
 | `removing-lvm.md`           |      8 |         1 |
 | `lvm-swap-space.md`         |      4 |         1 |
-| `lvm-practice.md`           |      6 |         2 |
+| `lvm-practice.md`           |      7 |         2 |
 
 Plus `exercises/` with eight `.sh` command files, eight `.html` written
 exercises, and eight `.cast` recordings, and `assets/` holding the one
@@ -878,10 +879,17 @@ Components: `exercise`, `AccentText` with `hue`.
 
 **Addition.** Recording variant for `create-logical-volume-exercise.cast`.
 
-### 5. `extending-lvm.md` (7 slides)
+### 5. `extending-lvm.md` (8 slides), built 2026-10-25
 
 `routeAlias: extending-lvm`. Alignments: RH134 chapter 11, cert guide chapter
-15. Exercise: Extend a Logical Volume Exercise.
+15. Exercise: Extend a Logical Volume Exercise, declared in `topicInfo`, its
+files built with the slides. Built and checked with `check:entry`,
+`check:slides`, and `check:exercises`, and every slide and click state captured
+at 1920x1080; it waits on the instructor's review. Fragments 1 to 4 introduce
+and create; this one grows each layer (Decision 34), one slide per layer: 3.6
+the VG, 5.2a the LV, 5.2b the file system. Its procedure slide, 5.2, was built
+here and moved to fragment 8 the same day (Decision 40). Layer terms keep the
+color key.
 
 ##### 5.1 Extending LVM
 
@@ -889,104 +897,94 @@ Source L24. Section slide.
 
 Components: `section`.
 
-##### 5.1a Extend a Logical Volume
+##### 5.1a How LVM Storage Grows
 
-**Addition, from O9 and O10** (Decision 11). The section intro the source
-lacks. Left, O10's three rows as a table of layer and command: volume group,
-`vgextend`; logical volume, `lvextend`; file system, `xfs_growfs` or
-`resize2fs`. Right, O9's picture rebuilt in Mermaid: the layers diagram with a
-second disk and PV joining the VG, the new PV in blue, the VG in teal, the LV
-in slate (Decision 31), and the LV and
-file system above them marked as growing. O9 highlighted the new disk in a
-green box.
+**Addition, from O9 and O10** (Decision 11). The plan's title was "Extend a
+Logical Volume", the same as 5.2's; retitled so the overview and the procedure
+differ. Left: "Each layer grows with its own command, from the bottom up" over
+O10's three rows as a table of layer and command, colored like 1.3a (volume
+group, `vgextend`; logical volume, `lvextend`; file system, `xfs_growfs` or
+`resize2fs`), then "The file system stays mounted the whole time". Right: O9's
+picture rebuilt in Mermaid: a disk and PV, a "New disk" and "New Physical
+Volume" in blue joining the VG by a dashed link, the VG teal, and above it the
+LV (slate) and file system, each labeled "grows". O9's green box around the
+new disk is the blue fill and the "New" labels. The two-line "grows" labels
+made the diagram 16.3px too tall at 1.3's scale of 0.72, so it uses 0.66. The
+instructor widened the left column from 58 to 65 (2026-10-25).
+`check:slides`: 28.81px clearance.
 
-Components: `two-cols-header`, Markdown table, Mermaid diagram.
+Components: `two-cols-header`, Markdown table, Mermaid diagram, `AccentText`
+with `hue`.
 
 ##### 3.6 Extend a Volume Group
 
-Source L14, **moved from fragment 3** (Decision 34). It was built there on
-2026-10-25 and removed the same day, before fragment 5 existed, so its source
-is kept here to drop in after 5.1a. A `<div>` group, "`vgextend` adds a PV to
-an existing VG" with "Adds capacity without affecting mounted file systems"
-beneath it, over one terminal: `pvcreate /dev/sdc1` and `vgextend vg01
-/dev/sdc1` with their output, from the round 1 slide chain. The source shows
-only `vgextend`, on a `sdc1` no slide has created; the `pvcreate` follows the
-proposal in Decision 15. `check:slides` in fragment 3: 73.27px clearance.
+Source L14, **moved from fragment 3** (Decision 34) and dropped in from the
+source kept here: "`vgextend` adds a PV to an existing VG" with "Adds capacity
+without affecting mounted file systems" beneath it, over one terminal with
+`pvcreate /dev/sdc1` and `vgextend vg01 /dev/sdc1` and their output, from the
+round 1 slide chain. The instructor removed its `<div>` group and centered it
+vertically (2026-10-25). The source shows only `vgextend`, on a `sdc1` no
+slide has created; the `pvcreate` follows Decision 15. 5.2, whose second step
+repeats `vgextend`, moved to the practice fragment (Decision 40), which settles
+Decision 37. `check:slides`: 99.39px clearance.
 
-`````md
-# Extend a Volume Group
-
-<div>
-
-`vgextend` adds a <AccentText hue="blue">PV</AccentText> to an existing <AccentText hue="teal">VG</AccentText>
-
-- Adds capacity without affecting mounted file systems
-
-</div>
-
-<TerminalWindow title="root@servera:~">
-
-```bash-session
-root@servera:~# pvcreate /dev/sdc1
-  Physical volume "/dev/sdc1" successfully created.
-root@servera:~# vgextend vg01 /dev/sdc1
-  Volume group "vg01" successfully extended
-```
-
-</TerminalWindow>
-`````
-
-5.2's first state, "Add another PV to the VG, if needed", repeats the
-`pvcreate` and `vgextend` that 3.6 now teaches one slide earlier. The
-instructor's call (2026-10-25): keep both for now, and decide once fragment 5
-is built whether to combine them.
-
-Components: default layout, `<div>` group, fixed `TerminalWindow`,
+Components: default layout with `vertical: center`, fixed `TerminalWindow`,
 `AccentText` with `hue`.
 
-##### 5.2 Extend a Logical Volume
+##### 5.2a Extend a Logical Volume
 
-Source L25. Four click states, each a heading, the source's two short lines
-where it has them, and a `bash` fence:
+**Addition, from 5.2's third state** (Decision 40, the instructor's design,
+2026-10-25). "`lvextend` grows an LV into free extents in its VG" over a
+terminal with round 1's real output for `lvextend --size +100M
+/dev/vg01/lv01` ("Size of logical volume vg01/lv01 changed from 100.00 MiB (25
+extents) to 200.00 MiB (50 extents)." and "Logical volume vg01/lv01
+successfully resized."), then "A `+` adds to the current size" over 4.4's two
+`+` rows (Decision 35): `-L +500M` / `--size +500M` adds 500 MiB, and `-l +50`
+/ `--extents +50` adds 50 LEs (both verified in the fragment 5 side test). The
+terminal follows fragments 2 to 4's convention of output for every command on
+a concept slide. `check:slides`: 22.55px clearance.
 
-1. Add another PV to the VG, if needed: `parted /dev/sdc mklabel gpt`,
-   `mkpart primary 1MiB 256MiB`, `set 1 lvm on`, `udevadm settle`, `pvcreate
-   /dev/sdc1`, `vgextend vg01 /dev/sdc1`. The source's heading names `udevadm
-   settle` but its fence leaves it out; added.
-2. Extend the LV: `lvextend --size +100M /dev/vg01/lv01`, and the `+` size
-   forms that 4.4 no longer shows (Decision 35): `-l +50` / `--extents +50`
-   adds 50 LEs, and `-L +500M` / `--size +500M` adds 500 MiB
-3. Grow the file system: XFS, `xfs_growfs /data` (takes the mount point,
-   online only); ext4, `resize2fs /dev/vg01/lv01` (takes the device, online or
-   offline). The source's heading says `xfs_grow`.
-4. Or both at once: `lvextend --resizefs --size +100M /dev/vg01/lv01`. The
-   Cert Guide recommends this form.
+Components: default layout, fixed `TerminalWindow`, Markdown table,
+`AccentText` with `hue`.
 
-The size-change line `lvextend` prints ("Size of logical volume vg01/lv01
-changed from ... to ...") is the clearest proof that step 2 worked. Decision 14
-offers real output on states 2 to 4.
+##### 5.2b Grow the File System
 
-Components: default layout with `vertical: start`, `v-switch at="1"` with four
-templates, `bash` fences.
+**Addition, from 5.2's fourth and fifth states** (Decision 40). "`lvextend`
+grows the LV, not the file system inside it", then two columns: "XFS" with
+"`xfs_growfs` takes the mount point" over `xfs_growfs /data`, and "ext4" with
+"`resize2fs` takes the device" over `resize2fs /dev/vg01/lv01`; then, across
+both, "Or do both at once: `--resizefs` runs the right tool for XFS or ext4"
+over `lvextend --resizefs --size +100M /dev/vg01/lv01`. The source's "online
+only" for XFS is carried by "takes the mount point"; a longer sentence wrapped
+and left the two columns' commands at different heights. Its "online or
+offline" for ext4 is left out, as on 5.2. Verified: `resize2fs` and
+`--resizefs` on ext4 in round 1, `xfs_growfs` on a mount point and
+`--resizefs` on XFS (it ran `xfs_growfs` itself) in the fragment 5 side test.
+`check:slides`: 20px clearance.
 
-##### 5.3 Aside: `dd`
+Components: `two-cols-header` with `::bottom::`, `bash` fences, `AccentText`
+with `hue`.
 
-Source L26. `dd` copies data from an **input file** (`if=`) to an **output
-file** (`of=`) block by block; `/dev/zero` produces endless zeros. Then `dd
-if=/dev/zero of=/data/bigfile bs=1M`, and a `Callout`: without `count=`, `dd`
-runs until the destination is full. Proposed (Decision 14): a fixed
-`TerminalWindow` with the real output, ending in `No space left on device`,
-since that message is what exercise 4 asks students to see. The source shows
-the command only.
+##### 5.3 Aside: Fill a File or Device with `dd`
 
-Components: default layout, `AccentText` on the two terms, fixed
-`TerminalWindow`, `Callout`.
+Source L26, whose title joined "Aside: `dd`" and "Fill a File or Device" with a
+dash, now one phrase. "`dd` copies data from an input file (`if=`) to an output
+file (`of=`) block by block", the two terms in the deck accent; "`/dev/zero` is
+a special file that produces endless zeros"; then, as Decision 14 proposes, a
+fixed `TerminalWindow` with round 1's real output on the 100 MiB `lv01`: `dd:
+error writing '/data/bigfile': No space left on device` and the records and
+bytes lines (86 MiB copied). The source showed the command only, and its note
+said "the shell prints" the error; `dd` prints it, so the `Callout` now reads
+"Without a `count=` limit, `dd` keeps writing until the destination is full" and
+the terminal shows the message. `check:slides`: 43.05px clearance.
+
+Components: default layout, `AccentText`, fixed `TerminalWindow`, `Callout`.
 
 ##### 5.4 Exercise: Extend a Logical Volume
 
 Source L27.
 
-- **Goal:** Grow a full logical volume without unmounting it
+- **Goal:** Grow a full logical volume (slate) without unmounting it
 - **Environment:** **Host:** `servera`; **Prerequisite exercise:** Create a
   Logical Volume
 - **Workflow:** 1. Fill `lv_data` completely; 2. Confirm that further writes
@@ -996,12 +994,40 @@ Source L27.
   succeed again
 
 The source's step 5 says XFS, but `lv_data` is ext4 (exercise 3) and the source
-command file runs `resize2fs` (Decision 25). Step 2 works on `lv_data`'s
-real size: after `dd` fills it, `echo test > /data/testfile` fails with
-"echo: write error: No space left on device" every time (verified, Decision
-28).
+command file runs `resize2fs` (Decision 25). Its step 3 ended with a dash and
+"do not unmount `/data`", now "without unmounting `/data`". `check:slides`:
+99.19px clearance.
 
-Components: `exercise`.
+Exercise files, written 2026-10-25 and run on `servera` from exercise 3's end
+state (see "The exercise chain"):
+
+- `extend-logical-volume-exercise.sh`, 71 presses (`kitty-demo --check`), the
+  source's `extend_logical_volume.sh` in the current format: `df -h /data` and
+  `dd` to fill it; `df -h /data` and the failing `echo` (Decision 28); an
+  interactive `parted /dev/sdc` session like exercise 1's (`mkpart` named
+  `pv2`, the type accepted with `#@ key enter`, `1MiB` to `257MiB` per
+  Decision 22, in place of the source's name `1`, type `ext4`, and `256MiB`);
+  `udevadm settle`, `pvcreate /dev/sdc1`, `vgextend vg_data /dev/sdc1`, `vgs
+  vg_data`; `lvextend --size +200M`, `lvs vg_data`; `resize2fs`, `df -h
+  /data`; and the `echo` again, followed by `cat /data/testfile`, added so the
+  success shows on screen (the source ended on the silent `echo`). `#!` notes
+  explain the expected `dd` error, the empty `testfile` the failed `echo`
+  leaves, the 257MiB boundary, the 252 MiB the new PV adds, the 63 to 113
+  extents, and that `lvextend` grows only the LV. The source's "continuing
+  from Exercise 1" and its dash notes are gone. Pauses: 10 on the twelve-line
+  intro, 5 on `df`, `print`, `vgs`, `lvs`, `df` after `resize2fs`, the failing
+  `echo`, and `cat`, and 6 on `dd`. No cleanup: exercise 5 removes it all.
+- `extend-logical-volume-exercise.html`, built from exercise 3's page. It
+  repeats exercise 1's `parted` session prompt by prompt for `/dev/sdc`, and
+  gives the expected results: `dd` stopping at about 226 MiB, `df` at 100%,
+  `-bash: echo: write error: No space left on device` and the empty
+  `testfile`, `vgs` at 504.00m with 252.00m free, `lvextend`'s size-change
+  line, `resize2fs`'s "on-line resizing required" and `df` at 418M, and `cat`
+  printing `test`. A note callout, "One command for both", gives `lvextend
+  --resizefs` and the XFS form, `xfs_growfs /data`. `check:exercises` passes
+  it.
+
+Components: `exercise`, `AccentText` with `hue`.
 
 ##### 5.4a Exercise recording (pending)
 
@@ -1173,7 +1199,7 @@ Components: `exercise`.
 
 **Addition.** Recording variant for `create-lvm-swap-space-exercise.cast`.
 
-### 8. `lvm-practice.md` (6 slides)
+### 8. `lvm-practice.md` (7 slides)
 
 `routeAlias: lvm-practice`. Alignments: RH134 chapter 11, cert guide chapter
 15. Exercises: Create a Large LV Spanning Two Disks Exercise, Create
@@ -1318,6 +1344,138 @@ mount /data
 
 Components: default layout with `vertical: start`, `v-switch at="1"` with six
 templates, `bash` fences, two `Callout`s, `AccentText` with `hue`.
+
+##### 5.2 Procedure: Extend a Logical Volume
+
+Source L25, **moved to fragment 8** (Decision 40) and retitled to match 4.8,
+the procedure it follows. Built in fragment 5 on 2026-10-25 and removed the
+same day, before fragment 8 existed, so its source is kept below to drop in
+after 4.8. In fragment 5 its states became 5.2a and 5.2b; here it stays the
+whole procedure in one place, without the option table.
+
+Source L25. Five click states, each an `h3` step heading over the source's
+short lines where it has them and a commands-only `bash` fence. The source's
+first step, which partitioned the disk, created the PV, and extended the VG in
+one fence, is two steps at the instructor's suggestion (2026-10-25), so each
+layer gets its own step:
+
+1. "Step 1: Create a PV on the new disk": "Skip steps 1 and 2 if the VG already
+   has enough free extents" (the source's "if needed"), over `parted /dev/sdc
+   mklabel gpt`, `mkpart primary 1MiB 256MiB`, `set 1 lvm on`, `udevadm
+   settle`, and `pvcreate /dev/sdc1`. The source's heading names `udevadm
+   settle` but its fence leaves it out; added.
+2. "Step 2: Add the PV to the VG": "Adds capacity to the VG", "No impact on
+   running file systems" (the source's two lines), over `vgextend vg01
+   /dev/sdc1`.
+3. "Step 3: Extend the LV": "Adds 100 MiB to the LV", "No impact on running
+   file systems", over `lvextend --size +100M /dev/vg01/lv01`. Its table of
+   `+` forms stayed in fragment 5, on 5.2a.
+4. "Step 4: Grow the file system": "XFS: `xfs_growfs` takes the mount point, so
+   the file system must be mounted" over `xfs_growfs /data`, and "ext4:
+   `resize2fs` takes the device" over `resize2fs /dev/vg01/lv01`. The source's
+   heading said `xfs_grow`. Its "online or offline" for ext4 is left out:
+   only the online grow was verified, and an offline one asks for `e2fsck`
+   first, which no slide teaches.
+5. "Step 4, alternative: Grow the file system with the LV": "`--resizefs`
+   extends the LV and grows its file system in one command" over `lvextend
+   --resizefs --size +100M /dev/vg01/lv01`. The source labeled this state
+   "Step 3 (Alternative)".
+
+Verified: round 1 ran `lvextend`, `resize2fs`, and `lvextend --resizefs` on
+ext4; the fragment 5 side test ran `xfs_growfs` on a mount point, both `+`
+forms, and `lvextend --resizefs` on XFS, which runs `xfs_growfs` itself.
+Decision 14's optional real output for states 3 to 5 is not built; the
+fences stay commands only, as the source has them. The instructor removed
+`vertical: start` (2026-10-25), so each state is centered and the step heading
+sits at a different height from state to state. `check:slides` in
+fragment 5, with the table: 30.3px clearance at state 3, 103.22px or more at
+the others.
+
+`````md
+---
+---
+
+# Procedure: Extend a Logical Volume
+
+<v-switch at="1">
+
+<template #0>
+
+### Step 1: Create a <AccentText hue="blue">PV</AccentText> on the new disk
+
+- Skip steps 1 and 2 if the <AccentText hue="teal">VG</AccentText> already has enough free extents
+
+```bash
+parted /dev/sdc mklabel gpt
+parted /dev/sdc mkpart primary 1MiB 256MiB
+parted /dev/sdc set 1 lvm on
+udevadm settle
+pvcreate /dev/sdc1
+```
+
+</template>
+
+<template #1>
+
+### Step 2: Add the <AccentText hue="blue">PV</AccentText> to the <AccentText hue="teal">VG</AccentText>
+
+- Adds capacity to the <AccentText hue="teal">VG</AccentText>
+- No impact on running file systems
+
+```bash
+vgextend vg01 /dev/sdc1
+```
+
+</template>
+
+<template #2>
+
+### Step 3: Extend the <AccentText hue="slate">LV</AccentText>
+
+- Adds 100 MiB to the <AccentText hue="slate">LV</AccentText>
+- No impact on running file systems
+
+```bash
+lvextend --size +100M /dev/vg01/lv01
+```
+
+</template>
+
+<template #3>
+
+### Step 4: Grow the file system
+
+XFS: `xfs_growfs` takes the mount point, so the file system must be mounted
+
+```bash
+xfs_growfs /data
+```
+
+ext4: `resize2fs` takes the device
+
+```bash
+resize2fs /dev/vg01/lv01
+```
+
+</template>
+
+<template #4>
+
+### Step 4, alternative: Grow the file system with the <AccentText hue="slate">LV</AccentText>
+
+`--resizefs` extends the <AccentText hue="slate">LV</AccentText> and grows its file system in one command
+
+```bash
+lvextend --resizefs --size +100M /dev/vg01/lv01
+```
+
+</template>
+
+</v-switch>
+`````
+
+Components: default layout, `v-switch at="1"` with five templates, `bash`
+fences, `AccentText` with `hue`.
 
 ##### 8.2 Exercise: Create a Large LV Spanning Two Disks
 
@@ -1775,10 +1933,29 @@ baseline:
    `daemon-reload`, `mount /data` (no output); `lsblk` shows
    `vg_data-lv_data` 252M on `/data`, `df -h` 231M, and `lvdisplay` 63 LEs.
 
-**`servera` is now at the end of exercise 3**: `lv_data` mounted on `/data`
-and in `/etc/fstab`. Exercise 4 runs from here. A side test that needs `sdb`,
-`vg_data`, `/data`, or `/etc/fstab` puts them back to this state, not to the
-snapshot.
+5. A side test for fragment 5, on `sdd`, copied and restored as in step 3:
+   a 2 GiB partition, `vg01`, a 400 MiB XFS `lv01` mounted on a scratch
+   directory; `lvextend --size +100M` then `xfs_growfs` on the mount point
+   (336M to 436M in `df`); `lvextend --extents +50` (125 to 175 extents) and
+   `--size +500M` (700 MiB to 1.17 GiB); and `lvextend --resizefs --size
+   +100M` on XFS, which ran `xfs_growfs` itself. Teardown as in step 3; both
+   hashes and all three listings matched, `sdd` showed no signatures, and
+   `/data` was still `lv_data`.
+6. Exercise 4, as its command file runs it, with the `parted` session and the
+   two `echo`s typed through a terminal (the `echo`s in a `sudo -i` login
+   shell): `dd` stopped at 226 MiB with "No space left on device"; `df` 100%;
+   `-bash: echo: write error: No space left on device`, leaving a 0-byte
+   `testfile`; `sdc1` from `1MiB` to `257MiB` named `pv2` with the `lvm`
+   flag; `vgextend` gave `vg_data` 504.00m and 252.00m free; `lvextend
+   --size +200M` went from 63 to 113 extents (452.00 MiB); `resize2fs` ran on
+   line and `df` showed 418M with 167M free; the second `echo` worked and
+   `cat` printed `test`.
+
+**`servera` is now at the end of exercise 4**: `lv_data` at 452 MiB across
+`sdb1` and `sdc1`, mounted on `/data` and in `/etc/fstab`, holding `bigfile`
+and `testfile`, with 52 MiB free in `vg_data`. Exercise 5 runs from here. A
+side test that needs `sdb`, `sdc`, `vg_data`, `/data`, or `/etc/fstab` puts
+them back to this state, not to the snapshot.
 
 ## Authoring notes
 
@@ -1991,16 +2168,32 @@ Decided by the instructor on 2026-10-25, following Decision 34:
     them on 4.4 for now. Proposed: 4.4 keeps the create-time forms (`32`,
     `100%FREE`, `300M`, `2G`), and the two `+` forms go to 5.2's "Extend the
     LV" state beside `lvextend --size +100M`, where they are used. Lost: the
-    side-by-side view of every form in one table.
+    side-by-side view of every form in one table. Since Decision 40 they sit
+    on 5.2a, the `lvextend` slide.
 36. **4.6a's highlights click through**, like 2.4a's, not fixed like 3.4a's.
     Built so; the instructor then made them fixed, as on 3.4a, in review.
 37. **5.2 keeps its "Add another PV" state** beside 3.6 for now; whether to
-    combine them is decided once fragment 5 is built.
+    combine them is decided once fragment 5 is built. Since 2026-10-25 that
+    state is two (Decision 39), and step 2 is 3.6's `vgextend` alone.
+    Settled by Decision 40: 5.2 moved to the practice fragment, so 3.6 is the
+    only `vgextend` slide in fragment 5.
 38. **The procedure, 4.8, moves to the practice fragment**, after 8.1 and
     before exercise 6, which follows the same recipe. Fragment 4 drops to nine
     slides and fragment 8 grows to six. Fragment 4 now ends its concepts at
     4.6a and goes straight to exercise 3; the procedure becomes a recap where
     students put every layer together on their own.
+39. **5.2's first step is two**, "Create a PV on the new disk" and "Add the
+    PV to the VG", so each layer has its own step and no fence holds three
+    layers' commands (the instructor's suggestion, 2026-10-25). 5.2 has five
+    click states.
+40. **Fragment 5 teaches one layer per slide, and 5.2 moves to the practice
+    fragment.** After 3.6 (the VG) come 5.2a, "Extend a Logical Volume"
+    (`lvextend` with real output and the `+` option table), and 5.2b, "Grow
+    the File System" (`xfs_growfs`, `resize2fs`, and `lvextend --resizefs`).
+    The five-step procedure, 5.2, goes to fragment 8 after 4.8, retitled
+    "Procedure: Extend a Logical Volume", without the option table. The
+    instructor's design, 2026-10-25. Fragment 5 grows to eight slides,
+    fragment 8 to seven, and the deck to 58.
 
 ## Open questions
 
@@ -2033,7 +2226,7 @@ As of 2026-10-25.
 **Done:**
 
 - This plan, and `course/w11-draft.md` with the cover, the VM reminder, and
-  the imports for fragments 1 to 4.
+  the imports for fragments 1 to 5.
 - Fragment 1, `logical-volume-manager.md`, five slides built and checked,
   including the commands table (1.3a) and the animation that follows it
   (1.3b).
@@ -2046,24 +2239,22 @@ As of 2026-10-25.
 - Fragment 4, `logical-volumes.md`, eight slides built and checked (the
   recording slide waits on the cast), and exercise 3's command file and
   written version. Its procedure slide moved to fragment 8 (Decision 38).
+- Fragment 5, `extending-lvm.md`, seven slides built and checked (the
+  recording slide waits on the cast), and exercise 4's command file and
+  written version. Its procedure slide, 5.2, moved to fragment 8 (Decision
+  40).
 - The week's color key (Decision 31) and `AccentText`'s `hue` prop in the
   theme, with its test, gallery line, and documentation.
 - The lab checks behind every correction, under "Verification". `servera` is
-  at the end of exercise 3 ("The exercise chain").
+  at the end of exercise 4 ("The exercise chain").
 
 **Next, in order:**
 
-1. The instructor reviews exercise 3's files, and Decisions 13 and 16 as
-   built.
-2. Fragment 5, `extending-lvm.md`, with exercise 4's command file and written
-   version built alongside its slides and run on `servera` from exercise 3's
-   end state:
-   - 5.1a's overview table and diagram, then 3.6 from the source kept in its
-     entry, then 5.2 with the `+` size forms in its second state (Decision
-     35) and its first state kept (Decision 37), then 5.3.
-   - Real output where Decision 14 settles it (5.3's `dd` to a full volume,
-     and optionally 5.2's `lvextend` and `resize2fs`), captured in a side
-     test that returns `servera` to exercise 3's state.
+1. The instructor reviews fragment 5 and exercise 4's files: 5.1a's new
+   title, 5.2a and 5.2b, and 5.3's real output (Decision 14).
+2. Fragment 6, `removing-lvm.md`, with exercise 5's command file and written
+   version built alongside its slides and run on `servera` from exercise 4's
+   end state, then exercise 5a's design (Decision 30) before fragment 7.
 3. Open decisions: everything not marked accepted, including Decision 30
    (exercise 5a's design).
 4. Before the recordings: the SCC volume group name (Open question 6).
