@@ -9,22 +9,24 @@ produce this plan. Nothing is built until the plan is approved.
 ## Answer in brief
 
 **Eight topic fragments** in one chapter directory, **eight exercises**, and a
-deck of **54 slides**: 41 from the source (39 content slides plus the cover and
-VM reminder), 5 added slides (1.3a, 1.3b, 2.2a, 5.1a, and the new exercise
-slide 7.3), and 8 recording slides that wait on the casts.
+deck of **56 slides**: 40 from the source (38 content slides plus the cover and
+VM reminder; L13 was removed on 2026-10-25, Decision 32), 3 more from splitting
+the inspect slides in two (2.4a, 3.4a, 4.6a, Decision 33), 5 added slides
+(1.3a, 1.3b, 2.2a, 5.1a, and the new exercise slide 7.3), and 8 recording
+slides that wait on the casts.
 
 | # | Fragment                    | Section title                  | Slides | Exercises |
 |--:|-----------------------------|--------------------------------|-------:|----------:|
 | 1 | `logical-volume-manager.md` | Logical Volume Manager (LVM)   |      5 |         0 |
-| 2 | `physical-volumes.md`       | Physical Volumes               |      7 |         1 |
-| 3 | `volume-groups.md`          | Volume Groups                  |      8 |         1 |
-| 4 | `logical-volumes.md`        | Logical Volumes                |      9 |         1 |
-| 5 | `extending-lvm.md`          | Extending LVM                  |      6 |         1 |
+| 2 | `physical-volumes.md`       | Physical Volumes               |      8 |         1 |
+| 3 | `volume-groups.md`          | Volume Groups                  |      7 |         1 |
+| 4 | `logical-volumes.md`        | Logical Volumes                |     10 |         1 |
+| 5 | `extending-lvm.md`          | Extending LVM                  |      7 |         1 |
 | 6 | `removing-lvm.md`           | Removing LVM                   |      8 |         1 |
 | 7 | `lvm-swap-space.md`         | Swap Space on Logical Volumes  |      4 |         1 |
 | 8 | `lvm-practice.md`           | LVM Practice                   |      5 |         2 |
 |   | Entry file                  |                                |      2 |           |
-|   | **Total**                   |                                | **54** |     **8** |
+|   | **Total**                   |                                | **56** |     **8** |
 
 Slide counts include the recording slides. The fragments follow the Slidev
 deck's eight sections one for one. The LibreOffice deck contributes two concept
@@ -182,47 +184,49 @@ Forced changes, not choices:
 
 From `managing_storage_with_lvm.md`:
 
-| Source | Title                                     | Goes to |
-|-------:|-------------------------------------------|---------|
-|     L1 | Section: Managing Storage with LVM        | 1.1     |
-|     L2 | What is LVM?                              | 1.2     |
-|     L3 | LVM: Three Layers                         | 1.3     |
-|     L4 | Section: Physical Volumes                 | 2.1     |
-|     L5 | Physical Volumes (PVs)                    | 2.2     |
-|     L6 | Initialize a Physical Volume              | 2.3     |
-|     L7 | Inspect Physical Volumes                  | 2.4     |
-|     L8 | Exercise: Initialize a Physical Volume    | 2.5     |
-|     L9 | Section: Volume Groups                    | 3.1     |
-|    L10 | Volume Groups (VGs)                       | 3.2     |
-|    L11 | Create a Volume Group                     | 3.3     |
-|    L12 | Inspect Volume Groups                     | 3.4     |
-|    L13 | PE Fields from `pvdisplay`                | 3.5     |
-|    L14 | Extend a Volume Group                     | 3.6     |
-|    L15 | Exercise: Create a Volume Group           | 3.7     |
-|    L16 | Section: Logical Volumes                  | 4.1     |
-|    L17 | Logical Volumes (LVs)                     | 4.2     |
-|    L18 | Create a Logical Volume                   | 4.3     |
-|    L19 | Specifying LV Size                        | 4.4     |
-|    L20 | LV Device Paths                           | 4.5     |
-|    L21 | Inspect Logical Volumes                   | 4.6     |
-|    L22 | Exercise: Create a Logical Volume         | 4.7     |
-|    L23 | Procedure: Create a Logical Volume        | 4.8     |
-|    L24 | Section: Extending LVM                    | 5.1     |
-|    L25 | Extend a Logical Volume                   | 5.2     |
-|    L26 | Aside: `dd`                               | 5.3     |
-|    L27 | Exercise: Extend a Logical Volume         | 5.4     |
-|    L28 | Section: Removing LVM                     | 6.1     |
-|    L29 | Remove a Logical Volume                   | 6.2     |
-|    L30 | Remove a Volume Group                     | 6.3     |
-|    L31 | Remove a Physical Volume                  | 6.4     |
-|    L32 | Removing LVM Components                   | 6.5     |
-|    L33 | Wipe the Disk                             | 6.6     |
-|    L34 | Exercise: Remove the LVM Setup            | 6.7     |
-|    L35 | Section: Swap Space on Logical Volumes    | 7.1     |
-|    L36 | Creating Swap Space on a Logical Volume   | 7.2     |
-|    L37 | Section: Practice                         | 8.1     |
-|    L38 | Exercise: Large LV Spanning Two Disks     | 8.2     |
-|    L39 | Exercise: Persistent Swap on an LV        | 8.3     |
+| Source | Title                                     | Goes to   |
+|-------:|-------------------------------------------|-----------|
+|     L1 | Section: Managing Storage with LVM        | 1.1       |
+|     L2 | What is LVM?                              | 1.2       |
+|     L3 | LVM: Three Layers                         | 1.3       |
+|     L4 | Section: Physical Volumes                 | 2.1       |
+|     L5 | Physical Volumes (PVs)                    | 2.2       |
+|     L6 | Initialize a Physical Volume              | 2.3       |
+|     L7 | Inspect Physical Volumes                  | 2.4, 2.4a |
+|     L8 | Exercise: Initialize a Physical Volume    | 2.5       |
+|     L9 | Section: Volume Groups                    | 3.1       |
+|    L10 | Volume Groups (VGs)                       | 3.2       |
+|    L11 | Create a Volume Group                     | 3.3       |
+|    L12 | Inspect Volume Groups                     | 3.4, 3.4a |
+|    L13 | PE Fields from `pvdisplay`                | removed   |
+|    L14 | Extend a Volume Group                     | 3.6       |
+|    L15 | Exercise: Create a Volume Group           | 3.7       |
+|    L16 | Section: Logical Volumes                  | 4.1       |
+|    L17 | Logical Volumes (LVs)                     | 4.2       |
+|    L18 | Create a Logical Volume                   | 4.3       |
+|    L19 | Specifying LV Size                        | 4.4       |
+|    L20 | LV Device Paths                           | 4.5       |
+|    L21 | Inspect Logical Volumes                   | 4.6, 4.6a |
+|    L22 | Exercise: Create a Logical Volume         | 4.7       |
+|    L23 | Procedure: Create a Logical Volume        | 4.8       |
+|    L24 | Section: Extending LVM                    | 5.1       |
+|    L25 | Extend a Logical Volume                   | 5.2       |
+|    L26 | Aside: `dd`                               | 5.3       |
+|    L27 | Exercise: Extend a Logical Volume         | 5.4       |
+|    L28 | Section: Removing LVM                     | 6.1       |
+|    L29 | Remove a Logical Volume                   | 6.2       |
+|    L30 | Remove a Volume Group                     | 6.3       |
+|    L31 | Remove a Physical Volume                  | 6.4       |
+|    L32 | Removing LVM Components                   | 6.5       |
+|    L33 | Wipe the Disk                             | 6.6       |
+|    L34 | Exercise: Remove the LVM Setup            | 6.7       |
+|    L35 | Section: Swap Space on Logical Volumes    | 7.1       |
+|    L36 | Creating Swap Space on a Logical Volume   | 7.2       |
+|    L37 | Section: Practice                         | 8.1       |
+|    L38 | Exercise: Large LV Spanning Two Disks     | 8.2       |
+|    L39 | Exercise: Persistent Swap on an LV        | 8.3       |
+
+3.6 keeps its number but sits in fragment 5, after 5.1a (Decision 34).
 
 From `ManageStorageStack.odp`:
 
@@ -257,10 +261,10 @@ New, under
 | File                        | Slides | Exercises |
 |-----------------------------|-------:|----------:|
 | `logical-volume-manager.md` |      5 |         0 |
-| `physical-volumes.md`       |      7 |         1 |
-| `volume-groups.md`          |      8 |         1 |
-| `logical-volumes.md`        |      9 |         1 |
-| `extending-lvm.md`          |      6 |         1 |
+| `physical-volumes.md`       |      8 |         1 |
+| `volume-groups.md`          |      7 |         1 |
+| `logical-volumes.md`        |     10 |         1 |
+| `extending-lvm.md`          |      7 |         1 |
 | `removing-lvm.md`           |      8 |         1 |
 | `lvm-swap-space.md`         |      4 |         1 |
 | `lvm-practice.md`           |      5 |         2 |
@@ -451,16 +455,16 @@ and `clicks: 2`; `AccentText` with `hue`; UnoCSS utility classes for the
 windows, the grid, and the sizes (`text-4xl` and `text-5xl`, each with
 `leading-[1.3]`); `v-motion`; an `sr-only` paragraph.
 
-### 2. `physical-volumes.md` (7 slides), built 2026-10-25
+### 2. `physical-volumes.md` (8 slides), built 2026-10-25
 
 `routeAlias: physical-volumes`. Alignments: RH134 chapter 11, cert guide
 chapter 15. Exercise: Initialize a Physical Volume Exercise, declared in
-`topicInfo` once its written version exists (`check:entry` requires the file).
+`topicInfo` since 2026-10-25, when its files were written.
 Built and checked with `check:entry` and `check:slides`; every slide and click
 state was also captured at 1920x1080. It waits on the instructor's review. The
 transcripts are real output from the slide-chain run on `servera` on
 2026-10-24 (round 1 under "Verification"), the same run fragment 3 draws on,
-so the PV UUID on 2.4 comes back on 3.5. Trailing spaces in the output were
+so device names and sizes agree with fragment 3. Trailing spaces in the output were
 dropped. The colors follow Decision 31; slide titles stay plain, because they
 feed the week page's agenda and Slidev's navigation as raw text.
 
@@ -539,17 +543,29 @@ Components: default layout, `<div>` groups, two fixed `TerminalWindow`s,
 
 ##### 2.4 Inspect Physical Volumes
 
-Source L7, with its typo ("Physoical"). Two click states: "`pvs` gives a
-summary of all PVs on the system" (the instructor's wording, 2026-10-25) over
-`pvs` (`sda3` in `rhel_servera`, `sdb1` and `sdb2` unassigned at 255.00m);
-then "`pvdisplay` shows the details of one PV" over `pvdisplay /dev/sdb1`, a
-new PV with no extents yet. The source's "pvs: a summary" form put a visible
-gap between the inline code and the colon. `check:slides`: 86.8px clearance on
-the second state.
+Source L7, with its typo ("Physoical"), split in two (Decision 33). "`pvs`
+gives a summary of all PVs on the system" (the instructor's wording,
+2026-10-25) over `pvs`: `sda3` in `rhel_servera`, and `sdb1` and `sdb2`
+unassigned at 255.00m. The source's "pvs: a summary" form put a visible gap
+between the inline code and the colon. Centered vertically (`vertical:
+center`, the instructor's edit). `check:slides`: 120.89px clearance.
 
-Components: default layout (the instructor dropped `vertical: start`),
-`v-switch at="1"` with two templates, each a fixed `TerminalWindow`,
-`AccentText` with `hue`.
+Components: default layout, fixed `TerminalWindow`, `AccentText` with `hue`.
+
+##### 2.4a Inspect Physical Volumes
+
+The second half of L7. "`pvdisplay` shows the details of one PV" over
+`pvdisplay /dev/sdb1`, a new PV, with the instructor's click-through
+highlights (`{all|2-4,6,12|5,7-11}`): the whole output, then what the PV has
+(the new-PV lines, PV Name, PV Size, and PV UUID), then what it lacks (the
+empty VG Name, Allocatable NO, and the four zero extent counts). Beneath it,
+in the instructor's words:
+"A PV that has not been added to a volume group and no extents yet". It is
+the counterpart of 3.4a's extents. `check:slides`: 23.2px clearance in every
+click state.
+
+Components: default layout, fixed `TerminalWindow` with click-based line
+highlights, `AccentText` with `hue`.
 
 ##### 2.5 Exercise: Initialize a Physical Volume
 
@@ -563,8 +579,28 @@ Source L8.
 
 The source command file ends the partition at `256MiB`, which makes it 255
 MiB; proposed: end it at `257MiB` (Decision 22). Either way the PV holds 63
-extents, 252 MiB (verified), so nothing later changes. The command file and
-written exercise are still to write.
+extents, 252 MiB (verified), so nothing later changes.
+
+Exercise files, written 2026-10-25 and run end to end on `servera` through a
+terminal (then reverted; run again the same day to start the exercise chain):
+
+- `initialize-physical-volume-exercise.sh`, 52 presses (`kitty-demo
+  --check`). Step 1 inspects with `lsblk`, then an interactive `parted
+  /dev/sdb` session: `mklabel gpt`; `mkpart` named `pv1`, the file system type
+  accepted with `#@ key enter`, `1MiB` to `257MiB` (Decision 22); `set 1 lvm
+  on`; `print`; `quit`; `udevadm settle`. Then `pvcreate /dev/sdb1`, `pvs`,
+  and `pvdisplay /dev/sdb1`. `#!` delivery notes give the reason for a
+  partition rather than the whole disk (round 5, at the instructor's request),
+  explain the default type and the `257MiB` boundary, and describe the new
+  PV. Pauses: 8 on the intro, 5 on `lsblk`, `print`, `pvs`, and `pvdisplay`.
+  No cleanup: exercise 2 builds on `sdb1`.
+- `initialize-physical-volume-exercise.html`, built from w10's exercise
+  page. It quotes the `parted` session prompt by prompt, explains that
+  `print` shows `ext2` as a type hint and no file system exists, and gives
+  the expected `pvs` and `pvdisplay` results (256.00m, no VG, not
+  allocatable, no extents). A note callout, "Why a partition, not the whole
+  disk", gives round 5's reasoning (the instructor's request). The page is
+  the first with Decision 31's hue classes; `check:exercises` passes it.
 
 Components: `exercise`, `AccentText` with `hue`.
 
@@ -573,88 +609,119 @@ Components: `exercise`, `AccentText` with `hue`.
 **Addition.** Recording variant for `initialize-physical-volume-exercise.cast`,
 added once the cast exists.
 
-### 3. `volume-groups.md` (8 slides)
+### 3. `volume-groups.md` (7 slides), built 2026-10-25
 
 `routeAlias: volume-groups`. Alignments: RH134 chapter 11, cert guide chapter
-15. Exercise: Create a Volume Group Exercise.
+15. Exercise: Create a Volume Group Exercise, declared in `topicInfo`. Built and
+checked with `check:entry` and `check:slides`, and every slide and click state
+captured at 1920x1080; it waits on the instructor's review. Built to fragment
+2's conventions: `<div>` groups, the instructor's 2.4 wording and default layout
+on the inspect slides, a terminal with output for every command, VG terms teal
+and PV terms blue in the body, plain titles. Every transcript comes from the
+round 1 slide chain under "Verification", so `vg01` is built from the PVs 2.4
+introduced.
 
 ##### 3.1 Volume Groups
 
-Source L9. Section slide.
+Source L9. Section slide carrying the `topicInfo` alignments.
 
 Components: `section`.
 
 ##### 3.2 Volume Groups (VGs)
 
-Source L10. A storage pool made of one or more PVs. "Why VGs are needed":
-combines PVs into one block of storage; divides them into 4 MiB chunks called
-**physical extents (PEs)**; the PE size can be set when the VG is created and
-is the same on every PV in the VG. 4 MiB is the default (Cert Guide chapter
-15). On the right, the layers diagram with the VG layer in teal and the others
-white (Decision 31).
+Source L10. Left column, two `<div>` groups as on 2.2: "A volume group is a
+storage pool", with "Made of one or more physical volumes" beneath it; then
+"Why VGs are needed": combines PVs into one block of storage; divides them
+into 4 MiB chunks called **physical extents (PEs)**; the PE size is set when
+the VG is created, the same on every PV in it. 4 MiB is the default (Cert
+Guide chapter 15). Right column, 2.2's diagram with only the VG in teal.
+`check:slides`: 39.22px clearance.
 
-Components: `two-cols-header`, `AccentText` on the term, Mermaid diagram.
+Components: `two-cols-header` with `listSpacing: padded` and `leftWidth: 60`;
+`<div>` groups; `AccentText` with `hue`; Mermaid.
 
 ##### 3.3 Create a Volume Group
 
-Source L11. "`vgcreate` pools one or more PVs", over `vgcreate vg01
-/dev/sdb1` and its output; then "Create from several PVs" over `vgcreate vg01
-/dev/sdb1 /dev/sdb2` as a command.
+Source L11. Two `<div>` groups, like 2.3: "`vgcreate` pools one or more PVs
+into a volume group" over `vgcreate vg01 /dev/sdb1` and its output; then
+"Create from several PVs" over `vgcreate vg01 /dev/sdb1 /dev/sdb2` and its
+output, a terminal rather than the source's command-only block, following the
+instructor's 2.3. Both lines are real: the chain ran the one-PV form, removed
+it, and ran the two-PV form that 3.4 shows. `check:slides`: 61.67px
+clearance.
 
-Components: default layout, fixed `TerminalWindow`, `bash` fence.
+Components: default layout, `<div>` groups, two fixed `TerminalWindow`s,
+`AccentText` with `hue`.
 
 ##### 3.4 Inspect Volume Groups
 
-Source L12. Two click states, worded like 2.4: "`vgs` gives a summary of all
-VGs on the system" over `vgs`, with the OS volume group and `vg01` (two PVs,
-no LVs); then "`vgdisplay` shows the details of one VG" over `vgdisplay vg01`,
-trimmed to the source's eight fields with `...output omitted...` lines where
-fields are left out, in place of the source's "Abridged Output" fence title.
-"VG" is teal (Decision 31).
+Source L12, split in two like 2.4 (Decision 33). "`vgs` gives a summary of all
+VGs on the system" over `vgs`: `rhel_servera`, and `vg01` with two PVs, no
+LVs, and 504.00m free. Centered vertically, like 2.4 (the instructor's
+edit). `check:slides`: 129.89px clearance.
 
-Components: default layout, as on 2.4; `v-switch at="1"` with two templates,
-each a fixed `TerminalWindow`; `AccentText` with `hue`.
+Components: default layout, fixed `TerminalWindow`, `AccentText` with `hue`.
 
-##### 3.5 Physical Extents in `pvdisplay`
+##### 3.4a Inspect Volume Groups
 
-Source L13. Its heading is an `h2` and its output is edited: comments typed
-after four fields and a blank line inserted between them. Rebuilt as a
-`TextExplainer` over the real `pvdisplay /dev/sdb1`, now that `sdb1` belongs to
-`vg01`, stepping through the source's four comments: PE Size, the size of each
-physical extent; Total PE, the extents on this PV; Free PE, the extents
-available to allocate; Allocated PE, the extents already in use by LVs. Title
-shortened from "Physical Extent (PE) Fields from `pvdisplay`".
+The second half of L12. "`vgdisplay` shows the details of one VG" over
+`vgdisplay vg01`, trimmed to the source's eight fields (VG Name, Cur PV, VG
+Size, PE Size, Total PE, Alloc PE / Size, Free PE / Size, VG UUID) with
+`...output omitted...` lines where the other twelve are left out, in place of
+the source's "Abridged Output" fence title. The instructor replaced the
+click-through highlights with fixed ones (`{1-3,5,7-12}`) that only dim the two
+`...output omitted...` markers, so the slide has no clicks. Beneath it: "4.00
+MiB × 126 extents = 504 MiB; the free extents are what `lvcreate` can use",
+the extents lesson 3.5 carried before it was removed (Decision 32).
+`check:slides`: 23.17px clearance.
 
-Components: default layout, `TextExplainer` (four steps; size chosen by the
-component, likely `sm`).
+Components: default layout, fixed `TerminalWindow` with line highlights,
+`AccentText` with `hue`.
 
-##### 3.6 Extend a Volume Group
+##### 3.5 Physical Extents in `pvdisplay` (removed 2026-10-25)
 
-Source L14. "`vgextend` adds a PV to an existing VG", "Adds capacity without
-affecting mounted file systems", over a transcript of `pvcreate /dev/sdc1` and
-`vgextend vg01 /dev/sdc1` with their output. The source shows only `vgextend`,
-on a `sdc1` no slide has created; proposed: show the `pvcreate` too (Decision
-15).
-
-Components: default layout, fixed `TerminalWindow`.
+Source L13: a `TextExplainer` over `pvdisplay /dev/sdb1` once `sdb1` belonged
+to `vg01`, stepping through PE Size, Total PE, Free PE, and Allocated PE. The
+instructor found a `pvdisplay` right after 3.4's `vgdisplay` jarring, and
+`vgdisplay` already shows the same four fields for the whole VG, which is the
+level fragment 4 builds on (`lvcreate -l`, `100%FREE`, Current LE). Removed;
+its lesson moved to 3.4a's highlighted lines (Decision 32). Lost: the per-PV
+view, 63 extents per 255 MiB PV with 3 MiB not usable, and the Allocatable NO
+to yes contrast with 2.4a, which 2.4a's highlights now carry from the other side.
 
 ##### 3.7 Exercise: Create a Volume Group
 
 Source L15.
 
-- **Goal:** Pool the new physical volume into a volume group
+- **Goal:** Pool the new physical volume (blue) into a volume group (teal)
 - **Environment:** **Host:** `servera`; **Prerequisite exercise:** Initialize
   a Physical Volume
-- **Workflow:** 1. Create a volume group named `vg_data` using `/dev/sdb1`;
-  2. Verify with `vgs` and `vgdisplay`
+- **Workflow:** 1. Create a volume group (teal) named `vg_data` using
+  `/dev/sdb1`; 2. Verify with `vgs` and `vgdisplay`
 
-Components: `exercise`.
+Exercise files, written 2026-10-25 and run on `servera` from exercise 1's
+end state (see "The exercise chain" under "Verification"):
+
+- `create-volume-group-exercise.sh`, 18 presses (`kitty-demo --check`), the
+  source's `create_volume_group.sh` in the current format: `sudo -i`,
+  `vgcreate vg_data /dev/sdb1`, `vgs`, `vgdisplay vg_data`. `#!` notes say
+  the VG name comes before the PVs and why the VG is 252 MiB, not 256 (63
+  whole 4 MiB extents; `pvdisplay` reports 4.00 MiB not usable). Pauses: 8 on
+  the intro, 5 on `vgs` and `vgdisplay`. No cleanup: exercise 3 builds on
+  `vg_data`.
+- `create-volume-group-exercise.html`, built from exercise 1's page with
+  `hue-teal`, `hue-blue`, and `hue-slate`. It gives the expected `vgs` and
+  `vgdisplay` results (one PV, no LVs, 252.00m, 4.00 MiB extents, 63 free),
+  and a note callout, "Why 252 MiB and not 256", ties the free extents to
+  exercise 3's `lvcreate`. `check:exercises` passes it.
+
+Components: `exercise`, `AccentText` with `hue`.
 
 ##### 3.7a Exercise recording (pending)
 
 **Addition.** Recording variant for `create-volume-group-exercise.cast`.
 
-### 4. `logical-volumes.md` (9 slides)
+### 4. `logical-volumes.md` (10 slides)
 
 `routeAlias: logical-volumes`. Alignments: RH134 chapter 11, cert guide
 chapter 15. Exercise: Create a Logical Volume Exercise.
@@ -716,14 +783,24 @@ Components: default layout, Markdown table, fixed `TerminalWindow`.
 
 ##### 4.6 Inspect Logical Volumes
 
-Source L21. Two click states, worded like 2.4: "`lvs` gives a summary of all
-LVs on the system" over `lvs`, listing the OS volumes `root` and `swap` and
-`lv01` at 100 MiB; then "`lvdisplay` shows the details of one LV" over
-`lvdisplay /dev/vg01/lv01`, trimmed as on 3.4. "LV" is slate (Decision 31).
-`lvs` prints about 85 columns; to check for overflow.
+Source L21, split in two like 2.4 and 3.4 (Decision 33). "`lvs` gives a
+summary of all LVs on the system" over `lvs`, listing the OS volumes `root`
+and `swap` and `lv01` at 100 MiB, centered vertically like 2.4 and 3.4.
+`lvs` prints about 85 columns, so check it for overflow at 1920x1080. "LV" is
+slate (Decision 31).
 
-Components: default layout, as on 2.4; `v-switch at="1"` with two templates,
-each a fixed `TerminalWindow`; `AccentText` with `hue`.
+Components: default layout, fixed `TerminalWindow`, `AccentText` with `hue`.
+
+##### 4.6a Inspect Logical Volumes
+
+The second half of L21. "`lvdisplay` shows the details of one LV" over
+`lvdisplay /dev/vg01/lv01`, trimmed as on 3.4a. Its highlights follow 2.4a
+(click-through, likely LV Path, LV Size, and Current LE, which ties back to
+3.4a's extents) or 3.4a (fixed, dimming only the omitted markers); the
+instructor's call.
+
+Components: default layout, fixed `TerminalWindow` with line highlights,
+`AccentText` with `hue`.
 
 ##### 4.8 Procedure: Create a Logical Volume
 
@@ -775,7 +852,7 @@ Components: `exercise`.
 
 **Addition.** Recording variant for `create-logical-volume-exercise.cast`.
 
-### 5. `extending-lvm.md` (6 slides)
+### 5. `extending-lvm.md` (7 slides)
 
 `routeAlias: extending-lvm`. Alignments: RH134 chapter 11, cert guide chapter
 15. Exercise: Extend a Logical Volume Exercise.
@@ -798,6 +875,48 @@ file system above them marked as growing. O9 highlighted the new disk in a
 green box.
 
 Components: `two-cols-header`, Markdown table, Mermaid diagram.
+
+##### 3.6 Extend a Volume Group
+
+Source L14, **moved from fragment 3** (Decision 34). It was built there on
+2026-10-25 and removed the same day, before fragment 5 existed, so its source
+is kept here to drop in after 5.1a. A `<div>` group, "`vgextend` adds a PV to
+an existing VG" with "Adds capacity without affecting mounted file systems"
+beneath it, over one terminal: `pvcreate /dev/sdc1` and `vgextend vg01
+/dev/sdc1` with their output, from the round 1 slide chain. The source shows
+only `vgextend`, on a `sdc1` no slide has created; the `pvcreate` follows the
+proposal in Decision 15. `check:slides` in fragment 3: 73.27px clearance.
+
+`````md
+# Extend a Volume Group
+
+<div>
+
+`vgextend` adds a <AccentText hue="blue">PV</AccentText> to an existing <AccentText hue="teal">VG</AccentText>
+
+- Adds capacity without affecting mounted file systems
+
+</div>
+
+<TerminalWindow title="root@servera:~">
+
+```bash-session
+root@servera:~# pvcreate /dev/sdc1
+  Physical volume "/dev/sdc1" successfully created.
+root@servera:~# vgextend vg01 /dev/sdc1
+  Volume group "vg01" successfully extended
+```
+
+</TerminalWindow>
+`````
+
+5.2's first state, "Add another PV to the VG, if needed", repeats the
+`pvcreate` and `vgextend` that 3.6 now teaches one slide earlier. Proposed
+when fragment 5 is built: shorten that state to point back to 3.6, or keep
+it so 5.2 stays the whole procedure on one slide.
+
+Components: default layout, `<div>` group, fixed `TerminalWindow`,
+`AccentText` with `hue`.
 
 ##### 5.2 Extend a Logical Volume
 
@@ -1218,7 +1337,7 @@ To verify on the lab where marked; the rest are typos and logic.
   (L25), "Phsical Voulme" (L31), "an Logical Volume" (L36). "Filesystem"
   becomes "file system" throughout.
 - L13: comments and a blank line were added to `pvdisplay` output by hand.
-  Recaptured, and the comments become `TextExplainer` captions.
+  The slide was later removed (Decision 32).
 - L12, L21: "Abridged Output" in a fence title becomes visible
   `...output omitted...` lines, as w10 did.
 - L19: the `+` forms are `lvextend` forms; "LEs" is never defined.
@@ -1245,6 +1364,8 @@ To verify on the lab where marked; the rest are typos and logic.
 
 - **Stratis, O14 to O24** (Decision 8): a section slide, four concept slides,
   two exercises, three asciinema links (one still `7###`), and two GIFs.
+- **L13, Physical Extent (PE) Fields from `pvdisplay`** (Decision 32), whose
+  lesson moved to 3.4a's highlighted `vgdisplay` lines.
 - **The ODP's two exercises, O6 and O11** (Decision 7), and their links and
   GIFs, O7, O8, O12, and O13.
 - **O4's flow diagram as a slide of its own.** 1.3 and 4.8 carry the same
@@ -1440,11 +1561,11 @@ restored:
 
 1. `sdb`: GPT, `sdb1` from `1MiB` to `256MiB` and `sdb2` from `256MiB` to
    `511MiB`, both `lvm` (2.2a)
-2. `pvcreate /dev/sdb1` (2.3), `pvcreate /dev/sdb2`, `pvs` and `pvdisplay
-   /dev/sdb1` (2.4)
+2. `pvcreate /dev/sdb1` (2.3), `pvcreate /dev/sdb2`, `pvs` (2.4) and
+   `pvdisplay /dev/sdb1` (2.4a)
 3. `vgcreate vg01 /dev/sdb1` captured for 3.3 and undone, then `vgcreate vg01
-   /dev/sdb1 /dev/sdb2`, `vgs` and `vgdisplay vg01` (3.4), `pvdisplay
-   /dev/sdb1` (3.5)
+   /dev/sdb1 /dev/sdb2`, `vgs` (3.4) and `vgdisplay vg01` (3.4a), and `pvdisplay
+   /dev/sdb1` inside the VG (for 3.5, since removed)
 4. `sdc1` from `1MiB` to `256MiB`, `lvm`; `pvcreate /dev/sdc1` and `vgextend
    vg01 /dev/sdc1` (3.6)
 5. `lvcreate --name lv01 --size 100M vg01` (4.3), `ls -l` on both paths (4.5),
@@ -1457,6 +1578,23 @@ restored:
 `/etc/fstab` is not touched by the chain. Afterwards `/data` is removed, the
 disks and `/etc/fstab` must match the baseline, and LVM's archives and
 devices-file entries are cleared by a snapshot revert or by hand.
+
+**The exercise chain.** `servera` stays in the state the last verified
+exercise ends in, so each exercise is verified by running it on its
+predecessor's result (the instructor, 2026-10-25). Started 2026-10-25 from the
+baseline:
+
+1. Exercise 1, as its command file runs it: the interactive `parted` session
+   through a terminal, `udevadm settle`, `pvcreate /dev/sdb1`, `pvs` (256.00m,
+   no VG).
+2. Exercise 2: `vgcreate vg_data /dev/sdb1`; `vgs` and `vgdisplay vg_data`
+   (252.00 MiB, 4.00 MiB extents, 63 total and free); `pvdisplay /dev/sdb1`
+   now shows `vg_data`, Allocatable yes, and 4.00 MiB not usable.
+
+**`servera` is now at the end of exercise 2.** Exercise 3 runs from here. A
+side test that needs `sdb` or `vg_data` puts them back to this state, not to
+the snapshot; the slide chain's transcripts for fragment 4 were captured in
+round 1, so none should be needed.
 
 ## Authoring notes
 
@@ -1506,8 +1644,14 @@ devices-file entries are cleared by a snapshot revert or by hand.
   component.
 - A line that starts with `AccentText` loses its paragraph; start such lines
   with text.
-- `TextExplainer` on 3.5 is more than four lines, so the component picks `sm`;
-  do not force a size.
+- **Line highlights inside `TerminalWindow` work** as on any fence, counting
+  the prompt line as line 1. Click-through steps such as
+  ```` ```bash-session {all|2-4,6,12|5,7-11} ```` add one click per step
+  (2.4a); a fixed range such as `{1-3,5,7-12}` adds none, and on a trimmed
+  transcript can dim just the `...output omitted...` markers (3.4a). Inside a
+  `v-switch`, click-through steps also need `{at:N}` and template click ranges
+  to line up, which is why the inspect slides were split instead
+  (Decision 33).
 - No presenter notes. Anything learned on the lab goes under "Verification".
 - No em dashes. Search the new files for U+2014 before handing work back.
 
@@ -1566,7 +1710,9 @@ All proposed on 2026-10-24 and waiting on the instructor. Each is reversible.
     The alternative is a different slide mount point, such as `/mnt/lv01`.
 22. **"256 MiB" partitions end at `257MiB`** in exercises 1 and 4. The
     alternative is to change the steps to say 255 MiB. Either gives 63
-    extents, so only the stated size changes.
+    extents, so only the stated size changes. RH134's own guided exercise
+    uses `1MiB` to `257MiB`. Applied in exercise 1's files on 2026-10-25; the
+    instructor can still switch to the alternative.
 23. **The chain ends where it started**: exercise 5 removes `/data`, and
     exercise 7 gains a cleanup that restores blank disks and the original
     `/etc/fstab`.
@@ -1619,14 +1765,44 @@ Added on 2026-10-24 from the instructor's answers:
     - **Written exercises:** each page's inline `<style>` block gains three
       classes named and colored like `AccentText`'s hues, `hue-blue`
       (`#0461be`), `hue-teal` (`#006e80`), and `hue-slate` (`#526678`), bold,
-      used as `<span class="hue-blue">physical volume</span>`. To build with
-      fragment 2's first written exercise and check against
-      `check:exercises`, including that a colored `h1` still matches the
-      declared exercise title; the declared titles and the page `<title>`
-      stay plain text. Once it holds, record the classes under "Exercise
-      documents" in `docs/design-system.md`.
+      used as `<span class="hue-blue">physical volume</span>`. Built with
+      exercise 1's written version on 2026-10-25 and accepted by
+      `check:exercises`. Headings stay plain, as slide titles do, so the
+      `h1` still matches the declared title. Recorded under "Exercise
+      documents" in `docs/design-system.md` the same day.
     - **Not covered:** command files and recordings, whose terminal text the
       key cannot reach.
+
+Decided by the instructor on 2026-10-25:
+
+32. **Slide 3.5 (source L13) is removed.** A `pvdisplay` right after
+    `vgdisplay` was jarring, and `vgdisplay` shows the same extent fields for
+    the whole VG. 3.4a now shows those lines (VG Size through Free PE) with
+    one sentence of arithmetic, and 2.4a steps through what the new PV has
+    and then what it lacks (an empty VG Name, Allocatable NO, and zero
+    extents), so the two display slides teach the before and after. The
+    instructor set the final highlights: click-through on 2.4a, fixed on 3.4a.
+33. **Each inspect slide is two slides,** the summary command (`pvs`, `vgs`,
+    `lvs`), centered vertically, and then the details command with line
+    highlights (2.4 and 2.4a, 3.4 and 3.4a, 4.6 and 4.6a). The `v-switch`
+    that held both added click bookkeeping for little benefit.
+34. **Extending gets its own fragment.** Fragments 1 to 4 introduce each
+    layer and create it; growing any layer waits for fragment 5. So 3.6,
+    Extend a Volume Group, moves from fragment 3 to fragment 5, after 5.1a's
+    overview and before 5.2. Fragment 3 drops to seven slides and fragment 5
+    grows to seven. One extending fragment rather than two, since a fragment
+    for `vgextend` alone would be a section slide and one content slide.
+    Fragment 4's transcripts show no VG capacity, so capturing them after
+    `vgextend` in the slide chain does not show on screen.
+
+Proposed 2026-10-25, following Decision 34:
+
+35. **4.4's `+` rows move to fragment 5.** `+50` (`-l`) and `+500M` (`-L`)
+    add to an existing LV, so only `lvextend` takes them; Decision 17 labels
+    them on 4.4 for now. Proposed: 4.4 keeps the create-time forms (`32`,
+    `100%FREE`, `300M`, `2G`), and the two `+` forms go to 5.2's "Extend the
+    LV" state beside `lvextend --size +100M`, where they are used. Lost: the
+    side-by-side view of every form in one table.
 
 ## Open questions
 
@@ -1642,8 +1818,8 @@ Added on 2026-10-24 from the instructor's answers:
 4. ~~**Exercise 2.**~~ Answered 2026-10-24: keep it separate. The instructor
    wants no more than about ten content slides between exercises; section,
    title, reminder, and exercise slides do not count. This plan's longest run
-   is eight (1.2 to 2.4, before exercise 1, since 1.3b was added); the others
-   are 0 to 6.
+   is nine (1.2 to 2.4a, before exercise 1, since 1.3b and 2.4a were added);
+   the others are 0 to 7.
 5. ~~**The 1.2 image.**~~ Answered 2026-10-24: a placeholder now, replaced
    later (Decision 10).
 6. **SCC volume group name.** The instructor lab's OS volume group is
@@ -1659,47 +1835,39 @@ As of 2026-10-25.
 **Done:**
 
 - This plan, and `course/w11-draft.md` with the cover, the VM reminder, and
-  the imports for fragments 1 and 2.
+  the imports for fragments 1 to 3.
 - Fragment 1, `logical-volume-manager.md`, five slides built and checked,
   including the commands table (1.3a) and the animation that follows it
   (1.3b).
-- Fragment 2, `physical-volumes.md`, six slides built and checked (the
-  recording slide waits on the cast). Its exercise files are not written yet.
+- Fragment 2, `physical-volumes.md`, seven slides built and checked (the
+  recording slide waits on the cast), and exercise 1's command file and
+  written version.
+- Fragment 3, `volume-groups.md`, six slides built and checked (the same),
+  and exercise 2's command file and written version. Its Extend a Volume
+  Group slide moved to fragment 5 (Decision 34).
 - The week's color key (Decision 31) and `AccentText`'s `hue` prop in the
   theme, with its test, gallery line, and documentation.
-- The lab checks behind every correction, under "Verification". `servera` was
-  reverted to its snapshot afterwards.
+- The lab checks behind every correction, under "Verification". `servera` is
+  at the end of exercise 2 ("The exercise chain").
 
 **Next, in order:**
 
-1. The instructor reviews fragments 1 and 2.
-2. Exercise 1, Initialize a Physical Volume: the command file and the
-   written version, each command verified on the lab as it is written. The
-   written version is the first to carry the `hue-blue` class (Decision 31);
-   confirm `check:exercises` accepts it, including a colored `h1`, before the
-   other exercises copy it. Then declare it in fragment 2's `topicInfo`.
-   Decision 22 (`257MiB`) applies. The written version can give the reason
-   behind 2.2's "Use a partition" (round 5): a PV on a bare disk looks empty
-   to `parted` and `lsblk`, and `parted mklabel` overwrites it without
-   asking.
-3. Fragment 3, `volume-groups.md`, with what fragments 1 and 2 settled:
-   - Transcripts from the round 1 slide chain under "Verification":
-     `vgcreate`, `vgs`, `vgdisplay vg01`, `pvdisplay /dev/sdb1` in the VG
-     (same PV UUID as 2.4), `pvcreate /dev/sdc1`, and `vgextend`.
-   - Copy 2.2's diagram for 3.2 and change only the `class` lines: the VG
-     teal, the rest white.
-   - Color VG mentions teal and PV mentions blue in the body text; leave
-     slide titles plain.
-   - Wrap a short heading and its list, or a label and its transcript, in a
-     `<div>` so they stay together, as on 1.2, 2.2, and 2.3.
-   - Word 3.4 like the instructor's 2.4: "`vgs` gives a summary of all VGs on
-     the system" and "`vgdisplay` shows the details of one VG", in the default
-     layout without `vertical: start`. 4.6 follows the same pattern.
-   - The new partitions on 3.6 (`sdc1`) and 5.2 already follow 2.2's
-     "Use a partition" recommendation; nothing to change.
-4. Open decisions: everything not marked accepted, including Decision 30
+1. The instructor reviews fragment 3 and exercise 2's files.
+2. Fragment 4, `logical-volumes.md`, with exercise 3's command file and
+   written version built alongside its slides and run on `servera` from
+   exercise 2's end state:
+   - Transcripts from the round 1 slide chain: `lvcreate --name lv01 --size
+     100M vg01`, `ls -l` on both LV paths (both `../dm-2`), `lvs`, and
+     `lvdisplay /dev/vg01/lv01`.
+   - 4.2's diagram: 2.2's with only the LVs in slate.
+   - 4.6 and 4.6a as two slides, worded like 2.4 and 3.4, LV terms slate,
+     4.6 centered; 4.6a's highlights click-through like 2.4a or fixed like
+     3.4a, the instructor's call (Decision 33).
+   - Procedure slide 4.8 keeps commands-only fences (Decision 13) unless the
+     instructor prefers terminals with output there too, as on 2.3 and 3.3.
+3. Open decisions: everything not marked accepted, including Decision 30
    (exercise 5a's design).
-5. Before the recordings: the SCC volume group name (Open question 6).
+4. Before the recordings: the SCC volume group name (Open question 6).
 
 **On another machine:**
 

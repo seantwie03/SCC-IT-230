@@ -132,6 +132,12 @@ paths students hit by accident:
 Restore every host you change in the same session, then confirm it matches the
 baseline you recorded before you started.
 
+The exception is a week's exercise chain while a week is being ported: each
+exercise starts where the one before it ends, so a verified exercise's end
+state stays on the host for the next one. The `week-porting` skill covers it.
+"Restore" then means returning to that chain state, and reverting to the
+snapshot discards the chain.
+
 `start-latest-snapshot`, installed in `/usr/local/bin`, is available for agent
 use. It reverts lab VMs to their newest snapshot, which the instructor took
 just after configuring the lab, and starts them. Run `start-latest-snapshot -h`

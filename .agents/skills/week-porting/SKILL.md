@@ -78,6 +78,11 @@ reminder slide, then one `src:` import per fragment in teaching order.
 Build one fragment, show it, and take feedback before starting the next. A
 fragment built on a misunderstanding is cheaper to fix alone than five are.
 
+A fragment with an exercise slide is not built until the exercise is: write its
+command file and written HTML version (Step 4) alongside the fragment's slides,
+verify them on the lab, and declare the exercise in the fragment's `topicInfo`
+before showing the fragment. Only the recording waits for the end.
+
 Before building the next fragment, re-read the instructor's edits to the one
 just built and check the next fragment's plan against them. A renamed term, a
 dropped slide, or a changed transcript often reaches forward. Propose the plan
@@ -151,6 +156,14 @@ ported material frequently predates RHEL 10.
 - Restore any host you change, in the same session, and say so in the plan's
   Verification section. Removing a package, closing a port, deleting a file, and
   reverting a config edit are part of the work, not follow-up.
+- The week's exercise chain (Step 4) is the exception. Once an exercise is
+  verified, leave its host in the state that exercise ends in, so the next
+  exercise is verified by running it on that state rather than on a rebuilt
+  copy. Record in the plan's Verification section which exercise the lab is
+  at. A side test, such as capturing a slide transcript or trying an edge
+  case, still puts the host back where it found it: to the chain's state,
+  not to the snapshot. The last exercise's cleanup returns the lab to the
+  week's start.
 - Record what you verified in the plan, including the answers that contradicted
   the source deck. The slides carry no presenter notes, so the plan is the only
   place that knowledge survives.
@@ -161,7 +174,8 @@ Each exercise is two files in the topic's `exercises/` directory, sharing one
 `<name>-exercise` stem: a `.sh` command file for `kitty-demo.py` and an `.html`
 written version for students working alone. The processed cast lands beside
 them as `.cast`. `docs/course-authoring.md` holds the directive syntax,
-the pause guidance, and the recording order. Write the command file first,
+the pause guidance, and the recording order. Write both files while building
+the exercise's fragment, not afterward (Step 2). Write the command file first,
 verifying each command on the lab as you write it.
 
 Chain a week's exercises through the lab state. Each names its prerequisite
