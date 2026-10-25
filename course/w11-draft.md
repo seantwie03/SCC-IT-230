@@ -53,3 +53,7 @@ src: ./chapters/rh134-ch11-managing-storage-with-logical-volume-manager/logical-
 ---
 src: ./chapters/rh134-ch11-managing-storage-with-logical-volume-manager/extending-lvm.md
 ---
+
+---
+src: ./chapters/rh134-ch11-managing-storage-with-logical-volume-manager/removing-lvm.md
+---

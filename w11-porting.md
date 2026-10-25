@@ -9,11 +9,11 @@ produce this plan. Nothing is built until the plan is approved.
 ## Answer in brief
 
 **Eight topic fragments** in one chapter directory, **eight exercises**, and a
-deck of **58 slides**: 40 from the source (38 content slides plus the cover and
+deck of **59 slides**: 40 from the source (38 content slides plus the cover and
 VM reminder; L13 was removed on 2026-10-25, Decision 32), 3 more from splitting
-the inspect slides in two (2.4a, 3.4a, 4.6a, Decision 33), 7 added slides
-(1.3a, 1.3b, 2.2a, 5.1a, 5.2a, 5.2b, and the new exercise slide 7.3), and 8
-recording slides that wait on the casts.
+the inspect slides in two (2.4a, 3.4a, 4.6a, Decision 33), 8 added slides
+(1.3a, 1.3b, 2.2a, 5.1a, 5.2a, 5.2b, 6.1a, and the new exercise slide 7.3), and
+8 recording slides that wait on the casts.
 
 | # | Fragment                    | Section title                  | Slides | Exercises |
 |--:|-----------------------------|--------------------------------|-------:|----------:|
@@ -24,9 +24,9 @@ recording slides that wait on the casts.
 | 5 | `extending-lvm.md`          | Extending LVM                  |      8 |         1 |
 | 6 | `removing-lvm.md`           | Removing LVM                   |      8 |         1 |
 | 7 | `lvm-swap-space.md`         | Swap Space on Logical Volumes  |      4 |         1 |
-| 8 | `lvm-practice.md`           | LVM Practice                   |      7 |         2 |
+| 8 | `lvm-practice.md`           | LVM Practice                   |      8 |         2 |
 |   | Entry file                  |                                |      2 |           |
-|   | **Total**                   |                                | **58** |     **8** |
+|   | **Total**                   |                                | **59** |     **8** |
 
 Slide counts include the recording slides. The fragments follow the Slidev
 deck's eight sections one for one. The LibreOffice deck contributes two concept
@@ -227,8 +227,8 @@ From `managing_storage_with_lvm.md`:
 |    L39 | Exercise: Persistent Swap on an LV        | 8.3       |
 
 3.6 keeps its number but sits in fragment 5, after 5.1a (Decision 34), and
-4.8 keeps its number but sits in fragment 8, after 8.1 (Decision 38), and 5.2
-sits there too, after 4.8 (Decision 40).
+4.8 keeps its number but sits in fragment 8, after 8.1 (Decision 38); 5.2 and
+6.5 sit there too, after it (Decisions 40 and 41).
 
 From `ManageStorageStack.odp`:
 
@@ -269,7 +269,7 @@ New, under
 | `extending-lvm.md`          |      8 |         1 |
 | `removing-lvm.md`           |      8 |         1 |
 | `lvm-swap-space.md`         |      4 |         1 |
-| `lvm-practice.md`           |      7 |         2 |
+| `lvm-practice.md`           |      8 |         2 |
 
 Plus `exercises/` with eight `.sh` command files, eight `.html` written
 exercises, and eight `.cast` recordings, and `assets/` holding the one
@@ -1033,10 +1033,18 @@ Components: `exercise`, `AccentText` with `hue`.
 
 **Addition.** Recording variant for `extend-logical-volume-exercise.cast`.
 
-### 6. `removing-lvm.md` (8 slides)
+### 6. `removing-lvm.md` (8 slides), built 2026-10-25
 
 `routeAlias: removing-lvm`. Alignments: RH134 chapter 11, cert guide chapter
-15. Exercise: Remove the LVM Setup Exercise.
+15. Exercise: Remove the LVM Setup Exercise, declared in `topicInfo`, its files
+built with the slides. Built and checked with `check:entry`, `check:slides`,
+and `check:exercises`, and every slide and click state captured at 1920x1080;
+it waits on the instructor's review. One concept slide per step, as in
+fragment 5: 6.1a the unmount, 6.2 the LV, 6.3 the VG, 6.4 the PV, 6.6 the disk.
+Its procedure slide, 6.5, was built here and moved to fragment 8 the same day
+(Decision 41). Transcripts come
+from round 1's slide chain, except 6.2's, retaken in the fragment 6 side test
+in a terminal so the typed `y` shows where a student sees it.
 
 ##### 6.1 Removing LVM
 
@@ -1044,66 +1052,76 @@ Source L28. Section slide.
 
 Components: `section`.
 
+##### 6.1a Unmount a Logical Volume
+
+**Addition, the instructor's request** (Decision 42, 2026-10-25). "`umount`
+detaches the file system; LVM refuses to remove an LV that is still mounted"
+over a terminal with `umount /data`, `vim /etc/fstab`, and `systemctl
+daemon-reload`, none of which print anything; then "Delete the LV's line in
+`vim`" over a `text [/etc/fstab]` fence with `/dev/vg01/lv01 /data ext4
+defaults 0 0`, the line 4.8's procedure appends (verified in the fragment 4
+side test); then a `Callout type="warning"`: "A leftover entry makes the next
+boot wait 90 seconds for the missing device, then stop in emergency mode" (the
+fragment 6 check under "The exercise chain"). Built from 6.5's first step,
+which said the same in bullets before it moved to fragment 8. "In `vim`, delete" left a gap before the
+comma, as on 2.4, so `vim` ends the sentence. 6.2 still opens with `umount
+/dev/vg01/lv01`, which now repeats this slide's point by device instead of by
+mount point. `check:slides`: 29.22px clearance.
+
+Components: default layout, fixed `TerminalWindow`, `text` fence with a
+title, `Callout`, `AccentText` with `hue`.
+
 ##### 6.2 Remove a Logical Volume
 
-Source L29. "`lvremove`": removes the LV and frees its extents in the VG;
-**irreversible**. A fixed `TerminalWindow`: `umount /dev/vg01/lv01`, then
-`lvremove /dev/vg01/lv01` with its `[y/n]` question answered `y` and its
-result. The source repeats "Irreversible" as a closing quote; ported as a
-`Callout type="danger"` and dropped from the list, so it is said once.
+Source L29. "`lvremove` removes an LV and frees its extents in the VG" over a
+terminal: `umount /dev/vg01/lv01` (the source's form, verified: `umount`
+takes the device as well as the mount point), then `lvremove /dev/vg01/lv01`
+with "Do you really want to remove active logical volume vg01/lv01? [y/n]: y"
+and "Logical volume "lv01" successfully removed.". The source said
+"Irreversible" twice, as its first bullet and as a closing quote; it is now
+said once, in a `Callout type="danger"`: "**Irreversible**: all data on the LV
+is destroyed". `check:slides`: 61.55px clearance.
 
-Components: default layout, fixed `TerminalWindow`, `Callout`.
+Components: default layout, fixed `TerminalWindow`, `Callout`, `AccentText`
+with `hue`.
 
 ##### 6.3 Remove a Volume Group
 
-Source L30. "`vgremove`" removes the VG and releases its PVs. A fixed
-`TerminalWindow` with `vgremove vg01` and its output. The source's closing note,
-"All Logical Volumes must be removed before removing the VG", is wrong:
-`vgremove` asks "Do you really want to remove volume group "vg01" containing 1
-logical volumes? [y/n]:" and removes them too on `y` (verified; answered `n`,
-it prints "Volume group "vg01" not removed" and exits 5). Proposed note:
-"`vgremove` asks before removing a VG that still holds LVs, and removes them
-too" (Decision 18).
+Source L30. "`vgremove` removes a VG and releases its PVs back to an
+unassigned state" (the source's two lines as one) over `vgremove vg01` and
+"Volume group "vg01" successfully removed". The source's closing note, "All
+Logical Volumes must be removed before removing the VG", is wrong; a `Callout
+type="warning"` says instead "`vgremove` asks before removing a VG that still
+holds LVs, and on `y` removes them too" (Decision 18). Verified in the side
+test: on a VG holding an active LV, `vgremove` asks "Do you really want to
+remove volume group "vg01" containing 1 logical volumes? [y/n]:", then "Do
+you really want to remove active logical volume vg01/lv01? [y/n]:", and on two
+`y`s removes both; answered `n` (round 1), it prints "Volume group "vg01" not
+removed" and exits 5. `check:slides`: 70.39px clearance.
 
-Components: default layout, fixed `TerminalWindow`, `Callout`.
+Components: default layout, fixed `TerminalWindow`, `Callout`, `AccentText`
+with `hue`.
 
 ##### 6.4 Remove a Physical Volume
 
-Source L31, with its typos ("Phsical Voulme"). "`pvremove`" removes the LVM
-label from a device. A fixed `TerminalWindow` with `pvremove /dev/sdb1` and its
-output, then "The partition itself is not deleted".
+Source L31, with its typos ("Phsical Voulme") fixed. "`pvremove` removes the
+LVM label from a device" over `pvremove /dev/sdb1` and "Labels on physical
+volume "/dev/sdb1" successfully wiped.", then "The partition itself is not
+deleted". `check:slides`: 68.2px clearance.
 
 Components: default layout, fixed `TerminalWindow`.
-
-##### 6.5 Removing LVM Components
-
-Source L32. "Teardown order is the reverse of creation: unmount, LV, VG, PV",
-then two click states:
-
-1. Unmount and remove the LV: LVM refuses to remove a mounted LV; remove the
-   `/etc/fstab` entry, or the next boot stops in emergency mode (w10); `lvremove`
-   is irreversible. `umount /data`, `vim /etc/fstab` with the comment "Remove
-   the entry", `lvremove /dev/vg01/lv01`.
-2. Remove the VG and PVs: `vgremove` releases the PVs; `pvremove` wipes the
-   LVM label, and the partition remains. `vgremove vg01`, `pvremove /dev/sdb1
-   /dev/sdb2 /dev/sdc1`. The source lists only `sdb1` and `sdb2`, but 3.6 added
-   `sdc1` to `vg01`.
-
-The source says a leftover entry causes "a failed mount on reboot"; w10's
-Sequencing note records that it stops the boot in emergency mode. To check on
-the lab before the slide says which.
-
-Components: default layout with `vertical: start`, `v-switch at="1"` with two
-templates, `bash` fences.
 
 ##### 6.6 Wipe the Disk
 
 Source L33. "`wipefs` erases the signatures that identify a file system,
-partition table, or LVM label; the data stays, but nothing can find it".
-The source says it "zeros metadata regions", which overstates it: `wipefs`
-erases the few bytes of each signature. Then `wipefs --all /dev/sdb`, with real
-output listing each erased signature (proposed, Decision 14; the source shows
-the command only). W10 used `wipefs` in exercise cleanups but never on a slide.
+partition table, or LVM label", then "The data stays on the disk, but nothing
+can find it" (the source's "leaves the rest of the data untouched (but
+inaccessible)"). The source said it "zeros metadata regions", which overstates
+it: `wipefs` erases the few bytes of each signature, as the output shows. A
+terminal with round 1's real output for `wipefs --all /dev/sdb`: the GPT
+signature at the start and at the end of the disk, the protective MBR, and
+"calling ioctl to re-read partition table: Success" (Decision 14; the source
+showed the command only). `check:slides`: 55.7px clearance.
 
 Components: default layout, fixed `TerminalWindow`.
 
@@ -1115,16 +1133,39 @@ Source L34.
 - **Environment:** **Host:** `servera`; **Prerequisite exercise:** Extend a
   Logical Volume
 - **Workflow:** 1. Unmount `/data` and remove its `/etc/fstab` entry;
-  2. Remove the logical volume; 3. Remove the volume group; 4. Remove the
-  physical volumes on `/dev/sdb1` and `/dev/sdc1`; 5. Wipe the `/dev/sdb` and
-  `/dev/sdc` disks
+  2. Remove the logical volume (slate); 3. Remove the volume group (teal);
+  4. Remove the physical volumes (blue) on `/dev/sdb1` and `/dev/sdc1`; 5. Wipe
+  the `/dev/sdb` and `/dev/sdc` disks
 
 The source's requirement line, "Teardown order is the reverse of creation",
-moves into the goal, since the environment slot lists only hosts and
-prerequisites. The command file also removes `/data`, which no later exercise
-uses (Decision 23); cleanup is not listed on the slide.
+moved into the goal, since the environment slot lists only hosts and
+prerequisites. `check:slides`: 122.84px clearance.
 
-Components: `exercise`.
+Exercise files, written 2026-10-25 and run on `servera` from exercise 4's end
+state (see "The exercise chain"):
+
+- `remove-lvm-setup-exercise.sh`, 50 presses (`kitty-demo --check`), the
+  source's `remove_lvm.sh` in the current format. Step 1: `umount /data`; the
+  `/etc/fstab` edit in `vim` as the source wrote it (`/lv_data` to find the
+  line, `dd` with `#@ noenter`, `:wq`); `cat /etc/fstab`; `systemctl
+  daemon-reload`; and `rmdir /data` (Decision 23). Step 2: `lvremove` with its
+  `y` answer on its own line, which the source left out (the command would
+  have waited at the question), then `lvs`. Steps 3 and 4: `vgremove vg_data`
+  and `vgs`; `pvremove /dev/sdb1 /dev/sdc1` and `pvs`. Step 5: `wipefs --all`
+  on each disk, written long as on 6.6 (the source used `-a`), then `lsblk`;
+  the source's `wipefs -n` dry runs are gone (Decision 24). `#!` notes give
+  the emergency-mode reason, what `dd` deletes, the irreversibility, and that
+  the partitions outlive `pvremove`. The source's dash notes and arrow line
+  are rewritten. Pauses: 10 on the eleven-line intro, 5 on `cat`, `lvs`,
+  `vgs`, `pvs`, and the closing `lsblk`.
+- `remove-lvm-setup-exercise.html`, built from exercise 4's page. It gives the
+  `vim` keys in prose, a warning callout, "Remove the entry before the next
+  reboot" (the 90-second wait and emergency mode), `lvremove`'s question and
+  answer, what to do if it reports `contains a filesystem in use`, and the
+  expected `lvs`, `vgs`, `pvs`, `wipefs`, and `lsblk` results.
+  `check:exercises` passes it.
+
+Components: `exercise`, `AccentText` with `hue`.
 
 ##### 6.7a Exercise recording (pending)
 
@@ -1199,11 +1240,21 @@ Components: `exercise`.
 
 **Addition.** Recording variant for `create-lvm-swap-space-exercise.cast`.
 
-### 8. `lvm-practice.md` (7 slides)
+### 8. `lvm-practice.md` (8 slides)
 
 `routeAlias: lvm-practice`. Alignments: RH134 chapter 11, cert guide chapter
 15. Exercises: Create a Large LV Spanning Two Disks Exercise, Create
 Persistent Swap on an LV Exercise.
+
+The fragment has two purposes (Decision 43, the instructor, 2026-10-25):
+
+1. **Creation in one exercise.** Fragments 2 to 4 build the stack a layer at
+   a time, one exercise per layer; exercise 6 goes from partition to
+   persistent mount in one pass.
+2. **A reference set.** The three procedures, 4.8 (create), 5.2 (extend), and
+   6.5 (remove), give every step with minimal instruction, so students can
+   come back to them as a refresher. The concept slides in fragments 2 to 6
+   do the teaching.
 
 ##### 8.1 LVM Practice
 
@@ -1476,6 +1527,87 @@ lvextend --resizefs --size +100M /dev/vg01/lv01
 
 Components: default layout, `v-switch at="1"` with five templates, `bash`
 fences, `AccentText` with `hue`.
+
+##### 6.5 Procedure: Remove LVM
+
+Source L32 ("Removing LVM Components"), **moved to fragment 8** (Decision 41)
+and retitled to match 4.8 and 5.2, the procedures it follows. Built in
+fragment 6 on 2026-10-25 and removed the same day, before fragment 8 existed,
+so its source is kept below to drop in after 5.2. In fragment 6, 6.1a, 6.2,
+6.3, and 6.4 teach its steps one at a time.
+
+Source L32. "Teardown order: **Unmount → LV → VG → PV**, the reverse of
+creation", then two click states, each an `h3` step heading, bullets, and a
+commands-only `bash` fence (Decision 13):
+
+1. "Step 1: Unmount and remove the LV": "LVM refuses to remove an LV whose file
+   system is mounted" (verified: "Logical volume vg01/lv01 contains a
+   filesystem in use.", exit 5); "Remove the `/etc/fstab` entry, or the next
+   boot waits for the missing device and stops in emergency mode"; "`lvremove`
+   is **irreversible**". `umount /data`, `vim /etc/fstab    # Remove the
+   entry`, `systemctl daemon-reload`, `lvremove /dev/vg01/lv01`. The
+   `daemon-reload` is added, as the file's own header and w10 teach and as
+   exercise 5 does.
+2. "Step 2: Remove the VG and PVs": "`vgremove` removes the VG and releases its
+   PVs"; "`pvremove` removes the LVM label from each device; the partitions
+   remain". `vgremove vg01`, `pvremove /dev/sdb1 /dev/sdb2 /dev/sdc1`. The
+   source lists only `sdb1` and `sdb2`, but 3.6 added `sdc1` to `vg01`.
+
+The source said a leftover entry causes "a failed mount on reboot". Checked
+without a reboot, on the chain's `/data` (read-only): `data.mount` requires
+its device unit and is required by `local-fs.target`, whose `OnFailure` is
+`emergency.target`, and the default start timeout is 1 min 30 s. So a missing
+device holds the boot for 90 seconds and then drops it to emergency mode,
+which is what w10's Sequencing note records. `check:slides` in fragment 6:
+61.45px and 163.45px clearance.
+
+`````md
+---
+vertical: start
+---
+
+# Procedure: Remove LVM
+
+Teardown order: **Unmount → <AccentText hue="slate">LV</AccentText> → <AccentText hue="teal">VG</AccentText> → <AccentText hue="blue">PV</AccentText>**, the reverse of creation
+
+<v-switch at="1">
+
+<template #0>
+
+### Step 1: Unmount and remove the <AccentText hue="slate">LV</AccentText>
+
+- LVM refuses to remove an <AccentText hue="slate">LV</AccentText> whose file system is mounted
+- Remove the `/etc/fstab` entry, or the next boot waits for the missing device and stops in emergency mode
+- `lvremove` is **irreversible**
+
+```bash
+umount /data
+vim /etc/fstab    # Remove the entry
+systemctl daemon-reload
+lvremove /dev/vg01/lv01
+```
+
+</template>
+
+<template #1>
+
+### Step 2: Remove the <AccentText hue="teal">VG</AccentText> and <AccentText hue="blue">PV</AccentText>s
+
+- `vgremove` removes the <AccentText hue="teal">VG</AccentText> and releases its <AccentText hue="blue">PV</AccentText>s
+- `pvremove` removes the LVM label from each device; the partitions remain
+
+```bash
+vgremove vg01
+pvremove /dev/sdb1 /dev/sdb2 /dev/sdc1
+```
+
+</template>
+
+</v-switch>
+`````
+
+Components: default layout with `vertical: start`, `v-switch at="1"` with two
+templates, `bash` fences, `AccentText` with `hue`.
 
 ##### 8.2 Exercise: Create a Large LV Spanning Two Disks
 
@@ -1951,11 +2083,29 @@ baseline:
    line and `df` showed 418M with 167M free; the second `echo` worked and
    `cat` printed `test`.
 
-**`servera` is now at the end of exercise 4**: `lv_data` at 452 MiB across
-`sdb1` and `sdc1`, mounted on `/data` and in `/etc/fstab`, holding `bigfile`
-and `testfile`, with 52 MiB free in `vg_data`. Exercise 5 runs from here. A
-side test that needs `sdb`, `sdc`, `vg_data`, `/data`, or `/etc/fstab` puts
-them back to this state, not to the snapshot.
+7. A check and a side test for fragment 6. Read-only, on the chain's `/data`:
+   `systemctl show data.mount` (`Requires` the device unit, `RequiredBy=
+   local-fs.target`), `systemctl show local-fs.target`
+   (`OnFailure=emergency.target`), `DefaultTimeoutStartUSec=1min 30s`, and
+   `findmnt --verify` clean. On `sdd`, copied and restored as in step 3: a
+   mounted ext4 `lv01`, `umount /dev/vg01/lv01` by device, `lvremove` answered
+   `y` in a terminal, then `vgremove vg01` on a VG still holding an active LV
+   (two questions, both answered `y`, both removed) and `pvremove`. Both
+   hashes and all three listings matched afterwards, and `sdd` was blank.
+8. Exercise 5, as its command file runs it, with the `vim` keystrokes and the
+   `lvremove` answer typed through a terminal: `umount /data`; `/lv_data`,
+   `dd`, `:wq` removed exactly the one line, and `/etc/fstab` matched the
+   baseline hash `b96e219b79…` again; `daemon-reload`; `rmdir /data`;
+   `lvremove` answered `y`; `vgremove vg_data` without a question; `pvremove
+   /dev/sdb1 /dev/sdc1`; `wipefs --all` on both disks (GPT at both ends and
+   the PMBR); `lsblk` showed no partitions.
+
+**`servera` is now at the end of exercise 5**, which is the week's starting
+state for the disks and `/etc/fstab`: `sdb`, `sdc`, and `sdd` blank with no
+signatures, `/etc/fstab` at the baseline hash, no `/data`, and only
+`rhel_servera`. LVM's own records differ, as Decision 29 expects:
+`system.devices` keeps entries for `sdb1` and `sdc1` with `PVID=.`. Exercise
+5a, on `sdd`, runs from here.
 
 ## Authoring notes
 
@@ -2195,6 +2345,39 @@ Decided by the instructor on 2026-10-25, following Decision 34:
     instructor's design, 2026-10-25. Fragment 5 grows to eight slides,
     fragment 8 to seven, and the deck to 58.
 
+Decided by the instructor on 2026-10-25:
+
+41. **6.5, Removing LVM Components, moves to the practice fragment** as
+    "Procedure: Remove LVM", after 5.2, so fragment 8 holds all three
+    procedures (create, extend, remove) and fragment 6, like fragment 5, keeps
+    one concept slide per step. Since 6.1a (Decision 42) teaches unmounting
+    and removing the `/etc/fstab` entry, no point of 6.5's is lost. Accepted
+    2026-10-25 and moved: fragment 6 drops to eight slides and fragment 8
+    grows to eight.
+42. **6.1a, Unmount a Logical Volume, comes before 6.2**: `umount`, deleting
+    the `/etc/fstab` line, `systemctl daemon-reload`, and why the line must
+    go. The instructor's request, 2026-10-25. Fragment 6 grows to nine slides
+    and the deck to 59.
+43. **The practice fragment serves two purposes**: exercise 6 shows creation
+    in one exercise instead of a layer at a time, and the three procedures
+    (4.8, 5.2, 6.5) are a reference set of every step to create, extend, and
+    remove, with minimal instruction. The instructor, 2026-10-25.
+
+Decided by the instructor on 2026-10-25, following Decision 43:
+
+44. **The procedures are trimmed to steps and commands when fragment 8 is
+    built.** Accepted 2026-10-25. Each keeps its step headings and fences, and only the words a
+    reader needs to choose a command: 5.2's "Skip steps 1 and 2 if the VG
+    already has enough free extents" and its XFS and ext4 labels. Dropped,
+    since the concept slides teach them: 4.8's two callouts (`udevadm settle`,
+    the XFS minimum), 5.2's "Adds capacity", "No impact", and "Adds 100 MiB"
+    bullets and its `--resizefs` sentence, and 6.5's bullets. 6.5 keeps its
+    teardown-order line, which is the procedure's shape. All three share one
+    layout, `vertical: start`, so the step headings sit at the same height as
+    a reader clicks through (5.2 lost it on 2026-10-25). Lost: the reasons
+    beside each step, which a student reviewing alone finds on the concept
+    slides instead.
+
 ## Open questions
 
 1. ~~**The lab.**~~ Answered 2026-10-24: the instructor started it.
@@ -2226,7 +2409,7 @@ As of 2026-10-25.
 **Done:**
 
 - This plan, and `course/w11-draft.md` with the cover, the VM reminder, and
-  the imports for fragments 1 to 5.
+  the imports for fragments 1 to 6.
 - Fragment 1, `logical-volume-manager.md`, five slides built and checked,
   including the commands table (1.3a) and the animation that follows it
   (1.3b).
@@ -2243,18 +2426,21 @@ As of 2026-10-25.
   recording slide waits on the cast), and exercise 4's command file and
   written version. Its procedure slide, 5.2, moved to fragment 8 (Decision
   40).
+- Fragment 6, `removing-lvm.md`, seven slides built and checked (the
+  recording slide waits on the cast), and exercise 5's command file and
+  written version. Its procedure slide, 6.5, moved to fragment 8 (Decision
+  41).
 - The week's color key (Decision 31) and `AccentText`'s `hue` prop in the
   theme, with its test, gallery line, and documentation.
 - The lab checks behind every correction, under "Verification". `servera` is
-  at the end of exercise 4 ("The exercise chain").
+  at the end of exercise 5 ("The exercise chain").
 
 **Next, in order:**
 
-1. The instructor reviews fragment 5 and exercise 4's files: 5.1a's new
-   title, 5.2a and 5.2b, and 5.3's real output (Decision 14).
-2. Fragment 6, `removing-lvm.md`, with exercise 5's command file and written
-   version built alongside its slides and run on `servera` from exercise 4's
-   end state, then exercise 5a's design (Decision 30) before fragment 7.
+1. The instructor reviews exercise 5's files.
+2. Exercise 5a's design (Decision 30), then fragment 7, `lvm-swap-space.md`,
+   with exercise 5a's files built alongside its slides and run on `servera`
+   from exercise 5's end state.
 3. Open decisions: everything not marked accepted, including Decision 30
    (exercise 5a's design).
 4. Before the recordings: the SCC volume group name (Open question 6).
