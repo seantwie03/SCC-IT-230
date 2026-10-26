@@ -149,3 +149,25 @@ Tear down the LVM stack in the reverse order of creation
 3. Remove the <AccentText hue="teal">volume group</AccentText>
 4. Remove the <AccentText hue="blue">physical volumes</AccentText> on `/dev/sdb1` and `/dev/sdc1`
 5. Wipe the `/dev/sdb` and `/dev/sdc` disks
+
+---
+layout: exercise
+variant: recording
+---
+
+<script setup>
+import castUrl from "./exercises/remove-lvm-setup-exercise.cast?url";
+</script>
+
+# Remove the LVM Setup
+
+::recording::
+
+<AsciinemaPlayer
+    :src="castUrl"
+    label="Screen recording of the instructor unmounting /data, deleting its line from /etc/fstab in vim, removing the mount point, removing lv_data with lvremove, vg_data with vgremove, and both physical volumes with pvremove, then wiping /dev/sdb and /dev/sdc with wipefs."
+/>
+
+::resources::
+
+<a href="../resources/remove-lvm-setup-exercise.html" target="_blank" rel="noopener noreferrer" aria-label="Read the written Remove the LVM Setup exercise in a new tab">Written exercise</a>

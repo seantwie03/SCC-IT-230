@@ -39,7 +39,7 @@ listSpacing: padded
 
 ::right::
 
-![](./assets/lvm-storage-illustration.placeholder.jpg)
+![](./assets/lvm-storage-illustration.webp)
 
 ---
 layout: two-cols-header

@@ -180,3 +180,25 @@ Pool the new <AccentText hue="blue">physical volume</AccentText> into a <AccentT
 
 1. Create a <AccentText hue="teal">volume group</AccentText> named `vg_data` using `/dev/sdb1`
 2. Verify with `vgs` and `vgdisplay`
+
+---
+layout: exercise
+variant: recording
+---
+
+<script setup>
+import castUrl from "./exercises/create-volume-group-exercise.cast?url";
+</script>
+
+# Create a Volume Group
+
+::recording::
+
+<AsciinemaPlayer
+    :src="castUrl"
+    label="Screen recording of the instructor creating the volume group vg_data from /dev/sdb1 with vgcreate, then inspecting it with vgs and vgdisplay, which show 508 MiB in 127 free extents."
+/>
+
+::resources::
+
+<a href="../resources/create-volume-group-exercise.html" target="_blank" rel="noopener noreferrer" aria-label="Read the written Create a Volume Group exercise in a new tab">Written exercise</a>

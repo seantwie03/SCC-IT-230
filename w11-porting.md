@@ -314,15 +314,26 @@ in the stack. 1.3 shows all three layers in their hues.
 **`lvm_storage_illustration.png` and O2's 1024 by 1024 JPEG, no recorded
 source, replace.** The same isometric illustration of coloured disk stacks
 with garbled labels, which suggests an AI image generator; the PNG is a crop
-of the JPEG. O15 (Stratis) reuses it. Proposed (Decision 10): a placeholder on
-1.2, beside the "Why use LVM" list, replaced before publication by one of:
+of the JPEG. O15 (Stratis) reuses it. It went on 1.2 as a placeholder
+(Decision 10) and was replaced on 2026-10-26 by an image the instructor
+generated with Gemini, decorative, with empty alt text and no credit line:
 
-- an image the instructor generates with Gemini from a prompt written once the
-  box is measured (decorative, empty alt text, no credit line), for example
-  several small drives pouring into one large pool;
-- a Wikimedia Commons image under CC BY or CC BY-SA, with a credit line;
-- nothing, in which case 1.2 becomes a text slide or an `IconGrid` of the four
-  reasons.
+- **Box:** 1.2's right column, 635 by 786 pixels at 1920 wide, or 325 by 402
+  slide units; Gemini's nearest aspect, 3:4.
+- **Prompt:** the third of three tried (an isometric pipes-and-pools scene came
+  out ugly; a clay-style stack and building blocks were offered): a product
+  photograph of two 3.5-inch hard drives and one 2.5-inch solid state drive,
+  upright and slightly angled, brushed silver and white casings with small
+  blue (#3584e4) labels carrying no text, on solid chroma-key green with
+  nothing green, purple, or see-through in the subject.
+- **Source:** 1792 by 2400 JPEG, kept out of the repository.
+- **Keying:** `key-green.py --canvas 900x1200 --preview 9141ac` (the purple
+  accent fill); no interior pixel lost opacity (the most green inside the
+  subject was 5 against a threshold of 40), no holes; the subject came out
+  1403 by 1355, fitted to 810 by 782 on the canvas.
+- **Result:** `assets/lvm-storage-illustration.webp`, 900 by 1200, 48,106
+  bytes. The placeholder file is deleted, and no `*.placeholder.*` reference
+  remains in the week.
 
 **`hard_drive_icon.png` (O3, O4, O9, and the Stratis slides), no recorded
 source, not ported.** Carbon icon shapes in the Mermaid diagrams replace it.
@@ -378,10 +389,12 @@ abstraction layer between physical devices and file systems", then "Why use
 LVM?" over L2's four reasons: resize volumes **without downtime**;
 **combine** several disks into one mount point; **replace** a failing disk
 without downtime; consistent LV names across servers ("LV" in slate,
-Decision 31). Right column: O2's
-illustration as `assets/lvm-storage-illustration.placeholder.jpg` (Decision
-10), with empty alt text as a decorative image, filling the column height.
-`check:slides`: 38.45px clearance.
+Decision 31). Right column: a decorative image filling the column height, with
+empty alt text. It was O2's illustration as a placeholder until 2026-10-26,
+when the instructor's Gemini image replaced it,
+`assets/lvm-storage-illustration.webp` (see "Third-party images", Decision
+10). `check:slides`: 0px clearance with the new image, which fills the
+column's height exactly.
 
 Components: `two-cols-header` with `leftWidth: 60` and `vertical: center`.
 `center` keeps "Why use LVM?" near its list; the default spreads the three
@@ -616,10 +629,9 @@ the exercise chain from the snapshot:
 
 Components: `exercise`, `AccentText` with `hue`.
 
-##### 2.5a Exercise recording (pending)
+##### 2.5a Exercise recording, built 2026-10-26
 
-**Addition.** Recording variant for `initialize-physical-volume-exercise.cast`,
-added once the cast exists.
+**Addition.** The `recording` variant, with `initialize-physical-volume-exercise.cast` (2:39, 4 section markers, asciicast v3 at 120x24) in an `AsciinemaPlayer` whose `label` describes the recorded workflow, and the written exercise in the `resources` slot.
 
 ### 3. `volume-groups.md` (7 slides), built 2026-10-25
 
@@ -729,9 +741,9 @@ Exercise files, written 2026-10-25, updated for 512 MiB on 2026-10-26
 
 Components: `exercise`, `AccentText` with `hue`.
 
-##### 3.7a Exercise recording (pending)
+##### 3.7a Exercise recording, built 2026-10-26
 
-**Addition.** Recording variant for `create-volume-group-exercise.cast`.
+**Addition.** The `recording` variant, with `create-volume-group-exercise.cast` (0:52, 3 section markers, asciicast v3 at 120x24) in an `AsciinemaPlayer` whose `label` describes the recorded workflow, and the written exercise in the `resources` slot.
 
 ### 4. `logical-volumes.md` (9 slides), built 2026-10-25
 
@@ -886,9 +898,9 @@ exercise chain:
 
 Components: `exercise`, `AccentText` with `hue`.
 
-##### 4.7a Exercise recording (pending)
+##### 4.7a Exercise recording, built 2026-10-26
 
-**Addition.** Recording variant for `create-logical-volume-exercise.cast`.
+**Addition.** The `recording` variant, with `create-logical-volume-exercise.cast` (2:27, 5 section markers, asciicast v3 at 120x24) in an `AsciinemaPlayer` whose `label` describes the recorded workflow, and the written exercise in the `resources` slot.
 
 ### 5. `extending-lvm.md` (8 slides), built 2026-10-25
 
@@ -1056,9 +1068,9 @@ run in the exercise chain:
 
 Components: `exercise`, `AccentText` with `hue`.
 
-##### 5.4a Exercise recording (pending)
+##### 5.4a Exercise recording, built 2026-10-26
 
-**Addition.** Recording variant for `extend-logical-volume-exercise.cast`.
+**Addition.** The `recording` variant, with `extend-logical-volume-exercise.cast` (3:48, 7 section markers, asciicast v3 at 120x24) in an `AsciinemaPlayer` whose `label` describes the recorded workflow, and the written exercise in the `resources` slot.
 
 ### 6. `removing-lvm.md` (8 slides), built 2026-10-25
 
@@ -1194,9 +1206,9 @@ state (see "The exercise chain"):
 
 Components: `exercise`, `AccentText` with `hue`.
 
-##### 6.7a Exercise recording (pending)
+##### 6.7a Exercise recording, built 2026-10-26
 
-**Addition.** Recording variant for `remove-lvm-setup-exercise.cast`.
+**Addition.** The `recording` variant, with `remove-lvm-setup-exercise.cast` (2:37, 6 section markers, asciicast v3 at 120x24) in an `AsciinemaPlayer` whose `label` describes the recorded workflow, and the written exercise in the `resources` slot.
 
 ### 7. Swap Space on Logical Volumes, dropped 2026-10-26
 
@@ -1312,9 +1324,9 @@ state:
 
 Components: `exercise`, `AccentText` with `hue`.
 
-##### 8.2a Exercise recording (pending)
+##### 8.2a Exercise recording, built 2026-10-26
 
-**Addition.** Recording variant for `create-lvm-storage-exercise.cast`.
+**Addition.** The `recording` variant, with `create-lvm-storage-exercise.cast` (4:55, 7 section markers, asciicast v3 at 120x24) in an `AsciinemaPlayer` whose `label` describes the recorded workflow, and the written exercise in the `resources` slot.
 
 ##### 5.2 Procedure: Extend a Logical Volume
 
@@ -1365,9 +1377,9 @@ The `+100%FREE` form is the third row added to 5.2a's table (Decision 46).
 
 Components: `exercise`.
 
-##### 8.3a Exercise recording (pending)
+##### 8.3a Exercise recording, built 2026-10-26
 
-**Addition.** Recording variant for `extend-lvm-storage-exercise.cast`.
+**Addition.** The `recording` variant, with `extend-lvm-storage-exercise.cast` (2:26, 5 section markers, asciicast v3 at 120x24) in an `AsciinemaPlayer` whose `label` describes the recorded workflow, and the written exercise in the `resources` slot.
 
 ##### 6.5 Procedure: Remove LVM
 
@@ -1416,9 +1428,9 @@ Exercise files, written 2026-10-26 and run from exercise 7's end state:
 
 Components: `exercise`, `AccentText` with `hue`.
 
-##### 8.4a Exercise recording (pending)
+##### 8.4a Exercise recording, built 2026-10-26
 
-**Addition.** Recording variant for `remove-lvm-storage-exercise.cast`.
+**Addition.** The `recording` variant, with `remove-lvm-storage-exercise.cast` (2:27, 5 section markers, asciicast v3 at 120x24) in an `AsciinemaPlayer` whose `label` describes the recorded workflow, and the written exercise in the `resources` slot.
 
 ## Exercises
 
@@ -2026,6 +2038,8 @@ All proposed on 2026-10-24 and waiting on the instructor. Each is reversible.
 10. **The storage illustration is a placeholder on 1.2**, replaced before
     publication by a Gemini image, a Commons image, or nothing. Accepted
     2026-10-24: placeholder now, replacement chosen later (Open question 5).
+    Replaced 2026-10-26 by the instructor's Gemini image, decorative (see
+    "Third-party images").
 11. **Add slides 1.3a, 2.2a, and 5.1a.** All three accepted 2026-10-24. For
     2.2a, flags are introduced this week, with no reference to w10's swap
     partition. 1.3a and 1.3b are built: the table (1.3a) is followed by an
@@ -2288,12 +2302,10 @@ Decided by the instructor on 2026-10-26, following Decision 45:
    is nine (1.2 to 2.4a, before exercise 1, since 1.3b and 2.4a were added);
    the others are 0 to 7.
 5. ~~**The 1.2 image.**~~ Answered 2026-10-24: a placeholder now, replaced
-   later (Decision 10).
-6. **SCC volume group name.** The instructor lab's OS volume group is
-   `rhel_servera`, as the source shows. `docs/lab-environments.md` does not say
-   whether SCC matches. The instructor will check `vgs` on an SCC `servera`;
-   **remind the instructor before the recordings**, since 2.4, 3.4, and 4.6
-   show the name.
+   later (Decision 10). Replaced 2026-10-26 with a decorative Gemini image.
+6. ~~**SCC volume group name.**~~ The instructor lab's OS volume group is
+   `rhel_servera`, as the source shows. Answered 2026-10-26: not relevant; the
+   instructor will not check it on the SCC VDI.
 
 ## Status
 
@@ -2301,58 +2313,62 @@ As of 2026-10-26.
 
 **Done:**
 
-- This plan, and `course/w11-draft.md` with the cover, the VM reminder, and
-  the imports for fragments 1 to 6 and 8.
+- This plan, and `course/w11-draft.md` with the cover, the VM reminder, and the
+  imports for fragments 1 to 6 and 8.
 - Fragment 1, `logical-volume-manager.md`, five slides built and checked,
-  including the commands table (1.3a) and the animation that follows it
-  (1.3b).
-- Fragment 2, `physical-volumes.md`, seven slides built and checked (the
-  recording slide waits on the cast), and exercise 1's command file and
-  written version.
-- Fragment 3, `volume-groups.md`, six slides built and checked (the same),
-  and exercise 2's command file and written version. Its Extend a Volume
-  Group slide moved to fragment 5 (Decision 34).
-- Fragment 4, `logical-volumes.md`, eight slides built and checked (the
-  recording slide waits on the cast), and exercise 3's command file and
-  written version. Its procedure slide moved to fragment 8 (Decision 38).
-- Fragment 5, `extending-lvm.md`, seven slides built and checked (the
-  recording slide waits on the cast), and exercise 4's command file and
-  written version. Its procedure slide, 5.2, moved to fragment 8 (Decision
-  40).
-- Fragment 6, `removing-lvm.md`, seven slides built and checked (the
-  recording slide waits on the cast), and exercise 5's command file and
-  written version. Its procedure slide, 6.5, moved to fragment 8 (Decision
-  41).
-- Fragment 8, `lvm-practice.md`, seven slides built and checked (the three
-  recording slides wait on the casts): the three procedures, trimmed and given
-  the swap steps, each before its exercise, and exercises 6 to 8's command
-  files and written versions.
-- The week's color key (Decision 31) and `AccentText`'s `hue` prop in the
-  theme, with its test, gallery line, and documentation.
+  including the commands table (1.3a) and the animation that follows it (1.3b).
+- Fragment 2, `physical-volumes.md`, eight slides built and checked including
+  its recording slide, and exercise 1's command file and written version.
+- Fragment 3, `volume-groups.md`, seven slides built and checked including its
+  recording slide, and exercise 2's command file and written version. Its Extend
+  a Volume Group slide moved to fragment 5 (Decision 34).
+- Fragment 4, `logical-volumes.md`, nine slides built and checked including its
+  recording slide, and exercise 3's command file and written version. Its
+  procedure slide moved to fragment 8 (Decision 38).
+- Fragment 5, `extending-lvm.md`, eight slides built and checked including its
+  recording slide, and exercise 4's command file and written version. Its
+  procedure slide, 5.2, moved to fragment 8 (Decision 40).
+- Fragment 6, `removing-lvm.md`, eight slides built and checked including its
+  recording slide, and exercise 5's command file and written version. Its
+  procedure slide, 6.5, moved to fragment 8 (Decision 41).
+- Fragment 8, `lvm-practice.md`, ten slides built and checked including its
+  three recording slides: the three procedures, trimmed and given the swap
+  steps, each before its exercise, and exercises 6 to 8's command files and
+  written versions.
+- The week's color key (Decision 31) and `AccentText`'s `hue` prop in the theme,
+  with its test, gallery line, and documentation.
+- 1.2's decorative image, generated by the instructor with Gemini and keyed on
+  2026-10-26; the placeholder is gone.
+- The eight recordings, made by the instructor on 2026-10-26, processed (`pnpm
+  run casts`), and placed on their recording slides; lengths and markers are
+  under each recording slide's entry. The deck is complete at 57 slides.
 - The lab checks behind every correction, under "Verification". The whole
   exercise chain has run in order from the snapshot with XFS throughout
   (Decision 49), and `servera` is back at the week's starting state ("The
   exercise chain").
 
+**Published locally on 2026-10-26:** this plan read as public material (no
+addresses, credentials, or internal paths beyond the source repository's
+`~/s/IT-230`, as w10's plan has); `course/w11-draft.md` renamed to
+`course/w11.md` with plain `mv`; `"w11"` added to the published weeks in
+`tests/site.test.mjs`; and `pnpm check` passed (exit 0, every test suite at 0
+failures; the one "Course-site reload failed" line is the test that makes an
+invalid edit on purpose). `dist/weeks/w11/` holds the detail page, the Canvas
+utility, the slides with the eight casts, the eight written exercises, and the
+PDF.
+
 **Next, in order:**
 
-1. The instructor reviews the XFS changes (Decision 49), fragment 8, and
-   exercises 6 to 8.
-2. The image pass: replace 1.2's placeholder (Decision 10, Open question 5).
-3. Before the recordings: the SCC volume group name (Open question 6), the
-   snapshot reset (Decision 29), a read-only check that the lab is at the
-   week's start, and `kitty-demo --check` on all eight command files.
-4. The recordings, in order, then the recording slides 2.5a to 8.4a.
-5. Publication, per the porting skill.
+1. The instructor's manual accessibility review (`docs/accessibility.md`,
+   "Validation").
+2. The instructor commits and pushes.
+3. Post-deploy checks (`docs/publishing.md`, "Deployment"): the landing page,
+   the w11 detail page and presentation, the PDF and exercise downloads, and a
+   nested hash route in production; then the Canvas fragment from
+   `/weeks/w11/canvas/`.
 
 **On another machine:**
 
-- The placeholder image is ignored by Git, so it does not travel. Recreate
-  `assets/lvm-storage-illustration.placeholder.jpg` from the instructor's
-  source repository: unzip `~/s/IT-230/w11/slides/ManageStorageStack.odp` into
-  an empty scratch directory and copy
-  `Pictures/100000000000040000000400C4BC7452.jpg` (1024 by 1024, 204,774
-  bytes) to that name. Without it, slide 1.2's image fails to load.
 - Restart any running dev or review server after pulling, since the theme's
   `AccentText` changed.
 - If the review server keeps serving an old version after an edit, `touch` the

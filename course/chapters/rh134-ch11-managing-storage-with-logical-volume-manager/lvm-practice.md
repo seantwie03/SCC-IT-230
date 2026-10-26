@@ -140,6 +140,28 @@ Pool two blank disks into one <AccentText hue="teal">volume group</AccentText> t
 6. Verify with `lsblk`, `df`, and `swapon --show`
 
 ---
+layout: exercise
+variant: recording
+---
+
+<script setup>
+import castUrl from "./exercises/create-lvm-storage-exercise.cast?url";
+</script>
+
+# Create LVM Storage
+
+::recording::
+
+<AsciinemaPlayer
+    :src="castUrl"
+    label="Screen recording of the instructor partitioning all of /dev/sdb and /dev/sdc for LVM, pooling them into vg_storage, creating a 1 GiB lv_swap and lv_records from the rest while answering lvcreate's questions about old signatures, formatting lv_records with XFS and mounting it on /records, making lv_swap swap space, adding both to /etc/fstab in vim, and checking with lsblk, df, and swapon --show."
+/>
+
+::resources::
+
+<a href="../resources/create-lvm-storage-exercise.html" target="_blank" rel="noopener noreferrer" aria-label="Read the written Create LVM Storage exercise in a new tab">Written exercise</a>
+
+---
 vertical: start
 ---
 
@@ -250,6 +272,28 @@ Grow a file system and swap space onto a third disk
 4. Verify with `vgs`, `df`, and `swapon --show`
 
 ---
+layout: exercise
+variant: recording
+---
+
+<script setup>
+import castUrl from "./exercises/extend-lvm-storage-exercise.cast?url";
+</script>
+
+# Extend LVM Storage
+
+::recording::
+
+<AsciinemaPlayer
+    :src="castUrl"
+    label="Screen recording of the instructor adding a partition covering all of /dev/sdd to vg_storage, extending lv_swap by 1 GiB with the swap turned off and rewriting it with mkswap, extending lv_records with every free extent and growing its XFS file system in one lvextend --resizefs command, and checking with vgs, df, and swapon --show."
+/>
+
+::resources::
+
+<a href="../resources/extend-lvm-storage-exercise.html" target="_blank" rel="noopener noreferrer" aria-label="Read the written Extend LVM Storage exercise in a new tab">Written exercise</a>
+
+---
 vertical: start
 ---
 
@@ -318,3 +362,25 @@ Return all three disks to blank
 2. Remove both entries from `/etc/fstab`
 3. Remove both <AccentText hue="slate">logical volumes</AccentText>, the <AccentText hue="teal">volume group</AccentText>, and the three <AccentText hue="blue">physical volumes</AccentText>
 4. Wipe `/dev/sdb`, `/dev/sdc`, and `/dev/sdd`
+
+---
+layout: exercise
+variant: recording
+---
+
+<script setup>
+import castUrl from "./exercises/remove-lvm-storage-exercise.cast?url";
+</script>
+
+# Remove LVM Storage
+
+::recording::
+
+<AsciinemaPlayer
+    :src="castUrl"
+    label="Screen recording of the instructor turning off the swap space, unmounting /records, deleting both lines from /etc/fstab in vim, removing both logical volumes, vg_storage, and the three physical volumes, then wiping /dev/sdb, /dev/sdc, and /dev/sdd with wipefs."
+/>
+
+::resources::
+
+<a href="../resources/remove-lvm-storage-exercise.html" target="_blank" rel="noopener noreferrer" aria-label="Read the written Remove LVM Storage exercise in a new tab">Written exercise</a>

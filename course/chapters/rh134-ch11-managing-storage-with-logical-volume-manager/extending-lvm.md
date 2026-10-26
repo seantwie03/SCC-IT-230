@@ -198,3 +198,25 @@ Grow a full <AccentText hue="slate">logical volume</AccentText> without unmounti
 4. Extend `lv_data` by 200 MiB
 5. Grow the XFS file system
 6. Confirm that writes to `/data` succeed again
+
+---
+layout: exercise
+variant: recording
+---
+
+<script setup>
+import castUrl from "./exercises/extend-logical-volume-exercise.cast?url";
+</script>
+
+# Extend a Logical Volume
+
+::recording::
+
+<AsciinemaPlayer
+    :src="castUrl"
+    label="Screen recording of the instructor filling /data with dd until no space is left, showing that echo can no longer create a file there, adding a 512 MiB lvm partition on /dev/sdc to vg_data with parted, pvcreate, and vgextend, extending lv_data by 200 MiB with lvextend, growing its XFS file system with xfs_growfs, and writing to /data again."
+/>
+
+::resources::
+
+<a href="../resources/extend-logical-volume-exercise.html" target="_blank" rel="noopener noreferrer" aria-label="Read the written Extend a Logical Volume exercise in a new tab">Written exercise</a>

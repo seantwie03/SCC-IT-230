@@ -249,3 +249,25 @@ Carve a <AccentText hue="slate">logical volume</AccentText> from `vg_data` and m
 2. Format `lv_data` with an XFS file system
 3. Persistently mount `lv_data` on `/data`
 4. Verify with `lsblk`, `df`, and `lvdisplay`
+
+---
+layout: exercise
+variant: recording
+---
+
+<script setup>
+import castUrl from "./exercises/create-logical-volume-exercise.cast?url";
+</script>
+
+# Create a Logical Volume
+
+::recording::
+
+<AsciinemaPlayer
+    :src="castUrl"
+    label="Screen recording of the instructor creating lv_data from all of vg_data with lvcreate --extents 100%FREE, formatting it with mkfs.xfs, adding its line to /etc/fstab in vim, mounting it on /data, and checking it with lsblk, df, and lvdisplay."
+/>
+
+::resources::
+
+<a href="../resources/create-logical-volume-exercise.html" target="_blank" rel="noopener noreferrer" aria-label="Read the written Create a Logical Volume exercise in a new tab">Written exercise</a>

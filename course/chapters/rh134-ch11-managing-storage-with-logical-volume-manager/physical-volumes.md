@@ -244,3 +244,25 @@ Prepare a partition on a blank disk for LVM
 1. Create a 512 MiB GPT partition with the `lvm` flag on `/dev/sdb`
 2. Initialize `/dev/sdb1` as a <AccentText hue="blue">physical volume</AccentText>
 3. Verify with `pvs` and `pvdisplay`
+
+---
+layout: exercise
+variant: recording
+---
+
+<script setup>
+import castUrl from "./exercises/initialize-physical-volume-exercise.cast?url";
+</script>
+
+# Initialize a Physical Volume
+
+::recording::
+
+<AsciinemaPlayer
+    :src="castUrl"
+    label="Screen recording of the instructor listing the disks with lsblk, creating a 512 MiB GPT partition named pv1 on /dev/sdb in parted's interactive mode and setting its lvm flag, initializing /dev/sdb1 as a physical volume with pvcreate, and inspecting it with pvs and pvdisplay."
+/>
+
+::resources::
+
+<a href="../resources/initialize-physical-volume-exercise.html" target="_blank" rel="noopener noreferrer" aria-label="Read the written Initialize a Physical Volume exercise in a new tab">Written exercise</a>
