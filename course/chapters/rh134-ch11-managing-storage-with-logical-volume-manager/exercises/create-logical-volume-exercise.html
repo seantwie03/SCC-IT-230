@@ -502,7 +502,7 @@
                         <code>lv_data</code> from all of the
                         <span class="hue-teal">volume group</span>
                         <code>vg_data</code> on <code>servera</code>, format it
-                        with ext4, and mount it on <code>/data</code> at every
+                        with XFS, and mount it on <code>/data</code> at every
                         boot. The next exercise fills it and then grows it, so
                         leave it mounted when you finish.
                     </p>
@@ -530,27 +530,29 @@ lvcreate --name lv_data --extents 100%FREE vg_data
 lvs</code></pre>
                         <p>
                             <code>--extents 100%FREE</code> takes every free
-                            extent in <code>vg_data</code>, all 63 of them, so
-                            <code>lv_data</code> is 252 MiB.
+                            extent in <code>vg_data</code>, all 127 of them, so
+                            <code>lv_data</code> is 508 MiB.
                             <code>lvcreate</code> answers
                             <code>Logical volume "lv_data" created.</code>, and
                             <code>lvs</code> lists <code>lv_data</code> in
-                            <code>vg_data</code> at <code>252.00m</code>, beside
+                            <code>vg_data</code> at <code>508.00m</code>, beside
                             the system's own <code>root</code> and
                             <code>swap</code>.
                         </p>
                     </li>
                     <li class="step">
-                        <h2>Format lv_data with an ext4 file system</h2>
-                        <pre><code>mkfs.ext4 /dev/vg_data/lv_data</code></pre>
+                        <h2>Format lv_data with an XFS file system</h2>
+                        <pre><code>mkfs.xfs /dev/vg_data/lv_data</code></pre>
                         <p>
                             The <span class="hue-slate">logical volume</span> is
                             addressed by its path,
                             <code>/dev/vg_data/lv_data</code>, like any other
-                            block device. It gets ext4 rather than XFS because
-                            it is too small for XFS: <code>mkfs.xfs</code>
-                            stops with
-                            <code>Filesystem must be larger than 300MB.</code>
+                            block device. XFS is RHEL's default file system. It
+                            needs a volume larger than 300 MB, and on anything
+                            smaller <code>mkfs.xfs</code> stops with
+                            <code>Filesystem must be larger than 300MB.</code>,
+                            which is why the Initialize a Physical Volume
+                            Exercise made a 512 MiB partition.
                         </p>
                     </li>
                     <li class="step">
@@ -562,7 +564,7 @@ vim /etc/fstab</code></pre>
                             last line and <kbd>o</kbd> to open a new line below
                             it, then type this line:
                         </p>
-                        <pre><code>/dev/vg_data/lv_data /data ext4 defaults 0 0</code></pre>
+                        <pre><code>/dev/vg_data/lv_data /data xfs defaults 0 0</code></pre>
                         <p>
                             Press <kbd>Esc</kbd>, then type <code>:wq</code> and
                             press <kbd>Enter</kbd> to save. The path of a
@@ -591,16 +593,15 @@ lvdisplay /dev/vg_data/lv_data</code></pre>
                         <p>
                             <code>lsblk</code> shows
                             <code>vg_data-lv_data</code> beneath
-                            <code>sdb1</code>, 252M, mounted on
+                            <code>sdb1</code>, 508M, mounted on
                             <code>/data</code>. <code>df -h /data</code> names
                             the device by the
                             <span class="hue-slate">logical volume</span>'s
                             other path,
                             <code>/dev/mapper/vg_data-lv_data</code>, with a
-                            size of 231M: ext4's inode tables and journal take
-                            about 20 MiB of the 252.
-                            <code>lvdisplay</code> reports an LV Size of 252.00
-                            MiB and a Current LE of 63, every extent in
+                            size of 444M: XFS's internal log takes 64 MiB of the
+                            508. <code>lvdisplay</code> reports an LV Size of
+                            508.00 MiB and a Current LE of 127, every extent in
                             <code>vg_data</code>.
                         </p>
                     </li>

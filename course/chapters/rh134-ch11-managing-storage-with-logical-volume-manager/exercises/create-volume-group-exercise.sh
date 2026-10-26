@@ -23,7 +23,7 @@ clear
 #@ pause 5
 vgs
 clear
-#! 252 MiB, not 256: the PV is used in whole 4 MiB extents, 63 of them,
+#! 508 MiB, not 512: the PV is used in whole 4 MiB extents, 127 of them,
 #! and pvdisplay reports the other 4 MiB as not usable
 #@ pause 5
 vgdisplay vg_data

@@ -546,17 +546,17 @@ vgdisplay vg_data</code></pre>
                             the system's own <code>rhel_servera</code>, with one
                             <span class="hue-blue">physical volume</span>, no
                             <span class="hue-slate">logical volumes</span>, and
-                            <code>252.00m</code> in both its size and free
+                            <code>508.00m</code> in both its size and free
                             columns. <code>vgdisplay</code> shows the details: a
-                            VG Size of 252.00 MiB, a PE Size of 4.00 MiB, and
-                            all 63 physical extents free.
+                            VG Size of 508.00 MiB, a PE Size of 4.00 MiB, and
+                            all 127 physical extents free.
                         </p>
                         <aside class="note">
-                            <strong>Why 252 MiB and not 256</strong>
+                            <strong>Why 508 MiB and not 512</strong>
                             A <span class="hue-teal">volume group</span> uses
                             its <span class="hue-blue">physical volumes</span>
-                            in whole extents. The 256 MiB partition holds 63
-                            extents of 4 MiB, which is 252 MiB, and
+                            in whole extents. The 512 MiB partition holds 127
+                            extents of 4 MiB, which is 508 MiB, and
                             <code>pvdisplay /dev/sdb1</code> now reports the
                             other 4 MiB as not usable. Those free extents are
                             what the next exercise's <code>lvcreate</code> draws

@@ -503,7 +503,7 @@
                         <code>/data</code>: add a partition on a second disk to
                         the <span class="hue-teal">volume group</span>
                         <code>vg_data</code>, extend <code>lv_data</code> by 200
-                        MiB, and grow its ext4 file system. The next exercise
+                        MiB, and grow its XFS file system. The next exercise
                         removes the whole LVM setup, so leave it as it is when
                         you finish.
                     </p>
@@ -525,20 +525,21 @@
                         <h2>Fill lv_data completely</h2>
                         <pre><code>sudo -i
 df -h /data
-dd if=/dev/zero of=/data/bigfile bs=1M</code></pre>
+dd if=/dev/zero of=/data/bigfile bs=4k</code></pre>
                         <p>
                             <code>df</code> shows the file system on
-                            <code>lv_data</code> at 231M and nearly empty.
+                            <code>lv_data</code> at 444M with 410M available.
                             <code>dd</code> copies zeros from
                             <code>/dev/zero</code> into
-                            <code>/data/bigfile</code> one mebibyte at a time.
-                            With no <code>count=</code> to stop it, it keeps
-                            going until the file system is full, then stops with
+                            <code>/data/bigfile</code> 4 KiB at a time, the size
+                            of an XFS block. With no <code>count=</code> to stop
+                            it, it keeps going until not even one block is left,
+                            then stops with
                             <code
                                 >dd: error writing '/data/bigfile': No space
                                 left on device</code
                             >
-                            after about 226 MiB. That error is the result you
+                            after about 410 MiB. That error is the result you
                             want here.
                         </p>
                     </li>
@@ -550,20 +551,19 @@ dd if=/dev/zero of=/data/bigfile bs=1M</code></pre>
                         <pre><code>df -h /data
 echo "test" &gt; /data/testfile</code></pre>
                         <p>
-                            <code>df</code> reports the file system 100% used
-                            with nothing available, and the <code>echo</code>
-                            fails with
+                            <code>df</code> reports the file system 100% used,
+                            with only about 28K available, which XFS keeps for
+                            itself. The <code>echo</code> fails with
                             <code
-                                >-bash: echo: write error: No space left on
+                                >-bash: /data/testfile: No space left on
                                 device</code
-                            >. The shell still creates
-                            <code>testfile</code> before <code>echo</code>
-                            fails, so an empty file is left behind.
+                            >: there is no room even to create the file, so no
+                            <code>testfile</code> appears.
                         </p>
                     </li>
                     <li class="step">
                         <h2>
-                            Add a 256 MiB lvm partition on /dev/sdc to vg_data
+                            Add a 512 MiB lvm partition on /dev/sdc to vg_data
                             without unmounting /data
                         </h2>
                         <p>
@@ -581,7 +581,7 @@ New disk label type? gpt
 Partition name?  []? pv2
 File system type?  [ext2]?
 Start? 1MiB
-End? 257MiB
+End? 513MiB
 (parted) set
 Partition number? 1
 Flag to Invert? lvm
@@ -604,8 +604,8 @@ vgs vg_data</code></pre>
                                 extended</code
                             >, and <code>vgs</code> shows two
                             <span class="hue-blue">physical volumes</span>,
-                            504.00m in all, and 252.00m free: the new
-                            partition's 63 extents. <code>/data</code> stayed
+                            1016.00m in all, and 508.00m free: the new
+                            partition's 127 extents. <code>/data</code> stayed
                             mounted the whole time.
                         </p>
                     </li>
@@ -618,24 +618,24 @@ lvs vg_data</code></pre>
                             <code>lvextend</code> reports
                             <code
                                 >Size of logical volume vg_data/lv_data changed
-                                from 252.00 MiB (63 extents) to 452.00 MiB (113
+                                from 508.00 MiB (127 extents) to 708.00 MiB (177
                                 extents).</code
                             >, and <code>lvs</code> lists
-                            <code>lv_data</code> at <code>452.00m</code>.
+                            <code>lv_data</code> at <code>708.00m</code>.
                         </p>
                     </li>
                     <li class="step">
-                        <h2>Grow the ext4 file system</h2>
-                        <pre><code>resize2fs /dev/vg_data/lv_data
+                        <h2>Grow the XFS file system</h2>
+                        <pre><code>xfs_growfs /data
 df -h /data</code></pre>
                         <p>
                             <code>lvextend</code> grew the
                             <span class="hue-slate">logical volume</span>, not
                             the file system inside it, so <code>/data</code> is
-                            still full. <code>resize2fs</code> grows the ext4
-                            file system to fill the volume while it stays
-                            mounted, and says so: "on-line resizing required".
-                            <code>df</code> then shows 418M with about 167M
+                            still full. <code>xfs_growfs</code> grows XFS to
+                            fill the volume. It takes the mount point, not the
+                            device, because XFS grows only while it is mounted.
+                            <code>df</code> then shows 644M with about 197M
                             available.
                         </p>
                         <aside class="note">
@@ -646,9 +646,9 @@ df -h /data</code></pre>
                             >
                             would have extended the
                             <span class="hue-slate">logical volume</span> and
-                            grown its file system together. For XFS, the second
-                            step is <code>xfs_growfs /data</code>, which takes
-                            the mount point instead of the device.
+                            grown its file system together. On ext4, the second
+                            step is <code>resize2fs /dev/vg_data/lv_data</code>,
+                            which takes the device instead of the mount point.
                         </aside>
                     </li>
                     <li class="step">
@@ -656,9 +656,9 @@ df -h /data</code></pre>
                         <pre><code>echo "test" &gt; /data/testfile
 cat /data/testfile</code></pre>
                         <p>
-                            The <code>echo</code> now succeeds without a
-                            message, and <code>cat</code> prints
-                            <code>test</code>.
+                            The <code>echo</code> that failed in the second step
+                            now succeeds without a message, and
+                            <code>cat</code> prints <code>test</code>.
                         </p>
                     </li>
                 </ol>

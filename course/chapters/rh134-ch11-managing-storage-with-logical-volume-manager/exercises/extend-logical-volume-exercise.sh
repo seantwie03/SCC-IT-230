@@ -10,9 +10,9 @@ clear
 # Steps
 #   1. Fill lv_data completely
 #   2. Confirm that further writes fail with "No space left on device"
-#   3. Add a 256 MiB lvm partition on /dev/sdc to vg_data without unmounting /data
+#   3. Add a 512 MiB lvm partition on /dev/sdc to vg_data without unmounting /data
 #   4. Extend lv_data by 200 MiB
-#   5. Grow the ext4 file system
+#   5. Grow the XFS file system
 #   6. Confirm that writes to /data succeed again
 clear
 
@@ -21,19 +21,20 @@ sudo -i
 #@ pause 5
 df -h /data
 clear
-#! Without count=, dd writes until /data is full, so the error is the expected result
+#! Without count=, dd writes until /data is full, so the error is the expected result;
+#! bs=4k matches XFS's 4 KiB block size, so dd fills the very last block
 #@ pause 6
-dd if=/dev/zero of=/data/bigfile bs=1M
+dd if=/dev/zero of=/data/bigfile bs=4k
 clear
 
 #^ 2. Confirm that further writes fail with "No space left on device"
 df -h /data
-#! The shell creates testfile before echo fails, so it is left empty
+#! Not even a 5-byte file fits: the shell cannot create testfile
 #@ pause 5
 echo "test" > /data/testfile
 clear
 
-#^ 3. Add a 256 MiB lvm partition on /dev/sdc to vg_data without unmounting /data
+#^ 3. Add a 512 MiB lvm partition on /dev/sdc to vg_data without unmounting /data
 #! /data stays mounted the whole time: the VG grows while lv_data is in use
 parted /dev/sdc
 mklabel
@@ -43,8 +44,8 @@ pv2
 #! Accept the default type, as in the first exercise
 #@ key enter
 1MiB
-#! Ending at 257MiB makes the partition exactly 256 MiB, since it starts at 1MiB
-257MiB
+#! Ending at 513MiB makes the partition exactly 512 MiB, since it starts at 1MiB
+513MiB
 set
 1
 lvm
@@ -55,21 +56,21 @@ quit
 udevadm settle
 pvcreate /dev/sdc1
 vgextend vg_data /dev/sdc1
-#! Two PVs now, and 252 MiB free: the new PV's 63 extents
+#! Two PVs now, and 508 MiB free: the new PV's 127 extents
 #@ pause 5
 vgs vg_data
 clear
 
 #^ 4. Extend lv_data by 200 MiB
-#! The size-change line is the proof: 63 extents to 113
+#! The size-change line is the proof: 127 extents to 177
 lvextend --size +200M /dev/vg_data/lv_data
 #@ pause 5
 lvs vg_data
 clear
 
-#^ 5. Grow the ext4 file system
-#! lvextend grew the LV only; resize2fs grows the file system to fill it, still mounted
-resize2fs /dev/vg_data/lv_data
+#^ 5. Grow the XFS file system
+#! lvextend grew the LV only; xfs_growfs grows the file system to fill it, and takes the mount point
+xfs_growfs /data
 #@ pause 5
 df -h /data
 clear

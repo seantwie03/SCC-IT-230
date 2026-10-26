@@ -36,7 +36,7 @@ root@servera:~# systemctl daemon-reload
 Delete the <AccentText hue="slate">LV</AccentText>'s line in `vim`
 
 ```text [/etc/fstab]
-/dev/vg01/lv01 /data ext4 defaults 0 0
+/dev/vg01/lv01 /data xfs defaults 0 0
 ```
 
 <Callout type="warning">

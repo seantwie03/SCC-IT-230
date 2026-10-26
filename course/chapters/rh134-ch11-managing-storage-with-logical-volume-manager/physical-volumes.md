@@ -241,6 +241,6 @@ Prepare a partition on a blank disk for LVM
 
 ::workflow::
 
-1. Create a 256 MiB GPT partition with the `lvm` flag on `/dev/sdb`
+1. Create a 512 MiB GPT partition with the `lvm` flag on `/dev/sdb`
 2. Initialize `/dev/sdb1` as a <AccentText hue="blue">physical volume</AccentText>
 3. Verify with `pvs` and `pvdisplay`

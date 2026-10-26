@@ -246,6 +246,6 @@ Carve a <AccentText hue="slate">logical volume</AccentText> from `vg_data` and m
 ::workflow::
 
 1. Create a <AccentText hue="slate">logical volume</AccentText> named `lv_data` using all available space in `vg_data`
-2. Format `lv_data` with an ext4 file system
+2. Format `lv_data` with an XFS file system
 3. Persistently mount `lv_data` on `/data`
 4. Verify with `lsblk`, `df`, and `lvdisplay`

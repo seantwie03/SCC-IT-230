@@ -8,12 +8,13 @@ produce this plan. Nothing is built until the plan is approved.
 
 ## Answer in brief
 
-**Eight topic fragments** in one chapter directory, **eight exercises**, and a
-deck of **59 slides**: 40 from the source (38 content slides plus the cover and
-VM reminder; L13 was removed on 2026-10-25, Decision 32), 3 more from splitting
-the inspect slides in two (2.4a, 3.4a, 4.6a, Decision 33), 8 added slides
-(1.3a, 1.3b, 2.2a, 5.1a, 5.2a, 5.2b, 6.1a, and the new exercise slide 7.3), and
-8 recording slides that wait on the casts.
+**Seven topic fragments** in one chapter directory, **eight exercises**, and a
+deck of **57 slides**: 38 from the source (36 content slides plus the cover and
+VM reminder; L13 was removed on 2026-10-25, Decision 32, and L35 and L36 went
+with fragment 7 on 2026-10-26, Decision 45), 3 more from splitting the inspect
+slides in two (2.4a, 3.4a, 4.6a, Decision 33), 8 added slides (1.3a, 1.3b,
+2.2a, 5.1a, 5.2a, 5.2b, 6.1a, and exercise 8's slide 8.4), and 8 recording
+slides that wait on the casts.
 
 | # | Fragment                    | Section title                  | Slides | Exercises |
 |--:|-----------------------------|--------------------------------|-------:|----------:|
@@ -23,23 +24,25 @@ the inspect slides in two (2.4a, 3.4a, 4.6a, Decision 33), 8 added slides
 | 4 | `logical-volumes.md`        | Logical Volumes                |      9 |         1 |
 | 5 | `extending-lvm.md`          | Extending LVM                  |      8 |         1 |
 | 6 | `removing-lvm.md`           | Removing LVM                   |      8 |         1 |
-| 7 | `lvm-swap-space.md`         | Swap Space on Logical Volumes  |      4 |         1 |
-| 8 | `lvm-practice.md`           | LVM Practice                   |      8 |         2 |
+| 7 | dropped (Decision 45)       |                                |      0 |         0 |
+| 8 | `lvm-practice.md`           | LVM Practice                   |     10 |         3 |
 |   | Entry file                  |                                |      2 |           |
-|   | **Total**                   |                                | **59** |     **8** |
+|   | **Total**                   |                                | **57** |     **8** |
 
 Slide counts include the recording slides. The fragments follow the Slidev
-deck's eight sections one for one. The LibreOffice deck contributes two concept
-slides, a command table, and its disk icons and mount points in the rebuilt
-layers diagram. Its second half, Stratis, is RHEL 9 material that RHEL 10's
-RH134 no longer teaches, and is not ported (Decision 8).
+deck's sections one for one, except Swap Space on Logical Volumes, which was
+dropped and folded into the practice fragment (Decision 45). The LibreOffice
+deck contributes two concept slides, a command table, and its disk icons and
+mount points in the rebuilt layers diagram. Its second half, Stratis, is RHEL 9
+material that RHEL 10's RH134 no longer teaches, and is not ported (Decision 8).
 
 Three things to know before approving:
 
-1. **Exercise 6 stops at a question.** Exercise 5's teardown leaves the old
-   ext4 signature on the disk, so exercise 6's `lvcreate` asks "Wipe it?
-   [y/n]" (verified). The command file answers `y`, and the written exercise
-   explains why. The source's other facts checked out; see "Verification".
+1. **Exercise 6 stops at two questions.** Exercise 5's teardown leaves old XFS
+   signatures on the disks, so both of exercise 6's `lvcreate` commands ask
+   "Wipe it? [y/n]" (verified). The command file answers `y` to each, and the
+   written exercise explains why. The source's other facts checked out; see
+   "Verification".
 2. **One unsourced image.** The isometric storage illustration on the ODP's
    "Logical Volume Management" slide has no recorded source and looks
    AI-generated. It goes in as a placeholder and is replaced before
@@ -129,15 +132,17 @@ Forced changes, not choices:
   post-configuration snapshot between weeks, so it starts with blank `sdb`,
   `sdc`, and `sdd` and no LVM leftovers. Students start from w10's cleanups,
   which wipe `sdb` and `sdc`.
-- **The exercises form one chain on `sdb` and `sdc`**: exercises 1 to 4 build
-  and grow one stack, exercise 5 tears it down, exercises 6 and 7 build a
-  second stack across both disks, and exercise 7's cleanup returns the disks
-  and `/etc/fstab` to the week's starting state. See "Exercises".
+- **The exercises form one chain**: exercises 1 to 4 build and grow one stack
+  on `sdb` and `sdc`, exercise 5 tears it down, exercises 6 and 7 build and
+  grow a second stack across all three disks with swap beside a file system,
+  and exercise 8 returns the disks and `/etc/fstab` to the week's starting
+  state. See "Exercises".
 - **Teardown leaves old signatures behind.** `pvremove` wipes only the LVM
   label and `wipefs --all` on the disk only the partition table, so the
   file system a removed LV held is still on the sectors. A new LV created
   over them makes `lvcreate` ask "Wipe it? [y/n]" (verified). Exercise 6 hits
-  this after exercise 5, and students need to know the question is expected.
+  this twice after exercise 5, and students need to know the questions are
+  expected.
 - **W10 taught "use the UUID, not the device file" for `/etc/fstab`.** This
   week's slides and exercises write `/dev/vg01/lv01` and `/dev/vg_data/lv_data`
   into `/etc/fstab`, as RH134 does. That is correct, because an LV path is a
@@ -145,8 +150,9 @@ Forced changes, not choices:
   students will notice the contradiction. Slide 4.5 says why (Decision 16).
 - **W10 taught `swap` as the mount point field of a swap line** (Decision 32
   there). The source here writes `none`. Proposed: follow w10 (Decision 20).
-- **W12 is the boot process.** Nothing in w11 depends on it. Exercise 7
-  reboots, as w10's swap exercise did.
+- **W12 is the boot process.** Nothing in w11 depends on it. No exercise
+  reboots (proposed, Decision 46); w10's swap exercise already proved an
+  `/etc/fstab` line at boot.
 
 ## Deck-level decisions
 
@@ -177,8 +183,8 @@ Forced changes, not choices:
   `course/chapters/rh134-ch11-managing-storage-with-logical-volume-manager/`.
 - **Alignments:** every fragment aligns to RH134 chapter `"11"`, *Managing
   Storage with Logical Volume Manager*, and cert guide chapter `"15"`,
-  *Managing Logical Volumes* (Decision 26). Fragment 7 is swap space, which w10
-  aligned to chapter 10, but RH134 covers swap on an LV in chapter 11.
+  *Managing Logical Volumes* (Decision 26). Swap on an LV, which RH134 covers
+  in chapter 11, is in the practice fragment (Decision 45).
 
 ## Source-to-fragment map
 
@@ -220,15 +226,18 @@ From `managing_storage_with_lvm.md`:
 |    L32 | Removing LVM Components                   | 6.5       |
 |    L33 | Wipe the Disk                             | 6.6       |
 |    L34 | Exercise: Remove the LVM Setup            | 6.7       |
-|    L35 | Section: Swap Space on Logical Volumes    | 7.1       |
-|    L36 | Creating Swap Space on a Logical Volume   | 7.2       |
+|    L35 | Section: Swap Space on Logical Volumes    | dropped   |
+|    L36 | Creating Swap Space on a Logical Volume   | dropped   |
 |    L37 | Section: Practice                         | 8.1       |
 |    L38 | Exercise: Large LV Spanning Two Disks     | 8.2       |
 |    L39 | Exercise: Persistent Swap on an LV        | 8.3       |
 
 3.6 keeps its number but sits in fragment 5, after 5.1a (Decision 34), and
 4.8 keeps its number but sits in fragment 8, after 8.1 (Decision 38); 5.2 and
-6.5 sit there too, after it (Decisions 40 and 41).
+6.5 sit there too, after it (Decisions 40 and 41). L35 and L36 were dropped
+with fragment 7 (Decision 45), and L36's swap steps are proposed for 4.8
+(Decision 47). L38 and L39 keep their slots, 8.2 and 8.3, for the instructor's
+redesigned exercises 6 and 7.
 
 From `ManageStorageStack.odp`:
 
@@ -251,9 +260,9 @@ O4's flow (device, PV, VG, LV, mount) is what 1.3's diagram and 4.8's steps
 already show, so it is not proposed as a slide of its own. Say if you want it
 back; it would sit before 4.8 as a Mermaid flowchart.
 
-Slides with no source row: 1.3a, 1.3b, 2.2a, and 5.1a (additions), 7.3 (the swap
-exercise the instructor asked for), and the eight recording slides 2.5a, 3.7a,
-4.7a, 5.4a, 6.7a, 7.3a, 8.2a, and 8.3a.
+Slides with no source row: 1.3a, 1.3b, 2.2a, 5.1a, 5.2a, 5.2b, and 6.1a
+(additions), 8.4 (exercise 8), and the eight recording slides 2.5a, 3.7a,
+4.7a, 5.4a, 6.7a, 8.2a, 8.3a, and 8.4a.
 
 ## File inventory
 
@@ -268,8 +277,7 @@ New, under
 | `logical-volumes.md`        |      9 |         1 |
 | `extending-lvm.md`          |      8 |         1 |
 | `removing-lvm.md`           |      8 |         1 |
-| `lvm-swap-space.md`         |      4 |         1 |
-| `lvm-practice.md`           |      8 |         2 |
+| `lvm-practice.md`           |     10 |         3 |
 
 Plus `exercises/` with eight `.sh` command files, eight `.html` written
 exercises, and eight `.cast` recordings, and `assets/` holding the one
@@ -336,13 +344,14 @@ never changes and takes no `rows`. Every prompt takes the theme form,
 (see "Verification"), so device names, sizes, extent counts, and UUIDs agree
 from slide to slide.
 
-Slides use the generic names `vg01`, `lv01`, and `swap01`; exercises use
-`vg_data`, `lv_data`, `vol_group1`, `srv_vol`, and `swap_vol`, as the source
-does.
+Slides use the generic names `vg01`, `lv01`, and `swap01`; exercises 1 to 5
+use `vg_data` and `lv_data`, as the source does, and exercises 6 to 8
+`vg_storage`, `lv_records`, and `lv_swap` (proposed, Decision 46) in place of
+the source's `vol_group1`, `srv_vol`, and `swap_vol`.
 
 Where the source shows output, the slide shows recaptured output in a
 `TerminalWindow`. Where it shows commands only, which is every procedure slide
-(4.8, 5.2, 6.5, 7.2), the slide keeps a plain `bash` fence of commands, since
+(4.8, 5.2, 6.5), the slide keeps a plain `bash` fence of commands, since
 `docs/course-authoring.md` forbids a transcript that implies a command printed
 nothing when its output was only left out (Decision 13). Two exceptions are
 proposed under Decision 14.
@@ -575,34 +584,35 @@ Source L8.
 
 - **Goal:** Prepare a partition on a blank disk for LVM
 - **Environment:** **Host:** `servera`
-- **Workflow:** 1. Create a 256 MiB GPT partition with the `lvm` flag on
+- **Workflow:** 1. Create a 512 MiB GPT partition with the `lvm` flag on
   `/dev/sdb`; 2. Initialize `/dev/sdb1` as a physical volume (blue);
   3. Verify with `pvs` and `pvdisplay`
 
-The source command file ends the partition at `256MiB`, which makes it 255
-MiB; proposed: end it at `257MiB` (Decision 22). Either way the PV holds 63
-extents, 252 MiB (verified), so nothing later changes.
+The source makes a 255 MiB partition (`1MiB` to `256MiB`). Since 2026-10-26 the
+week uses XFS throughout (Decision 49), which needs more than 300 MB, so the
+partition is 512 MiB, `1MiB` to `513MiB` (Decision 22's pattern). The PV holds
+127 extents, 508 MiB (verified).
 
-Exercise files, written 2026-10-25 and run end to end on `servera` through a
-terminal (then reverted; run again the same day to start the exercise chain):
+Exercise files, written 2026-10-25, moved to 512 MiB on 2026-10-26, and run in
+the exercise chain from the snapshot:
 
 - `initialize-physical-volume-exercise.sh`, 52 presses (`kitty-demo
   --check`). Step 1 inspects with `lsblk`, then an interactive `parted
   /dev/sdb` session: `mklabel gpt`; `mkpart` named `pv1`, the file system type
-  accepted with `#@ key enter`, `1MiB` to `257MiB` (Decision 22); `set 1 lvm
-  on`; `print`; `quit`; `udevadm settle`. Then `pvcreate /dev/sdb1`, `pvs`,
-  and `pvdisplay /dev/sdb1`. `#!` delivery notes give the reason for a
-  partition rather than the whole disk (round 5, at the instructor's request),
-  explain the default type and the `257MiB` boundary, and describe the new
-  PV. Pauses: 8 on the intro, 5 on `lsblk`, `print`, `pvs`, and `pvdisplay`.
-  No cleanup: exercise 2 builds on `sdb1`.
+  accepted with `#@ key enter`, `1MiB` to `513MiB`; `set 1 lvm on`; `print`;
+  `quit`; `udevadm settle`. Then `pvcreate /dev/sdb1`, `pvs`, and `pvdisplay
+  /dev/sdb1`. `#!` delivery notes give the reason for a partition rather than
+  the whole disk (round 5, at the instructor's request), the default type,
+  the `513MiB` boundary and the room it leaves for XFS, and the new PV.
+  Pauses: 8 on the intro, 5 on `lsblk`, `print`, `pvs`, and `pvdisplay`. No
+  cleanup: exercise 2 builds on `sdb1`.
 - `initialize-physical-volume-exercise.html`, built from w10's exercise
-  page. It quotes the `parted` session prompt by prompt, explains that
-  `print` shows `ext2` as a type hint and no file system exists, and gives
-  the expected `pvs` and `pvdisplay` results (256.00m, no VG, not
-  allocatable, no extents). A note callout, "Why a partition, not the whole
-  disk", gives round 5's reasoning (the instructor's request). The page is
-  the first with Decision 31's hue classes; `check:exercises` passes it.
+  page. It quotes the `parted` session prompt by prompt, says the 512 MiB
+  leaves room for XFS, explains that `print` shows `ext2` as a type hint and
+  no file system exists, and gives the expected `pvs` and `pvdisplay` results
+  (512.00m, no VG, not allocatable, no extents). A note callout, "Why a
+  partition, not the whole disk", gives round 5's reasoning (the instructor's
+  request). `check:exercises` passes it.
 
 Components: `exercise`, `AccentText` with `hue`.
 
@@ -701,21 +711,21 @@ Source L15.
 - **Workflow:** 1. Create a volume group (teal) named `vg_data` using
   `/dev/sdb1`; 2. Verify with `vgs` and `vgdisplay`
 
-Exercise files, written 2026-10-25 and run on `servera` from exercise 1's
-end state (see "The exercise chain" under "Verification"):
+Exercise files, written 2026-10-25, updated for 512 MiB on 2026-10-26
+(Decision 49), and run in the exercise chain:
 
 - `create-volume-group-exercise.sh`, 18 presses (`kitty-demo --check`), the
   source's `create_volume_group.sh` in the current format: `sudo -i`,
   `vgcreate vg_data /dev/sdb1`, `vgs`, `vgdisplay vg_data`. `#!` notes say
-  the VG name comes before the PVs and why the VG is 252 MiB, not 256 (63
+  the VG name comes before the PVs and why the VG is 508 MiB, not 512 (127
   whole 4 MiB extents; `pvdisplay` reports 4.00 MiB not usable). Pauses: 8 on
   the intro, 5 on `vgs` and `vgdisplay`. No cleanup: exercise 3 builds on
   `vg_data`.
-- `create-volume-group-exercise.html`, built from exercise 1's page with
-  `hue-teal`, `hue-blue`, and `hue-slate`. It gives the expected `vgs` and
-  `vgdisplay` results (one PV, no LVs, 252.00m, 4.00 MiB extents, 63 free),
-  and a note callout, "Why 252 MiB and not 256", ties the free extents to
-  exercise 3's `lvcreate`. `check:exercises` passes it.
+- `create-volume-group-exercise.html`, with `hue-teal`, `hue-blue`, and
+  `hue-slate`. It gives the expected `vgs` and `vgdisplay` results (one PV, no
+  LVs, 508.00m, 4.00 MiB extents, 127 free), and a note callout, "Why 508 MiB
+  and not 512", ties the free extents to exercise 3's `lvcreate`.
+  `check:exercises` passes it.
 
 Components: `exercise`, `AccentText` with `hue`.
 
@@ -841,37 +851,38 @@ Source L22.
 - **Environment:** **Host:** `servera`; **Prerequisite exercise:** Create a
   Volume Group
 - **Workflow:** 1. Create a logical volume (slate) named `lv_data` using all
-  available space in `vg_data`; 2. Format `lv_data` with an ext4 file system;
+  available space in `vg_data`; 2. Format `lv_data` with an XFS file system;
   3. Persistently mount `lv_data` on `/data`; 4. Verify with `lsblk`, `df`,
   and `lvdisplay`
 
-`/data` is both 4.8's mount point and this exercise's, as in the source
-(Decision 21). `check:slides`: 144.84px clearance.
+The source asked for ext4; it is XFS since 2026-10-26 (Decision 49). `/data`
+is both 4.8's mount point and this exercise's, as in the source (Decision 21).
+`check:slides`: 144.84px clearance.
 
-Exercise files, written 2026-10-25 and run on `servera` from exercise 2's end
-state (see "The exercise chain"):
+Exercise files, written 2026-10-25, moved to XFS on 2026-10-26, and run in the
+exercise chain:
 
 - `create-logical-volume-exercise.sh`, 46 presses (`kitty-demo --check`), the
   source's `create_logical_volume.sh` in the current format: `lvcreate --name
-  lv_data --extents 100%FREE vg_data`, `lvs`, `mkfs.ext4`, `mkdir /data`, the
-  `/etc/fstab` edit in `vim` (`G` and `o` with `#@ noenter`, the line typed
-  with `#@ noenter` and held 5 seconds, `#@ key escape`, `:wq`, in place of
-  the source's `jj:wq`), `cat /etc/fstab`, `systemctl daemon-reload`, `mount
-  /data`, then `lsblk`, `df -h /data`, and `lvdisplay`, each cleared before
-  the next (the source ran the three together). `#!` notes give the 63
-  extents behind 252 MiB, why ext4, why the LV path can stand in for a UUID,
-  and Current LE 63. Pauses: 8 on the intro, 5 on `lvs`, `mkfs.ext4`, the
-  typed line, `cat`, and each verification. No cleanup: exercise 4 fills and
-  grows `lv_data`.
-- `create-logical-volume-exercise.html`, built from exercise 2's page with the
-  hue classes. It gives the `vim` keys in prose (<kbd>G</kbd>, <kbd>o</kbd>,
-  the line, <kbd>Esc</kbd>, `:wq`), quotes `mkfs.xfs`'s refusal ("Filesystem
-  must be larger than 300MB."), and gives the expected results: `lvs` at
-  252.00m; `lsblk` with `vg_data-lv_data` under `sdb1`; `df` naming
-  `/dev/mapper/vg_data-lv_data` at 231M, since ext4's inode tables and journal
-  take about 20 MiB (64,512 inodes and a 4 MiB journal, from `mkfs.ext4`'s
-  output); and `lvdisplay` with 252.00 MiB and 63 LEs. `check:exercises`
-  passes it.
+  lv_data --extents 100%FREE vg_data`, `lvs`, `mkfs.xfs`, `mkdir /data`, the
+  `/etc/fstab` edit in `vim` (`G` and `o` with `#@ noenter`, the line
+  `/dev/vg_data/lv_data /data xfs defaults 0 0` typed with `#@ noenter` and
+  held 5 seconds, `#@ key escape`, `:wq`, in place of the source's `jj:wq`),
+  `cat /etc/fstab`, `systemctl daemon-reload`, `mount /data`, then `lsblk`,
+  `df -h /data`, and `lvdisplay`, each cleared before the next (the source
+  ran the three together). `#!` notes give the 127 extents behind 508 MiB,
+  that XFS is RHEL's default and needs more than 300 MB, why the LV path can
+  stand in for a UUID, and Current LE 127. Pauses: 8 on the intro, 5 on
+  `lvs`, `mkfs.xfs`, the typed line, `cat`, and each verification. No
+  cleanup: exercise 4 fills and grows `lv_data`.
+- `create-logical-volume-exercise.html`, with the hue classes. It gives the
+  `vim` keys in prose, says XFS is RHEL's default and quotes `mkfs.xfs`'s
+  refusal below 300 MB ("Filesystem must be larger than 300MB."), and gives
+  the expected results: `lvs` at 508.00m; `lsblk` with `vg_data-lv_data`
+  (508M) under `sdb1`; `df` naming `/dev/mapper/vg_data-lv_data` at 444M,
+  since XFS's internal log takes 64 MiB (16384 blocks of 4 KiB, from
+  `mkfs.xfs`'s output); and `lvdisplay` with 508.00 MiB and 127 LEs.
+  `check:exercises` passes it.
 
 Components: `exercise`, `AccentText` with `hue`.
 
@@ -940,9 +951,11 @@ terminal with round 1's real output for `lvextend --size +100M
 extents) to 200.00 MiB (50 extents)." and "Logical volume vg01/lv01
 successfully resized."), then "A `+` adds to the current size" over 4.4's two
 `+` rows (Decision 35): `-L +500M` / `--size +500M` adds 500 MiB, and `-l +50`
-/ `--extents +50` adds 50 LEs (both verified in the fragment 5 side test). The
-terminal follows fragments 2 to 4's convention of output for every command on
-a concept slide. `check:slides`: 22.55px clearance.
+/ `--extents +50` adds 50 LEs (both verified in the fragment 5 side test), and,
+since 2026-10-26, `-l +100%FREE` / `--extents +100%FREE` adds every free extent
+in the VG (Decision 46; exercise 7 uses it). The terminal follows fragments 2
+to 4's convention of output for every command on a concept slide.
+`check:slides`: 12.78px clearance with the third row.
 
 Components: default layout, fixed `TerminalWindow`, Markdown table,
 `AccentText` with `hue`.
@@ -971,9 +984,12 @@ Source L26, whose title joined "Aside: `dd`" and "Fill a File or Device" with a
 dash, now one phrase. "`dd` copies data from an input file (`if=`) to an output
 file (`of=`) block by block", the two terms in the deck accent; "`/dev/zero` is
 a special file that produces endless zeros"; then, as Decision 14 proposes, a
-fixed `TerminalWindow` with round 1's real output on the 100 MiB `lv01`: `dd:
-error writing '/data/bigfile': No space left on device` and the records and
-bytes lines (86 MiB copied). The source showed the command only, and its note
+fixed `TerminalWindow` with real output: `dd: error writing '/data/bigfile': No
+space left on device` and the records and bytes lines. Since 2026-10-26 the
+command uses `bs=4k`, as exercise 4 does (Decision 50), recaptured on a 300 MiB
+XFS `lv01` on `/data` in a side test on `sdd` (216 MiB copied, 28K left); it
+first showed `bs=1M` on round 1's 100 MiB ext4 `lv01`. The source showed the
+command only, and its note
 said "the shell prints" the error; `dd` prints it, so the `Callout` now reads
 "Without a `count=` limit, `dd` keeps writing until the destination is full" and
 the terminal shows the message. `check:slides`: 43.05px clearance.
@@ -988,44 +1004,55 @@ Source L27.
 - **Environment:** **Host:** `servera`; **Prerequisite exercise:** Create a
   Logical Volume
 - **Workflow:** 1. Fill `lv_data` completely; 2. Confirm that further writes
-  fail with "No space left on device"; 3. Add a 256 MiB `lvm` partition on
+  fail with "No space left on device"; 3. Add a 512 MiB `lvm` partition on
   `/dev/sdc` to `vg_data` without unmounting `/data`; 4. Extend `lv_data` by
-  200 MiB; 5. Grow the ext4 file system; 6. Confirm that writes to `/data`
+  200 MiB; 5. Grow the XFS file system; 6. Confirm that writes to `/data`
   succeed again
 
-The source's step 5 says XFS, but `lv_data` is ext4 (exercise 3) and the source
-command file runs `resize2fs` (Decision 25). Its step 3 ended with a dash and
+The source's step 5 said XFS while its command file ran `resize2fs`; with XFS
+throughout (Decision 49), the slide and the command file now both say XFS and
+run `xfs_growfs /data`, reversing Decision 25. Its step 3 ended with a dash and
 "do not unmount `/data`", now "without unmounting `/data`". `check:slides`:
 99.19px clearance.
 
-Exercise files, written 2026-10-25 and run on `servera` from exercise 3's end
-state (see "The exercise chain"):
+**XFS changes step 1** (verified 2026-10-26). After the source's `dd ...
+bs=1M` fills the 508 MiB XFS volume, `df` still shows about 820K available, and
+`echo "test" > /data/testfile` succeeds, so step 2 shows no failure. Tested on
+a matching volume: a 1 MiB write fails every time; a second `bs=1M` `dd` fails
+but leaves `echo` working; filling with `bs=4k`, XFS's block size, leaves 28K
+and makes `echo` fail. The instructor chose `bs=4k` and the `echo`, which lands
+harder in class than a second `dd` (Decision 50). In the chain on `lv_data`,
+the `bs=4k` fill and the `echo` were repeated four times: 28K left and "-bash:
+/data/testfile: No space left on device" every time. On XFS the shell cannot
+create the file at all, so the message names the file rather than ext4's
+"echo: write error", and no empty `testfile` is left.
 
-- `extend-logical-volume-exercise.sh`, 71 presses (`kitty-demo --check`), the
-  source's `extend_logical_volume.sh` in the current format: `df -h /data` and
-  `dd` to fill it; `df -h /data` and the failing `echo` (Decision 28); an
-  interactive `parted /dev/sdc` session like exercise 1's (`mkpart` named
-  `pv2`, the type accepted with `#@ key enter`, `1MiB` to `257MiB` per
-  Decision 22, in place of the source's name `1`, type `ext4`, and `256MiB`);
-  `udevadm settle`, `pvcreate /dev/sdc1`, `vgextend vg_data /dev/sdc1`, `vgs
-  vg_data`; `lvextend --size +200M`, `lvs vg_data`; `resize2fs`, `df -h
-  /data`; and the `echo` again, followed by `cat /data/testfile`, added so the
-  success shows on screen (the source ended on the silent `echo`). `#!` notes
-  explain the expected `dd` error, the empty `testfile` the failed `echo`
-  leaves, the 257MiB boundary, the 252 MiB the new PV adds, the 63 to 113
-  extents, and that `lvextend` grows only the LV. The source's "continuing
-  from Exercise 1" and its dash notes are gone. Pauses: 10 on the twelve-line
-  intro, 5 on `df`, `print`, `vgs`, `lvs`, `df` after `resize2fs`, the failing
-  `echo`, and `cat`, and 6 on `dd`. No cleanup: exercise 5 removes it all.
-- `extend-logical-volume-exercise.html`, built from exercise 3's page. It
-  repeats exercise 1's `parted` session prompt by prompt for `/dev/sdc`, and
-  gives the expected results: `dd` stopping at about 226 MiB, `df` at 100%,
-  `-bash: echo: write error: No space left on device` and the empty
-  `testfile`, `vgs` at 504.00m with 252.00m free, `lvextend`'s size-change
-  line, `resize2fs`'s "on-line resizing required" and `df` at 418M, and `cat`
-  printing `test`. A note callout, "One command for both", gives `lvextend
-  --resizefs` and the XFS form, `xfs_growfs /data`. `check:exercises` passes
-  it.
+Exercise files, written 2026-10-25, moved to XFS and 512 MiB on 2026-10-26, and
+run in the exercise chain:
+
+- `extend-logical-volume-exercise.sh`, 71 presses (`kitty-demo --check`):
+  `df -h /data` and `dd if=/dev/zero of=/data/bigfile bs=4k` to fill it; `df
+  -h /data` and the `echo` that fails; an interactive `parted /dev/sdc`
+  session like exercise 1's (`pv2`, the type accepted with `#@ key enter`,
+  `1MiB` to `513MiB`, in place of the source's name `1`, type `ext4`, and
+  `256MiB`); `udevadm settle`, `pvcreate /dev/sdc1`, `vgextend vg_data
+  /dev/sdc1`, `vgs vg_data`; `lvextend --size +200M`, `lvs vg_data`;
+  `xfs_growfs /data`, `df -h /data`; and the `echo` again, followed by `cat
+  /data/testfile`. `#!` notes explain the expected `dd` error, why `bs=4k`,
+  that not even a 5-byte file fits, the `513MiB` boundary, the 508 MiB the new
+  PV adds, the 127 to 177 extents, and that `xfs_growfs` takes the mount
+  point. Pauses: 10 on the twelve-line intro, 5 on `df`, the failing `echo`,
+  `print`, `vgs`, `lvs`, `df` after `xfs_growfs`, and `cat`, and 6 on the
+  filling `dd`. No cleanup: exercise 5 removes it all.
+- `extend-logical-volume-exercise.html`, from the 2026-10-26 runs: `df` at
+  444M with 410M available, `dd` writing 4 KiB blocks and stopping at about
+  410 MiB, `df` at 100% with about 28K left, the `echo`'s failure (no
+  `testfile` is created), the `parted` session for `/dev/sdc`, `vgs` at
+  1016.00m with 508.00m free, `lvextend`'s 508.00 MiB (127 extents) to 708.00
+  MiB (177 extents), `xfs_growfs` and `df` at 644M with about 197M available,
+  and the `echo` succeeding with `cat` printing `test`. A note callout, "One
+  command for both", gives `lvextend --resizefs` and the ext4 form,
+  `resize2fs`. `check:exercises` passes it.
 
 Components: `exercise`, `AccentText` with `hue`.
 
@@ -1058,11 +1085,11 @@ Components: `section`.
 detaches the file system; LVM refuses to remove an LV that is still mounted"
 over a terminal with `umount /data`, `vim /etc/fstab`, and `systemctl
 daemon-reload`, none of which print anything; then "Delete the LV's line in
-`vim`" over a `text [/etc/fstab]` fence with `/dev/vg01/lv01 /data ext4
-defaults 0 0`, the line 4.8's procedure appends (verified in the fragment 4
-side test); then a `Callout type="warning"`: "A leftover entry makes the next
-boot wait 90 seconds for the missing device, then stop in emergency mode" (the
-fragment 6 check under "The exercise chain"). Built from 6.5's first step,
+`vim`" over a `text [/etc/fstab]` fence with `/dev/vg01/lv01 /data xfs
+defaults 0 0`, the line 4.8's procedure appends (`ext4` until Decision 49);
+then a `Callout type="warning"`, which the instructor shortened to "A leftover
+entry makes the next boot stop in emergency mode", with "emergency mode" in
+red (the fragment 6 check under "The exercise chain"). Built from 6.5's first step,
 which said the same in bullets before it moved to fragment 8. "In `vim`, delete" left a gap before the
 comma, as on 2.4, so `vim` ends the sentence. 6.2 still opens with `umount
 /dev/vg01/lv01`, which now repeats this slide's point by device instead of by
@@ -1171,80 +1198,30 @@ Components: `exercise`, `AccentText` with `hue`.
 
 **Addition.** Recording variant for `remove-lvm-setup-exercise.cast`.
 
-### 7. `lvm-swap-space.md` (4 slides)
+### 7. Swap Space on Logical Volumes, dropped 2026-10-26
 
-`routeAlias: lvm-swap-space` (`swap-space` is w10's). Alignments: RH134
-chapter 11, cert guide chapter 15. Exercise: Create Swap Space on a Logical
-Volume Exercise, added at the instructor's request (Open question 3). It
-overlaps 8.3 on purpose: the Practice exercises repeat earlier work for extra
-practice.
+Dropped by the instructor before it was built (Decision 45), with exercise 5a
+(Decision 30). Its section slide (L35) is gone; its one content slide (L36) is
+not built, and its steps are proposed for 4.8 (Decision 47). Swap on an LV
+moves into the practice fragment, where exercises 6 to 8 create, extend, and
+remove a swap LV beside `lv_records`.
 
-##### 7.1 Swap Space on Logical Volumes
+Compared with w10's swap fragment and exercise, the fragment's only new points
+were that the swap device is an LV path made with `lvcreate`, that
+`/etc/fstab` can name that path, and that `swapon --show` lists the LV as
+`/dev/dm-N`; fragment 4 already teaches the last two (4.5). What RH134 chapter
+11 adds, extending a swap LV (RH134 ch11 section 3: `swapoff`, `lvextend`,
+`mkswap`, `swapon`, with a warning that turning swap off on a busy system can
+run it out of memory), the source never had; exercise 7 now does it.
 
-Source L35. Section slide.
-
-Components: `section`.
-
-##### 7.2 Creating Swap Space on a Logical Volume
-
-Source L36, with its typo ("an Logical Volume"). "LVM swap uses the same
-commands as partition swap: the device is just an LV path", then three click
-states:
-
-1. Create the swap LV, an ordinary LV: `lvcreate --name swap01 --size 512M
-   vg01`. The source names it `swap_vol`, the exercise's name, and makes it 1
-   GiB, which does not fit the slide chain's `vg01` (Decision 19).
-2. Format and activate: `mkswap` writes the swap signature; `swapon`
-   activates it until the next reboot. `mkswap /dev/vg01/swap01`, `swapon
-   /dev/vg01/swap01`, `swapon --show`.
-3. Persist it in `/etc/fstab`: `/dev/vg01/swap01 swap swap pri=5 0 0`
-   (Decision 20; the source writes `none swap defaults,pri=5`), the source's
-   `Callout` that the kernel uses higher-priority swap first, then `systemctl
-   daemon-reload`, `swapon --all`, `swapon --show`.
-
-Steps 2 and 3 end in `swapon --show`, a command that exists only for its
-output; Decision 14 offers real output there. It lists the LV by its kernel
-name, not its path (verified: `/dev/dm-2 partition 256M 0B -3`), which 4.5's
-`ls -l` already explains. Shown or not, the written exercise 7 says so, since
-students look for `swap_vol` and do not find it.
-
-Components: default layout with `vertical: start`, `v-switch at="1"` with
-three templates, `bash` fences, a titled `text [/etc/fstab]` fence, `Callout`.
-
-##### 7.3 Exercise: Create Swap Space on a Logical Volume
-
-**Addition, requested by the instructor 2026-10-24.** No source slide or
-command file; written from 7.2 and the source's `lvm_swap.sh`. Proposed
-(Decision 30):
-
-- **Goal:** Add swap space from a new volume group on the spare disk
-- **Environment:** **Host:** `servera`
-- **Workflow:** 1. Create a 1 GiB `lvm` partition on `/dev/sdd`;
-  2. Initialize it as a physical volume and create a volume group named
-  `vg_swap`; 3. Create a 512 MiB logical volume named `lv_swap`; 4. Format and
-  activate `lv_swap` as swap space; 5. Persistently activate it with priority
-  10; 6. Verify with `swapon --show`
-
-It stands alone on `/dev/sdd`, which nothing else this week touches, so it
-needs no prerequisite exercise and leaves the `sdb` and `sdc` chain alone.
-`sdd`'s sectors are fresh, so `lvcreate` does not stop to ask here. Its
-"Clean up" section, not on the slide, removes everything it made: swap off,
-the `/etc/fstab` line removed, systemd reloaded, the LV, VG, and PV removed,
-and `sdd` wiped. That way 8.3's priority 5 swap is the only one added later.
-No reboot; 8.3 has one. The names and priority differ from 8.3's
-(`vol_group1`, `swap_vol`, priority 5) so the two are not copies.
-
-Components: `exercise`.
-
-##### 7.3a Exercise recording (pending)
-
-**Addition.** Recording variant for `create-lvm-swap-space-exercise.cast`.
-
-### 8. `lvm-practice.md` (8 slides)
+### 8. `lvm-practice.md` (10 slides), built 2026-10-26
 
 `routeAlias: lvm-practice`. Alignments: RH134 chapter 11, cert guide chapter
-15. Exercises: Create a Large LV Spanning Two Disks Exercise, Create
-Persistent Swap on an LV Exercise.
+15. Exercises: Create LVM Storage Exercise, Extend LVM Storage Exercise, and
+Remove LVM Storage Exercise, declared in `topicInfo`, their files built with
+the slides. Built and checked with `check:entry`, `check:slides`, and
+`check:exercises`, and every slide and click state captured at 1920x1080; it
+waits on the instructor's review.
 
 The fragment has two purposes (Decision 43, the instructor, 2026-10-25):
 
@@ -1256,406 +1233,192 @@ The fragment has two purposes (Decision 43, the instructor, 2026-10-25):
    come back to them as a refresher. The concept slides in fragments 2 to 6
    do the teaching.
 
+Since fragment 7 was dropped (Decision 45), it also carries swap on an LV:
+exercise 6 creates `/records` and a swap LV on the two blank disks, exercise
+7 adds the third disk and extends both, and exercise 8 removes it all. Each
+procedure sits right before the exercise that uses it (Decision 48), and each
+was trimmed to steps and commands (Decision 44) and given the swap steps
+(Decision 47). Every procedure command, swap steps included, ran in the
+fragment 8 side test, and every exercise ran on the chain (see "The exercise
+chain").
+
 ##### 8.1 LVM Practice
 
-Source L37 ("Practice"), retitled so the week page's agenda line says what it
-practices (Decision 2). Section slide.
+Source L37 ("Practice"), retitled (Decision 2). Section slide; not on the
+cover's agenda (Decisions 5 and 48).
 
 Components: `section`.
 
 ##### 4.8 Procedure: Create a Logical Volume
 
-Source L23, **moved to fragment 8** (Decision 38). It was built in fragment 4
-on 2026-10-25, ahead of exercise 3 (Decision 12), and removed the same day,
-before fragment 8 existed, so its source is kept below to drop in after 8.1.
-In fragment 8 it opens the practice: exercise 6 follows the same recipe,
-from partition to persistent mount, on two disks with XFS.
-
-Six click states, each an
-`h3` step heading over a commands-only `bash` fence (Decision 13), with layer
-terms colored:
-
-1. "Step 1: Create a partition": `parted /dev/sdb mklabel gpt`, `mkpart
-   primary 1MiB 512MiB`, `set 1 lvm on`, `udevadm settle`, and a `Callout`:
-   "`udevadm settle` waits until udev has finished with the new partition, so
-   `/dev/sdb1` exists before the next command needs it" (the source said it
-   waits for the kernel to register the partition)
-2. "Step 2: Create a physical volume from the partition": `pvcreate`,
-   `pvdisplay`
-3. "Step 3: Create a volume group from the PV": `vgcreate vg01 /dev/sdb1`,
-   `vgdisplay vg01`
-4. "Step 4: Create a logical volume in the VG": `lvcreate --name lv01 --size
-   300M vg01`, `lvdisplay /dev/vg01/lv01`
-5. "Step 5: Create a file system on the LV": `mkfs.ext4 /dev/vg01/lv01`, and a
-   `Callout`: "XFS needs a volume larger than 300 MB, so the smaller volumes in
-   this week's exercises use ext4" (the source said "at least 300MiB")
-6. "Step 6: Mount it persistently": `mkdir /data`, `echo "/dev/vg01/lv01 /data
-   ext4 defaults 0 0" >> /etc/fstab`, `systemctl daemon-reload`, `mount /data`
-
-Corrections: the source numbers two steps "Step 4", and its `/etc/fstab` line
-says `xfs` for the ext4 file system it just made. The whole procedure ran on
-`sdd` in the side test (a 511 MiB PV, a 508 MiB VG, a 300 MiB LV of 75 LEs,
-ext4, mounted on `/data` through the appended line), so every command is
-verified; the slide keeps the source's `/dev/sdb`. `check:slides` in
-fragment 4: 143.44px clearance or more in every state. Step 5's `Callout`
-still holds in fragment 8, where exercise 6's 6 GiB volume gets XFS.
-
-`````md
----
-vertical: start
----
-
-# Procedure: Create a Logical Volume
-
-<v-switch at="1">
-
-<template #0>
-
-### Step 1: Create a partition
-
-```bash
-parted /dev/sdb mklabel gpt
-parted /dev/sdb mkpart primary 1MiB 512MiB
-parted /dev/sdb set 1 lvm on
-udevadm settle
-```
-
-<Callout>
-
-`udevadm settle` waits until udev has finished with the new partition, so `/dev/sdb1` exists before the next command needs it
-
-</Callout>
-
-</template>
-
-<template #1>
-
-### Step 2: Create a <AccentText hue="blue">physical volume</AccentText> from the partition
-
-```bash
-pvcreate /dev/sdb1
-pvdisplay /dev/sdb1
-```
-
-</template>
-
-<template #2>
-
-### Step 3: Create a <AccentText hue="teal">volume group</AccentText> from the <AccentText hue="blue">PV</AccentText>
-
-```bash
-vgcreate vg01 /dev/sdb1
-vgdisplay vg01
-```
-
-</template>
-
-<template #3>
-
-### Step 4: Create a <AccentText hue="slate">logical volume</AccentText> in the <AccentText hue="teal">VG</AccentText>
-
-```bash
-lvcreate --name lv01 --size 300M vg01
-lvdisplay /dev/vg01/lv01
-```
-
-</template>
-
-<template #4>
-
-### Step 5: Create a file system on the <AccentText hue="slate">LV</AccentText>
-
-```bash
-mkfs.ext4 /dev/vg01/lv01
-```
-
-<Callout>
-
-XFS needs a volume larger than 300 MB, so the smaller volumes in this week's exercises use ext4
-
-</Callout>
-
-</template>
-
-<template #5>
-
-### Step 6: Mount it persistently
-
-```bash
-mkdir /data
-echo "/dev/vg01/lv01 /data ext4 defaults 0 0" >> /etc/fstab
-systemctl daemon-reload
-mount /data
-```
-
-</template>
-
-</v-switch>
-`````
-
-Components: default layout with `vertical: start`, `v-switch at="1"` with six
-templates, `bash` fences, two `Callout`s, `AccentText` with `hue`.
-
-##### 5.2 Procedure: Extend a Logical Volume
-
-Source L25, **moved to fragment 8** (Decision 40) and retitled to match 4.8,
-the procedure it follows. Built in fragment 5 on 2026-10-25 and removed the
-same day, before fragment 8 existed, so its source is kept below to drop in
-after 4.8. In fragment 5 its states became 5.2a and 5.2b; here it stays the
-whole procedure in one place, without the option table.
-
-Source L25. Five click states, each an `h3` step heading over the source's
-short lines where it has them and a commands-only `bash` fence. The source's
-first step, which partitioned the disk, created the PV, and extended the VG in
-one fence, is two steps at the instructor's suggestion (2026-10-25), so each
-layer gets its own step:
-
-1. "Step 1: Create a PV on the new disk": "Skip steps 1 and 2 if the VG already
-   has enough free extents" (the source's "if needed"), over `parted /dev/sdc
-   mklabel gpt`, `mkpart primary 1MiB 256MiB`, `set 1 lvm on`, `udevadm
-   settle`, and `pvcreate /dev/sdc1`. The source's heading names `udevadm
-   settle` but its fence leaves it out; added.
-2. "Step 2: Add the PV to the VG": "Adds capacity to the VG", "No impact on
-   running file systems" (the source's two lines), over `vgextend vg01
-   /dev/sdc1`.
-3. "Step 3: Extend the LV": "Adds 100 MiB to the LV", "No impact on running
-   file systems", over `lvextend --size +100M /dev/vg01/lv01`. Its table of
-   `+` forms stayed in fragment 5, on 5.2a.
-4. "Step 4: Grow the file system": "XFS: `xfs_growfs` takes the mount point, so
-   the file system must be mounted" over `xfs_growfs /data`, and "ext4:
-   `resize2fs` takes the device" over `resize2fs /dev/vg01/lv01`. The source's
-   heading said `xfs_grow`. Its "online or offline" for ext4 is left out:
-   only the online grow was verified, and an offline one asks for `e2fsck`
-   first, which no slide teaches.
-5. "Step 4, alternative: Grow the file system with the LV": "`--resizefs`
-   extends the LV and grows its file system in one command" over `lvextend
-   --resizefs --size +100M /dev/vg01/lv01`. The source labeled this state
-   "Step 3 (Alternative)".
-
-Verified: round 1 ran `lvextend`, `resize2fs`, and `lvextend --resizefs` on
-ext4; the fragment 5 side test ran `xfs_growfs` on a mount point, both `+`
-forms, and `lvextend --resizefs` on XFS, which runs `xfs_growfs` itself.
-Decision 14's optional real output for states 3 to 5 is not built; the
-fences stay commands only, as the source has them. The instructor removed
-`vertical: start` (2026-10-25), so each state is centered and the step heading
-sits at a different height from state to state. `check:slides` in
-fragment 5, with the table: 30.3px clearance at state 3, 103.22px or more at
-the others.
-
-`````md
----
----
-
-# Procedure: Extend a Logical Volume
-
-<v-switch at="1">
-
-<template #0>
-
-### Step 1: Create a <AccentText hue="blue">PV</AccentText> on the new disk
-
-- Skip steps 1 and 2 if the <AccentText hue="teal">VG</AccentText> already has enough free extents
-
-```bash
-parted /dev/sdc mklabel gpt
-parted /dev/sdc mkpart primary 1MiB 256MiB
-parted /dev/sdc set 1 lvm on
-udevadm settle
-pvcreate /dev/sdc1
-```
-
-</template>
-
-<template #1>
-
-### Step 2: Add the <AccentText hue="blue">PV</AccentText> to the <AccentText hue="teal">VG</AccentText>
-
-- Adds capacity to the <AccentText hue="teal">VG</AccentText>
-- No impact on running file systems
-
-```bash
-vgextend vg01 /dev/sdc1
-```
-
-</template>
-
-<template #2>
-
-### Step 3: Extend the <AccentText hue="slate">LV</AccentText>
-
-- Adds 100 MiB to the <AccentText hue="slate">LV</AccentText>
-- No impact on running file systems
-
-```bash
-lvextend --size +100M /dev/vg01/lv01
-```
-
-</template>
-
-<template #3>
-
-### Step 4: Grow the file system
-
-XFS: `xfs_growfs` takes the mount point, so the file system must be mounted
-
-```bash
-xfs_growfs /data
-```
-
-ext4: `resize2fs` takes the device
-
-```bash
-resize2fs /dev/vg01/lv01
-```
-
-</template>
-
-<template #4>
-
-### Step 4, alternative: Grow the file system with the <AccentText hue="slate">LV</AccentText>
-
-`--resizefs` extends the <AccentText hue="slate">LV</AccentText> and grows its file system in one command
-
-```bash
-lvextend --resizefs --size +100M /dev/vg01/lv01
-```
-
-</template>
-
-</v-switch>
-`````
-
-Components: default layout, `v-switch at="1"` with five templates, `bash`
-fences, `AccentText` with `hue`.
-
-##### 6.5 Procedure: Remove LVM
-
-Source L32 ("Removing LVM Components"), **moved to fragment 8** (Decision 41)
-and retitled to match 4.8 and 5.2, the procedures it follows. Built in
-fragment 6 on 2026-10-25 and removed the same day, before fragment 8 existed,
-so its source is kept below to drop in after 5.2. In fragment 6, 6.1a, 6.2,
-6.3, and 6.4 teach its steps one at a time.
-
-Source L32. "Teardown order: **Unmount → LV → VG → PV**, the reverse of
-creation", then two click states, each an `h3` step heading, bullets, and a
-commands-only `bash` fence (Decision 13):
-
-1. "Step 1: Unmount and remove the LV": "LVM refuses to remove an LV whose file
-   system is mounted" (verified: "Logical volume vg01/lv01 contains a
-   filesystem in use.", exit 5); "Remove the `/etc/fstab` entry, or the next
-   boot waits for the missing device and stops in emergency mode"; "`lvremove`
-   is **irreversible**". `umount /data`, `vim /etc/fstab    # Remove the
-   entry`, `systemctl daemon-reload`, `lvremove /dev/vg01/lv01`. The
-   `daemon-reload` is added, as the file's own header and w10 teach and as
-   exercise 5 does.
-2. "Step 2: Remove the VG and PVs": "`vgremove` removes the VG and releases its
-   PVs"; "`pvremove` removes the LVM label from each device; the partitions
-   remain". `vgremove vg01`, `pvremove /dev/sdb1 /dev/sdb2 /dev/sdc1`. The
-   source lists only `sdb1` and `sdb2`, but 3.6 added `sdc1` to `vg01`.
-
-The source said a leftover entry causes "a failed mount on reboot". Checked
-without a reboot, on the chain's `/data` (read-only): `data.mount` requires
-its device unit and is required by `local-fs.target`, whose `OnFailure` is
-`emergency.target`, and the default start timeout is 1 min 30 s. So a missing
-device holds the boot for 90 seconds and then drops it to emergency mode,
-which is what w10's Sequencing note records. `check:slides` in fragment 6:
-61.45px and 163.45px clearance.
-
-`````md
----
-vertical: start
----
-
-# Procedure: Remove LVM
-
-Teardown order: **Unmount → <AccentText hue="slate">LV</AccentText> → <AccentText hue="teal">VG</AccentText> → <AccentText hue="blue">PV</AccentText>**, the reverse of creation
-
-<v-switch at="1">
-
-<template #0>
-
-### Step 1: Unmount and remove the <AccentText hue="slate">LV</AccentText>
-
-- LVM refuses to remove an <AccentText hue="slate">LV</AccentText> whose file system is mounted
-- Remove the `/etc/fstab` entry, or the next boot waits for the missing device and stops in emergency mode
-- `lvremove` is **irreversible**
-
-```bash
-umount /data
-vim /etc/fstab    # Remove the entry
-systemctl daemon-reload
-lvremove /dev/vg01/lv01
-```
-
-</template>
-
-<template #1>
-
-### Step 2: Remove the <AccentText hue="teal">VG</AccentText> and <AccentText hue="blue">PV</AccentText>s
-
-- `vgremove` removes the <AccentText hue="teal">VG</AccentText> and releases its <AccentText hue="blue">PV</AccentText>s
-- `pvremove` removes the LVM label from each device; the partitions remain
-
-```bash
-vgremove vg01
-pvremove /dev/sdb1 /dev/sdb2 /dev/sdc1
-```
-
-</template>
-
-</v-switch>
-`````
-
-Components: default layout with `vertical: start`, `v-switch at="1"` with two
+Source L23, built in fragment 4 and moved here (Decision 38). Seven click
+states, each an `h3` step heading over a commands-only `bash` fence: create a
+partition (`parted /dev/sdb mklabel gpt`, `mkpart primary 1MiB 512MiB`, `set 1
+lvm on`, `udevadm settle`); create the PV (`pvcreate`, `pvdisplay`); create
+the VG (`vgcreate vg01 /dev/sdb1`, `vgdisplay`); create the LV (`lvcreate
+--name lv01 --size 300M vg01`, `lvdisplay`); create the file system
+(`mkfs.xfs` since Decision 49; the 300 MiB LV is large enough, verified); mount
+it persistently (`mkdir /data`, the `echo ... >> /etc/fstab` line with `xfs`,
+`systemctl daemon-reload`, `mount /data`); and, new, "Step
+7: Add swap space on an LV" (`lvcreate --name swap01 --size 200M vg01`,
+`mkswap`, `echo "/dev/vg01/swap01 swap swap defaults 0 0" >> /etc/fstab`,
+`systemctl daemon-reload`, `swapon -a`), from source L36 (Decision 47). Its
+two callouts (`udevadm settle`, the XFS minimum) are gone (Decision 44); 2.2a
+and the fragment 4 slides teach both. `swap01` is 200 MiB because `vg01` here
+is 508 MiB and `lv01` takes 300 (Decision 19's 512 MiB would not fit).
+`check:slides`: 236.64px clearance or more in every state.
+
+Components: default layout with `vertical: start`, `v-switch at="1"` with seven
 templates, `bash` fences, `AccentText` with `hue`.
 
-##### 8.2 Exercise: Create a Large LV Spanning Two Disks
+##### 8.2 Exercise: Create LVM Storage
 
-Source L38.
+Source L38 ("Large LV Spanning Two Disks"), redesigned by the instructor
+(Decision 45), details accepted (Decision 46).
 
-- **Goal:** Build a logical volume larger than either 5 GiB disk
+- **Goal:** Pool two blank disks into one volume group (teal) that holds a
+  file system and swap space
 - **Environment:** **Host:** `servera`; **Prerequisite exercise:** Remove the
   LVM Setup
-- **Workflow:** 1. Create an `lvm` partition on `/dev/sdb` and `/dev/sdc`,
-  using all available space; 2. Initialize `/dev/sdb1` and `/dev/sdc1` as
-  physical volumes; 3. Create a volume group named `vol_group1` using both
-  partitions; 4. Create a 6 GiB logical volume named `srv_vol`; 5. Format
-  `srv_vol` with an XFS file system; 6. Persistently mount `srv_vol` on `/srv`;
-  7. Verify the mounted size and confirm free space remains in the volume group
+- **Workflow:** 1. Create an `lvm` partition using all of `/dev/sdb`, and
+  another using all of `/dev/sdc`; 2. Initialize both as physical volumes
+  (blue) and create a volume group (teal) named `vg_storage` from them;
+  3. Create a 1 GiB logical volume (slate) named `lv_swap`, and one named
+  `lv_records` from the rest of the space; 4. Format `lv_records` with XFS and
+  persistently mount it on `/records`; 5. Format `lv_swap` as swap space and
+  persistently activate it; 6. Verify with `lsblk`, `df`, and `swapon --show`
 
-The source's requirement, "Each disk is only 5 GB", becomes the goal; the lab
-disks are 5 GiB (w10: `Disk /dev/sdb: 5369MB`). The written exercise adds the
-Cert Guide's caution: an LV that spans disks is lost if either disk fails,
-unless the disks below it are redundant (Decision 27).
+`check:slides`: 145.67px clearance.
 
-Components: `exercise`.
+Exercise files, written 2026-10-26 and run on `servera` from exercise 5's end
+state:
+
+- `create-lvm-storage-exercise.sh`, 92 presses (`kitty-demo --check`).
+  Partitions in command mode, as 4.8 shows (`mkpart primary 1MiB 100%`);
+  `pvcreate` and `vgcreate` on both; `lvcreate` for `lv_swap` and for
+  `lv_records` (`--extents 100%FREE`), each followed by a `y` line, since
+  with XFS in exercises 3 and 4 both ask "Wipe it?" (Decision 49); `mkfs.xfs`,
+  `mkdir /records`, and the `vim` line `/dev/vg_storage/lv_records /records
+  xfs defaults 0 0`, `daemon-reload`, `mount /records`; `mkswap`, the `vim`
+  line `/dev/vg_storage/lv_swap swap swap defaults 0 0`, `tail -3`,
+  `daemon-reload`, `swapon -a`; then `lsblk`, `df -h /records`, `swapon
+  --show`. `#!` notes explain the `Wipe it?` question, the 9 GiB volume that
+  spans both disks, the swap line's mount point, and `dm-2`. Pauses: 10 on
+  the intro, 5 on the outputs before each `clear` and on the typed lines.
+- `create-lvm-storage-exercise.html`: the same steps, the `Wipe it?` question
+  explained, a warning callout on spanning two disks (Decision 27), and the
+  expected `lvs`, `lsblk`, `df` (9.0G), and `swapon --show` (`/dev/dm-2`)
+  results. `check:exercises` passes it.
+
+Components: `exercise`, `AccentText` with `hue`.
 
 ##### 8.2a Exercise recording (pending)
 
-**Addition.** Recording variant for
-`create-spanning-logical-volume-exercise.cast`.
+**Addition.** Recording variant for `create-lvm-storage-exercise.cast`.
 
-##### 8.3 Exercise: Create Persistent Swap on an LV
+##### 5.2 Procedure: Extend a Logical Volume
 
-Source L39.
+Source L25, built in fragment 5 and moved here (Decision 40), restored to
+`vertical: start` (Decision 44). Six click states: create a PV on the new disk
+(with "Skip steps 1 and 2 if the VG already has enough free extents"); add the
+PV to the VG; extend the LV; grow the file system ("XFS: `xfs_growfs` takes
+the mount point", "ext4: `resize2fs` takes the device"); the `--resizefs`
+alternative; and, new, "For a swap LV: extend it with the swap off"
+(`swapoff`, `lvextend --size +100M /dev/vg01/swap01`, `mkswap`, `swapon`),
+from RH134 chapter 11 (Decision 47). The option table stayed on 5.2a, and the
+"Adds capacity", "No impact", and "Adds 100 MiB" bullets and the `--resizefs`
+sentence are gone (Decision 44). `check:slides`: 166.45px clearance or more in
+every state.
 
-- **Goal:** Add swap space from the volume group's free space, used at every
-  boot
-- **Environment:** **Host:** `servera`; **Prerequisite exercise:** Create a
-  Large LV Spanning Two Disks
-- **Workflow:** 1. Create a 1 GiB logical volume named `swap_vol` in
-  `vol_group1`; 2. Format `swap_vol` as swap space; 3. Activate it temporarily
-  and verify with `swapon --show`; 4. Deactivate it; 5. Persistently activate
-  it with priority 5; 6. Verify the persistent swap; 7. Reboot to verify
+Components: default layout with `vertical: start`, `v-switch at="1"` with six
+templates, `bash` fences, `AccentText` with `hue`.
 
-Its "Clean up" section, not on the slide, returns `servera` to the week's
-starting state (Decision 23).
+##### 8.3 Exercise: Extend LVM Storage
+
+Source L39 ("Persistent Swap on an LV"), redesigned (Decisions 45 and 46).
+
+- **Goal:** Grow a file system and swap space onto a third disk
+- **Environment:** **Host:** `servera`; **Prerequisite exercise:** Create LVM
+  Storage
+- **Workflow:** 1. Create an `lvm` partition using all of `/dev/sdd` and add it
+  to `vg_storage`; 2. Extend `lv_swap` by 1 GiB; 3. Extend `lv_records` with
+  the rest of the free space and grow its file system; 4. Verify with `vgs`,
+  `df`, and `swapon --show`
+
+`check:slides`: 144.84px clearance.
+
+Exercise files, written 2026-10-26 and run from exercise 6's end state:
+
+- `extend-lvm-storage-exercise.sh`, 46 presses. `vgs` (nothing free), the
+  `sdd` partition, `pvcreate`, `vgextend`, `vgs` (about 5 GiB free);
+  `swapoff`, `lvextend --size +1G`, `mkswap`, `swapon`, `swapon --show`;
+  `lvextend --resizefs --extents +100%FREE`; then `vgs`, `df -h /records`,
+  and `swapon --show`. `#!` notes say why swap must be off, that `mkswap`
+  gives a new UUID while `/etc/fstab` names the LV path, and that
+  `--resizefs` runs `xfs_growfs`. Pauses: 8 on the intro, 5 on `vgs`,
+  `mkswap`, and the `swapon --show`s, 6 on the `lvextend --resizefs` output.
+- `extend-lvm-storage-exercise.html`, with the expected results (14.99g and
+  5.00g free, 1 to 2 GiB, the "wiping old swap signature" warning, 13G) and a
+  note, "Why /etc/fstab still works". `check:exercises` passes it.
+
+The `+100%FREE` form is the third row added to 5.2a's table (Decision 46).
 
 Components: `exercise`.
 
 ##### 8.3a Exercise recording (pending)
 
-**Addition.** Recording variant for `create-persistent-lvm-swap-exercise.cast`.
+**Addition.** Recording variant for `extend-lvm-storage-exercise.cast`.
+
+##### 6.5 Procedure: Remove LVM
+
+Source L32 ("Removing LVM Components"), built in fragment 6 and moved here
+(Decision 41). "Teardown order: **Swap off and unmount → LV → VG → PV**, the
+reverse of creation", then three click states: "Step 1: Swap off, unmount, and
+remove the LVs" (`swapoff /dev/vg01/swap01`, `umount /data`, `vim /etc/fstab
+# Remove both entries`, `systemctl daemon-reload`, `lvremove /dev/vg01/lv01
+/dev/vg01/swap01`); "Step 2: Remove the VG and PVs" (`vgremove vg01`,
+`pvremove /dev/sdb1 /dev/sdc1`); and "Step 3: Wipe the disks" (`wipefs --all
+/dev/sdb /dev/sdc`). Its bullets are gone (Decision 44); the swap steps are
+Decision 47. Two fixes for the reference set: `pvremove` named `/dev/sdb2`,
+which came from the slide chain, not from 4.8 and 5.2, so it now names only
+`sdb1` and `sdc1`; and the wipe step, which exercise 8 needs, is added from
+6.6. `check:slides`: 191.64px clearance or more.
+
+Components: default layout with `vertical: start`, `v-switch at="1"` with three
+templates, `bash` fences, `AccentText` with `hue`.
+
+##### 8.4 Exercise: Remove LVM Storage
+
+**Addition** (Decision 45).
+
+- **Goal:** Return all three disks to blank
+- **Environment:** **Host:** `servera`; **Prerequisite exercise:** Extend LVM
+  Storage
+- **Workflow:** 1. Deactivate the swap space and unmount `/records`; 2. Remove
+  both entries from `/etc/fstab`; 3. Remove both logical volumes (slate), the
+  volume group (teal), and the three physical volumes (blue); 4. Wipe
+  `/dev/sdb`, `/dev/sdc`, and `/dev/sdd`
+
+`check:slides`: 145.67px clearance.
+
+Exercise files, written 2026-10-26 and run from exercise 7's end state:
+
+- `remove-lvm-storage-exercise.sh`, 48 presses. `swapoff`, `umount /records`,
+  `swapon --show`; the `vim` edit (`/vg_storage`, `dd` twice with `#@
+  noenter`, `:wq`), `tail -3`, `daemon-reload`, `rmdir /records` (Decision
+  23); `lvremove` of both LVs with a `y` line for each question, `vgremove`,
+  `pvremove` of all three, `pvs`; `wipefs --all` on all three disks in one
+  command, and `lsblk`. Pauses: 8 on the intro, 5 on `swapon --show`, `tail`,
+  `pvs`, and `lsblk`.
+- `remove-lvm-storage-exercise.html`, with the `vim` keys in prose, the
+  emergency-mode warning, `lvremove`'s two questions, and the expected
+  results. `check:exercises` passes it.
+
+Components: `exercise`, `AccentText` with `hue`.
+
+##### 8.4a Exercise recording (pending)
+
+**Addition.** Recording variant for `remove-lvm-storage-exercise.cast`.
 
 ## Exercises
 
@@ -1666,33 +1429,32 @@ Components: `exercise`.
 | 3 | Create a Logical Volume               |    4 | `create-logical-volume-exercise.sh`           |
 | 4 | Extend a Logical Volume               |    5 | `extend-logical-volume-exercise.sh`           |
 | 5 | Remove the LVM Setup                  |    6 | `remove-lvm-setup-exercise.sh`                |
-| 5a | Create Swap Space on a Logical Volume |   7 | `create-lvm-swap-space-exercise.sh`           |
-| 6 | Create a Large LV Spanning Two Disks  |    8 | `create-spanning-logical-volume-exercise.sh`  |
-| 7 | Create Persistent Swap on an LV       |    8 | `create-persistent-lvm-swap-exercise.sh`      |
+| 6 | Create LVM Storage                    |    8 | `create-lvm-storage-exercise.sh`              |
+| 7 | Extend LVM Storage                    |    8 | `extend-lvm-storage-exercise.sh`              |
+| 8 | Remove LVM Storage                    |    8 | `remove-lvm-storage-exercise.sh`              |
 
-All on `servera`. Each declared title ends in "Exercise". Exercises 1 to 7
+All on `servera`. Each declared title ends in "Exercise". Exercises 1 to 5
 port their source command files, rewritten to the current `kitty-demo` format,
-with an `.html` written version beside each. Exercise 5a is new (Decision 30)
-and lettered so the other numbers, used throughout this plan, do not move.
+with an `.html` written version beside each. Exercises 6 to 8 are the
+instructor's redesign of the source's two Practice exercises (Decision 45);
+the source's `multi_disk_logical_volume.sh` and `lvm_swap.sh` supply their
+command forms. Exercise 5a was dropped with fragment 7.
 
 **The chain.** One pass, in order, with no resets:
 
-1. `sdb1` (256 MiB, `lvm`) becomes a PV
-2. `vg_data` from `sdb1`
-3. `lv_data` (all of `vg_data`, ext4) on `/data`, in `/etc/fstab`
-4. `/data` filled; `sdc1` (256 MiB) added to `vg_data`; `lv_data` grown 200
-   MiB
+1. `sdb1` (512 MiB, `lvm`) becomes a PV
+2. `vg_data` (508 MiB) from `sdb1`
+3. `lv_data` (all of `vg_data`, XFS) on `/data`, in `/etc/fstab`
+4. `/data` filled; `sdc1` (512 MiB) added to `vg_data`; `lv_data` grown 200
+   MiB, XFS with it
 5. All of it removed, `/data` deleted, `sdb` and `sdc` wiped
-
-   5a. Off the chain, on `sdd`: `lv_swap` (512 MiB) in `vg_swap` at priority
-   10, in `/etc/fstab`; then its cleanup removes all of it and wipes `sdd`
-
-6. `sdb1` and `sdc1` (whole disks) in `vol_group1`; `srv_vol` (6 GiB, XFS) on
-   `/srv`, in `/etc/fstab`
-7. `swap_vol` (1 GiB) at priority 5, in `/etc/fstab`; reboot; then cleanup
-   restores the start: swap off, `/srv` unmounted, both `/etc/fstab` lines
-   removed, systemd reloaded, both LVs, the VG, and both PVs removed, `sdb`
-   and `sdc` wiped
+6. `sdb1` and `sdc1` (all of each disk) in `vg_storage`; `lv_swap` (1 GiB)
+   and `lv_records` (the rest, XFS) on `/records`; both in `/etc/fstab`
+7. `sdd1` (all of `sdd`) added; `lv_swap` grown 1 GiB with swap off;
+   `lv_records` grown into the rest, its file system with it
+8. All of it removed: swap off, `/records` unmounted and deleted, both
+   `/etc/fstab` lines removed, systemd reloaded, both LVs, the VG, and the
+   three PVs removed, and the three disks wiped
 
 The disks and `/etc/fstab` end exactly as they started. LVM's own records do
 not, and the taught commands cannot put them back (verified):
@@ -1720,38 +1482,42 @@ Changes to the source command files, beyond the format:
   source sends an Enter after `G` and after `o`, which inserts a blank line.
 - Pauses per "Pausing for the audience": 8 seconds after each intro, 5 after
   multi-line output such as `pvdisplay`, `vgdisplay`, and `mkfs`, 5 on the last
-  `/etc/fstab` edit, 6 after `dd` and `lvcreate` on a large volume, and 15
-  after `reboot` before `ssh servera` (the instructor lab's `servera` boots in
-  about 5 seconds).
-- Exercises 1 and 4 end their partitions at `257MiB`, so they are the 256 MiB
-  the steps ask for (Decision 22).
+  `/etc/fstab` edit, and 6 after `dd` and `lvcreate --resizefs` on a large
+  volume. No exercise reboots (Decision 46).
+- Exercises 1 and 4 make 512 MiB partitions, `1MiB` to `513MiB`, large enough
+  for XFS (Decisions 22 and 49).
 - Interactive `parted`: the sources answer the GPT name prompt with `1` and the
   file system type with `ext4` or `xfs`. Verified: on GPT, `mkpart` asks
   `Partition name?  []?` and then `File system type?  [ext2]?`, and whatever
-  the type answer, including Enter for the default, `print` in the same session
-  shows it (`ext2`) beside the `lvm` flag; a later `parted print` shows the
-  column empty. Proposed: name each partition for what it holds (such as
-  `pv1`), press Enter at the type, and have the written exercise say the type
-  is only a hint, since `set 1 lvm on` is what marks the partition. The
-  alternative is command mode, as 4.8 and 5.2 show, which never asks.
-- Exercise 4's step 5 header says "Grow the EXT4 file system" in the command
-  file and XFS on the slide; both now say ext4 (Decision 25).
+  the type answer, including Enter for the default, `print` in the same
+  session shows it (`ext2`) beside the `lvm` flag; a later `parted print`
+  shows the column empty. Exercises 1 and 4 name each partition for what it
+  holds (`pv1`, `pv2`), press Enter at the type, and the written exercise says
+  the type is only a hint, since `set 1 lvm on` is what marks the partition.
+  The practice exercises use command mode, as 4.8 and 5.2 show, which never
+  asks.
+- XFS throughout (Decision 49): exercise 3 formats with `mkfs.xfs`, and
+  exercise 4 grows with `xfs_growfs /data`; its fill uses `bs=4k`, since after
+  a `bs=1M` fill a tiny `echo` still fits on XFS (Decision 50, see 5.4).
 - Exercise 5 drops the `wipefs -n` dry runs, a flag no slide teaches, and checks
   the result with `lsblk` instead (Decision 24). It removes `/data` at the end
   (Decision 23).
-- Exercise 6's source runs `pvs` without a `clear` before the next header; the
-  rewrite clears.
-- Exercise 7 gains a "Clean up" section (Decision 23), and its swap line uses
-  `swap` as the mount point (Decision 20).
-- **`lvcreate` stops to ask.** After exercise 5, `srv_vol` starts on the same
-  sectors `lv_data` used, where the old ext4 signature still sits. Verified on
-  the same layout: `lvcreate` prints "WARNING: ext4 signature detected on
-  /dev/vg01/swap01 at offset 1080. Wipe it? [y/n]:" and, on `y`, "Wiping ext4
-  signature on /dev/vg01/swap01." before "Logical volume ... created." With no
-  terminal on standard input it answers `[n]` itself and aborts ("Failed to
-  wipe start of new LV."), exit 5. `kitty-demo` types into a terminal, so the
-  command file answers `y` on its own line, and the written exercise explains
-  the question.
+- Exercises 6 to 8 are written fresh to the instructor's design (Decision 45),
+  so the source's `pvs` without a `clear` and its missing cleanup no longer
+  apply. Their swap lines use `swap` as the mount point (Decision 20).
+- **`lvcreate` stops to ask, twice in exercise 6.** Teardown leaves old file
+  system signatures on the sectors, and `lvcreate` checks the start of each
+  new LV. After exercise 5, `lv_swap` starts where `lv_data` began, on its XFS
+  superblock, and `lv_records` starts at the beginning of `sdc1`, where
+  `lv_data`'s XFS kept a copy of its superblock after growing onto that disk
+  (verified: `lv_records` is allocated from `/dev/sdc1(0)` first). Each
+  prints "WARNING: xfs signature detected on /dev/vg_storage/... at offset 0.
+  Wipe it? [y/n]:" and, on `y`, "Wiping xfs signature on ...". With no
+  terminal on standard input `lvcreate` answers `[n]` itself and aborts
+  ("Failed to wipe start of new LV."), exit 5. `kitty-demo` types into a
+  terminal, so the command file answers `y` on its own line after each, and
+  the written exercise explains both questions. With ext4 in exercises 3 and
+  4, only `lv_swap` asked.
 
 The written exercises have students look up their disk names with `lsblk`
 before the first `parted`, per `docs/course-authoring.md`, even though the SCC
@@ -1770,15 +1536,14 @@ Proposed, each one cuttable:
    section's intro.
 4. **`ls -l` and the stable-path line on 4.5** (Decision 16).
 5. **`pvcreate /dev/sdc1` on 3.6** (Decision 15).
-6. **Real output on 5.3 and 6.6**, and optionally 5.2 and 7.2 (Decision 14).
+6. **Real output on 5.3 and 6.6**, and optionally 5.2 (Decision 14).
 7. **Recording slides for all eight exercises.** The Slidev deck has none; the
    ODP had GIFs for its two.
 8. **The spanning caution in exercise 6's written version** (Decision 27).
-9. **Exercise 7's cleanup and exercise 5's `rmdir /data`** (Decision 23), so
-   the chain ends where the week started.
-10. **Exercise 5a, Create Swap Space on a Logical Volume (slide 7.3)**,
-    requested by the instructor on 2026-10-24 so fragment 7 ends with an
-    exercise (Decision 30).
+9. **Exercise 8, Remove LVM Storage, and exercise 5's `rmdir /data`**
+   (Decisions 23 and 45), so the chain ends where the week started.
+10. ~~**Exercise 5a, Create Swap Space on a Logical Volume (slide 7.3)**~~,
+    dropped 2026-10-26 with fragment 7 (Decision 45).
 
 ## Corrections
 
@@ -1833,20 +1598,17 @@ To verify on the lab where marked; the rest are typos and logic.
 ## Fitting the class period
 
 Rough costs, not measured: about 45 slides at a minute or so each; exercises 2
-and 5 about 3 to 5 minutes, exercises 1 and 3 about 6, exercises 4, 5a, 6, and
-7 about 8 to 10 each, with 1 to 2 minutes for exercise 7's reboot. That is a
-little over two hours, inside the 2.5-hour class, with less margin than it
-looks once questions start.
+and 5 about 3 to 5 minutes, exercises 1 and 3 about 6, exercises 4, 6, and 7
+about 8 to 10 each, and exercise 8 about 5. That is a little over two hours,
+inside the 2.5-hour class, with less margin than it looks once questions start.
 
 Decided by the instructor on 2026-10-24: cut nothing until the slides and
 exercises are built, as with w10. Candidates then, with what each loses:
 
 - **Run exercise 5 as a demonstration.** Loses hands-on teardown, which is also
   what students need to recover their own VM.
-- **Drop exercise 7's reboot.** Loses the proof that `/etc/fstab` works, which
-  w10's swap exercise already gave once.
 - **Assign the Practice exercises as homework.** Loses the in-class run of the
-  two exercises closest to the graded lab.
+  three exercises closest to the graded lab.
 
 ## Verification
 
@@ -1997,7 +1759,8 @@ Still to verify during the build:
 
 - `vgremove` answered `y` while an LV is mounted.
 - `xfs_growfs` output, for 5.2 if Decision 14 takes it.
-- Whether exercise 6 prints the devices-file warning after exercise 5.
+- ~~Whether exercise 6 prints the devices-file warning after exercise 5.~~ It
+  does not (step 10 of the exercise chain).
 - What a leftover `/etc/fstab` entry for a removed LV does at boot (6.5). This
   needs a reboot with a deliberately bad entry; only with the instructor's
   agreement, and restored in the same session.
@@ -2022,7 +1785,7 @@ restored:
 5. `lvcreate --name lv01 --size 100M vg01` (4.3), `ls -l` on both paths (4.5),
    `lvs` and `lvdisplay` (4.6)
 6. `mkfs.ext4`, a temporary mount on `/data`, `dd` until full (5.3)
-7. Optional outputs for 5.2 and 7.2 if Decision 14 takes them
+7. Optional outputs for 5.2 if Decision 14 takes them
 8. `umount` and `lvremove` (6.2), `vgremove` (6.3), `pvremove /dev/sdb1`
    (6.4), the other two PVs, `wipefs --all /dev/sdb` (6.6), then `sdc`
 
@@ -2100,12 +1863,79 @@ baseline:
    /dev/sdb1 /dev/sdc1`; `wipefs --all` on both disks (GPT at both ends and
    the PMBR); `lsblk` showed no partitions.
 
-**`servera` is now at the end of exercise 5**, which is the week's starting
-state for the disks and `/etc/fstab`: `sdb`, `sdc`, and `sdd` blank with no
-signatures, `/etc/fstab` at the baseline hash, no `/data`, and only
+9. A side test for fragment 8, on `sdd` (`sdd1` for the slides' `sdb1`,
+   `sdd2` for `sdc1`), copied and restored as in step 3: 4.8 end to end with
+   step 7 (a 200 MiB `swap01` beside the 300 MiB `lv01` in the 508 MiB `vg01`,
+   its `/etc/fstab` line, `swapon -a`, `findmnt --verify` clean); 5.2 with the
+   swap step (`swapoff`, `lvextend +100M`, `mkswap` warning "wiping old swap
+   signature" and writing a new UUID, 760963b3… to 8be52509…, `swapon`); and
+   6.5 (`swapoff`, `umount`, both lines out, `lvremove` of both LVs asking
+   once per LV, `vgremove`, `pvremove`, `wipefs --all`). `swap01`'s
+   `lvcreate` asked about an XFS signature left on `sdd` by the fragment 5
+   side test; a student's `sdd` has none. Both hashes and all three listings
+   matched afterwards, and `sdd` was blank.
+10. Exercise 6, as its command file runs it, with the `vim` lines typed
+    through a terminal: one partition per disk from `1MiB` to `100%`;
+    `pvcreate` without the devices-file warning Decision 29 expected;
+    `vg_storage` at 9.99g; `lv_swap`'s `lvcreate` asked about `lv_data`'s
+    ext4 signature and wiped it on `y`, and `lv_records` (8.99g) did not ask;
+    `mkfs.xfs`; both `/etc/fstab` lines; `/records` mounted (9.0G in `df`),
+    swap on as `/dev/dm-2`; `findmnt --verify` clean.
+11. Exercise 7: `sdd1` added (14.99g, 5.00g free); swap off, `lvextend --size
+    +1G` (256 to 512 extents), `mkswap` with its warning, swap on at 2G;
+    `lvextend --resizefs --extents +100%FREE` grew `lv_records` to 12.99g and
+    XFS with it (13G in `df`); `findmnt --verify` clean.
+12. Exercise 8: swap off, `/records` unmounted; `/vg_storage`, `dd` twice,
+    `:wq` removed exactly the two lines, and `/etc/fstab` matched the
+    baseline hash; `rmdir /records`; `lvremove` of both LVs (asking about
+    `lv_swap` first); `vgremove`; `pvremove` of all three; one `wipefs --all`
+    for the three disks; `lsblk` showed three blank disks.
+
+**`servera` is now at the end of exercise 8, the week's starting state** for
+the disks and `/etc/fstab`: `sdb`, `sdc`, and `sdd` blank with no signatures,
+`/etc/fstab` at the baseline hash, no `/data` or `/records`, and only
 `rhel_servera`. LVM's own records differ, as Decision 29 expects:
-`system.devices` keeps entries for `sdb1` and `sdc1` with `PVID=.`. Exercise
-5a, on `sdd`, runs from here.
+`system.devices` keeps entries for `sdb1`, `sdc1`, and `sdd1` with `PVID=.`.
+The whole chain has run once in order; reset to the snapshot before the live
+pass and again before the recording pass (Decision 29).
+
+**The XFS rerun, 2026-10-26** (Decision 49). `servera` was reverted to its
+snapshot, the baseline confirmed (the original devices-file hash, blank disks,
+the baseline `/etc/fstab`), and exercises 1 to 8 run in order as their final
+command files do, with the `parted` sessions, `vim` edits, and prompt answers
+typed through a terminal:
+
+1. Exercise 1: `parted print` shows `pv1` from 1049kB to 538MB with the `lvm`
+   flag; `pvs` and `pvdisplay` show 512.00m.
+2. Exercise 2: `vg_data` 508.00m, 127 extents of 4.00 MiB; `pvdisplay` in the
+   VG reports 4.00 MiB not usable.
+3. Exercise 3: `lv_data` 508.00m without a question; `mkfs.xfs` (4 groups of
+   32512 blocks, a 16384-block log); `df` 444M with 410M available;
+   `lvdisplay` 127 LEs.
+4. Exercise 4, in its final form (Decision 50, run again from the snapshot
+   the same day): `dd ... bs=4k` stopped at 410 MiB; `df` 100% with 28K
+   available; the `echo` failed with "-bash: /data/testfile: No space left on
+   device", and repeating the fill and the `echo` three more times gave the
+   same; `sdc1` from `1MiB` to `513MiB`; `vg_data` 1016.00m with 508.00m
+   free; `lvextend +200M` from 127 to 177 extents (708.00 MiB); `xfs_growfs
+   /data`; `df` 644M with 197M available; the `echo` succeeded and `cat`
+   printed `test`. Earlier runs with `bs=1M` left 820K, where the `echo`
+   succeeded and a 1 MiB `dd` failed.
+5. Exercise 5: as before; `/etc/fstab` back to the baseline hash.
+6. Exercise 6: `lv_swap` and `lv_records` each asked about an XFS signature at
+   offset 0 and wiped it on `y`; `lv_records` came from `/dev/sdc1(0)` then
+   `/dev/sdb1(256)`. A first run stopped there, since the script answered only
+   the first; a read-only scan then found `lv_data`'s XFS superblock copies at
+   MiB 129, 256, and 383 of `sdb` and 2 and 129 of `sdc`, the second at the
+   start of `sdc1`'s data. Everything else as before.
+7. Exercises 7 and 8: as before; at the end `/etc/fstab` matched the baseline
+   hash and the three disks were blank.
+
+The snapshot restores the data disks as well as the system disk: `sdd`'s
+leftover XFS copies from the fragment 5 side test were gone after the revert.
+So the reset between the live and recording passes starts both from the same
+disks. `servera` is at the end of exercise 8, the week's starting state for
+the disks and `/etc/fstab`.
 
 ## Authoring notes
 
@@ -2183,7 +2013,9 @@ All proposed on 2026-10-24 and waiting on the instructor. Each is reversible.
    3.19 canvas pixels past the cover's content box; seven pass
    `check:slides`. The week page's agenda comes from the topics, so it still
    lists fragment 8.
-6. **VM reminder** "Start `workstation` and `servera` on your VDI".
+6. **VM reminder** "Start `workstation` and `servera` on your VDI". Since
+   2026-10-26, "Start `servera` on your VDI": nothing this week uses
+   `workstation` (the instructor).
 7. **Combine the two decks**: Slidev sequence, commands, and exercises; ODP
    concept slides 1.3a, 1.3b, and 5.1a and O3's diagram details. The ODP's two
    exercises are not ported.
@@ -2207,7 +2039,8 @@ All proposed on 2026-10-24 and waiting on the instructor. Each is reversible.
     side test.
 14. **Real output where the output is the point**: 5.3 (`dd` hitting a full
     disk) and 6.6 (`wipefs` listing what it erased). Optional: states 2 to 4
-    of 5.2 (`lvextend`, `resize2fs`) and the `swapon --show` states of 7.2.
+    of 5.2 (`lvextend`, `resize2fs`) and the `swapon --show` states of 7.2 (7.2
+    was dropped with fragment 7, Decision 45).
 15. **3.6 shows `pvcreate /dev/sdc1`** before `vgextend`.
 16. **4.5 gains `ls -l` on both paths** and the line that an LV path is stable
     enough for `/etc/fstab`. Built on 2026-10-25, for review.
@@ -2217,9 +2050,12 @@ All proposed on 2026-10-24 and waiting on the instructor. Each is reversible.
 18. **6.3's note is reworded to match the lab**: `vgremove` asks before
     removing a VG that still holds LVs, and removes them too.
 19. **The slide's swap LV is `swap01` at 512 MiB**, a generic name that fits
-    the slide chain's `vg01`; the exercise keeps `swap_vol` at 1 GiB.
+    the slide chain's `vg01`; the exercise keeps `swap_vol` at 1 GiB. 7.2 was
+    dropped (Decision 45); 4.8's proposed swap step uses `swap01` (Decision
+    47), and the exercises `lv_swap` (Decision 46).
 20. **Swap lines use `swap` as the mount point**, as in w10 (Decision 32
-    there), on 7.2 and in exercise 7.
+    there), on 7.2 and in exercise 7. Since Decision 45, on 4.8's swap step
+    and in exercises 6 and 7.
 21. **`/data` stays the mount point** on 4.8 and in exercises 3 to 5, as in the
     source, although w10 used `/data` for slides and `/records` for exercises.
     The alternative is a different slide mount point, such as `/mnt/lv01`.
@@ -2228,13 +2064,17 @@ All proposed on 2026-10-24 and waiting on the instructor. Each is reversible.
     extents, so only the stated size changes. RH134's own guided exercise
     uses `1MiB` to `257MiB`. Applied in exercise 1's files on 2026-10-25; the
     instructor can still switch to the alternative.
+    Since Decision 49, the partitions are 512 MiB and end at `513MiB`, the
+    same pattern.
 23. **The chain ends where it started**: exercise 5 removes `/data`, and
     exercise 7 gains a cleanup that restores blank disks and the original
-    `/etc/fstab`.
+    `/etc/fstab`. Since Decision 45, exercise 8 is that cleanup, and it
+    removes `/records`.
 24. **Exercise 5 drops the `wipefs -n` dry runs.** The alternative is to teach
     `-n` on 6.6.
 25. **Exercise 4 grows ext4 with `resize2fs`**, as its command file does, and
-    the slide's step 5 says ext4.
+    the slide's step 5 says ext4. Reversed by Decision 49: exercise 4 grows
+    XFS with `xfs_growfs /data`, as the source's slide said.
 26. **Every fragment aligns to RH134 chapter 11 and cert guide chapter 15.**
 27. **Exercise 6's written version warns** that a spanning LV without
     redundancy is lost when either disk fails.
@@ -2247,6 +2087,8 @@ Added on 2026-10-24 from the lab checks:
     `echo`, as the source command file does; it reads `100%` either way, so a
     student whose volume came out a different size still sees that it is full.
     A smaller block size was tested and changes nothing.
+    Superseded by Decisions 49 and 50: on XFS the `echo` succeeds after a
+    `bs=1M` fill, so the fill uses `bs=4k` (see 5.4).
 29. **The exercises leave LVM's own records alone.** Clearing the stale
     devices-file entries needs `lvmdevices`, which no slide teaches, and the
     metadata archives are harmless. The written exercise 6 explains the
@@ -2262,6 +2104,7 @@ Added on 2026-10-24 from the instructor's answers:
     it on `sdb` after exercise 5, which would make `lvcreate` ask about
     `lv_data`'s old signature here, and 8.2's ask about this exercise's swap
     signature instead of the ext4 one.
+    Dropped 2026-10-26 with fragment 7 (Decision 45).
 
 31. **A color key for the three layers**, used in text and diagrams all week:
     PV blue, VG teal, LV slate. Chosen by the instructor on 2026-10-24; pink
@@ -2366,17 +2209,67 @@ Decided by the instructor on 2026-10-25:
 Decided by the instructor on 2026-10-25, following Decision 43:
 
 44. **The procedures are trimmed to steps and commands when fragment 8 is
-    built.** Accepted 2026-10-25. Each keeps its step headings and fences, and only the words a
-    reader needs to choose a command: 5.2's "Skip steps 1 and 2 if the VG
-    already has enough free extents" and its XFS and ext4 labels. Dropped,
-    since the concept slides teach them: 4.8's two callouts (`udevadm settle`,
-    the XFS minimum), 5.2's "Adds capacity", "No impact", and "Adds 100 MiB"
-    bullets and its `--resizefs` sentence, and 6.5's bullets. 6.5 keeps its
+    built.** Accepted 2026-10-25. Each keeps its step headings and fences, and
+    only the words a reader needs to choose a command: 5.2's "Skip steps 1 and 2
+    if the VG already has enough free extents" and its XFS and ext4 labels.
+    Dropped, since the concept slides teach them: 4.8's two callouts (`udevadm
+    settle`, the XFS minimum), 5.2's "Adds capacity", "No impact", and "Adds 100
+    MiB" bullets and its `--resizefs` sentence, and 6.5's bullets. 6.5 keeps its
     teardown-order line, which is the procedure's shape. All three share one
-    layout, `vertical: start`, so the step headings sit at the same height as
-    a reader clicks through (5.2 lost it on 2026-10-25). Lost: the reasons
-    beside each step, which a student reviewing alone finds on the concept
-    slides instead.
+    layout, `vertical: start`, so the step headings sit at the same height as a
+    reader clicks through (5.2 lost it on 2026-10-25). Lost: the reasons beside
+    each step, which a student reviewing alone finds on the concept slides
+    instead.
+
+Decided by the instructor on 2026-10-26:
+
+45. **No swap fragment; the practice fragment holds three exercises.** Fragment
+    7 and exercise 5a are dropped: the fragment mostly repeated w10, and the
+    practice now covers swap on an LV. Exercise 6 creates LVM on the two blank
+    disks with `/records` and a swap LV, both mounted; exercise 7 adds the
+    third disk and extends both; exercise 8 removes it all, back to three blank
+    disks. The deck drops to seven fragments and 57 slides; the exercises stay
+    at eight. The cover's "Swap Space on Logical Volumes" line is removed.
+
+Decided by the instructor on 2026-10-26, following Decision 45:
+
+46. **Exercise details.** Accepted 2026-10-26. Titles "Create LVM Storage", "Extend LVM Storage",
+    and "Remove LVM Storage". Names `vg_storage`, `lv_records`, and
+    `lv_swap`. Each disk gets one `lvm` partition from `1MiB` to `100%`.
+    Exercise 6 makes `lv_swap` 1 GiB first and `lv_records` from the rest
+    (`--extents 100%FREE`), XFS on `/records`, both in `/etc/fstab` by LV path,
+    the swap line with `defaults` and no priority. Exercise 7 grows `lv_swap`
+    by 1 GiB (swap off, `lvextend`, `mkswap`, swap on) and `lv_records` by
+    `--extents +100%FREE` with `--resizefs`, which adds a third row to 5.2a's
+    table. No reboot; the persistent lines are checked with `systemctl
+    daemon-reload`, `mount /records`, and `swapon -a`, as in exercise 3.
+    Alternatives: fixed sizes in place of `100%FREE`, a swap priority, or a
+    reboot at the end of exercise 6.
+47. **The reference procedures gain the swap steps** (accepted 2026-10-26): 4.8 a last step, "Create
+    swap space on an LV", from source L36; 5.2 a step, "Extend a swap LV",
+    from RH134 chapter 11; 6.5's first step a `swapoff`. No other slide
+    teaches swap on an LV now. The alternative is a fourth reference slide,
+    "Procedure: Swap Space on an LV", with create, extend, and remove states.
+48. **Each procedure sits right before its exercise** in fragment 8 (4.8 then
+    exercise 6, 5.2 then 7, 6.5 then 8). Accepted 2026-10-26. The cover agenda
+    now has six lines, so "LVM Practice" would fit again; the instructor keeps
+    it off the cover.
+49. **XFS for every exercise and the create procedure.** It is RHEL's
+    recommended and default file system; w10 already showed ext4. Exercises 1
+    and 4 make 512 MiB partitions (`1MiB` to `513MiB`), so exercise 3's
+    `lv_data` (508 MiB) clears XFS's 300 MB minimum; exercise 3 runs
+    `mkfs.xfs`, exercise 4 `xfs_growfs /data`, and 4.8 and 6.1a write `xfs`
+    lines. The concept slide 5.2b and procedure 5.2 keep `resize2fs` beside
+    `xfs_growfs`, since students will meet ext4. Two consequences, verified:
+    exercise 4's fill needs `bs=4k` for the `echo` to fail (Decision 50), and
+    exercise 6 meets two "Wipe it?" questions instead of one. The instructor,
+    2026-10-26, with the VM reminder reduced to `servera` (Decision 6).
+50. **Exercise 4 fills with `bs=4k` and keeps the `echo`.** After a `bs=1M`
+    fill, XFS has about 820K left and a 5-byte `echo` succeeds; a 4 KiB fill
+    leaves 28K, and the `echo` fails with "-bash: /data/testfile: No space
+    left on device" (four times in four tries on `lv_data`). The `echo` lands
+    harder than a second `dd` (the instructor, 2026-10-26). 5.3's transcript
+    was recaptured with `bs=4k` on XFS so the slide matches.
 
 ## Open questions
 
@@ -2387,8 +2280,8 @@ Decided by the instructor on 2026-10-25, following Decision 43:
    as in w10.
 3. ~~**Swap without an exercise.**~~ Answered 2026-10-24: fragment 7 gets an
    exercise of its own, even though 8.3 mostly repeats it; the Practice
-   exercises repeat earlier work on purpose. See 7.3 and Decision 30, whose
-   design waits on the instructor.
+   exercises repeat earlier work on purpose. Superseded 2026-10-26: fragment 7
+   and exercise 5a were dropped (Decision 45).
 4. ~~**Exercise 2.**~~ Answered 2026-10-24: keep it separate. The instructor
    wants no more than about ten content slides between exercises; section,
    title, reminder, and exercise slides do not count. This plan's longest run
@@ -2404,12 +2297,12 @@ Decided by the instructor on 2026-10-25, following Decision 43:
 
 ## Status
 
-As of 2026-10-25.
+As of 2026-10-26.
 
 **Done:**
 
 - This plan, and `course/w11-draft.md` with the cover, the VM reminder, and
-  the imports for fragments 1 to 6.
+  the imports for fragments 1 to 6 and 8.
 - Fragment 1, `logical-volume-manager.md`, five slides built and checked,
   including the commands table (1.3a) and the animation that follows it
   (1.3b).
@@ -2430,20 +2323,27 @@ As of 2026-10-25.
   recording slide waits on the cast), and exercise 5's command file and
   written version. Its procedure slide, 6.5, moved to fragment 8 (Decision
   41).
+- Fragment 8, `lvm-practice.md`, seven slides built and checked (the three
+  recording slides wait on the casts): the three procedures, trimmed and given
+  the swap steps, each before its exercise, and exercises 6 to 8's command
+  files and written versions.
 - The week's color key (Decision 31) and `AccentText`'s `hue` prop in the
   theme, with its test, gallery line, and documentation.
-- The lab checks behind every correction, under "Verification". `servera` is
-  at the end of exercise 5 ("The exercise chain").
+- The lab checks behind every correction, under "Verification". The whole
+  exercise chain has run in order from the snapshot with XFS throughout
+  (Decision 49), and `servera` is back at the week's starting state ("The
+  exercise chain").
 
 **Next, in order:**
 
-1. The instructor reviews exercise 5's files.
-2. Exercise 5a's design (Decision 30), then fragment 7, `lvm-swap-space.md`,
-   with exercise 5a's files built alongside its slides and run on `servera`
-   from exercise 5's end state.
-3. Open decisions: everything not marked accepted, including Decision 30
-   (exercise 5a's design).
-4. Before the recordings: the SCC volume group name (Open question 6).
+1. The instructor reviews the XFS changes (Decision 49), fragment 8, and
+   exercises 6 to 8.
+2. The image pass: replace 1.2's placeholder (Decision 10, Open question 5).
+3. Before the recordings: the SCC volume group name (Open question 6), the
+   snapshot reset (Decision 29), a read-only check that the lab is at the
+   week's start, and `kitty-demo --check` on all eight command files.
+4. The recordings, in order, then the recording slides 2.5a to 8.4a.
+5. Publication, per the porting skill.
 
 **On another machine:**
 

@@ -106,10 +106,11 @@ root@servera:~# lvextend --size +100M /dev/vg01/lv01
 
 A `+` adds to the current size
 
-| Option                      | Meaning                         |
-| --------------------------- | ------------------------------- |
-| `-L +500M` / `--size +500M` | Add 500 MiB to the current size |
-| `-l +50` / `--extents +50`  | Add 50 LEs to the current size  |
+| Option                                 | Meaning                         |
+| -------------------------------------- | ------------------------------- |
+| `-L +500M` / `--size +500M`            | Add 500 MiB to the current size |
+| `-l +50` / `--extents +50`             | Add 50 LEs to the current size  |
+| `-l +100%FREE` / `--extents +100%FREE` | Add every free extent in the <AccentText hue="teal">VG</AccentText> |
 
 ---
 layout: two-cols-header
@@ -158,11 +159,11 @@ lvextend --resizefs --size +100M /dev/vg01/lv01
 <TerminalWindow title="root@servera:~">
 
 ```bash-session
-root@servera:~# dd if=/dev/zero of=/data/bigfile bs=1M
+root@servera:~# dd if=/dev/zero of=/data/bigfile bs=4k
 dd: error writing '/data/bigfile': No space left on device
-87+0 records in
-86+0 records out
-90386432 bytes (90 MB, 86 MiB) copied, 0.162833 s, 555 MB/s
+55334+0 records in
+55333+0 records out
+226643968 bytes (227 MB, 216 MiB) copied, 0.116624 s, 1.9 GB/s
 ```
 
 </TerminalWindow>
@@ -193,7 +194,7 @@ Grow a full <AccentText hue="slate">logical volume</AccentText> without unmounti
 
 1. Fill `lv_data` completely
 2. Confirm that further writes fail with "No space left on device"
-3. Add a 256 MiB `lvm` partition on `/dev/sdc` to `vg_data` without unmounting `/data`
+3. Add a 512 MiB `lvm` partition on `/dev/sdc` to `vg_data` without unmounting `/data`
 4. Extend `lv_data` by 200 MiB
-5. Grow the ext4 file system
+5. Grow the XFS file system
 6. Confirm that writes to `/data` succeed again

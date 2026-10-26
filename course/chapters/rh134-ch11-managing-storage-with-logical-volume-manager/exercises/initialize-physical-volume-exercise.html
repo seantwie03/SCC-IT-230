@@ -497,7 +497,7 @@
                 <section class="overview" aria-labelledby="overview-heading">
                     <h2 id="overview-heading">Task</h2>
                     <p>
-                        Create a 256 MiB partition on the blank disk
+                        Create a 512 MiB partition on the blank disk
                         <code>/dev/sdb</code> on <code>servera</code>, flag it
                         for LVM, and initialize it as a
                         <span class="hue-blue">physical volume</span>. The next
@@ -521,7 +521,7 @@
                 <ol class="steps">
                     <li class="step">
                         <h2>
-                            Create a 256 MiB GPT partition with the lvm flag on
+                            Create a 512 MiB GPT partition with the lvm flag on
                             /dev/sdb
                         </h2>
                         <pre><code>sudo -i
@@ -548,7 +548,7 @@ New disk label type? gpt
 Partition name?  []? pv1
 File system type?  [ext2]?
 Start? 1MiB
-End? 257MiB
+End? 513MiB
 (parted) set
 Partition number? 1
 Flag to Invert? lvm
@@ -557,8 +557,10 @@ New state?  [on]/off? on
 (parted) quit
 udevadm settle</code></pre>
                         <p>
-                            The partition starts at 1 MiB, so ending it at 257
-                            MiB makes it exactly 256 MiB.
+                            The partition starts at 1 MiB, so ending it at 513
+                            MiB makes it exactly 512 MiB, room enough for the
+                            XFS file system a later exercise puts on it, since
+                            XFS needs more than 300 MB.
                             <code>print</code> lists partition 1 named
                             <code>pv1</code> with the <code>lvm</code> flag. It
                             also shows <code>ext2</code> in the File system
@@ -597,11 +599,11 @@ udevadm settle</code></pre>
 pvdisplay /dev/sdb1</code></pre>
                         <p>
                             <code>pvs</code> lists <code>/dev/sdb1</code> at
-                            <code>256.00m</code> with an empty VG column, beside
+                            <code>512.00m</code> with an empty VG column, beside
                             the system's own <code>/dev/sda3</code>.
                             <code>pvdisplay</code> calls it a new
                             <span class="hue-blue">physical volume</span> of
-                            256.00 MiB, with no
+                            512.00 MiB, with no
                             <span class="hue-teal">volume group</span>, not yet
                             allocatable, and no physical extents. It gets its
                             extents when it joins a

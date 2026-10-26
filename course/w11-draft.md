@@ -26,13 +26,12 @@ Week 11
 - Logical Volumes
 - Extending LVM
 - Removing LVM
-- Swap Space on Logical Volumes
 
 ---
 layout: section
 ---
 
-Start `workstation` and `servera` on your VDI
+Start `servera` on your VDI
 
 ---
 src: ./chapters/rh134-ch11-managing-storage-with-logical-volume-manager/logical-volume-manager.md
@@ -56,4 +55,8 @@ src: ./chapters/rh134-ch11-managing-storage-with-logical-volume-manager/extendin
 
 ---
 src: ./chapters/rh134-ch11-managing-storage-with-logical-volume-manager/removing-lvm.md
+---
+
+---
+src: ./chapters/rh134-ch11-managing-storage-with-logical-volume-manager/lvm-practice.md
 ---
