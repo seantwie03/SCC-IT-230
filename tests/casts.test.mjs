@@ -138,6 +138,41 @@ test("local shell identity that survives trimming is reported", () => {
     assert.equal(result.identity.length, 1);
 });
 
+test("Neovim's whitespace dots become spaces on the alternate screen", () => {
+    const result = processCast(
+        cast(
+            [0.01, "o", "preamble"],
+            [0.01, "o", BORDER],
+            [0.01, "o", "    1. Do a thing"],
+            [0.01, "o", BORDER],
+            [1, "o", "date +%H·%M"],
+            // The switch is split across events, as coalesced writes can be.
+            [1, "o", "\u001b[?10"],
+            [1, "o", "49h\u001b[38;5;248m·\u001b[0m\u001b[2;10Hecho·hi"],
+            [1, "o", "\u001b[?1049l"],
+            [1, "o", "12·30"],
+            [1, "o", "# End"],
+        ),
+    );
+    assert.deepEqual(result.problems, []);
+    assert.equal(result.clearedDots, 2);
+    const output = result.text
+        .split("\n")
+        .slice(1)
+        .filter(Boolean)
+        .map((line) => JSON.parse(line))
+        .filter((event) => event[1] === "o")
+        .map((event) => event[2]);
+    assert.ok(
+        output.includes("49h\u001b[38;5;248m \u001b[0m\u001b[2;10Hecho hi"),
+    );
+    assert.ok(
+        output.includes("date +%H·%M") && output.includes("12·30"),
+        "a dot in ordinary command output is content and must survive",
+    );
+    assert.equal(processCast(result.text).text, result.text);
+});
+
 test("a malformed event stream is refused", () => {
     for (const [name, source] of [
         ["not a header", ["oops", '[1,"o","x"]', ""].join("\n")],

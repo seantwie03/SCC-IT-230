@@ -5,8 +5,9 @@
  * local machine, changes font size, and connects to a lab host before the
  * first section header is drawn, and it ends with a sentinel that is presenter
  * scaffolding rather than course content. This script removes both ends,
- * turns each section header into a navigable marker, and refuses to publish a
- * recording that still carries local shell identity.
+ * turns each section header into a navigable marker, replaces the dots Neovim
+ * draws for whitespace with real spaces so copied text pastes cleanly, and
+ * refuses to publish a recording that still carries local shell identity.
  *
  * It is idempotent: existing markers are replaced rather than duplicated, and
  * a recording that is already trimmed is left alone.
@@ -80,6 +81,8 @@ for (const target of targets) {
         result.trimmedLeading > 0 && `trimmed ${result.trimmedLeading} leading`,
         result.trimmedTrailing > 0 &&
             `trimmed ${result.trimmedTrailing} trailing`,
+        result.clearedDots > 0 &&
+            `cleared ${result.clearedDots} whitespace dot${result.clearedDots === 1 ? "" : "s"}`,
         `${result.markers} marker${result.markers === 1 ? "" : "s"}`,
         result.text === source && "unchanged",
     ].filter(Boolean);

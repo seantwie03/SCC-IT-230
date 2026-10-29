@@ -21,6 +21,17 @@ const IDENTITY = [
     ["systemd OSC context (carries machineid, user, hostname)", /\]3008;/],
 ];
 
+/**
+ * The lab's Neovim draws every space as a faint middle dot through its
+ * `listchars` setting. That helps live, but a student who copies a command out
+ * of the player gets the dots instead of spaces. Neovim, like every full-screen
+ * program, draws on the alternate screen, so only a dot drawn there is
+ * whitespace; one printed by an ordinary command is output and is left alone.
+ * The pattern matches a switch into (`h`) or out of (`l`) the alternate screen,
+ * or a middle dot.
+ */
+const SCREEN_OR_DOT = /\x1b\[\?1049([hl])|·/g;
+
 /** Select Graphic Rendition sequences, stripped before reading a label. */
 const ANSI = /\[[0-9;]*m/g;
 
@@ -128,6 +139,38 @@ function headerBlocks(events) {
     return blocks;
 }
 
+/**
+ * Replace each whitespace dot with the space it stands for.
+ *
+ * Like borders, a switch into the alternate screen can be split across
+ * events, so the dots are found in the joined stream. A space is one code
+ * unit, like the dot it replaces, so every span still locates its event's
+ * text afterwards.
+ */
+function clearWhitespaceDots(events) {
+    const { text, spans } = outputStream(events);
+    let alternate = false;
+    let cleared = 0;
+    const cleaned = text.replace(SCREEN_OR_DOT, (match, mode) => {
+        if (mode !== undefined) alternate = mode === "h";
+        else if (alternate) {
+            cleared++;
+            return " ";
+        }
+        return match;
+    });
+    if (cleared === 0) return { events, cleared };
+
+    const next = [...events];
+    for (const span of spans)
+        next[span.index] = [
+            events[span.index][0],
+            "o",
+            cleaned.slice(span.start, span.end),
+        ];
+    return { events: next, cleared };
+}
+
 export function processCast(source) {
     const { header, body } = parse(source);
     const warnings = [];
@@ -189,6 +232,9 @@ export function processCast(source) {
                 "demonstration cannot be located",
         );
 
+    const dots = clearWhitespaceDots(events);
+    events = dots.events;
+
     // Identity is judged on what would actually be published, so this runs
     // after trimming: the local prompt drawn on the way out of the session is
     // removed by the tail trim, while one drawn mid-exercise is not and must
@@ -223,6 +269,7 @@ export function processCast(source) {
         markers: closes.size,
         trimmedLeading,
         trimmedTrailing,
+        clearedDots: dots.cleared,
     };
 }
 

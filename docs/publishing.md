@@ -39,8 +39,8 @@ when judging how much a slide can still take. Run `--all` after changing a share
 because those changes can push content past the content box on any week.
 
 A new or re-made screen recording is processed before it is published, which
-trims it, marks its section boundaries, and refuses it if it still carries
-local shell identity:
+trims it, marks its section boundaries, replaces Neovim's whitespace dots with
+spaces, and refuses it if it still carries local shell identity:
 
 ```sh
 pnpm run casts -- course/chapters/<chapter>/exercises/<name>-exercise.cast

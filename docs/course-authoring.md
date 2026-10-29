@@ -515,8 +515,11 @@ depend on an external service.
 
 Process every new recording with `pnpm run casts -- <path>` before publishing.
 That trims the session down to the exercise, adds a marker per section header,
-and refuses recordings that still carry local shell identity. `pnpm check`
-asserts it has been done.
+and refuses recordings that still carry local shell identity. It also turns the
+middle dots Neovim draws for whitespace back into spaces, so text copied from
+the player pastes as typed; dots in ordinary command output are left alone,
+because only full-screen programs on the alternate screen are cleaned.
+`pnpm check` asserts it has been done.
 
 Use the exact visible link label `Written exercise`; the layout presents the
 resources slot as one compact segmented group. Keep any links adjacent in
@@ -668,8 +671,9 @@ ahead wastes a recording.
    runs. A failed attempt keeps the previous recording and names the partial
    file it retained, so a bad take never destroys a good one.
 5. **Process the cast** with `pnpm run casts -- <path>`, which trims the
-   preamble and sentinel, adds one marker per section header, and refuses a
-   recording that is not publishable.
+   preamble and sentinel, adds one marker per section header, replaces
+   Neovim's whitespace dots with spaces, and refuses a recording that is not
+   publishable.
 6. **Play the recording back and watch it.** The checks confirm structure, not
    pacing, and this is the only thing that confirms the recording is worth
    showing.
