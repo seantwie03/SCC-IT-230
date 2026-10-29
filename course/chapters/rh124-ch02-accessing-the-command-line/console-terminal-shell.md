@@ -19,7 +19,7 @@ horizontal: center
 
 ## Graphical console
 
-![A graphical login console showing a desktop environment.](./assets/graphical-console-rha.png)
+![A graphical login console showing a desktop environment.](../it230-course-introduction/assets/graphical-console-rha.png)
 
 `workstation`
 
@@ -27,7 +27,7 @@ horizontal: center
 
 ## Text console
 
-![A text-only login console showing a login prompt.](./assets/text-console-rha.png)
+![A text-only login console showing a login prompt.](../it230-course-introduction/assets/text-console-rha.png)
 
 `servera`, `serverb`, `serverc`
 
@@ -44,7 +44,7 @@ horizontal: center
 
 ### Terminal on a graphical console
 
-![A terminal emulator window open on a graphical desktop.](./assets/terminal-in-graphical-rha.png)
+![A terminal emulator window open on a graphical desktop.](../it230-course-introduction/assets/terminal-in-graphical-rha.png)
 
 The terminal is an application
 
@@ -52,7 +52,7 @@ The terminal is an application
 
 ### Terminal on a text console
 
-![A full-screen terminal session on a text console.](./assets/terminal-in-text-console-rha.png)
+![A full-screen terminal session on a text console.](../it230-course-introduction/assets/terminal-in-text-console-rha.png)
 
 Terminal and console are basically the same.
 
@@ -74,4 +74,4 @@ leftWidth: 45
 
 ::right::
 
-![A Bash shell prompt open in a terminal window.](./assets/shell-in-terminal-in-graphical-rha.png)
+![A Bash shell prompt open in a terminal window.](../it230-course-introduction/assets/shell-in-terminal-in-graphical-rha.png)

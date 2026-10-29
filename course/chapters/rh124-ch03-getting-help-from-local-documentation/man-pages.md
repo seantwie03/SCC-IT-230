@@ -1,11 +1,23 @@
 ---
 layout: section
+routeAlias: man-pages
+topicInfo:
+  alignments:
+    redHatAcademy:
+      - course: RH124
+        chapter: "03"
+        title: Getting Help from Local Documentation
+    rhcsaCertGuide:
+      - chapter: "02"
+        title: Using Essential Tools
+  exercises:
+    - title: Look Up a DNF Setting Exercise
+      source: ./exercises/look-up-a-dnf-setting-exercise.html
 ---
 
 # Man(ual) Pages
 
 ---
-listSpacing: padded
 ---
 
 # Manual (man) Pages
@@ -70,8 +82,7 @@ DESCRIPTION
 # SYNOPSIS
 
 ```
-SYNOPSIS
-       ls [OPTION]... [FILE]...
+ls [OPTION]... [FILE]...
 ```
 
 | Syntax             | Meaning                                             |
@@ -152,11 +163,47 @@ systemd.unit (5)     - Unit configuration
 | `N`                 | Repeat search in reverse (previous match)   |
 
 ---
+layout: exercise
 ---
 
-# Demo: Man Pages
+# Look Up a DNF Setting
 
-![Screen recording of the instructor opening, navigating, and searching man pages with less.](./assets/man_pages.gif)
+::goal::
+
+Use the local manual to find out what a DNF setting controls
+
+::environment::
+
+**Host:** `servera`
+
+::workflow::
+
+1. Search the manual for the DNF configuration page
+2. Open the page and find the file it documents
+3. Search the page for `installonly_limit`
+4. Compare the documented default with the file
+
+---
+layout: exercise
+variant: recording
+---
+
+<script setup>
+import castUrl from "./exercises/look-up-a-dnf-setting-exercise.cast?url";
+</script>
+
+# Look Up a DNF Setting
+
+::recording::
+
+<AsciinemaPlayer
+    :src="castUrl"
+    label="Screen recording of the instructor finding the dnf.conf page with man -k, paging through it in less, searching for installonly_limit to read that it defaults to 3, and confirming installonly_limit=3 in /etc/dnf/dnf.conf with cat."
+/>
+
+::resources::
+
+<a href="../resources/look-up-a-dnf-setting-exercise.html" target="_blank" rel="noopener noreferrer" aria-label="Read the written Look Up a DNF Setting exercise in a new tab">Written exercise</a>
 
 ---
 listSpacing: padded

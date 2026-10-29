@@ -1,5 +1,18 @@
 ---
 layout: section
+routeAlias: command-syntax
+topicInfo:
+  alignments:
+    redHatAcademy:
+      - course: RH124
+        chapter: "02"
+        title: Accessing the Command Line
+    rhcsaCertGuide:
+      - chapter: "02"
+        title: Using Essential Tools
+  exercises:
+    - title: Explore Files with ls Options Exercise
+      source: ./exercises/explore-files-with-ls-options-exercise.html
 ---
 
 # Command Syntax
@@ -128,15 +141,46 @@ total 0
 </TerminalWindow>
 
 ---
+layout: exercise
 ---
 
-# Demo: Command Syntax
+# Explore Files with ls Options
 
-<div class="mx-auto w-[620px]">
+::goal::
 
-![Screen recording of the instructor running ls with several short and long option combinations in a terminal.](./assets/command_syntax.gif)
+Use options and arguments to change what `ls` reports
 
-</div>
+::environment::
+
+**Host:** `servera`
+
+::workflow::
+
+1. Reveal the hidden files in your home directory
+2. List the files in `/var/log` by size, largest first
+3. List the files in `/var/log` by time, newest last
+
+---
+layout: exercise
+variant: recording
+---
+
+<script setup>
+import castUrl from "./exercises/explore-files-with-ls-options-exercise.cast?url";
+</script>
+
+# Explore Files with ls Options
+
+::recording::
+
+<AsciinemaPlayer
+    :src="castUrl"
+    label="Screen recording of the instructor running ls -l in an apparently empty home directory, revealing its hidden files with ls -la and ls -l --all, then listing /var/log sorted by size with --sort=size and by time with --sort time and --reverse."
+/>
+
+::resources::
+
+<a href="../resources/explore-files-with-ls-options-exercise.html" target="_blank" rel="noopener noreferrer" aria-label="Read the written Explore Files with ls Options exercise in a new tab">Written exercise</a>
 
 ---
 vertical: center
