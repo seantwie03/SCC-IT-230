@@ -34,10 +34,11 @@ Where things stand on 2026-10-31:
    long output lines wrapped once at a space as built.
 2. **Fragment 2 is complete** (`784ed53`), its recording slide waiting on the
    cast.
-3. **Fragment 3 is built**: all 8 slides, exercise 3's command file and
+3. **Fragment 3 is complete** (`f4ef2e1`).
+4. **Fragment 4 is built**: all 9 slides, exercise 4's command file and
    written version, and its import in the draft entry. It waits on your
    review.
-4. **The console steps are still unverified.** The GRUB2 menu and editor, the
+5. **The console steps are still unverified.** The GRUB2 menu and editor, the
    rescue and emergency shells, and the `init=/bin/bash` shell cannot be
    reached through `pnpm lab`. Open question 1 is deferred. Fragments 2 and
    3's shell claims rest on the unit files, RH134, and the instructor's
@@ -312,7 +313,8 @@ on 2026-10-29, when fragment 1 was built.
 **`grub-cmdline-edit.png` (R4), replace.** The same RHA editor screen in a
 rounded window frame on a blue gradient, with `init=/bin/bash` already typed
 at the end and marked with a yellow highlighter stroke. Same proposal as
-above. Placeholder until then.
+above. Copied in as `assets/grub-cmdline-edit.placeholder.png`, in the ch13
+topic, on 2026-10-31, when fragment 4 was built.
 
 **`emergency_mode.png` and `boot_stalled_incorrect_uuid.png`, unreferenced,
 instructor's own.** Crops of a console in the same window frame: the
@@ -876,10 +878,22 @@ since 3.3 teaches it and the exercise is where it can be seen. `check:slides`:
 
 Components: `exercise`.
 
-### 4. `recovering-superuser-access.md` (9 slides, proposed)
+### 4. `recovering-superuser-access.md` (9 slides), built 2026-10-31
 
-`routeAlias: recovering-superuser-access`. Alignments: RH134 chapter 13, cert
-guide chapter 18. Exercise: Recover Root Access Exercise.
+`routeAlias: recovering-superuser-access`. Alignments: RH134 chapter 13,
+*Recovering Superuser Access* (no other fragment aligns to it), and cert guide
+chapter 18. Exercise: Recover Root Access Exercise, declared in `topicInfo`.
+Deck slides 37 to 45, in the new chapter directory
+`course/chapters/rh134-ch13-recovering-superuser-access/`. Checked with
+`check:entry`, `check:exercises`, and `check:slides` (no overflow; clearances
+below), and every slide and click state was captured at 1920x1080. The
+`servera` facts behind it are from the Round 3 lab copy on 2026-10-31
+("Verification", Round 5). The entries below describe what shipped; the
+fragment waits on the instructor's review.
+
+RH134 for RHEL 10 teaches this same `init=/bin/bash` procedure, step for step,
+as its method without rescue media, so the source's sequence stands. W06's
+`selinux-file-policies.md` taught `restorecon`, which 4.7 leans on.
 
 ##### 4.1 Recovering Superuser Access
 
@@ -889,78 +903,123 @@ Components: `section`.
 
 ##### 4.2 When Root Access Is Lost
 
-Source R2. `init=/bin/bash` replaces systemd with bash as PID 1: no login, no
-password, root at once, root file system read-only. The closing line "cannot
-be done remotely" becomes "needs console access", which a remote console
-also gives. RH134's recommended method, rescue media, is under "Not ported".
+Source R2. "If the `root` password is unknown or locked, nobody can administer
+the system" and "`init=/bin/bash` on the kernel command line starts bash as
+PID 1 instead of systemd", over three facts: no login, no password; a root
+shell at once; `/` is mounted read-only. A `Callout`: "Needs the console,
+physical or remote, to reach the GRUB2 menu", in place of R2's "cannot be done
+remotely". A first build's captions ran to two lines, one breaking
+"read-only" at its hyphen. `check:slides`: 79.08px.
 
-Components: default layout, `Callout`.
+Components: default layout with `vertical: center`, `IconGrid` with Carbon
+`login`, `user-admin`, and `locked`, `Callout`.
 
 ##### 4.3 Aside: Locking an Account
 
-Source R3. `passwd -l root` puts `!` in front of the hash in `/etc/shadow`.
-Corrections, verified on a throwaway user: RHEL 10 hashes with yescrypt
-(`ENCRYPT_METHOD YESCRYPT`, hashes begin `$y$j9T$`), not the source's
-`$6$rounds=4096$`; `passwd -l` prints "passwd: password changed."; `passwd -S`
-reports `L`. The before and after lines keep the prefix and elide the rest of
-the hash. The claim that setting a new password removes the `!` is to verify.
+Source R3, corrected (Round 5). "`passwd -l` locks an account by putting `!` in
+front of its password hash", then a `TextExplainer` over six lines:
+`grep root /etc/shadow`, `root:$y$j9T$...::0:99999:7:::`, `passwd -l root`,
+`passwd: password changed.`, and the same `grep` showing
+`root:!$y$j9T$...::0:99999:7:::`. Two steps: the hash, "The hash of the
+password, shortened here"; the `!`, "No password can match a hash that starts
+with !". A `Callout` keeps R3's closing line, now verified: "Setting a new
+password with `passwd` writes a fresh hash without the `!`, which unlocks the
+account". The prompts are `root@servera:~#`, since this aside runs on a
+normal boot. R3's `$6$rounds=4096$` (SHA-512) is yescrypt's `$y$j9T$` on RHEL
+10, and the fields after the hash are the lab's own. The hash is shortened
+with `...` as the plan proposed; it is never printed in full here or in this
+plan. `check:slides`: 23.5px in both states.
 
-Components: two titled `text` fences (before and after) or a `TextExplainer`
-marking the `!`.
+Components: default layout, `TextExplainer`, `Callout`.
 
 ##### 4.4 Edit the GRUB2 Entry
 
-Source R4. Three click states: enter the editor; remove any `console=`
-options; append `init=/bin/bash` and press Ctrl+X. The SCC and instructor
-labs have no `console=` options (instructor lab verified; SCC to confirm), the
-RHA lab does, so the step stays as "if present". Editor per Decision 11.
+Source R4. `two-cols-header` with `leftWidth: 45`: three `v-switch` states on
+the left, R4's editor image on the right as
+`assets/grub-cmdline-edit.placeholder.png` (Decision 11; a RHA capture with
+kernel `6.12.0-55.12.1` and `init=/bin/bash` already appended). First:
+"**Step 1:** Open the GRUB2 editor" and the three steps as on 2.8. Second:
+"**Step 2:** Clean up the `linux` line", "Remove any `console=` options", and
+a warning `Callout`, "Left in place, they can open the shell on a console you
+cannot reach" (R4 and RH134). Third: "**Step 3:** Append `init=/bin/bash`",
+"Press <kbd>End</kbd>, then type a space and", a `text` fence of
+`init=/bin/bash`, and "Press <kbd>Ctrl</kbd>+<kbd>X</kbd> to boot". The lab's
+kernel line has no `console=` options (Round 5), so the step stays "if any".
+`check:slides`: 28.48px in each state.
 
-Components: `two-cols-header` or `v-switch` with the editor beside the steps.
+Components: `two-cols-header`, `v-switch` with three templates, ordered list
+with `<kbd>`, `Callout`, `text` fence, image.
 
 ##### 4.5 Remount Root Read/Write
 
-Source R5. `mount -o remount,rw /`, since `passwd` must write `/etc/shadow`;
-verify with `mount | grep ' / '`. Prompt per Decision 19.
+Source R5. "The kernel line's `ro` mounts `/` **read-only**, and systemd,
+which would remount it, never ran" (the `ro` is in `/proc/cmdline` and in
+1.5's `grubby --info` output), "`passwd` must write `/etc/shadow`, so remount
+first, at the `bash-5.2#` prompt", a `TerminalWindow` titled "servera console"
+holding a `bash` fence of `mount -o remount,rw /` (Decision 19), and "Verify
+with `mount | grep root`: look for `rw` in the options". R5 verified with
+`mount | grep ' / '`; `grep root` matches 3.3. `check:slides`: 52.33px.
 
-Components: per Decision 19.
+Components: `TerminalWindow` with a `bash` fence.
 
 ##### 4.6 Reset the Root Password
 
-Source R6. `passwd` with no argument changes root's password. Corrections:
-the typed password is never shown, so the source's "New password: redhat" is
-not what the screen shows; whether `passwd` first prints "Changing password
-for user root." and the exact `BAD PASSWORD` line for `redhat` are to verify
-(see "Verification", Round 1, for why I could not capture it over `pnpm
-lab`). The `Callout` keeps "short passwords are accepted with a warning when
-run as root".
+Source R6, corrected. "`passwd` with no argument changes the current user's
+password, and that user is `root`", then a "servera console" terminal holding
+a `text` fence: `bash-5.2# passwd`, `New password:`, `BAD PASSWORD: The
+password is shorter than 8 characters`, `Retype new password:`, `passwd:
+password updated successfully`. The four output lines are real (Round 5);
+R6's echoed `redhat` is gone, since nothing echoes, which the next line says:
+"Nothing echoes as you type the password". The `Callout` keeps R6's: "`root`
+gets a warning for a short password, but the change still goes through".
 
-Components: per Decision 19, `Callout`.
+Decision 19 asked for a `bash` fence; this slide uses `text`, because it holds
+output, and a `bash` fence would colour the prompts and messages as shell
+code. The prompt line is not a capture: the `init=/bin/bash` shell cannot be
+reached over SSH, and the output lines were captured from the same `passwd`
+on a normal boot. `check:slides`: 43.13px.
+
+Components: `TerminalWindow` with a `text` fence, `Callout`.
 
 ##### 4.7 Trigger SELinux Relabeling
 
-Source R7. `passwd` replaces `/etc/shadow` with a new file, and with SELinux
-not yet loaded the file gets no context; `touch /.autorelabel` relabels every
-file on the next boot. Ties back to w06.
+Source R7. "With no SELinux policy loaded, the new `/etc/shadow` from `passwd`
+gets **no label**" and "An unlabeled `/etc/shadow` blocks logins once SELinux
+enforces again" (both R7's, as RH134 states them), a "servera console"
+terminal with `touch /.autorelabel`, and "Next boot, systemd sees
+`/.autorelabel`, runs `restorecon` on every file, and reboots". That last line
+replaces R7's blockquote and is verified from the relabel generator and
+script (Round 5). The first build's two sentences each wrapped one word onto
+a second line. `check:slides`: 52.33px.
 
-Components: per Decision 19, `Callout`.
+Components: `TerminalWindow` with a `bash` fence.
 
 ##### 4.8 Hand Control to systemd
 
-Source R8. `exec /sbin/init` replaces bash with systemd, since `reboot` needs
-systemd and `exit` would leave the kernel without PID 1 (Cert Guide chapter
-18). The relabel and the automatic reboot that follows are to verify, with how
-long they take.
+Source R8. "`reboot` is `systemctl`, which needs systemd, and systemd is not
+running" (`/usr/sbin/reboot` links to `systemctl`, Round 5), "`exec` replaces
+bash with systemd as PID 1, and the boot carries on", a "servera console"
+terminal with `exec /sbin/init`, "The relabel runs, then the system reboots by
+itself into a normal boot", and a warning `Callout`, "Not `exit`: that ends PID
+1 and leaves the kernel without one" (Cert Guide chapter 18). How long the
+relabel takes is console-only and unmeasured. `check:slides`: 45.92px.
 
-Components: per Decision 19, `Callout`.
+Components: `TerminalWindow` with a `bash` fence, `Callout`.
 
 ##### 4.9 Exercise: Recover Root Access
 
-Source R9 and `recover_root_access.sh`. Host `servera`; prerequisite exercise
-Change Kernel Arguments (1.14). Workflow: lock `root` and confirm a console login fails; boot with
-`init=/bin/bash`; remount, reset the password, and schedule a relabel; hand
-control to systemd and wait for the relabel; log in as `root` at the console.
-The source's slide says the password "has been changed" and its command file
-locks the account; Decision 18 proposes the lock, which 4.3 teaches.
+Source R9 and `recover_root_access.sh`. Goal: "Lock `root` out of `servera`,
+then get back in by booting with `init=/bin/bash`". Environment: "**Host:**
+`servera`, with its VM console open" and "**Prerequisite exercise:** Change
+Kernel Arguments", which unhides the menu. Workflow: lock the `root` account
+and confirm a console login fails (Decision 18); boot once with
+`init=/bin/bash` added at the GRUB2 menu; remount the root file system
+read/write; reset the `root` password; schedule an SELinux relabel; hand
+control to systemd and wait for the relabel and reboot; log in as `root` at
+the console. R9's "The `root` password on `servera` has been changed" is
+dropped, since step 1 locks the account instead. Its steps named the tools
+(`exec /sbin/init`, `/.autorelabel`); the workflow now says what to do, as
+`docs/course-authoring.md` asks. `check:slides`: 76.36px.
 
 Components: `exercise`.
 
@@ -986,7 +1045,7 @@ four, rewritten to the current `kitty-demo` format.
 3. One `/etc/fstab` UUID broken, the emergency shell, the line fixed (built;
    `/etc/fstab` ends byte for byte as it started)
 4. `root` locked, the password reset to `redhat` from `init=/bin/bash`, the
-   relabel; cleanup sets `menu_auto_hide=1` again (Decision 16)
+   relabel; cleanup sets `menu_auto_hide=1` again (Decision 16) (built)
 
 At the end `/etc/fstab`, the boot entry's arguments, and the GRUB environment's
 variables are back to their starting values; `/etc/shadow` holds a new hash of
@@ -1112,13 +1171,40 @@ copy) and its effect on `mount --all` (on the real file), and steps 4 to 6's
 commands with `/boot` still mounted. The reboot into the emergency shell and
 everything typed there are console-only and unverified (Open question 1).
 
-### Exercise 4
+### Exercise 4, Recover Root Access, built 2026-10-31
 
-Changes to the source command file, beyond the format, planned:
+`recover-root-access-exercise.sh` and `.html` in the ch13 topic's
+`exercises/`; `kitty-demo --check` counts 30 presses. Steps as on 4.9, plus an
+unnumbered "Clean up" step that sets `menu_auto_hide=1` again (Decision 16).
+No recording (Decision 10). Ported from `recover_root_access.sh` and
+`recover_root_access.md`, with these changes:
 
-- `jj:wq` becomes `#@ key escape` and `:wq`, if the file edits anything.
-- Notes that share a line become one note per line, as in exercises 2 and 3.
-- Pauses per "Pausing for the audience", as in exercise 1.
+- Step 1 locks `root` (Decision 18) and checks the lock over SSH with `sudo
+  passwd -S root` (`L`), then at the console with a `root` login that fails.
+- The source's step 2 told the instructor to see the `.md` file, and its
+  "3-6" ran four console commands together in one section. Every step is now
+  its own header, with one `#!` note per line saying what to type at the
+  console and what to look for, and step 3 adds `mount | grep root` to see
+  the `rw`.
+- Step 7 reconnects and checks `sudo passwd -S root` (`P`), which shows the
+  lock is gone as well as the password set.
+- Neither file writes the `root` password. The notes say "root's usual
+  password", and the written exercise says "the `root` password the lab
+  normally uses". The source wrote it out in four places; `AGENTS.md` allows
+  that only in slide content.
+- `recover_root_access.md`, the source's separate console walk-through, is
+  folded into the written exercise.
+
+The written exercise lists the console and the prerequisite exercise, quotes
+`passwd -l`'s and `passwd`'s real messages, explains each of `reboot`, `exit`,
+and `exec`, and ends by hiding the GRUB2 menu, which returns `servera` to the
+week's start. `check:exercises`: no violations.
+
+Verified on `servera` on 2026-10-31 (Round 5), over SSH: step 1's lock and its
+`passwd -S` line, step 4's `passwd` output and its effect on the `!`, and step
+7's `P`, all in a side test that restored `/etc/shadow` afterwards. The
+`init=/bin/bash` boot and everything typed in it are console-only and
+unverified (Open question 1).
 
 ## Additions
 
@@ -1185,8 +1271,11 @@ Verified on the lab where marked; the rest are typos, logic, or to verify.
   rescue boot has closed (fixed in exercise 2).
 - R2: "cannot be done remotely": a remote console can.
 - R3: RHEL 10 writes yescrypt (`$y$`), not `$6$rounds=4096$`; `passwd -l`
-  prints "passwd: password changed." (verified on a throwaway user).
-- R6: the typed password is not echoed.
+  prints "passwd: password changed." (verified on a throwaway user, and on
+  `root` in Round 5). R3's claim that a new password removes the `!` holds
+  (Round 5).
+- R6: the typed password is not echoed; the rest of R6's output matches RHEL
+  10's `passwd` exactly (Round 5).
 - R9: the slide says the password was changed; the command file locks the
   account.
 - Command files: `jj:wq`; notes run together; "Open the workstation console
@@ -1462,7 +1551,40 @@ systemd reloaded, `/mnt/w12probe` unmounted and removed (no unit left),
 `/dev/sdb` and `/dev/sdc` wiped (`wipefs` and `blkid -p` find no signature),
 and the backup removed from `/root`.
 
-**Still to verify over SSH**: whether a new password removes the `!`.
+**Round 5**, 2026-10-31, on the Round 3 lab copy, `servera` only. One script
+with a trap; `/etc/shadow` and `/etc/shadow-` were copied to `/root` first.
+No hash was printed beyond its first eight characters.
+
+- `bash` 5.2.26, so the `init=/bin/bash` prompt is `bash-5.2#`.
+  `/sbin/init` links to `../lib/systemd/systemd`; `/usr/sbin/reboot` links to
+  `../bin/systemctl`.
+- `/proc/cmdline` starts `... root=/dev/mapper/rhel_servera-root ro ...` and
+  has no `console=` options.
+- `root` before: `passwd -S` prints `root P never 0 99999 7 -1`; the hash
+  starts `$y$j9T$`; `/etc/shadow` is `shadow_t`; `ENCRYPT_METHOD YESCRYPT`;
+  SELinux enforcing. `passwd` belongs to `shadow-utils-4.15.0-5.el10`.
+  `grep root /etc/shadow` matches one line, `root:<hash>::0:99999:7:::`.
+- `passwd -l root`: `passwd: password changed.`, exit 0; `passwd -S` prints
+  `root L never ...`; the hash starts `!$y$j9T$`.
+- `passwd` as `root`, driven through `script` with the input fed after a
+  delay: `New password:`, `BAD PASSWORD: The password is shorter than 8
+  characters`, `Retype new password:`, `passwd: password updated
+  successfully`, exit 0. There is no "Changing password for user root." line.
+  Afterwards `passwd -S` prints `root P 2026-10-31 ...`, the hash starts
+  `$y$j9T$` without the `!`, and `/etc/shadow` is still `shadow_t` (SELinux was
+  enforcing; in the `init=/bin/bash` shell it is not loaded).
+- The relabel: `selinux-autorelabel-generator.sh` checks for `/.autorelabel`
+  and points `default.target` at `selinux-autorelabel.target`;
+  `selinux-autorelabel.service` runs `/usr/libexec/selinux/selinux-autorelabel`,
+  which runs `fixfiles restore`, removes `/.autorelabel`, and runs `systemctl
+  reboot`.
+
+Restored: both files copied back from `/root`, `restorecon` run on them; both
+checksums match the baseline (`a2532004...` and `7541dbe1...`), both are
+`shadow_t`, `passwd -S` prints `root P never ...` again, and the copies were
+removed from `/root`. No `/.autorelabel` exists.
+
+**Still to verify over SSH**: nothing for this week.
 
 **Console only**, by Open question 1: the menu's `*`; the editor's text, for
 1.4's text rebuild; End and Ctrl+E in the editor; exercise 1's step 2 itself;
@@ -1471,7 +1593,7 @@ unit files say rescue `rw`, emergency `ro`); `exit` and Ctrl+D from rescue;
 exercise 2's steps 6 and 7; the 90-second wait and emergency prompt after a
 bad UUID (the instructor's captures on 3.2a show both, from an earlier run);
 whether root is `rw` in that emergency shell (the unit ordering says yes);
-exercise 3's steps 2 to 7; `systemctl reboot`
+exercise 3's steps 2 to 7; exercise 4's steps 1 (the console login) to 7; `systemctl reboot`
 against `reboot -f` there; the `init=/bin/bash` prompt; `passwd` there; the
 relabel's length and automatic reboot; a console login as a locked `root`.
 
@@ -1480,7 +1602,7 @@ used in Rounds 1 and 2, `servera` was left at exercise 1's end state on
 2026-10-29: `menu_auto_hide` unset, the kernel line back to its original
 arguments (the entry file without its trailing space), and the running kernel
 booted with `ipv6.disable=1`. It has not been checked since. On the copy used
-in Rounds 3 and 4, `servera` and `workstation` are at their starting state. Before
+in Rounds 3 to 5, `servera` and `workstation` are at their starting state. Before
 recording, the recording lab must go back to the week's start
 (`start-latest-snapshot -a`).
 
@@ -1581,10 +1703,11 @@ the diagram. Each is reversible.
     instructor's capture on 3.2a), and RH134 uses it. Still to run on the
     console.
 18. **Exercise 4 locks `root` with `passwd -l`**, as its command file does.
-    Accepted.
+    Accepted; built.
 19. **The `init=/bin/bash` shell** shows its commands in a `bash` fence inside
     a `TerminalWindow` titled "servera console", and the text names the
-    `bash-5.2#` prompt. Accepted.
+    `bash-5.2#` prompt. Accepted; built on 4.5, 4.7, and 4.8. 4.6 uses a
+    `text` fence instead, because it holds `passwd`'s output.
 20. **Exercise titles**: "Change Kernel Arguments" (built; the two split titles
     went with Decision 9), "Switch systemd Targets", "Repair a File System at
     Boot", "Recover Root Access". Accepted.
@@ -1657,26 +1780,30 @@ As of 2026-10-31.
 **Done:**
 
 - This plan; your decisions 1 to 24 (all accepted except 9); Decision 25
-  overtaken by your redraw of the boot diagram.
-- `course/w12-draft.md`: cover, VM reminder, and the imports for fragments 1
-  to 3.
-- Fragments 1 and 2 and exercises 1 and 2: complete (`616d13c`, `784ed53`).
-- Fragment 3, `repairing-file-systems-at-boot.md`: 8 slides built and checked
+  overtaken by your redraw of the boot diagram; Open question 6 answered.
+- `course/w12-draft.md`: cover, VM reminder, and the imports for all four
+  fragments.
+- Fragments 1 to 3 and exercises 1 to 3: complete (`616d13c`, `784ed53`,
+  `f4ef2e1`).
+- Fragment 4, `recovering-superuser-access.md`: 9 slides built and checked
   (`check:entry`, `check:exercises`, `check:slides`, and captures of every
-  click state), with `assets/boot-stalled-incorrect-uuid.placeholder.png` and
-  `assets/emergency-mode.placeholder.png`.
-- Exercise 3's `repair-file-system-at-boot-exercise.sh` (`kitty-demo --check`:
-  35 presses) and `repair-file-system-at-boot-exercise.html`, verified over
-  SSH except the console steps.
-- The lab checks behind fragment 3, under "Verification", Round 4. `servera`
+  click state), with `assets/grub-cmdline-edit.placeholder.png`.
+- Exercise 4's `recover-root-access-exercise.sh` (`kitty-demo --check`: 30
+  presses) and `recover-root-access-exercise.html`, verified over SSH except
+  the console steps.
+- The lab checks behind fragment 4, under "Verification", Round 5. `servera`
   on the copy used is back at its starting state.
+
+All 45 non-recording slides now exist (47 in "Answer in brief", less the two
+recording slides).
 
 **Next:**
 
-1. Your review of fragment 3.
-2. Fragment 4, `recovering-superuser-access.md`, and exercise 4 on `servera`.
-
-Open questions 1 and 5 are deferred until the week is built.
+1. Your review of fragment 4.
+2. The deferred items: console verification (Open question 1), the recordings
+   for exercises 1 and 2 (Open question 5), the GRUB screenshots (Decision 11),
+   your boot diagram, and the placeholder images.
+3. Step 5 of the porting skill: recordings, then publication.
 
 No review server was started; the slides were captured with
 `pnpm run capture:course`.

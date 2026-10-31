@@ -43,3 +43,7 @@ src: ./chapters/rh134-ch12-controlling-and-troubleshooting-the-boot-process/syst
 ---
 src: ./chapters/rh134-ch12-controlling-and-troubleshooting-the-boot-process/repairing-file-systems-at-boot.md
 ---
+
+---
+src: ./chapters/rh134-ch13-recovering-superuser-access/recovering-superuser-access.md
+---
