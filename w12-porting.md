@@ -35,14 +35,15 @@ Where things stand on 2026-10-31:
 2. **Fragment 2 is complete** (`784ed53`), its recording slide waiting on the
    cast.
 3. **Fragment 3 is complete** (`f4ef2e1`).
-4. **Fragment 4 is built**: all 9 slides, exercise 4's command file and
-   written version, and its import in the draft entry. It waits on your
-   review.
+4. **Fragment 4 is complete** (`974a737`).
 5. **The console steps are still unverified.** The GRUB2 menu and editor, the
    rescue and emergency shells, and the `init=/bin/bash` shell cannot be
    reached through `pnpm lab`. Open question 1 is deferred. Fragments 2 and
    3's shell claims rest on the unit files, RH134, and the instructor's
    captures (see "Verification", Rounds 3 and 4).
+6. **Decision 26: a serial console for the console steps**, so they can be
+   presented in Kitty and recorded. Its prototype plan and the list of what
+   it changes are under "Console delivery"; nothing is changed yet.
 
 ## Scope
 
@@ -1206,6 +1207,196 @@ Verified on `servera` on 2026-10-31 (Round 5), over SSH: step 1's lock and its
 `init=/bin/bash` boot and everything typed in it are console-only and
 unverified (Open question 1).
 
+## Console delivery
+
+Decision 26, accepted 2026-10-31: present and record the console steps through
+a serial console, attached with `virsh console` in the `kitty-demo`
+Presentation window, and keep the VM's graphical console as the fallback. The
+prototype below comes first; nothing changes in the lab or the course files
+until it has run.
+
+### Why
+
+The instructor weighed it this way. For: the console appears in Kitty at a
+presentable font size; the console steps can be recorded with the rest of the
+exercise; and the demonstration is smoother, with no switching between
+windows. Against: text may wrap differently in Kitty than on a student's
+console; students use the VM window, so what they see differs slightly from
+the recording; and the kernel line differs between the instructor lab, the
+RHA lab, and the SCC lab. The recordings are worth it.
+
+### How it works
+
+Two settings on each instructor-lab VM. GRUB2 draws its menu and editor on
+both the VGA console and the serial port (`GRUB_TERMINAL_INPUT` and
+`GRUB_TERMINAL_OUTPUT` set to `console serial`, with `GRUB_SERIAL_COMMAND`).
+The kernel line gains `console=tty0 console=ttyS0,115200`, with `ttyS0`
+last, because the last `console=` becomes `/dev/console`: that is where
+systemd's status lines, the rescue and emergency shells, the
+`init=/bin/bash` shell, and the relabel output go. With the kernel console
+on the serial port, systemd also starts a serial login prompt there.
+
+During an exercise, the Presentation window runs `virsh console servera`
+after a reboot, the console steps are typed there by `kitty-demo` like any
+other step, and `Ctrl+]` detaches before `ssh servera` reconnects. The words
+on screen are the same programs' output that students see in their VM
+windows; the frame, the wrapping, and the kernel line are not.
+
+Known on 2026-10-31, read-only through `pnpm lab` on the lab copy on this
+machine: both `servera` and `workstation` already have a serial port (`ttyS0
+at I/O 0x3f8 ... is a 16550A` in the kernel log), `/proc/consoles` lists only
+`tty0`, `/etc/default/grub` has `GRUB_TERMINAL_OUTPUT="console"` and no serial
+settings, and `serial-getty@ttyS0` is inactive. `virsh`, `virt-viewer`, and
+`virt-manager` are installed on the machine that runs both the VMs and Kitty.
+
+### Fallback
+
+The VM's graphical console in `virt-viewer`, full screen or beside the
+Presentation window, with scaling on so the 8x16 VGA text is readable. The
+command files keep working: at a console step, step past the console lines
+with <kbd>F3</kbd> and type them in the VM window. Use it when the serial
+console misbehaves in class, or if the prototype fails one of its exit
+criteria for a particular step.
+
+### Prototype plan
+
+On the lab copy on this machine, so the home lab stays as it is. Everything
+below is undone by `start-latest-snapshot servera workstation`. `virsh
+console` is interactive, so the instructor runs it; I can prepare the exact
+commands and a trial command file (see Open question 1 for the alternative).
+
+1. **Baseline.** `virsh dumpxml servera` shows a `<serial>` and a `<console>`
+   device. Record the SHA-256 of `/etc/default/grub`, `grub.cfg`, `grubenv`,
+   and the boot entry files, as in Round 2.
+2. **GRUB2 on serial only.** Set `GRUB_TERMINAL_INPUT="console serial"`,
+   `GRUB_TERMINAL_OUTPUT="console serial"`, and `GRUB_SERIAL_COMMAND="serial
+   --unit=0 --speed=115200"`, then `grub2-mkconfig -o /boot/grub2/grub.cfg`,
+   and confirm the boot entry files did not change. Reboot with `virsh console
+   servera` attached in Kitty at the presentation font size, and check:
+   - the menu, its help lines, and the countdown appear and are readable;
+   - any key stops the countdown, the arrows move, `e` opens the editor;
+   - <kbd>End</kbd> reaches the end of the `linux` line (or <kbd>Ctrl</kbd>+<kbd>E</kbd>),
+     <kbd>Ctrl</kbd>+<kbd>X</kbd> boots, <kbd>Esc</kbd> discards;
+   - how the frame and arrows render, and where the `linux` line wraps.
+
+   Capture the editor's text here, before step 3 changes the kernel line: it
+   is the text Decision 11 wants for 1.4, 2.8, and 4.4, and it still matches
+   the SCC lab's arguments.
+3. **The kernel on serial.** `grubby --update-kernel=ALL --args="console=tty0
+   console=ttyS0,115200"`, and the same in `GRUB_CMDLINE_LINUX` so a future
+   kernel inherits it. Reboot attached, and check: kernel and systemd messages
+   reach Kitty; a serial login prompt appears; `stty size` after logging in;
+   colours.
+4. **Exercise 3 by hand over serial**, the most console-heavy: the 90-second
+   wait, the emergency banner, whether `sulogin` prompts on both consoles,
+   `mount | grep root` (`rw`?), `vim /etc/fstab` at Kitty's size, `systemctl
+   daemon-reload`, `mount --all`, and `systemctl reboot` (Decision 17).
+5. **Exercise 4 by hand over serial**: the console login as a locked `root`;
+   `init=/bin/bash` added with `ttyS0` kept; the `bash-5.2#` prompt and any
+   job-control warnings; `mount -o remount,rw /`; `passwd`; `touch
+   /.autorelabel`; `exec /sbin/init`; the relabel's output and length; the
+   automatic reboot; the console login as `root`.
+6. **Exercise 2's console steps on `workstation`**: the same two settings,
+   then `systemd.unit=rescue.target`, the rescue banner (with `rhgb quiet` and
+   Plymouth on that host), `mount | grep ' / '`, and `exit`.
+7. **`kitty-demo` integration.** A trial copy of exercise 3's command file
+   with the console steps as real lines: `virsh console servera` after the
+   reboot, `#@ key` for <kbd>e</kbd>, the arrows, <kbd>End</kbd>, and
+   <kbd>Ctrl</kbd>+<kbd>X</kbd>, and `#@ key` for `Ctrl+]` to detach (whether
+   Kitty's `send-key` accepts `ctrl+]` is to verify). Run it live, then with
+   `--record`; process it with `pnpm run casts`, check it with `--check`, and
+   play it back. Note whether the cast sanitizer accepts `virsh`'s
+   `Connected to domain` lines and how wide lines wrap in the player.
+8. **Compare with the VDI.** The same exercise 3 steps on the SCC lab, with
+   screenshots, and a list of what differs from the cast. This doubles as
+   Open question 1's VDI dry run.
+
+Exit criteria: the GRUB2 menu and editor readable and fully drivable from
+`kitty-demo`; all three shells usable, `vim` included; one cast that processes
+cleanly and reads well in playback. If one step fails, that step falls back to
+the graphical console and the rest stays on serial.
+
+Record the results under "Verification" as a new round, then revert or keep
+(step 9).
+
+9. **Keep it.** Make the change permanent on both instructor-lab copies: a new
+   snapshot after the change, or the change added to the lab's build
+   automation, since `start-latest-snapshot` otherwise undoes it.
+
+### What changes in week 12 if it is implemented
+
+Slides (students' view is unchanged, so no slide has to change):
+
+- **1.4, 2.8, 4.4:** Decision 11's editor rebuild comes from the serial capture
+  in prototype step 2 instead of a VDI capture.
+- **1.3:** the menu could also be rebuilt as text from the serial capture, or
+  stay a VDI screenshot, since the frame differs. Your call.
+- **3.2a:** the two console images could become text from a serial capture of
+  the same moments, which removes both placeholders and the images of text.
+  Optional.
+- **4.4:** "Remove any `console=` options" conflicts with what the recording
+  shows, since the instructor keeps `ttyS0`. Keep RH134's wording and say why
+  on camera, or reword the step. Your call.
+- **Recording slides:** 1.14a and 2.9a as planned, plus new **3.7a** and
+  **4.9a** for exercises 3 and 4.
+- Fragment 1's `grubby --info` transcripts (1.5, 1.8, 1.9) stay as captured,
+  without `console=`. Any later recapture on a changed lab would show the
+  extra arguments, so recapture with them removed or keep the old captures.
+
+Command files (all four change; each needs a new `kitty-demo --check`, a live
+run, and new pauses):
+
+- **`change-kernel-arguments-exercise.sh`:** step 2's four console notes
+  become `virsh console servera`, `#@ key` lines for the countdown, `e`, the
+  arrows, and <kbd>End</kbd>, the typed ` ipv6.disable=1` under `#@ noenter`,
+  `#@ key ctrl+x`, the detach, and `ssh servera`. The 45-second pause for a
+  manual edit goes. Its `cat /proc/cmdline` and `grubby --info` output in the
+  recording will include the `console=` arguments.
+- **`switch-systemd-targets-exercise.sh`:** step 6's GRUB2 edit the same way
+  with `systemd.unit=rescue.target`; step 7's `mount | grep ' / '` and `exit`
+  typed in the rescue shell; the two 45-second pauses become waits for the
+  boot.
+- **`repair-file-system-at-boot-exercise.sh`:** steps 2 to 7 typed in the
+  emergency shell, including the `vim` keystrokes that remove `zzz`, with a
+  pause long enough for the 90-second device timeout.
+- **`recover-root-access-exercise.sh`:** step 1's failed console login, step
+  2's GRUB2 edit, steps 3 to 6 at `bash-5.2#`, a pause for the relabel, and
+  step 7's console login.
+- **The `root` password.** The rescue shell, the emergency shell, `passwd`,
+  and both console logins need it typed, but `AGENTS.md` keeps credentials out
+  of exercise files. It does not echo, so a cast would not show it; the
+  command file would. Options: a `kitty-demo` directive that types a value
+  from an environment variable, typing it by hand during a `#@ pause`, or an
+  `AGENTS.md` exception for the lab password `docs/lab-environments.md`
+  already publishes. Your call before step 7 of the prototype.
+
+Written exercises: no change. Students use the VM window, and the `.html`
+files already describe it.
+
+This plan: Decision 10 (recordings for all four exercises), "Answer in brief"
+and "File inventory" (49 slides; fragment 3 has 9 and fragment 4 has 10; a
+`.cast` for every exercise), "Additions" (3.7a and 4.9a), the exercise
+entries under "Exercises", Open questions 1 and 5, and a new "Verification"
+round for the prototype.
+
+Outside week 12:
+
+- **Both instructor-lab copies:** the GRUB2 and kernel settings on `servera`
+  and `workstation`, and a new snapshot or the build automation (prototype
+  step 9).
+- **`docs/lab-environments.md`:** a new entry under "Differences that reach
+  the screen" for the kernel line (`console=tty0 console=ttyS0,115200n8` on
+  RHA, none on SCC, `console=tty0 console=ttyS0,115200` on the instructor lab)
+  and GRUB2's serial terminal, and a note under "The instructor lab".
+- **`docs/course-authoring.md`:** "Recording an exercise" gains how console
+  steps are recorded through `virsh console`, once the prototype settles it.
+- **`kitty-demo`:** the password directive, if that option is chosen, and
+  confirmation that `#@ key ctrl+]` works.
+- **Agent access, optional:** if you want me to drive the serial console for
+  verification, a wrapper like `pnpm lab` that allows only the four lab
+  domains, with matching approval rules in `.codex/rules/default.rules`,
+  `.claude/settings.json`, and `.agents/settings.json`.
+
 ## Additions
 
 Accepted 2026-10-29 (Decisions 7, 8, 12, 14, 15, 16, 21, 22):
@@ -1683,6 +1874,9 @@ the diagram. Each is reversible.
     them as prose, with screenshots from a VDI dry run once they exist.
     Recordings for exercises 1 and 2, whose results show over SSH; none for
     exercises 3 and 4, which happen almost entirely at the console. Accepted.
+    To be superseded by Decision 26 once its prototype succeeds: every
+    exercise is recorded, console steps included, and the `#!` console notes
+    become typed lines.
 11. **GRUB screens.** Recapture the menu (1.3) on the VDI, and rebuild the
     editor (1.4, 2.8, 4.4) as text from a VDI capture. Placeholders until
     then. Accepted; fragment 1 carries both placeholders.
@@ -1728,11 +1922,18 @@ the diagram. Each is reversible.
     will redraw fragment 1's boot diagram by hand (tldraw, Inkscape, or
     similar), since Mermaid is not quite doing it. The GPT fact goes to that
     redraw; the Mermaid version stays until then.
+26. **Serial console for the console steps.** Present and record them through
+    `virsh console` in the Presentation window, with the VM's graphical
+    console as the fallback. Accepted 2026-10-31, the instructor's own call:
+    the recordings are worth the different kernel line and wrapping. A
+    prototype comes first; see "Console delivery".
 
 ## Open questions
 
 1. **Console verification.** Deferred 2026-10-31: continue building and
-   decide later. I can verify only what SSH reaches.
+   decide later. I can verify only what SSH reaches. Decision 26's prototype
+   covers most of it, run by you over the serial console, and its step 8 is
+   the VDI dry run below.
    Two ways to cover the rest; both would help:
    - **A VDI dry run** with screenshots, as in w10: the GRUB menu, the editor
      with the `linux` line, the editor after an append, the rescue prompt,
@@ -1754,8 +1955,9 @@ the diagram. Each is reversible.
 4. **The GRUB screenshots' origin.** Are `grub-menu-1.png`, `grub-editor.png`,
    and `grub-cmdline-edit.png` your captures of the RHA lab? Either way they
    do not match the SCC lab (Decision 11).
-5. **Recording exercises 1 and 2.** Deferred 2026-10-31: continue building
-   and settle the recordings later. The recording runs unattended, but
+5. ~~**Recording exercises 1 and 2.**~~ Superseded 2026-10-31 by Decision 26:
+   over the serial console, `kitty-demo` types the console steps itself, so no
+   take depends on editing the console by hand during a pause. The recording runs unattended, but
    exercise 1's step 2 needs the argument typed at the GRUB2 menu, or
    `/proc/cmdline` in step 3 will not show it. The command file pauses 45
    seconds after that reboot so you can make the edit in the console during
@@ -1780,29 +1982,25 @@ As of 2026-10-31.
 **Done:**
 
 - This plan; your decisions 1 to 24 (all accepted except 9); Decision 25
-  overtaken by your redraw of the boot diagram; Open question 6 answered.
+  overtaken by your redraw of the boot diagram; Decision 26 accepted; Open
+  question 6 answered.
 - `course/w12-draft.md`: cover, VM reminder, and the imports for all four
   fragments.
-- Fragments 1 to 3 and exercises 1 to 3: complete (`616d13c`, `784ed53`,
-  `f4ef2e1`).
-- Fragment 4, `recovering-superuser-access.md`: 9 slides built and checked
-  (`check:entry`, `check:exercises`, `check:slides`, and captures of every
-  click state), with `assets/grub-cmdline-edit.placeholder.png`.
-- Exercise 4's `recover-root-access-exercise.sh` (`kitty-demo --check`: 30
-  presses) and `recover-root-access-exercise.html`, verified over SSH except
-  the console steps.
-- The lab checks behind fragment 4, under "Verification", Round 5. `servera`
-  on the copy used is back at its starting state.
+- Fragments 1 to 4 and exercises 1 to 4: complete (`616d13c`, `784ed53`,
+  `f4ef2e1`, `974a737`).
 
 All 45 non-recording slides now exist (47 in "Answer in brief", less the two
 recording slides).
 
+Decision 26 (serial console) accepted, with its prototype plan and change
+list under "Console delivery".
+
 **Next:**
 
-1. Your review of fragment 4.
-2. The deferred items: console verification (Open question 1), the recordings
-   for exercises 1 and 2 (Open question 5), the GRUB screenshots (Decision 11),
-   your boot diagram, and the placeholder images.
+1. Decision 26's prototype, and your calls on the `root` password in command
+   files and on 4.4's `console=` step.
+2. The deferred items: console verification (Open question 1), the GRUB
+   screenshots (Decision 11), your boot diagram, and the placeholder images.
 3. Step 5 of the porting skill: recordings, then publication.
 
 No review server was started; the slides were captured with
