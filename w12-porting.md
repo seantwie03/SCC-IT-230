@@ -28,18 +28,20 @@ and 2). The fragments follow the Slidev deck's sections one for one, in source
 order. The LibreOffice deck contributes an intro slide for GRUB2 (1.1a), detail
 for the targets slides, and an optional command table (2.8a).
 
-Where things stand on 2026-10-29:
+Where things stand on 2026-10-31:
 
-1. **Fragment 1 is built**: 16 of its 17 slides (the recording slide waits on
-   the cast), its exercise's command file and written version, and the draft
-   entry. It waits on your review.
-2. **The console steps are still unverified.** The GRUB2 menu and editor, the
+1. **Fragment 1 is complete** (committed 2026-10-31 as `616d13c`), with its
+   long output lines wrapped once at a space as built.
+2. **Fragment 2 is built**: 10 of its 11 slides (the recording slide waits on
+   the cast), exercise 2's command file and written version, and its import in
+   the draft entry. It waits on your review.
+3. **The console steps are still unverified.** The GRUB2 menu and editor, the
    rescue and emergency shells, and the `init=/bin/bash` shell cannot be
-   reached through `pnpm lab`. Open question 1 is still open; fragment 1's
-   exercise step 2 is the first step it affects.
-3. **Long output lines are wrapped once, at a space** (1.5, 1.6, 1.8, 1.9).
-   A terminal frame holds 120 columns and `grubby --info`'s `args` line is
-   148; see "Authoring notes". Review that choice before fragment 2.
+   reached through `pnpm lab`. Open question 1 is still open. Fragment 2's
+   rescue-shell claims rest on the unit files and RH134 (see "Verification",
+   Round 3).
+4. **Decision 25 is new**: a correction to fragment 1's diagram (1.2) that
+   Round 3 turned up.
 
 ## Scope
 
@@ -556,11 +558,24 @@ Components: `exercise`.
 Pending the cast. Recording it needs the GRUB2 edit made by hand in the
 console during step 2's 45-second pause (Open question 5).
 
-### 2. `systemd-targets.md` (11 slides, proposed)
+### 2. `systemd-targets.md` (11 slides), built 2026-10-31
 
-`routeAlias: systemd-targets` (to confirm unused; `systemd-services` exists).
-Alignments: RH134 chapter 12, cert guide chapters 17 and 18. Exercise: Switch
-systemd Targets Exercise.
+`routeAlias: systemd-targets` (unused before; w04 has `systemd-services`).
+Alignments: RH134 chapter 12, cert guide chapters 17 and 18, the same as
+fragment 1's, so the week lists them once. Exercise: Switch systemd Targets
+Exercise, declared in `topicInfo`. Deck slides 19 to 28. Checked with
+`check:entry`, `check:exercises`, and `check:slides` (no overflow; clearances
+below are from its `--verbose` report), and every slide and click state was
+captured at 1920x1080. The transcripts are real output from `servera` and
+`workstation` on 2026-10-31 ("Verification", Round 3); none carries a machine
+ID or UUID, so they hold on either copy of the instructor lab. The entries
+below describe what shipped; the fragment waits on the instructor's review.
+
+W04's `systemd-services.md` already defines a target ("A Target Is a Group of
+Units") and promises that "a later week digs into targets, boot order, and
+switching between them". This fragment is that week; 2.2 restates the
+definition rather than reteaching units, and exercise 2 checks its results
+with `systemctl is-active`, which w04 taught.
 
 ##### 2.1 systemd Targets
 
@@ -570,88 +585,155 @@ Components: `section`.
 
 ##### 2.2 What Is a systemd Target?
 
-Sources B16 and O4. The definition (a named group of units the system starts
-to reach a state) and B16's four reasons, with O4's two additions: targets can
-contain other targets, and one isolatable target is the boot default.
+Sources B16 and O4. "A **target** is a named group of units the system starts
+to reach a state", over six facts: decides which services start at boot (B16);
+can contain other targets (O4); servers boot to text logins only (B16's
+headless-server bullet, without its em dash); rescue and emergency targets for
+repairs (B16); switch targets without a reboot (B16); one target is the boot
+default (O4). O4's "isolatable" is left to 2.7, where `AllowIsolate=yes`
+explains it. `check:slides`: 62.84px.
 
-Components: default layout, or `IconGrid` for the reasons (five or six short
-facts), whichever reads better.
+Components: default layout with `vertical: center`; `IconGrid` with Carbon
+`application`, `tree-view`, `terminal`, `tools`, `renew`, and `star`.
 
 ##### 2.3 Common Boot Targets
 
-Sources B17 and O5. The four-row table (`graphical`, `multi-user`, `rescue`,
-`emergency`) and the nesting note. O5 adds "root password required" for
-`rescue` and `emergency`, which RH134 also states. The "rw" and "ro" claims are
-to verify on the console.
+Sources B17 and O5. The four-row table: `graphical.target`, "Multi-user, with
+a graphical login"; `multi-user.target`, "Multi-user, text logins only";
+`rescue.target`, "Single-user repair shell; local file systems read/write";
+`emergency.target`, "Minimal repair shell; root file system read-only". Then
+"Both repair shells ask for the `root` password" (O5's "can only log in as
+root", in RH134's terms) and "Targets nest: `graphical.target` includes
+`multi-user.target`, which includes `basic.target`". B17's "most filesystems
+mounted read/write" became "local file systems", since `rescue.target` pulls
+in `sysinit.target` and so `local-fs.target`, but not `remote-fs.target`
+(Round 3). `check:slides`: 21.42px.
 
 Components: default layout, Markdown table.
 
 ##### 2.4 Target Dependencies
 
-Source B18. `systemctl list-dependencies graphical.target`, cut to its first
-lines with `...output omitted...`. Verified on `servera`: the first lines
-match the source (`display-manager.service` and
-`systemd-update-utmp-runlevel.service` inactive, then `multi-user.target`
-with `firewalld`, `NetworkManager`, and the rest, then `basic.target`). The
-"Abridged Output" fence title becomes visible omission lines, as in w10 and
-w11.
+Source B18. "`systemctl list-dependencies` shows the units a target pulls in",
+then the real output on `servera`, cut with two `...output omitted...` lines:
+the target, `display-manager.service` and
+`systemd-update-utmp-runlevel.service` (both `○`), `multi-user.target` (`●`),
+its first two units (`audit-rules.service`, `auditd.service`), and
+`basic.target`. Lines 3 and 5, the display manager and `multi-user.target`, are
+highlighted. B18's `firewalld` and `NetworkManager` are not the first units
+under `multi-user.target` on RHEL 10, so they are not shown; the full tree is
+113 lines. Beneath it: "`graphical.target` adds a display manager on top of
+everything `multi-user.target` starts" (B18's closing note), and a `Callout`:
+"● marks an active unit and ○ an inactive one; `servera` has no display
+manager", which the source never explains. `check:slides`: 25.09px. The tree
+characters and both bullets render in the theme's monospace font (checked in
+the capture).
 
-Components: fixed `TerminalWindow`; `Callout` for the closing line.
+Components: fixed `TerminalWindow` with line highlight `{3,5}`, `Callout`.
 
 ##### 2.5 View Default Boot Target
 
-Source B19. `systemctl get-default` prints `multi-user.target` on `servera`
-(verified).
+Source B19. "`systemctl get-default` shows the target the system boots into",
+then two fixed terminals side by side: `servera` prints `multi-user.target`
+("A server: text logins only") and `workstation` prints `graphical.target`
+("A desktop: a graphical login"). The second terminal is new; the source shows
+`servera` alone. Both verified. `check:slides`: 72.27px.
 
-Components: fixed `TerminalWindow`.
+Components: `two-cols-header`, a fixed `TerminalWindow` per column.
 
 ##### 2.6 Change Default Boot Target
 
-Source B20. `systemctl set-default graphical.target` and its two lines
-("Removed ...", "Created symlink ... → ..."), to recapture and then restore.
+Source B20. "`systemctl set-default` changes the default by replacing a
+symlink", then `systemctl set-default graphical.target` on `servera` with its
+two real lines, `Removed '/etc/systemd/system/default.target'.` and `Created
+symlink '/etc/systemd/system/default.target' →
+'/usr/lib/systemd/system/graphical.target'.` (identical to the source and to
+RH134), then "The running system keeps its current target until the next
+boot" (verified on `workstation`: `graphical.target` and `gdm` stayed active
+after `set-default multi-user.target`). The first build named the link's full
+path in the sentence, which wrapped onto a second line; the terminal already
+shows it. `check:slides`: 63.7px.
 
 Components: fixed `TerminalWindow`.
 
 ##### 2.7 Switch Targets at Runtime
 
-Source B21. `systemctl isolate multi-user.target`, what it stops and starts,
-and the `AllowIsolate=yes` caveat. Verified: on `servera`, 22 targets carry
-`AllowIsolate=yes`, including all four in 2.3.
+Source B21. "`systemctl isolate` switches the running system to another
+target, with no reboot", a `bash` fence of `systemctl isolate
+multi-user.target` (it prints nothing, and the fence keeps the slide
+host-neutral: on `servera` the command would change nothing), three bullets
+(stops every unit the new target does not need; starts the units it needs that
+are not running; lasts until the next boot, the default does not change), and
+the `Callout` "Only targets with `AllowIsolate=yes` in their unit file can be
+isolated". The third bullet is new, verified on `workstation`. `check:slides`:
+38.87px.
 
-Components: `bash` fence (isolate prints nothing), `Callout`.
+Components: `bash` fence, bulleted list, `Callout`.
 
 ##### 2.8 Boot to a Specific Target
 
-Source B22. Three click states as the source: enter the GRUB2 editor; append
-`systemd.unit=rescue.target`; a `rescue` versus `emergency` table and "Exit
-the shell to continue the normal boot". The editor follows Decision 11. The
-table's file-system and service claims are to verify on the console.
+Source B22, three `v-switch` states as the source. First: "`systemd.unit=` on
+the kernel command line picks the target for one boot", "**Step 1:** Open the
+GRUB2 editor", and three numbered steps (reboot and stop the countdown; press
+<kbd>e</kbd> to edit the default entry; move to the line that starts with
+`linux`). Second: the same sentence, "**Step 2:** Append the target", "Press
+<kbd>End</kbd>, then type a space and the argument", a `text` fence of
+`systemd.unit=rescue.target`, and "Press <kbd>Ctrl</kbd>+<kbd>X</kbd> to
+boot". Third: "Which repair shell?" over the comparison table, then "Type
+`exit` or press <kbd>Ctrl</kbd>+<kbd>D</kbd> to leave the shell and continue
+the normal boot".
 
-Components: `v-switch` templates; Markdown table.
+The table, corrected from B22 (Round 3, unit files and RH134): **File
+systems**, "Local file systems, read/write" against "Root only, read-only";
+**Services**, "Logging and devices; no network" against "Almost none"; **Use
+when**, "A service breaks the normal boot" against "`rescue.target` fails, as
+with a bad `/etc/fstab` line". B22 had rescue for "investigating services or
+fstab", but a bad `/etc/fstab` line fails `local-fs.target`, which
+`rescue.target` needs, and systemd falls back to emergency; that also sets up
+fragment 3. "Almost none" replaces B22's "None", since I could not confirm
+from the unit files alone whether `journald` survives into the emergency shell.
+B22's "Ctrl+D" is kept beside `exit`, the word the rescue banner itself uses.
+
+No editor image: B22 has none, and Decision 11's text rebuild of the editor
+would go here when it exists. `check:slides`: 119.25px, 106.8px, 73.28px.
+
+Components: `v-switch` with three templates; ordered list with `<kbd>`; `text`
+fence; Markdown table.
 
 ##### 2.8a systemd Target Commands
 
-**Addition, from O6, optional** (Decision 21). The five `systemctl`
-subcommands in one table (`list-dependencies`, `isolate`, `list-units --type
-target`, `get-default`, `set-default`), a summary before the exercise as w11's
-1.3a was for LVM. Cut it if time is short.
+**Addition, from O6, optional** (Decision 21). A two-column table in teaching
+order: `systemctl list-dependencies TARGET`, "Show the units a target pulls
+in"; `systemctl list-units --type target`, "Show the active targets";
+`systemctl get-default`, "Show the default target"; `systemctl set-default
+TARGET`, "Change the default target"; `systemctl isolate TARGET`, "Switch to a
+target now". Beneath it: "At the GRUB2 menu, `systemd.unit=TARGET` picks the
+target for one boot". `TARGET` follows `systemctl`(1)'s own placeholder.
+`list-units --type target` appears on no other slide; it is O6's, and its
+output was checked on `servera` and `workstation`. Cut the slide if time is
+short. `check:slides`: 39.52px.
 
-Components: default layout, Markdown table.
+Components: default layout with `vertical: center`, Markdown table.
 
 ##### 2.9 Exercise: Switch systemd Targets
 
-Source B23. Host `workstation`. Workflow, as the source plus Decision 15:
-inspect the default target; switch to `multi-user.target` without rebooting;
-make it the default and reboot to confirm; restore `graphical.target`; boot
-once into `rescue.target` from the GRUB2 menu and check the root file system,
-then continue the boot. The step "make the GRUB2 menu appear" is added, since
-`workstation` has never had it unhidden.
+Source B23 and `systemd_targets.sh`. Goal: "Switch `workstation` between
+targets now, by default, and for a single boot". Environment: "**Host:**
+`workstation`, with its VM console open". No prerequisite exercise. Workflow:
+make the GRUB2 menu appear on every boot (Decision 15); inspect the default
+target and its dependencies; switch to `multi-user.target` without rebooting;
+make `multi-user.target` the default and reboot to confirm; restore
+`graphical.target` as the default; boot once into `rescue.target` from the
+GRUB2 menu; confirm the root file system is read/write, then continue the
+boot. The last step is the command file's step 6, which B23's slide leaves
+out. `check:slides`: 98.73px.
 
 Components: `exercise`.
 
 ##### 2.9a Exercise recording
 
-Pending the cast.
+Pending the cast. Like exercise 1's, the take needs console work during its
+pauses: the GRUB2 edit after step 6's reboot and the rescue shell during the
+pause on step 7's header (Open question 5).
 
 ### 3. `repairing-file-systems-at-boot.md` (8 slides, proposed)
 
@@ -841,7 +923,8 @@ four, rewritten to the current `kitty-demo` format.
 1. `menu_auto_hide` unset; one boot with `ipv6.disable=1` typed at the menu,
    one without; the argument added with `grubby`, one boot with it, then
    removed (built; the running kernel keeps IPv6 off until the next boot)
-2. (on `workstation`, independent of the chain)
+2. (on `workstation`, independent of the chain; built, and its cleanup
+   returns `workstation` to its start)
 3. One `/etc/fstab` UUID broken, the emergency shell, the line fixed
 4. `root` locked, the password reset to `redhat` from `init=/bin/bash`, the
    relabel; cleanup sets `menu_auto_hide=1` again (Decision 16)
@@ -892,7 +975,50 @@ Verified on `servera` on 2026-10-29 (Round 2): every step except step 2's
 console edit, whose effect was verified separately by booting with the same
 argument set through `grubby`.
 
-### Exercises 2 to 4
+### Exercise 2, Switch systemd Targets, built 2026-10-31
+
+`switch-systemd-targets-exercise.sh` and `.html` in the topic's `exercises/`;
+`kitty-demo --check` counts 61 presses. Steps as on 2.9, plus an unnumbered
+"Clean up" step that sets `menu_auto_hide=1` again (Decision 16) and is left off
+the slide, as `docs/course-authoring.md` asks. Ported from `systemd_targets.sh`,
+with these changes:
+
+- Step 1, unhiding the menu, is new (Decision 15), as in exercise 1.
+- Step 2 keeps the source's `get-default` and `list-dependencies
+  graphical.target`; the pager is left with `q` under `#@ noenter`.
+- Step 3 checks the switch over SSH with `systemctl is-active
+  graphical.target multi-user.target` (`inactive`, then `active`) and
+  `get-default` (still `graphical.target`), so the result shows in the
+  recording as well as on the console. The source checked `get-default` only.
+- Step 4 reconnects and checks `get-default` and `is-active
+  graphical.target` after the reboot.
+- The source's step 5 ran seven `#!` notes together on one line and said "Open
+  the workstation console and triggering a reboot"; each note is now its own
+  line, and the reboot is a command. The root password is named, not written.
+- The source's step 6 wrote `mount | grep ' / '` and `exit` as commands typed
+  into the SSH session, which is down while `workstation` sits in the rescue
+  shell. They are `#!` notes now, done at the console, and the command file
+  reconnects afterwards and checks `systemctl is-active graphical.target`
+  (`active`), which shows the boot continued.
+- Pauses: 10 seconds on the intro, 5 on the `list`, `is-active`, and final
+  `list`, 6 on the pager; 35 after step 4's reboot (SSH answered 28 seconds
+  after `systemctl reboot` to `multi-user.target`, countdown included); 45
+  after step 6's reboot for the edit and the boot to the rescue shell, and 45
+  on step 7's header for the console work and the boot on to
+  `graphical.target` (SSH answered 34 seconds after a reboot to
+  `graphical.target`).
+
+The written exercise names the VM window as a requirement, describes the GRUB2
+edit in the same five numbered keystrokes as exercise 1, says the rescue shell
+asks for the root password without quoting it, and describes the `rw` option
+rather than printing the rescue shell's `mount` line, which I could not
+capture. `check:exercises`: no violations.
+
+Verified on `workstation` on 2026-10-31 (Round 3): every step over SSH,
+including both reboots and the cleanup; step 6's menu edit and step 7's rescue
+shell are console-only and unverified (Open question 1).
+
+### Exercises 3 and 4
 
 Changes to the source command files, beyond the format, planned:
 
@@ -917,11 +1043,16 @@ Accepted 2026-10-29 (Decisions 7, 8, 12, 14, 15, 16, 21, 22):
    Built.
 3. **`cat /proc/cmdline` on 1.4** (Decision 14), as a sentence. Built.
 4. **Slide 2.8a, systemd Target Commands** (O6), optional (Decision 21).
+   Built.
 5. **Slide 3.2a, What a Failed Boot Looks Like** (Decision 12).
 6. **Recording slides** for the exercises Decision 10 gives casts. The source
    has none.
 7. **Unhiding `workstation`'s menu in exercise 2** (Decision 15), and hiding
-   both menus again in cleanup (Decision 16).
+   both menus again in cleanup (Decision 16). Built for `workstation`.
+
+Also in fragment 2, within existing slides rather than as new ones: the
+`workstation` terminal on 2.5, the closing line on 2.6, the third bullet on
+2.7, and the `Callout` explaining `●` and `○` on 2.4.
 
 ## Corrections
 
@@ -941,6 +1072,14 @@ Verified on the lab where marked; the rest are typos, logic, or to verify.
 - B13: `grubby --set-default-index` writes `saved_entry` in `grubenv`
   (verified: `GRUB_DEFAULT=saved`), so the table's "Stored in" row is wrong
   for the default.
+- B17: "most filesystems mounted read/write" for `rescue.target` is the local
+  file systems: it needs `sysinit.target`, hence `local-fs.target`, but not
+  `remote-fs.target` (verified in the unit files).
+- B18: `firewalld` and `NetworkManager` are not the first units under
+  `multi-user.target` on RHEL 10; `audit-rules` and `auditd` are (verified).
+- B22: a bad `/etc/fstab` line is not a job for `rescue.target`, which needs
+  `local-fs.target`; systemd falls back to `emergency.target` (unit files,
+  RH134). "Services: None" for emergency is softened to "Almost none".
 - B25: a missing mount point may not stop the boot (to verify); XFS is not
   repaired at boot (RH134).
 - B26: `rhel_servera_root` is `rhel_servera-root` (verified); the second
@@ -953,7 +1092,8 @@ Verified on the lab where marked; the rest are typos, logic, or to verify.
 - B30: "pre-configured with a broken `/etc/fstab` entry" contradicts step 0.
 - B23 and its command file: `workstation`'s menu is never unhidden, so step 5
   cannot be done as written unless someone catches a one-second hidden
-  timeout.
+  timeout. Its step 6 types `mount` and `exit` into an SSH session that the
+  rescue boot has closed (fixed in exercise 2).
 - R2: "cannot be done remotely": a remote console can.
 - R3: RHEL 10 writes yescrypt (`$y$`), not `$6$rounds=4096$`; `passwd -l`
   prints "passwd: password changed." (verified on a throwaway user).
@@ -1112,25 +1252,103 @@ checksums then matched the round's baseline:
 `servera`, in order; step 2's reboot ran without the console edit. Outputs as
 in the written exercise.
 
-**Still to verify over SSH**: `set-default` output on `servera` and
-`workstation` (restored after); whether systemd creates a missing mount point
+**Round 3**, 2026-10-31, on a second copy of the instructor lab on another
+machine, the one `pnpm lab` reached that day. It runs the same RHEL 10.0
+kernel and package versions as Rounds 1 and 2 and the same disk layout, but has
+its own machine IDs and UUIDs (`servera`'s machine ID is `4add9bf2...`, not
+`62e8bf6f...`), so fragment 1's transcripts do not match it while fragment 2's,
+which carry neither, do. Its clocks matched the host's.
+
+Baseline, read-only:
+
+- `servera`: BIOS; `/dev/sda` is GPT (`pmbr_boot`), partition 1 a 1 MB BIOS
+  boot partition (`bios_grub`), partition 2 the 1 GB XFS `/boot`, partition 3
+  LVM. This is the layout `docs/lab-environments.md` gives for the SCC and
+  instructor labs, and it is the basis for Decision 25. `grubenv` with
+  `menu_auto_hide=1`, default `multi-user.target`, so the copy is at the
+  snapshot, not at exercise 1's end state.
+- `workstation`: BIOS, `graphical.target` default and active, `gdm` active
+  (`display-manager.service` is an alias for it), `menu_auto_hide=1`, `root`
+  `P`, SELinux `Enforcing`, `rhgb quiet` on its kernel line.
+
+Slide captures, each restored:
+
+- `systemctl list-dependencies graphical.target` on `servera`: the lines on
+  2.4; 113 lines in all. On `workstation` the tree starts with
+  `accounts-daemon` and `gdm.service`, both active.
+- `systemctl get-default`: `multi-user.target` on `servera`,
+  `graphical.target` on `workstation`.
+- `systemctl set-default graphical.target` on `servera`: the two lines on 2.6,
+  exit 0. Restored with `set-default multi-user.target`; the link points at
+  `/usr/lib/systemd/system/multi-user.target` again, with a new timestamp.
+- `systemctl list-units --type target`: 23 loaded units on `servera`, 24 with
+  `graphical.target` on `workstation`.
+
+Unit files and binaries behind 2.3 and 2.8, read on `servera`:
+
+- `rescue.target` requires `sysinit.target` and `rescue.service`;
+  `emergency.target` requires only `emergency.service`.
+  `systemd-remount-fs.service`, which remounts root read/write, is wanted by
+  `local-fs.target`, which `sysinit.target` pulls in. `rescue.target`'s tree
+  includes `systemd-journald`, `systemd-udevd`, `local-fs.target`, and
+  `swap.target`, and no `NetworkManager`. All four boot targets carry
+  `AllowIsolate=yes` among 22 targets.
+- Both shells run `systemd-sulogin-shell`, whose banner reads: `You are in %s
+  mode. After logging in, type "journalctl -xb" to view system logs,
+  "systemctl reboot" to reboot, or "exit" to continue bootup.` It names
+  `default.target`, which it starts when the shell exits. `sulogin` prompts
+  `Give root password for maintenance` / `(or press Control-D to continue):`,
+  and also carries `Cannot open access to console, the root account is
+  locked.`, which bears on fragment 4: with `root` locked, neither repair
+  shell lets anyone in.
+
+Exercise 2 on `workstation`, every step over SSH, run as scripts sent in one
+argument:
+
+- `grub2-editenv - unset menu_auto_hide`, exit 0.
+- `systemctl isolate multi-user.target` prints nothing and exits 0; the SSH
+  session survives; `is-active graphical.target multi-user.target` prints
+  `inactive` and `active` (exit 0, since one is active); `gdm` is `inactive`;
+  `get-default` still prints `graphical.target`.
+- `set-default multi-user.target` prints its two lines. Reboot: ping after 7
+  seconds, SSH after 28, the five-second countdown included. Then
+  `get-default` prints `multi-user.target` and `is-active graphical.target`
+  prints `inactive` (exit 3), as `student`.
+- `sudo systemctl set-default graphical.target`, then a reboot standing in for
+  step 6's: SSH after 34 seconds; `graphical.target` and `gdm` active.
+- Cleanup: `grub2-editenv - set menu_auto_hide=1`, exit 0. The list holds the
+  same four variables as before, with `menu_auto_hide` now last.
+- A side test for 2.6: `set-default multi-user.target` left `graphical.target`
+  and `gdm` active; restored with `set-default graphical.target`.
+- `mount | grep ' / '` on a normal boot prints
+  `/dev/mapper/rhel_workstation-root on / type xfs (rw,relatime,seclabel,...)`.
+
+Restored: `workstation`'s default link points at `graphical.target`, its
+`grubenv` has `menu_auto_hide=1`, and the backup of `grubenv` I copied to
+`/root` first was removed. `servera`'s default link points at
+`multi-user.target`.
+
+**Still to verify over SSH**: whether systemd creates a missing mount point
 (on a scratch disk); `xfs_repair` and `fsck.ext4 -p` on scratch file systems;
-whether a new password removes the `!`; the rest of `workstation`.
+whether a new password removes the `!`.
 
 **Console only**, by Open question 1: the menu's `*`; the editor's text, for
 1.4's text rebuild; End and Ctrl+E in the editor; exercise 1's step 2 itself;
-the rescue and emergency shells' prompts and whether root is `rw` in each;
-`exit` and Ctrl+D from rescue; the 90-second wait and emergency prompt after a
+the rescue and emergency shells' prompts and whether root is `rw` in each (the
+unit files say rescue `rw`, emergency `ro`); `exit` and Ctrl+D from rescue;
+exercise 2's steps 6 and 7; the 90-second wait and emergency prompt after a
 bad UUID; whether root is `rw` in that emergency shell; `systemctl reboot`
 against `reboot -f` there; the `init=/bin/bash` prompt; `passwd` there; the
 relabel's length and automatic reboot; a console login as a locked `root`.
 
-**Where the lab is.** `servera` is at exercise 1's end state:
-`menu_auto_hide` unset, the kernel line back to its original arguments (the
-entry file without its trailing space), and the running kernel booted with
-`ipv6.disable=1`, so IPv6 is off until its next boot. `boot_success` was 0 at
-the last check. `workstation` is at the snapshot. Before recording, the lab
-must go back to the week's start (`start-latest-snapshot -a`).
+**Where the lab is.** Two copies now carry this week's checks. On the copy
+used in Rounds 1 and 2, `servera` was left at exercise 1's end state on
+2026-10-29: `menu_auto_hide` unset, the kernel line back to its original
+arguments (the entry file without its trailing space), and the running kernel
+booted with `ipv6.disable=1`. It has not been checked since. On the copy used
+in Round 3, `servera` and `workstation` are at their starting state. Before
+recording, the recording lab must go back to the week's start
+(`start-latest-snapshot -a`).
 
 ## Authoring notes
 
@@ -1168,11 +1386,18 @@ must go back to the week's start (`start-latest-snapshot -a`).
   with text.
 - No presenter notes. Anything learned on the lab goes under "Verification".
 - No em dashes. Search the new files for U+2014 before handing work back.
+- **Placeholders in a fresh clone.** `*.placeholder.*` files are ignored by
+  Git, so a clone made after fragment 1 was committed has no
+  `grub-menu.placeholder.png` or `grub-editor.placeholder.png`, and 1.3 and
+  1.4 show broken images. Copy them in from the working copy that has them.
+- **`<kbd>` in captures** renders as letter-spaced monospace ("C t r l"), on
+  1.3 as well as 2.8. A theme question, not a fragment one.
 
 ## Decisions
 
-All proposed on 2026-10-29. The instructor accepted every one the same day
-except Decision 9, which was rejected. Each is reversible.
+Decisions 1 to 24 were proposed on 2026-10-29, and the instructor accepted
+every one the same day except Decision 9, which was rejected. Decision 25 is
+proposed on 2026-10-31 and open. Each is reversible.
 
 1. **Four fragments**, one per source section, in two chapter directories,
    `rh134-ch12-controlling-and-troubleshooting-the-boot-process/` and
@@ -1230,6 +1455,16 @@ except Decision 9, which was rejected. Each is reversible.
 23. **The corrections** under "Corrections", each pending its check where
     marked. Accepted.
 24. **Cut nothing until built.** Accepted.
+25. **Correct 1.2's BIOS path for a GPT disk.** Proposed 2026-10-31, open.
+    1.2's node "GRUB2 core image before partition 1" follows B2's presenter
+    notes, which describe an MBR disk, where the core image sits in the gap
+    before the first partition. The lab disks are GPT: partition 1 is a 1 MB
+    BIOS boot partition (`bios_grub`), and the core image lives there
+    (Round 3; the same layout as `docs/lab-environments.md` gives). Proposed:
+    relabel the node "GRUB2 core image in the BIOS boot partition". The
+    "Boot sector (MBR)" node stays, since the protective MBR still holds
+    GRUB2's boot code (`pmbr_boot`). Fragment 1 is committed, so this is
+    your call; I have not touched it.
 
 ## Open questions
 
@@ -1255,33 +1490,40 @@ except Decision 9, which was rejected. Each is reversible.
 4. **The GRUB screenshots' origin.** Are `grub-menu-1.png`, `grub-editor.png`,
    and `grub-cmdline-edit.png` your captures of the RHA lab? Either way they
    do not match the SCC lab (Decision 11).
-5. **Recording exercise 1.** The recording runs unattended, but step 2 needs
-   the argument typed at the GRUB2 menu, or `/proc/cmdline` in step 3 will not
-   show it. The command file pauses 45 seconds after that reboot so you can
-   make the edit in the console during the take. Does that work for you, or
-   should step 2 stay out of the recording?
+5. **Recording exercises 1 and 2.** The recording runs unattended, but
+   exercise 1's step 2 needs the argument typed at the GRUB2 menu, or
+   `/proc/cmdline` in step 3 will not show it. The command file pauses 45
+   seconds after that reboot so you can make the edit in the console during
+   the take. Exercise 2 asks more: after step 6's reboot, 45 seconds for the
+   edit and the boot to the rescue shell, then 45 on step 7's header to log
+   in, run `mount`, and `exit`, before the take reconnects. Does that work for
+   you, or should those steps stay out of the recordings? The pauses are
+   timed on the instructor lab; the VDI is slower.
 
 ## Status
 
-As of 2026-10-29.
+As of 2026-10-31.
 
 **Done:**
 
-- This plan; your decisions (all accepted except 9).
-- `course/w12-draft.md`: cover, VM reminder, and fragment 1's import.
-- Fragment 1, `grub2-boot-loader.md`: 16 slides built and checked
+- This plan; your decisions 1 to 24 (all accepted except 9).
+- `course/w12-draft.md`: cover, VM reminder, and the imports for fragments 1
+  and 2.
+- Fragment 1, `grub2-boot-loader.md`, and exercise 1: complete (`616d13c`).
+- Fragment 2, `systemd-targets.md`: 10 slides built and checked
   (`check:entry`, `check:exercises`, `check:slides`, and captures of every
-  click state), with `assets/grub-menu.placeholder.png` and
-  `assets/grub-editor.placeholder.png`.
-- Exercise 1's `change-kernel-arguments-exercise.sh` (`kitty-demo --check`:
-  59 presses) and `change-kernel-arguments-exercise.html`, verified on
-  `servera` except the console edit.
-- The lab checks behind fragment 1, under "Verification". `servera` is at
-  exercise 1's end state.
+  click state).
+- Exercise 2's `switch-systemd-targets-exercise.sh` (`kitty-demo --check`: 61
+  presses) and `switch-systemd-targets-exercise.html`, verified on
+  `workstation` except the console steps.
+- The lab checks behind fragment 2, under "Verification", Round 3. Both hosts
+  on the copy used are back at their starting state.
 
 **Next:**
 
-1. Your review of fragment 1, and Open questions 1 and 5.
-2. Fragment 2, `systemd-targets.md`, and exercise 2 on `workstation`.
+1. Your review of fragment 2, Decision 25, and Open questions 1 and 5.
+2. Fragment 3, `repairing-file-systems-at-boot.md`, and exercise 3 on
+   `servera`.
 
-The review server started for this work on port 3131 was stopped afterwards.
+No review server was started for fragment 2; the slides were captured with
+`pnpm run capture:course`.

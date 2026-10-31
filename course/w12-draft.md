@@ -35,3 +35,7 @@ Start `workstation` and `servera` on your VDI
 ---
 src: ./chapters/rh134-ch12-controlling-and-troubleshooting-the-boot-process/grub2-boot-loader.md
 ---
+
+---
+src: ./chapters/rh134-ch12-controlling-and-troubleshooting-the-boot-process/systemd-targets.md
+---
