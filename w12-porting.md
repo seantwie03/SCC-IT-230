@@ -32,16 +32,16 @@ Where things stand on 2026-10-31:
 
 1. **Fragment 1 is complete** (committed 2026-10-31 as `616d13c`), with its
    long output lines wrapped once at a space as built.
-2. **Fragment 2 is built**: 10 of its 11 slides (the recording slide waits on
-   the cast), exercise 2's command file and written version, and its import in
-   the draft entry. It waits on your review.
-3. **The console steps are still unverified.** The GRUB2 menu and editor, the
+2. **Fragment 2 is complete** (`784ed53`), its recording slide waiting on the
+   cast.
+3. **Fragment 3 is built**: all 8 slides, exercise 3's command file and
+   written version, and its import in the draft entry. It waits on your
+   review.
+4. **The console steps are still unverified.** The GRUB2 menu and editor, the
    rescue and emergency shells, and the `init=/bin/bash` shell cannot be
-   reached through `pnpm lab`. Open question 1 is still open. Fragment 2's
-   rescue-shell claims rest on the unit files and RH134 (see "Verification",
-   Round 3).
-4. **Decision 25 is new**: a correction to fragment 1's diagram (1.2) that
-   Round 3 turned up.
+   reached through `pnpm lab`. Open question 1 is deferred. Fragments 2 and
+   3's shell claims rest on the unit files, RH134, and the instructor's
+   captures (see "Verification", Rounds 3 and 4).
 
 ## Scope
 
@@ -735,10 +735,21 @@ Pending the cast. Like exercise 1's, the take needs console work during its
 pauses: the GRUB2 edit after step 6's reboot and the rescue shell during the
 pause on step 7's header (Open question 5).
 
-### 3. `repairing-file-systems-at-boot.md` (8 slides, proposed)
+### 3. `repairing-file-systems-at-boot.md` (8 slides), built 2026-10-31
 
 `routeAlias: repairing-file-systems-at-boot`. Alignments: RH134 chapter 12,
-cert guide chapter 18. Exercise: Repair a File System at Boot Exercise.
+cert guide chapter 18. Exercise: Repair a File System at Boot Exercise,
+declared in `topicInfo`. Deck slides 29 to 36. Checked with `check:entry`,
+`check:exercises`, and `check:slides` (no overflow; clearances below), and
+every slide and click state was captured at 1920x1080. The transcripts are
+real output from `servera` on the Round 3 lab copy, on 2026-10-31
+("Verification", Round 4). The entries below describe what shipped; the
+fragment waits on the instructor's review.
+
+W10's `mounting-file-systems.md` taught the fstab fields (including "fsck:
+check at boot? `0` is no"), `lsblk -fp` for UUIDs, and `systemctl
+daemon-reload` and `mount --all` after an edit. This fragment relies on all of
+them.
 
 ##### 3.1 Repairing File Systems at Boot
 
@@ -748,73 +759,120 @@ Components: `section`.
 
 ##### 3.2 When the Boot Process Fails
 
-Source B25. A bad `/etc/fstab` entry can stop the boot; the three-row cause
-table; systemd drops to an emergency shell that asks for the root password.
-Corrections, to verify: a missing mount point may not stop the boot at all,
-since systemd creates the directory for a mount unit; and for XFS, `fsck.xfs`
-does nothing at boot (RH134), so "systemd attempts repair" applies to ext4.
+Source B25, corrected (Round 4). "A bad `/etc/fstab` entry can halt the boot"
+(with "halt the boot" in `AccentText`), then a two-row table, **Problem**
+against **What happens at boot**: "Device or UUID that does not exist",
+"systemd waits 90 seconds for it, then gives up"; "Damaged file system", "The
+mount may fail; `fsck` at boot repairs ext4, not XFS". Then "Then systemd
+opens an **emergency shell** and asks for the `root` password" (B25's closing
+blockquote) and a `Callout`: "A missing mount point does not stop the boot:
+systemd creates the directory".
 
-Components: default layout, Markdown table, `Callout`.
+B25's third row, "Nonexistent mount point: mount fails immediately", is the
+`Callout` now: on the lab, `mount --all` fails on a missing mount point, but
+the mount unit systemd builds from the same line creates the directory and
+mounts (Round 4). RH134 says the same as B25 and is wrong for RHEL 10 too.
+B25's "systemd attempts repair" for a corrupted file system holds only for
+ext4 with a nonzero sixth field; `fsck.xfs` is a stub. `check:slides`: 42.12px.
+
+Components: default layout, `AccentText`, Markdown table, `Callout`.
 
 ##### 3.2a What a Failed Boot Looks Like
 
-**Addition** (Decision 12). Two click states over the instructor's two
-console captures: systemd's 90-second wait on the missing UUID, then the
-emergency-mode password prompt. Alt text quotes the key lines.
+**Addition** (Decision 12). Two `v-switch` states over the instructor's
+console captures, copied in as `assets/boot-stalled-incorrect-uuid.placeholder.png`
+(1642 by 212) and `assets/emergency-mode.placeholder.png` (1260 by 418). First:
+"systemd waits 90 seconds for the device with the mistyped UUID" over the
+stalled job line, `(27s / 1min 30s)`. Second: "Then it gives up and opens the
+emergency shell" over the emergency banner and password prompt. Each alt text
+quotes the key lines, since the images are text. The banner in the second
+capture matches, word for word, the `systemd-sulogin-shell` string read in
+Round 3. `check:slides`: 138.83px, then 51.69px.
 
-Components: default layout with an image per click state (`v-switch`).
+The stalled capture's UUID is `b688d484-3d0c-...`, which is neither the Round
+3 lab copy's `/boot` (`5c381752-...`, on 3.4) nor recorded for the home copy
+(Open question 6).
+
+Components: default layout, `v-switch` with an image per template.
 
 ##### 3.3 Remount Root Read/Write
 
-Source B26. Check `mount | grep root` before assuming; remount with `mount -o
-remount,rw /` if `ro` appears. Typo: the source's `rhel_servera_root` is
-`rhel_servera-root` (verified). The claims "explicit `emergency.target`: read
-only" and "fstab failure: usually already read/write" are to verify on the
-console, and the transcript is captured there.
+Source B26. "Booted to `emergency.target` on purpose: `/` is mounted
+**read-only**" and "Dropped there by a failed mount: `/` is usually already
+**read/write**" (both B26's claims, now backed by the unit files: see Round
+4), then a fixed terminal with `mount | grep root` and its real line,
+`/dev/mapper/rhel_servera-root on / type xfs (rw,relatime,...)` in full, then
+"`ro` in the options means remount before editing `/etc/fstab`" over a `bash`
+fence of `mount -o remount,rw /`. B26's typo `rhel_servera_root` is fixed by
+using the real output, and its "Abridged Output" title with an em dash is
+gone.
 
-Components: fixed `TerminalWindow` (console capture), `bash` fence.
+The output was captured over SSH on a normal boot, so it shows `rw`; the slide
+claims only that the options show `rw` or `ro`. A first build put the line in
+a `TextExplainer` marking `rw`, which ran 168px off the right edge: the line
+is 106 columns and `TextExplainer` at `sm` holds fewer than a `TerminalWindow`.
+`check:slides`: 44.59px.
+
+Components: fixed `TerminalWindow`, `bash` fence.
 
 ##### 3.4 Find the Failing Mount
 
-Source B27. `mount --all` and its error. Verified with a scratch fstab
-(`mount --all --fstab`), exit 32 both times: a missing mount point prints
-"mount: /mnt/mountfolder: mount point does not exist." and a second line,
-"       dmesg(1) may have more information after failed mount system call.",
-which the source leaves out; a mistyped UUID prints "mount: /boot: can't find
-UUID=...zzz." Proposed: show the UUID form, since that is what the exercise
-produces, or both.
+Source B27. "`mount --all` mounts every `/etc/fstab` entry that is not already
+mounted", then the real error for a mistyped `/boot` UUID on `servera`, `mount:
+/boot: can't find UUID=5c381752-9fdd-458f-976f-240db85ec6a4zzz.` (exit 32),
+then "Each error names the mount point and the device it could not find" and a
+`Callout`: "Fix the error, then run `mount --all` again: no output means every
+entry mounted" (B27's closing blockquote).
+
+B27's example, the missing mount point, became the UUID form (the plan's first
+option): a missing mount point no longer stops a boot (3.2), and the UUID form
+is what 3.2a and the exercise produce. The missing-mount-point error and its
+`dmesg(1)` line stay in this plan (Round 1, Round 4). `check:slides`: 53.92px.
 
 Components: fixed `TerminalWindow`, `Callout`.
 
 ##### 3.5 Fix `/etc/fstab` and Reload
 
-Source B28. Two click states: edit the bad entry (three common fixes), then
-`systemctl daemon-reload`, `mount --all`, and a reboot. The source's slide says
-`systemctl reboot` and its exercise says `reboot -f`; which one works from the
-emergency shell is to verify (Decision 17).
+Source B28, two `v-switch` states. First: "**Step 1:** Edit the bad entry", a
+`bash` fence of `vim /etc/fstab`, and three fixes: correct a typo in a UUID or
+device path, comparing with `lsblk -fp` (w10's command, new here); create a
+missing mount point; comment out an entry for a device that no longer exists.
+Second: "**Step 2:** Reload systemd, then mount every entry", a fence of
+`systemctl daemon-reload` and `mount --all`, then "No errors? Reboot to confirm
+the system boots normally" over `systemctl reboot` (Decision 17). Commands
+only: the emergency shell cannot be captured over SSH. `check:slides`:
+116.67px, 118.72px.
 
-Components: `v-switch` templates, `bash` fences.
+Components: `v-switch` with two templates, `bash` fences, bulleted list.
 
-##### 3.6 Repairing a Corrupted Filesystem
+##### 3.6 Repairing a Corrupted File System
 
-Source B29. `xfs_repair` and `fsck.ext4 -p`, file system unmounted first.
-Correction: the source uses `/dev/sda2` for both, which is the XFS `/boot` on
-the lab; the slide uses a stand-in such as `/dev/sdb1` and says which
-command goes with which file system. Heading "Filesystem" becomes "File
-System". Commands only.
+Source B29. "For damage inside a file system, not an `/etc/fstab` error, run
+its repair tool on the device", then two columns: **XFS**, `xfs_repair
+/dev/sdb1`, "`fsck.xfs` does nothing at boot"; **ext4**, `fsck.ext4 -p
+/dev/sdb2`, "`-p` repairs small problems without asking". A warning `Callout`
+in the `bottom` band: "Unmount the file system first; `xfs_repair` refuses a
+mounted one". B29 ran both tools on `/dev/sda2`, the lab's XFS `/boot`; the
+stand-ins are partitions on a blank disk, one per file system. Both tools were
+run on scratch file systems, and `xfs_repair` on a mounted one (Round 4).
+"Filesystem" became "File System". A first build's XFS caption ran to two
+lines and pushed the columns out of line. `check:slides`: 17px.
 
-Components: default layout, `bash` fences.
+Components: `two-cols-header` with a `bottom` band, `bash` fences, `Callout`.
 
 ##### 3.7 Exercise: Repair a File System at Boot
 
-Source B30. Host `servera`; no prerequisite exercise, since systemd opens the
-emergency shell without the menu (in the chain it follows exercise 1).
-Workflow: break the UUID on one
-`/etc/fstab` line; reboot and log in to the emergency shell; find the bad
-entry with `mount --all`; fix it, reload systemd, and confirm `mount --all`
-succeeds; reboot and confirm a normal boot. The source's "The system has been
-pre-configured with a broken `/etc/fstab` entry" contradicts its own step 0
-and is dropped.
+Source B30 and `repair_file_system_at_boot.sh`. Goal: "Break the `/boot`
+entry in `/etc/fstab`, then repair it from the emergency shell". Environment:
+"**Host:** `servera`, with its VM console open". No prerequisite exercise.
+Workflow: break the UUID of the `/boot` entry in `/etc/fstab`; reboot and log
+in to the emergency shell as `root`; check that the root file system is
+read/write; find the bad entry with `mount --all`; correct the entry in
+`/etc/fstab`; reload systemd and confirm `mount --all` succeeds; reboot and
+confirm a normal boot. B30's "pre-configured with a broken `/etc/fstab`
+entry" is dropped, and its step 0 is step 1. The read/write check is new,
+since 3.3 teaches it and the exercise is where it can be seen. `check:slides`:
+97.91px.
 
 Components: `exercise`.
 
@@ -925,7 +983,8 @@ four, rewritten to the current `kitty-demo` format.
    removed (built; the running kernel keeps IPv6 off until the next boot)
 2. (on `workstation`, independent of the chain; built, and its cleanup
    returns `workstation` to its start)
-3. One `/etc/fstab` UUID broken, the emergency shell, the line fixed
+3. One `/etc/fstab` UUID broken, the emergency shell, the line fixed (built;
+   `/etc/fstab` ends byte for byte as it started)
 4. `root` locked, the password reset to `redhat` from `init=/bin/bash`, the
    relabel; cleanup sets `menu_auto_hide=1` again (Decision 16)
 
@@ -1018,20 +1077,47 @@ Verified on `workstation` on 2026-10-31 (Round 3): every step over SSH,
 including both reboots and the cleanup; step 6's menu edit and step 7's rescue
 shell are console-only and unverified (Open question 1).
 
-### Exercises 3 and 4
+### Exercise 3, Repair a File System at Boot, built 2026-10-31
 
-Changes to the source command files, beyond the format, planned:
+`repair-file-system-at-boot-exercise.sh` and `.html` in the topic's
+`exercises/`; `kitty-demo --check` counts 35 presses. Steps as on 3.7. No
+recording (Decision 10), so the pauses are only the intro's and those on
+output. Ported from `repair_file_system_at_boot.sh`, with these changes:
 
-- `jj:wq` becomes `#@ key escape` and `:wq`.
-- Several `#!` notes share one line (`#! Switch to ... #! When the GRUB2 menu
-  appears ...`), and some console commands are written as notes
-  (`#! mount --all #! The error message ...`). Each becomes one note per line.
-- Exercise 3's `vim` keystrokes (`G`, `kk`, `E`, `azzz`) count lines from the
-  end of the file, which lands on `/boot` only because the lab's `/etc/fstab`
-  ends with the `/dev/sr1` line. Proposed: move by a search that does not
-  depend on line count, or name the line in the written exercise.
-- Exercise 3's final `reboot -f` against 3.5's `systemctl reboot`: one of them
-  wins after the console test (Decision 17).
+- The `vim` edit moves by search, not by counting lines from the end: `/boot`,
+  `0`, `E`, `azzz` (with `#@ noenter` on the last three), `#@ key escape`,
+  `:wq`. Run against a copy of `servera`'s `/etc/fstab` with `vim -Es`, it
+  appends `zzz` to exactly the `/boot` UUID (Round 4). It no longer depends on
+  the `/dev/sr1` line being last, which also answers half of Open question 3.
+  `jj:wq` is gone with it.
+- The source's `cat /etc/fstab` after the edit is `grep /boot /etc/fstab`,
+  which shows the changed line alone.
+- The source ran its console steps together on one line each (`#! mount --all
+  #! The error message ...`). Each step is now its own header, so the audience
+  sees which step the console is on, with one `#!` note per line saying what
+  to type there and what to look for.
+- Step 3, checking `/` is read/write, is new (see 3.7).
+- `systemctl reboot` from the emergency shell, not `reboot -f` (Decision 17).
+- The closing check is `mount | grep /boot` as `student`, not the source's
+  `cat /etc/fstab` and `mount | grep -v tmpfs`.
+
+The written exercise names the VM window as a requirement, describes the
+`vim` edit in four numbered keystrokes, quotes the `mount --all` error with
+the UUID elided, points to `lsblk -fp` for the right UUID, and says there is
+nothing to clean up when exactly the `zzz` is removed. It does not quote the
+root password. `check:exercises`: no violations.
+
+Verified on `servera` on 2026-10-31 (Round 4), over SSH: step 1's edit (on a
+copy) and its effect on `mount --all` (on the real file), and steps 4 to 6's
+commands with `/boot` still mounted. The reboot into the emergency shell and
+everything typed there are console-only and unverified (Open question 1).
+
+### Exercise 4
+
+Changes to the source command file, beyond the format, planned:
+
+- `jj:wq` becomes `#@ key escape` and `:wq`, if the file edits anything.
+- Notes that share a line become one note per line, as in exercises 2 and 3.
 - Pauses per "Pausing for the audience", as in exercise 1.
 
 ## Additions
@@ -1044,7 +1130,8 @@ Accepted 2026-10-29 (Decisions 7, 8, 12, 14, 15, 16, 21, 22):
 3. **`cat /proc/cmdline` on 1.4** (Decision 14), as a sentence. Built.
 4. **Slide 2.8a, systemd Target Commands** (O6), optional (Decision 21).
    Built.
-5. **Slide 3.2a, What a Failed Boot Looks Like** (Decision 12).
+5. **Slide 3.2a, What a Failed Boot Looks Like** (Decision 12). Built, with
+   the two captures as placeholders.
 6. **Recording slides** for the exercises Decision 10 gives casts. The source
    has none.
 7. **Unhiding `workstation`'s menu in exercise 2** (Decision 15), and hiding
@@ -1080,15 +1167,17 @@ Verified on the lab where marked; the rest are typos, logic, or to verify.
 - B22: a bad `/etc/fstab` line is not a job for `rescue.target`, which needs
   `local-fs.target`; systemd falls back to `emergency.target` (unit files,
   RH134). "Services: None" for emergency is softened to "Almost none".
-- B25: a missing mount point may not stop the boot (to verify); XFS is not
-  repaired at boot (RH134).
+- B25: a missing mount point does not stop the boot: the mount unit creates
+  the directory (verified, Round 4; RH134 says otherwise). XFS is not checked
+  at boot: `fsck.xfs` is a stub (verified, and RH134).
 - B26: `rhel_servera_root` is `rhel_servera-root` (verified); the second
   fence title carries an em dash.
 - B27: `mount --all` prints a second line, the `dmesg(1)` hint, and exits 32
   (verified).
-- B28, B30: `systemctl reboot` on the slide, `reboot -f` in the exercise.
+- B28, B30: `systemctl reboot` on the slide, `reboot -f` in the exercise;
+  `systemctl reboot` kept (Decision 17).
 - B29: `/dev/sda2` is the lab's XFS `/boot`, so `fsck.ext4 -p /dev/sda2` is
-  wrong; "Filesystem" becomes "file system".
+  wrong (stand-ins `/dev/sdb1` and `/dev/sdb2` now); "Filesystem" becomes "file system".
 - B30: "pre-configured with a broken `/etc/fstab` entry" contradicts step 0.
 - B23 and its command file: `workstation`'s menu is never unhidden, so step 5
   cannot be done as written unless someone catches a one-second hidden
@@ -1328,16 +1417,61 @@ Restored: `workstation`'s default link points at `graphical.target`, its
 `/root` first was removed. `servera`'s default link points at
 `multi-user.target`.
 
-**Still to verify over SSH**: whether systemd creates a missing mount point
-(on a scratch disk); `xfs_repair` and `fsck.ext4 -p` on scratch file systems;
-whether a new password removes the `!`.
+**Round 4**, 2026-10-31, on the Round 3 lab copy, `servera` only. One script,
+sent in one argument, with a trap that restored everything on exit; the
+baseline is the same as Round 3's.
+
+- `/etc/fstab` (SHA-256 `347cab0d...`): root, `/boot`, and swap by UUID, all
+  with `0 0`, and `/dev/sr1 /mnt/dvd iso9660 defaults,nofail 0 0` last, as on
+  the home copy. `/boot` is `/dev/sda2`, UUID `5c381752-...`.
+- Timeouts: `DefaultTimeoutStartUSec=1min 30s`, and `boot.mount` and
+  `dev-sda2.device` carry a 90-second running timeout, so the wait on 3.2 and
+  3.2a is the default. `local-fs.target` has `OnFailure=emergency.target`.
+- `systemd-remount-fs.service`, which remounts `/` read/write, runs before
+  `local-fs-pre.target` and `local-fs.target`, so by the time a `/boot` mount
+  fails, `/` is already read/write; `emergency.target` alone never pulls it in
+  (Round 3). That is the basis for 3.3's two claims.
+- `fsck.xfs` is a shell script; run by hand on a device it prints "If you
+  wish to check the consistency of an XFS filesystem or repair a damaged
+  filesystem, see xfs_repair(8)." and exits 0.
+- `mount | grep root` and `mount | grep ' / '` both print only the root line;
+  `mount | grep /boot` prints `/dev/sda2 on /boot type xfs (rw,...)`.
+- **A mistyped `/boot` UUID**, in the real `/etc/fstab` (`zzz` appended with
+  `sed`, then `systemctl daemon-reload`): `mount --all` prints `mount: /boot:
+  can't find UUID=5c381752-9fdd-458f-976f-240db85ec6a4zzz.` and exits 32, while
+  `/boot` stays mounted (`boot.mount` keeps `What=/dev/sda2` and stays
+  active). With the file restored and systemd reloaded, `mount --all` prints
+  nothing and exits 0.
+- **A missing mount point**, with a scratch XFS file system on `/dev/sdb` and a
+  line for `/mnt/w12probe` added to `/etc/fstab`: `mount --all` fails with
+  `mount: /mnt/w12probe: mount point does not exist.` and the `dmesg(1)` line,
+  exit 32. After `systemctl daemon-reload`, `systemctl start
+  mnt-w12probe.mount`, the unit the boot would start, exits 0, creates the
+  directory, and mounts it.
+- **`xfs_repair`** on that file system while mounted: "contains a mounted and
+  writable filesystem", "fatal error -- couldn't initialize XFS library",
+  exit 1. Unmounted: Phases 1 to 7 and `done`, exit 0.
+- **`fsck.ext4 -p`** on a fresh ext4 file system on `/dev/sdc`: `/dev/sdc:
+  clean, 11/327680 files, 42078/1310720 blocks`, exit 0.
+- Exercise 3's `vim` keystrokes on a copy of `/etc/fstab` in `/tmp`, through
+  `vim -Es` with the system `vimrc`: only the `/boot` line changed, its UUID
+  now ending in `zzz`. The copy was removed.
+
+Restored: `/etc/fstab` copied back from its backup (checksum matches),
+systemd reloaded, `/mnt/w12probe` unmounted and removed (no unit left),
+`/dev/sdb` and `/dev/sdc` wiped (`wipefs` and `blkid -p` find no signature),
+and the backup removed from `/root`.
+
+**Still to verify over SSH**: whether a new password removes the `!`.
 
 **Console only**, by Open question 1: the menu's `*`; the editor's text, for
 1.4's text rebuild; End and Ctrl+E in the editor; exercise 1's step 2 itself;
 the rescue and emergency shells' prompts and whether root is `rw` in each (the
 unit files say rescue `rw`, emergency `ro`); `exit` and Ctrl+D from rescue;
 exercise 2's steps 6 and 7; the 90-second wait and emergency prompt after a
-bad UUID; whether root is `rw` in that emergency shell; `systemctl reboot`
+bad UUID (the instructor's captures on 3.2a show both, from an earlier run);
+whether root is `rw` in that emergency shell (the unit ordering says yes);
+exercise 3's steps 2 to 7; `systemctl reboot`
 against `reboot -f` there; the `init=/bin/bash` prompt; `passwd` there; the
 relabel's length and automatic reboot; a console login as a locked `root`.
 
@@ -1346,7 +1480,7 @@ used in Rounds 1 and 2, `servera` was left at exercise 1's end state on
 2026-10-29: `menu_auto_hide` unset, the kernel line back to its original
 arguments (the entry file without its trailing space), and the running kernel
 booted with `ipv6.disable=1`. It has not been checked since. On the copy used
-in Round 3, `servera` and `workstation` are at their starting state. Before
+in Rounds 3 and 4, `servera` and `workstation` are at their starting state. Before
 recording, the recording lab must go back to the week's start
 (`start-latest-snapshot -a`).
 
@@ -1396,8 +1530,9 @@ recording, the recording lab must go back to the week's start
 ## Decisions
 
 Decisions 1 to 24 were proposed on 2026-10-29, and the instructor accepted
-every one the same day except Decision 9, which was rejected. Decision 25 is
-proposed on 2026-10-31 and open. Each is reversible.
+every one the same day except Decision 9, which was rejected. Decision 25,
+proposed on 2026-10-31, was overtaken the same day: the instructor will redraw
+the diagram. Each is reversible.
 
 1. **Four fragments**, one per source section, in two chapter directories,
    `rh134-ch12-controlling-and-troubleshooting-the-boot-process/` and
@@ -1441,7 +1576,10 @@ proposed on 2026-10-31 and open. Each is reversible.
     menu_auto_hide=1`): exercise 2's on `workstation`, exercise 4's on
     `servera`. Accepted.
 17. **One reboot command in fragment 3**, whichever works from the emergency
-    shell on the console. Accepted.
+    shell on the console. Accepted. Built as `systemctl reboot` on 2026-10-31:
+    the emergency banner itself tells the user to type it (Round 3, and the
+    instructor's capture on 3.2a), and RH134 uses it. Still to run on the
+    console.
 18. **Exercise 4 locks `root` with `passwd -l`**, as its command file does.
     Accepted.
 19. **The `init=/bin/bash` shell** shows its commands in a `bash` fence inside
@@ -1463,12 +1601,15 @@ proposed on 2026-10-31 and open. Each is reversible.
     (Round 3; the same layout as `docs/lab-environments.md` gives). Proposed:
     relabel the node "GRUB2 core image in the BIOS boot partition". The
     "Boot sector (MBR)" node stays, since the protective MBR still holds
-    GRUB2's boot code (`pmbr_boot`). Fragment 1 is committed, so this is
-    your call; I have not touched it.
+    GRUB2's boot code (`pmbr_boot`). Overtaken 2026-10-31: the instructor
+    will redraw fragment 1's boot diagram by hand (tldraw, Inkscape, or
+    similar), since Mermaid is not quite doing it. The GPT fact goes to that
+    redraw; the Mermaid version stays until then.
 
 ## Open questions
 
-1. **Console verification.** Still open. I can verify only what SSH reaches.
+1. **Console verification.** Deferred 2026-10-31: continue building and
+   decide later. I can verify only what SSH reaches.
    Two ways to cover the rest; both would help:
    - **A VDI dry run** with screenshots, as in w10: the GRUB menu, the editor
      with the `linux` line, the editor after an append, the rescue prompt,
@@ -1483,14 +1624,15 @@ proposed on 2026-10-31 and open. Each is reversible.
 2. ~~**`workstation`.**~~ Answered 2026-10-29 for the instructor lab: graphical
    login with `gdm` (see "Verification", Round 2). Still to confirm on the SCC
    lab.
-3. **The SCC lab's `/etc/fstab` and GRUB environment.** Does it also end with
-   the `/dev/sr1 /mnt/dvd` line, and do SCC hosts start with
-   `menu_auto_hide=1`? Exercise 3's `vim` keystrokes and exercise 1's first
-   step assume both.
+3. **The SCC lab's GRUB environment.** Do SCC hosts start with
+   `menu_auto_hide=1`? Exercises 1 and 2's first step assume it. The
+   `/etc/fstab` half of this question is gone: exercise 3's `vim` edit now
+   searches for `/boot` instead of counting lines from the end.
 4. **The GRUB screenshots' origin.** Are `grub-menu-1.png`, `grub-editor.png`,
    and `grub-cmdline-edit.png` your captures of the RHA lab? Either way they
    do not match the SCC lab (Decision 11).
-5. **Recording exercises 1 and 2.** The recording runs unattended, but
+5. **Recording exercises 1 and 2.** Deferred 2026-10-31: continue building
+   and settle the recordings later. The recording runs unattended, but
    exercise 1's step 2 needs the argument typed at the GRUB2 menu, or
    `/proc/cmdline` in step 3 will not show it. The command file pauses 45
    seconds after that reboot so you can make the edit in the console during
@@ -1500,30 +1642,41 @@ proposed on 2026-10-31 and open. Each is reversible.
    you, or should those steps stay out of the recordings? The pauses are
    timed on the instructor lab; the VDI is slower.
 
+6. ~~**3.2a's capture and 3.4's UUID.**~~ Answered 2026-10-31: they do not
+   have to match. The stalled-boot capture on 3.2a waits
+   on UUID `b688d484-3d0c-...`; 3.4 shows the Round 3 copy's `/boot`,
+   `5c381752-...`, and the home copy's `/boot` UUID was never recorded. Do you
+   want them to agree? If so, either 3.4 is recaptured on the lab the capture
+   came from, or the capture is retaken on the lab 3.4 came from, which also
+   settles the placeholder.
+
 ## Status
 
 As of 2026-10-31.
 
 **Done:**
 
-- This plan; your decisions 1 to 24 (all accepted except 9).
+- This plan; your decisions 1 to 24 (all accepted except 9); Decision 25
+  overtaken by your redraw of the boot diagram.
 - `course/w12-draft.md`: cover, VM reminder, and the imports for fragments 1
-  and 2.
-- Fragment 1, `grub2-boot-loader.md`, and exercise 1: complete (`616d13c`).
-- Fragment 2, `systemd-targets.md`: 10 slides built and checked
+  to 3.
+- Fragments 1 and 2 and exercises 1 and 2: complete (`616d13c`, `784ed53`).
+- Fragment 3, `repairing-file-systems-at-boot.md`: 8 slides built and checked
   (`check:entry`, `check:exercises`, `check:slides`, and captures of every
-  click state).
-- Exercise 2's `switch-systemd-targets-exercise.sh` (`kitty-demo --check`: 61
-  presses) and `switch-systemd-targets-exercise.html`, verified on
-  `workstation` except the console steps.
-- The lab checks behind fragment 2, under "Verification", Round 3. Both hosts
-  on the copy used are back at their starting state.
+  click state), with `assets/boot-stalled-incorrect-uuid.placeholder.png` and
+  `assets/emergency-mode.placeholder.png`.
+- Exercise 3's `repair-file-system-at-boot-exercise.sh` (`kitty-demo --check`:
+  35 presses) and `repair-file-system-at-boot-exercise.html`, verified over
+  SSH except the console steps.
+- The lab checks behind fragment 3, under "Verification", Round 4. `servera`
+  on the copy used is back at its starting state.
 
 **Next:**
 
-1. Your review of fragment 2, Decision 25, and Open questions 1 and 5.
-2. Fragment 3, `repairing-file-systems-at-boot.md`, and exercise 3 on
-   `servera`.
+1. Your review of fragment 3.
+2. Fragment 4, `recovering-superuser-access.md`, and exercise 4 on `servera`.
 
-No review server was started for fragment 2; the slides were captured with
+Open questions 1 and 5 are deferred until the week is built.
+
+No review server was started; the slides were captured with
 `pnpm run capture:course`.

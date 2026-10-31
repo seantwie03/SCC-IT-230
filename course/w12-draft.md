@@ -39,3 +39,7 @@ src: ./chapters/rh134-ch12-controlling-and-troubleshooting-the-boot-process/grub
 ---
 src: ./chapters/rh134-ch12-controlling-and-troubleshooting-the-boot-process/systemd-targets.md
 ---
+
+---
+src: ./chapters/rh134-ch12-controlling-and-troubleshooting-the-boot-process/repairing-file-systems-at-boot.md
+---
