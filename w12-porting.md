@@ -2410,3 +2410,15 @@ recording slides).
 
 No review server was started; the slides were captured with
 `pnpm run capture:course`.
+
+## Flatpak
+
+I want to cover Flatpak from RH124. The reason I want to do this is: flatpak is only covered in the RHEL 10 version of RH124. I think the Intro to Linux (IT-130) course is still teaching the RHEL 9.4 version. I am encouraging students to take the version 10 exam, so I need to make sure I cover this gap.
+
+The RHA motivation for this chapter is not right in my opinion. RHA says the montivation is to solve underlying dependency requirements. I think a better motivation is to get fresher packages. RHA repeats over and over that Flatpak is only for desktop apps. I agree with this, it is not totally accurate but it is a good way for the students to distinguish between flatpak and rpm. For desktop software you usually want the newest version to get the latest features and bug fixes. RHEL releases usually do not upgrade software as quickly as upstream desktop apps. So to get that newest version of firefox, inkscape, etc. get it from flatpak and flathub.
+
+Another motivation is that flatpak is installable without sudo. This means regular users can install flatpak. This is allowed because the flatpaks are self-contained. Everything that is needed to run an application is included in the flatpak. Also, installing a flatpak won't make any changes to the system that any other user will notice.
+
+I want to skip the auth part. I just want to use flathub unauthenticated. I only want to teach the mask command if it can be ran by an administrator to prevent users from installing a certain version of a flatpak.
+
+I do want to teach doing things like adding/removing a remote from cli. Same for installing/removing a flatpak. Then at the end show it can also be done through Gnome Software.
