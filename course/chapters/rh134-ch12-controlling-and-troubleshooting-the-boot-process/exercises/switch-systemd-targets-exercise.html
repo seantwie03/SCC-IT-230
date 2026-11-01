@@ -558,9 +558,9 @@ systemctl get-default</code></pre>
                             <code>multi-user.target</code> is still
                             <code>active</code>. Your SSH session survives,
                             because <code>sshd</code> belongs to
-                            <code>multi-user.target</code>. The default is
-                            still <code>graphical.target</code>, so the next
-                            boot would bring the graphical login back.
+                            <code>multi-user.target</code>. The default is still
+                            <code>graphical.target</code>, so the next boot
+                            would bring the graphical login back.
                         </p>
                     </li>
                     <li class="step">
@@ -603,7 +603,9 @@ systemctl get-default</code></pre>
                         </p>
                     </li>
                     <li class="step">
-                        <h2>Boot once into rescue.target from the GRUB2 menu</h2>
+                        <h2>
+                            Boot once into rescue.target from the GRUB2 menu
+                        </h2>
                         <p>
                             Bring the <code>workstation</code> VM window forward
                             first, since the menu appears there. Then reboot
@@ -638,8 +640,8 @@ systemctl get-default</code></pre>
                         </ol>
                         <p>
                             The boot stops at a message that you are in rescue
-                            mode, followed by a prompt for the root password
-                            for maintenance. Type the <code>root</code>
+                            mode, followed by a prompt for the root password for
+                            maintenance. Type the <code>root</code>
                             password. You get a root shell on the console, with
                             no network and no SSH.
                         </p>
@@ -661,8 +663,7 @@ exit</code></pre>
                             the shell, and the boot continues to the default
                             target, <code>graphical.target</code>, which brings
                             the graphical login screen back. The
-                            <code>systemd.unit=</code> argument lasted one
-                            boot.
+                            <code>systemd.unit=</code> argument lasted one boot.
                         </p>
                         <p>
                             When the graphical login appears, connect again from
@@ -670,7 +671,10 @@ exit</code></pre>
                         </p>
                         <pre><code>ssh workstation
 systemctl is-active graphical.target</code></pre>
-                        <p><code>graphical.target</code> is <code>active</code>.</p>
+                        <p>
+                            <code>graphical.target</code> is
+                            <code>active</code>.
+                        </p>
                     </li>
                     <li class="step">
                         <h2>Clean up</h2>

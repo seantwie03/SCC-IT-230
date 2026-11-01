@@ -114,7 +114,7 @@ vertical: center
 
 ::right::
 
-![The GRUB2 boot menu: a list of Red Hat Enterprise Linux kernel entries with one highlighted, above instructions for the arrow keys, Enter to boot, e to edit, and c for a command line](./assets/grub-menu.placeholder.png)
+![The GRUB2 boot menu on servera: two Red Hat Enterprise Linux entries, the 6.12.0-55.9.1.el10_0 kernel highlighted and marked with an asterisk above the rescue entry, then instructions for the arrow keys, Enter to boot, e to edit, and c for a command line, and the countdown: The highlighted entry will be executed automatically in 4s](./assets/grub-menu.png)
 
 ---
 layout: two-cols-header
@@ -139,11 +139,33 @@ Changes apply to <AccentText>this boot only</AccentText>
 
 ::right::
 
-![The GRUB2 editor showing the commands for one boot entry; the line that starts with linux holds the kernel path followed by its arguments](./assets/grub-editor.placeholder.png)
+![The GRUB2 editor showing the commands for one boot entry: load_video, set gfxpayload=keep, insmod gzio, then the line that starts with linux, holding the kernel path and its arguments and wrapped over three screen lines, then the initrd line](./assets/grub-editor.png)
 
-::bottom::
+---
+vertical: center
+---
 
-After boot, `cat /proc/cmdline` shows the arguments the running kernel received
+# Check the Running Kernel's Arguments
+
+`/proc/cmdline` holds the arguments the running kernel booted with
+
+<TextExplainer
+  :lines="[
+    'student@servera:~$ cat /proc/cmdline',
+    'BOOT_IMAGE=(hd0,gpt2)/vmlinuz-6.12.0-55.9.1.el10_0.x86_64',
+    'root=/dev/mapper/rhel_servera-root ro crashkernel=2G-64G:256M,64G-:512M',
+    'resume=UUID=c0d07a5b-5662-4366-a797-9474a1ae9c44 rd.lvm.lv=rhel_servera/root',
+    'rd.lvm.lv=rhel_servera/swap ipv6.disable=1',
+  ]"
+  :steps="[
+    { line: 2, explanation: 'Added by GRUB2: the kernel it loaded' },
+    { line: 3, text: 'root=/dev/mapper/rhel_servera-root', explanation: 'The root file system' },
+    { line: 3, text: 'ro', occurrence: 3, explanation: 'Mount / read-only at first; systemd remounts it read/write later' },
+    { line: 5, text: 'ipv6.disable=1', explanation: 'Typed at the end of the linux line in the GRUB2 editor, so it comes last' },
+  ]"
+/>
+
+Wrapped here at spaces; the real output is a single line
 
 ---
 

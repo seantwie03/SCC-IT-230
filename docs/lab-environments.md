@@ -138,6 +138,12 @@ Before the 2026-10-17 rebuild the disks were virtio, named `vda` through `vdd`
 with a udev rule adding `sd` symlinks, and the interface was `enp1s0`.
 Transcripts and recordings made before then show those names.
 
+Each VM also has a serial port (`ttyS0`, a 16550A) that libvirt exposes as a
+`pty`, so `virsh -c qemu:///system console <vm>` attaches to it from the host.
+Plain `virsh` connects to the session URI and finds no VMs. Week 12
+prototyped presenting and recording console steps through it; until those
+settings are part of the lab build, the kernel and GRUB2 do not use it.
+
 ### How it is built
 
 From the same repository as the SCC lab, automated through
@@ -148,8 +154,8 @@ closely matches what the kickstart currently describes.
 
 ## Differences that reach the screen
 
-Four differences change what a student types or sees. A transcript that ignores
-them sends someone to a machine that does not match.
+These differences change what a student types or sees. A transcript that
+ignores them sends someone to a machine that does not match.
 
 ### Network interfaces
 
@@ -185,9 +191,28 @@ All three environments present SATA-style names.
 | SCC | `sda` | `sdb`, `sdc`, `sdd` | 1 MB, 1 GB `/boot`, then LVM holding root and swap |
 | Instructor | `sda` | `sdb`, `sdc`, `sdd` | Same as SCC |
 
-On the instructor lab each name stays on the same SATA port across reboots. The
-one part of `parted print` that still differs from SCC is the `Model:` line,
-which reads `ATA QEMU HARDDISK` there; VirtualBox reports its own model name.
+The table shows the usual order, not a guaranteed one. The kernel names `sd`
+disks in the order their asynchronous probes finish, so a fresh boot can name
+them differently, as RH134's storage chapter warns. Measured on the instructor
+lab's `servera` on 2026-11-01, 6 of 51 boots named the OS disk `sdd`: 1 of 30
+with nothing reading its serial console, and 5 of 21 while `virsh console` was
+attached. Each time, the blank disks moved up to `sda`, `sdb`, and `sdc` in
+port order. A snapshot revert does not boot, so it keeps the names the
+snapshot was taken with; only a reboot can reorder them. If `lsblk` shows the
+10 GB OS disk under any name but `sda`, reboot before a storage demonstration
+or recording. Whether the SCC lab's VirtualBox disks reorder the same way has
+not been measured.
+
+The one part of `parted print` that still differs from SCC is the `Model:`
+line, which reads `ATA QEMU HARDDISK` on the instructor lab; VirtualBox reports
+its own model name.
+
+The volume group holding root and swap is named differently: `rhel` on SCC's
+`servera` and `workstation`, and `rhel_` plus the host name on the instructor
+lab (`rhel_servera`, `rhel_workstation`). Root is therefore
+`/dev/mapper/rhel-root` on SCC and `/dev/mapper/rhel_servera-root` on the
+instructor lab's `servera`, and the name shows in `mount`, `df`, `lsblk`,
+`lvs`, `/proc/cmdline`, and `grubby --info`.
 
 Every environment boots BIOS, yet the RHA image carries an EFI partition
 mounted at `/boot/efi`. A student running `lsblk` there sees an ESP that is not
@@ -249,6 +274,59 @@ is a student problem.
 The gap is deliberate. The install step shows students the package name, and
 the machines in the RHCSA exam may not have these packages installed either.
 
+`plymouth`, the boot splash, is a difference of another kind: SCC's `servera`
+shows it, while the instructor lab has it on `workstation` only. See "Booting
+and the console".
+
+### Booting and the console
+
+Found on 2026-11-01 while checking week 12's console steps on the SCC lab's
+VDI and on the instructor lab.
+
+SCC's `servera` and `serverb` boot with `rhgb quiet` on the kernel line, and
+`servera`'s VM window showed a Plymouth splash while it booted; <kbd>Esc</kbd>
+switches it to the boot messages. That matters whenever an exercise has
+students watch a boot: on SCC, the 90-second wait for a missing device sat
+behind the splash until <kbd>Esc</kbd>. The instructor lab's `workstation`
+behaves the same way, but its `servera` has neither `rhgb quiet` nor the
+`plymouth` package, so it prints every kernel and systemd message as text. The
+kernel line therefore differs in `/proc/cmdline`, in `grubby --info`, and in
+the GRUB2 editor.
+
+`quiet` also lowers the console log level. The instructor lab's `servera`
+(`kernel.printk` `7 4 1 7`) prints kernel notices on its console, such as
+`XFS (sda2): Mounting V5 Filesystem ...` after a `mount`; SCC's servers do
+not. Warnings still reach the SCC console: `Warning: Unmaintained driver is
+detected: e1000` during `servera`'s boot, three `vmwgfx ... [drm]
+*ERROR*` lines about an unsupported hypervisor on `workstation`'s rescue
+screen, and, in emergency mode, `[FAILED] Failed to start kdump.service` just
+above the emergency banner.
+
+GRUB2 behaves alike in both target labs. Both start with `menu_auto_hide=1`
+in `/boot/grub2/grubenv` (checked on SCC's `serverb` and the instructor lab's
+`servera` and `workstation`), so the menu stays hidden after a successful boot
+until an exercise unsets it. SCC's boot entries end their `initrd` line with
+`$tuned_initrd`, which the instructor lab's lack; it shows in the GRUB2
+editor.
+
+The SCC lab is much slower at boot-time work. On the VDI, `servera` took about
+40 seconds from `systemctl reboot` to the wait for a missing device, against
+about 18 on the instructor lab, whose menu appears under 2 seconds after the
+reboot. A full SELinux relabel took 2 minutes 3 seconds on the VDI and about 6
+seconds on the instructor lab. A class following a live demonstration falls
+behind at those points.
+
+### Prompt and editor
+
+SCC's prompt already has the slides' form, `student@servera:~$`, in colour.
+The instructor lab keeps RHEL's default, `[student@servera ~]$`, which is what
+every recording shows.
+
+`root` on the instructor lab has a `~/.vimrc` that turns on line numbers and
+draws each space as a faint dot (`set list`); SCC's `root` has none, so `vim`
+there shows plain text. Those dots are what `pnpm run casts` replaces with
+spaces in recordings.
+
 ## Writing material
 
 Material in this repository targets the SCC lab, and has to run on the
@@ -268,7 +346,17 @@ the week 7 material.
   and instructor labs agree on `enp0s8`, but RHA does not, and SCC also carries
   a NAT link.
 - Use the blank `sdb` through `sdd` disks for storage work; leave the OS disk
-  alone. Both target environments name them the same way.
+  alone. Both target environments name them the same way on a normal boot, but
+  a reboot can reorder them (see "Disks and partitioning"), so start storage
+  exercises with `lsblk`.
+- Expect a splash screen when an SCC server boots. A written exercise that has
+  students watch the console during a boot should tell them to press
+  <kbd>Esc</kbd>, and should not promise kernel messages that `quiet` hides
+  there.
+- Keep the volume group name out of instructions, or have students look it
+  up: it is `rhel` on SCC and `rhel_` plus the host name on the instructor lab.
+- Allow for SCC's speed: a reboot or relabel that takes seconds on the
+  instructor lab takes minutes on the VDI.
 - Never name a key file. SCC and the instructor lab carry both `id_rsa` and
   `lab_rsa`, while RHA carries only `lab_rsa`, so `ssh` finds its key
   differently in each.

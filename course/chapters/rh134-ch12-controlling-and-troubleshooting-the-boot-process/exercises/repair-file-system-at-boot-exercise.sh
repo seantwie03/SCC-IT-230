@@ -39,6 +39,7 @@ clear
 #^ 2. Reboot and log in to the emergency shell as root
 #! Bring the servera console window forward before rebooting
 systemctl reboot
+#! On the SCC lab a splash screen hides the boot; Esc shows the messages
 #! systemd waits 1min 30s for the device with the zzz UUID, then opens the emergency shell
 #! At the prompt for the root password for maintenance, type the root password
 
@@ -62,6 +63,7 @@ systemctl reboot
 
 #^ 7. Reboot and confirm a normal boot
 #! On the console, run: systemctl reboot
+#! Two red "Failed to connect to system scope bus" lines are expected; the reboot goes ahead
 #! Wait for servera to finish booting, then reconnect
 ssh servera
 #! /boot is mounted again from /dev/sda2

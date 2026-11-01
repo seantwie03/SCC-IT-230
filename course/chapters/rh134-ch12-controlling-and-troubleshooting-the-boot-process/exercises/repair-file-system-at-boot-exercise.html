@@ -534,17 +534,22 @@ vim /etc/fstab</code></pre>
                                 Press <kbd>a</kbd> and type <code>zzz</code>,
                                 then press <kbd>Esc</kbd>.
                             </li>
-                            <li>Type <code>:wq</code> and press <kbd>Enter</kbd>.</li>
+                            <li>
+                                Type <code>:wq</code> and press
+                                <kbd>Enter</kbd>.
+                            </li>
                         </ol>
                         <pre><code>grep /boot /etc/fstab</code></pre>
                         <p>
-                            The UUID now ends in <code>zzz</code>. No device
-                            has that UUID, so the next boot cannot mount
+                            The UUID now ends in <code>zzz</code>. No device has
+                            that UUID, so the next boot cannot mount
                             <code>/boot</code>.
                         </p>
                     </li>
                     <li class="step">
-                        <h2>Reboot and log in to the emergency shell as root</h2>
+                        <h2>
+                            Reboot and log in to the emergency shell as root
+                        </h2>
                         <p>
                             Bring the <code>servera</code> VM window forward,
                             then reboot from your SSH session, which ends as
@@ -552,19 +557,23 @@ vim /etc/fstab</code></pre>
                         </p>
                         <pre><code>systemctl reboot</code></pre>
                         <p>
-                            In the VM window, the boot stalls on a job waiting
-                            for a device whose name ends in
-                            <code>zzz.device</code>, with a counter that runs up
-                            to <code>1min 30s</code>. When it runs out, systemd
-                            gives up on <code>/boot</code>, prints a message
-                            that you are in emergency mode, and asks for the
-                            root password for maintenance. Type the
+                            If the VM window shows a splash screen instead of
+                            boot messages, press <kbd>Esc</kbd> to see them. The
+                            boot stalls on a job waiting for a device whose name
+                            ends in <code>zzz.device</code>, with a counter that
+                            runs up to <code>1min 30s</code>. When it runs out,
+                            systemd gives up on <code>/boot</code>, prints a
+                            message that you are in emergency mode, and asks for
+                            the root password for maintenance. Type the
                             <code>root</code> password to get a root shell.
                         </p>
                     </li>
                     <li class="step">
                         <h2>Check that the root file system is read/write</h2>
-                        <p>Type the commands in this and the next steps in the VM window.</p>
+                        <p>
+                            Type the commands in this and the next steps in the
+                            VM window.
+                        </p>
                         <pre><code>mount | grep root</code></pre>
                         <p>
                             The line for <code>/</code> lists
@@ -582,10 +591,9 @@ vim /etc/fstab</code></pre>
                         <pre><code>mount --all</code></pre>
                         <p>
                             <code>mount --all</code> tries every entry in
-                            <code>/etc/fstab</code> that is not already
-                            mounted. The error names the mount point and the
-                            UUID it could not find, ending in
-                            <code>zzz</code>:
+                            <code>/etc/fstab</code> that is not already mounted.
+                            The error names the mount point and the UUID it
+                            could not find, ending in <code>zzz</code>:
                         </p>
                         <pre><code>mount: /boot: can't find UUID=...zzz.</code></pre>
                     </li>
@@ -615,6 +623,15 @@ mount --all</code></pre>
                     <li class="step">
                         <h2>Reboot and confirm a normal boot</h2>
                         <pre><code>systemctl reboot</code></pre>
+                        <p>
+                            Two red lines first, both reading
+                            <code
+                                >Failed to connect to system scope bus via local
+                                transport: No such file or directory</code
+                            >, are expected: emergency mode does not start
+                            D-Bus, which <code>systemctl</code> tries first. The
+                            reboot goes ahead anyway.
+                        </p>
                         <p>
                             <code>servera</code> boots without the wait this
                             time. When it has finished, connect again from your

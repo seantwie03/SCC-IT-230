@@ -55,18 +55,15 @@ Needs the console, physical or remote, to reach the GRUB2 menu
     'passwd: password changed.',
     'root@servera:~# grep root /etc/shadow',
     'root:!$y$j9T$...::0:99999:7:::',
+    'root@servera:~# passwd -S root',
+    'root L never 0 99999 7 -1',
   ]"
   :steps="[
     { line: 2, text: '$y$j9T$...', explanation: 'The hash of the password, shortened here' },
     { line: 6, text: '!', explanation: 'No password can match a hash that starts with !' },
+    { line: 8, text: 'L', explanation: 'passwd -S shows L for locked. A new password from passwd writes a fresh hash without the !, and the status reads P' },
   ]"
 />
-
-<Callout>
-
-Setting a new password with `passwd` writes a fresh hash without the `!`, which unlocks the account
-
-</Callout>
 
 ---
 layout: two-cols-header
@@ -121,7 +118,7 @@ Press <kbd>Ctrl</kbd>+<kbd>X</kbd> to boot
 
 ::right::
 
-![The GRUB2 editor for one boot entry, with init=/bin/bash added at the end of the line that starts with linux](./assets/grub-cmdline-edit.placeholder.png)
+![The GRUB2 editor for one boot entry, with init=/bin/bash added after rhgb quiet at the end of the line that starts with linux, which wraps over four screen lines](./assets/grub-editor-init-bin-bash.png)
 
 ---
 

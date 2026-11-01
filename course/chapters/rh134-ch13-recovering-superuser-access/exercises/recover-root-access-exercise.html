@@ -510,7 +510,9 @@
                             Lock the root account and confirm a console login
                             fails
                         </h2>
-                        <p>Connect to <code>servera</code> from your terminal.</p>
+                        <p>
+                            Connect to <code>servera</code> from your terminal.
+                        </p>
                         <pre><code>ssh servera
 sudo passwd -l root
 sudo passwd -S root</code></pre>
@@ -518,9 +520,8 @@ sudo passwd -S root</code></pre>
                             <code>passwd -l</code> reports
                             <code>passwd: password changed.</code> It has put a
                             <code>!</code> in front of the password hash in
-                            <code>/etc/shadow</code>, and the
-                            <code>L</code> in the <code>passwd -S</code> line
-                            means locked.
+                            <code>/etc/shadow</code>, and the <code>L</code> in
+                            the <code>passwd -S</code> line means locked.
                         </p>
                         <p>
                             In the VM window, at the login prompt, try to log in
@@ -532,7 +533,10 @@ sudo passwd -S root</code></pre>
                         </p>
                     </li>
                     <li class="step">
-                        <h2>Boot once with init=/bin/bash added at the GRUB2 menu</h2>
+                        <h2>
+                            Boot once with init=/bin/bash added at the GRUB2
+                            menu
+                        </h2>
                         <p>
                             Bring the <code>servera</code> VM window forward,
                             then reboot from your SSH session.
@@ -577,7 +581,10 @@ sudo passwd -S root</code></pre>
                     </li>
                     <li class="step">
                         <h2>Remount the root file system read/write</h2>
-                        <p>Type the commands in this and the next steps in the VM window.</p>
+                        <p>
+                            Type the commands in this and the next steps in the
+                            VM window.
+                        </p>
                         <pre><code>mount -o remount,rw /
 mount | grep root</code></pre>
                         <p>
@@ -601,9 +608,11 @@ mount | grep root</code></pre>
                             <code>Retype new password:</code>. Nothing appears
                             as you type. Between the prompts,
                             <code>passwd</code> warns
-                            <code>BAD PASSWORD: The password is shorter than 8
-                            characters</code>; for <code>root</code> that is
-                            only a warning, and it ends with
+                            <code
+                                >BAD PASSWORD: The password is shorter than 8
+                                characters</code
+                            >; for <code>root</code> that is only a warning, and
+                            it ends with
                             <code>passwd: password updated successfully</code>.
                             The new hash replaces the locked one, so the
                             <code>!</code> is gone too.
@@ -613,12 +622,13 @@ mount | grep root</code></pre>
                         <h2>Schedule an SELinux relabel</h2>
                         <pre><code>touch /.autorelabel</code></pre>
                         <p>
-                            <code>passwd</code> wrote <code>/etc/shadow</code>
-                            as a new file, and with no SELinux policy loaded,
-                            that file has no SELinux label. Left like that, it
-                            would block logins once SELinux enforces again. The
-                            empty <code>/.autorelabel</code> file asks the next
-                            boot to restore the label of every file, as
+                            <code>passwd</code> wrote
+                            <code>/etc/shadow</code> as a new file, and with no
+                            SELinux policy loaded, that file has no SELinux
+                            label. Left like that, it would block logins once
+                            SELinux enforces again. The empty
+                            <code>/.autorelabel</code> file asks the next boot
+                            to restore the label of every file, as
                             <code>restorecon</code> does for one.
                         </p>
                     </li>
@@ -629,16 +639,16 @@ mount | grep root</code></pre>
                         </h2>
                         <pre><code>exec /sbin/init</code></pre>
                         <p>
-                            <code>reboot</code> does not work here, because it is
-                            <code>systemctl</code>, which needs systemd. And
-                            <code>exit</code> would end bash, the system's PID 1,
-                            leaving the kernel without one.
+                            <code>reboot</code> does not work here, because it
+                            is <code>systemctl</code>, which needs systemd. And
+                            <code>exit</code> would end bash, the system's PID
+                            1, leaving the kernel without one.
                             <code>exec</code> replaces bash with systemd
                             instead, and the boot carries on. systemd finds
                             <code>/.autorelabel</code>, relabels every file,
                             deletes it, and reboots <code>servera</code> by
-                            itself. The relabel takes a while; wait for the
-                            normal login prompt.
+                            itself. The relabel takes a while, about two minutes
+                            on the SCC lab; wait for the normal login prompt.
                         </p>
                     </li>
                     <li class="step">
@@ -666,9 +676,10 @@ sudo passwd -S root</code></pre>
 grub2-editenv - set menu_auto_hide=1
 grub2-editenv - list</code></pre>
                         <p>
-                            The list includes <code>menu_auto_hide=1</code>
-                            again, and <code>servera</code> is back to how the
-                            week started.
+                            The list includes
+                            <code>menu_auto_hide=1</code> again, and
+                            <code>servera</code> is back to how the week
+                            started.
                         </p>
                     </li>
                 </ol>

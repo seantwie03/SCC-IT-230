@@ -9,41 +9,44 @@ produce this plan. Nothing is built until the plan is approved.
 ## Answer in brief
 
 **Four topic fragments** in two chapter directories, **four exercises**, one
-per source exercise, and a deck of **47 slides** under the decisions accepted
-on 2026-10-29: 41 from the source (39 content, section, and exercise slides
-plus the cover and VM reminder), 4 added (1.1a, 1.2a, 2.8a, 3.2a), and 2
-recording slides (1.14a, 2.9a) that wait on the casts (Decision 10).
+per source exercise, and a deck of **48 slides** under the decisions accepted
+on 2026-10-29 and 2026-11-01: 41 from the source (39 content, section, and
+exercise slides plus the cover and VM reminder), 5 added (1.1a, 1.2a, 1.4a,
+2.8a, 3.2a), and 2 recording slides (1.14a, 2.9a) that wait on the casts
+(Decision 10).
 
 | # | Fragment                             | Section title                  | Slides | Exercises |
 |--:|--------------------------------------|--------------------------------|-------:|----------:|
-| 1 | `grub2-boot-loader.md`               | GRUB2 Boot Loader              |     17 |         1 |
+| 1 | `grub2-boot-loader.md`               | GRUB2 Boot Loader              |     18 |         1 |
 | 2 | `systemd-targets.md`                 | systemd Targets                |     11 |         1 |
 | 3 | `repairing-file-systems-at-boot.md`  | Repairing File Systems at Boot |      8 |         1 |
 | 4 | `recovering-superuser-access.md`     | Recovering Superuser Access    |      9 |         1 |
 |   | Entry file                           |                                |      2 |           |
-|   | **Total**                            |                                | **47** |     **4** |
+|   | **Total**                            |                                | **48** |     **4** |
 
 Slide counts include the recording slides Decision 10 gives casts (fragments 1
 and 2). The fragments follow the Slidev deck's sections one for one, in source
 order. The LibreOffice deck contributes an intro slide for GRUB2 (1.1a), detail
 for the targets slides, and an optional command table (2.8a).
 
-Where things stand on 2026-10-31:
+Where things stand on 2026-11-01:
 
 1. **Fragment 1 is complete** (committed 2026-10-31 as `616d13c`), with its
-   long output lines wrapped once at a space as built.
+   long output lines wrapped once at a space as built. Changed 2026-11-01,
+   unstaged: the VDI screenshots on 1.3 and 1.4, and the new 1.4a.
 2. **Fragment 2 is complete** (`784ed53`), its recording slide waiting on the
    cast.
-3. **Fragment 3 is complete** (`f4ef2e1`).
-4. **Fragment 4 is complete** (`974a737`).
-5. **The console steps are still unverified.** The GRUB2 menu and editor, the
-   rescue and emergency shells, and the `init=/bin/bash` shell cannot be
-   reached through `pnpm lab`. Open question 1 is deferred. Fragments 2 and
-   3's shell claims rest on the unit files, RH134, and the instructor's
-   captures (see "Verification", Rounds 3 and 4).
-6. **Decision 26: a serial console for the console steps**, so they can be
-   presented in Kitty and recorded. Its prototype plan and the list of what
-   it changes are under "Console delivery"; nothing is changed yet.
+3. **Fragment 3 is complete** (`f4ef2e1`). Changed 2026-11-01, unstaged: the
+   VDI crops and the <kbd>Esc</kbd> line on 3.2a.
+4. **Fragment 4 is complete** (`974a737`). Changed 2026-11-01, unstaged:
+   `passwd -S` on 4.3 and the VDI screenshot on 4.4.
+5. **The console steps are verified**, over the instructor lab's serial
+   console (Round 6) and on the SCC lab's VDI (Round 8). Open question 1 is
+   answered.
+6. **Decision 26's prototype passed** (Rounds 6 to 8). The lab settings it
+   needs are on the instructor-lab copy on this machine only; making them
+   permanent (prototype step 9) and rewriting the four command files are
+   still to do. See "Console delivery".
 
 ## Scope
 
@@ -265,7 +268,7 @@ New, under
 
 | File                                | Slides | Exercises |
 |-------------------------------------|-------:|----------:|
-| `grub2-boot-loader.md`              |     17 |         1 |
+| `grub2-boot-loader.md`              |     18 |         1 |
 | `systemd-targets.md`                |     11 |         1 |
 | `repairing-file-systems-at-boot.md` |      8 |         1 |
 
@@ -277,9 +280,15 @@ New, under `course/chapters/rh134-ch13-recovering-superuser-access/`:
 
 Plus, in each topic's `exercises/`, one `.sh` command file and one `.html`
 written exercise per exercise (four of each), and a `.cast` beside each
-exercise that gets a recording (Decision 10). `assets/` holds the
-placeholders for the GRUB screenshots until they are replaced (Decision 11),
-and the two SCC console screenshots if 3.2a is accepted (Decision 12).
+exercise that gets a recording (Decision 10). Since 2026-11-01 the ch12
+topic's `assets/` holds the VDI screenshots that replaced the placeholders,
+`grub-menu.png` (1.3) and `grub-editor.png` (1.4), and the two crops on 3.2a,
+`boot-stalled-incorrect-uuid.png` and `emergency-mode.png`. The ch13 topic
+gains `assets/grub-editor-init-bin-bash.png` (4.4). The instructor's other
+eleven VDI screenshots are kept beside them for later use, renamed with an
+`scc-` prefix that marks the lab they came from (for example
+`scc-servera-emergency-shell-vim-fstab.png`); no slide references them. The
+placeholders were deleted on 2026-11-01, so none remain in the week.
 
 Also new: `course/w12-draft.md`. At publication, `tests/site.test.mjs` gains
 `"w12"` in its published-week list.
@@ -351,7 +360,7 @@ shows commands only, the slide keeps a plain `bash` fence, since
 nothing when its output was only left out. Commands typed at the console in
 the `init=/bin/bash` shell follow Decision 19.
 
-### 1. `grub2-boot-loader.md` (17 slides), built 2026-10-29
+### 1. `grub2-boot-loader.md` (18 slides), built 2026-10-29
 
 `routeAlias: grub2-boot-loader`. Alignments: RH134 chapter 12, cert guide
 chapters 17 and 18. Exercise: Change Kernel Arguments Exercise, declared in
@@ -422,9 +431,10 @@ default entry", see "Corrections"), "A countdown boots it automatically", and
 the key table: any key except <kbd>Enter</kbd> stops the countdown, arrow keys
 select, <kbd>Enter</kbd> boots, <kbd>e</kbd> edits. "Arrow keys" is written
 out because the arrow characters fall outside the bundled Lato subsets. Right
-column: `assets/grub-menu.placeholder.png` (the source's `grub-menu-1.png`)
-until the recapture (Decision 11), with alt text that will fit the
-replacement. `check:slides`: 8.88px.
+column: `assets/grub-menu.png`, the VDI capture of `servera`'s menu (Round 8,
+V01; 720 by 400) that replaced the placeholder on 2026-11-01 (Decision 11).
+The alt text quotes both entries, the help lines, and the countdown.
+`check:slides`: 8.88px, as before.
 
 Components: `two-cols-header` with `vertical: center`; Markdown table with
 `<kbd>`; image.
@@ -434,15 +444,36 @@ Components: `two-cols-header` with `vertical: center`; Markdown table with
 Source B4. Left column: the five steps (press <kbd>e</kbd>; move to the line
 that starts with `linux`; <kbd>End</kbd>; type a space and the arguments;
 <kbd>Ctrl</kbd>+<kbd>X</kbd>) and a `Callout`, "Changes apply to **this boot
-only**". Right column: `assets/grub-editor.placeholder.png` until the editor is
-rebuilt as text from a VDI capture (Decision 11). Decision 14 shipped as a
-sentence in the `bottom` band rather than a terminal, since `/proc/cmdline`
-on the lab is 234 columns: "After boot, `cat /proc/cmdline` shows the
-arguments the running kernel received". `check:slides`: 0px, so the text
-rebuild of the editor must not be taller than the placeholder.
+only**". Right column: `assets/grub-editor.png`, the VDI capture of the
+editor just after <kbd>e</kbd> (Round 8, V02), which replaced the placeholder
+on 2026-11-01; rebuilding it as text (Decision 11) stays possible. Its
+`linux` line wraps at 78 columns with `\`, as on the serial console, and its
+`initrd` line ends in `$tuned_initrd`, which the instructor lab lacks. Until
+2026-11-01 Decision 14 sat here as a sentence in the `bottom` band; 1.4a now
+shows it, so the band is gone. `check:slides`: 65px (it was 0px with the
+band and the placeholder).
 
-Components: `two-cols-header` with `vertical: center` and a `bottom` band;
-ordered list with `<kbd>`; `Callout` with `AccentText`; image.
+Components: `two-cols-header` with `vertical: center`; ordered list with
+`<kbd>`; `Callout` with `AccentText`; image.
+
+##### 1.4a Check the Running Kernel's Arguments
+
+**Addition** (Decision 31), 2026-11-01, so exercise 1's `cat /proc/cmdline`
+is taught before it is used. "`/proc/cmdline` holds the arguments the running
+kernel booted with", then a `TextExplainer` over `cat /proc/cmdline` as
+`student`: the 249-column line from the instructor lab's `servera` (the
+fragment's machine, UUID `c0d07a5b-...`, booted with `ipv6.disable=1`; read
+on 2026-10-31, Round 6's baseline), wrapped at spaces into four lines of at
+most 77 columns. At the `sm` size a full-width `TextExplainer` holds about 90
+columns (see "Authoring notes"). Four steps: `BOOT_IMAGE=...` (whole line),
+"Added by GRUB2: the kernel it loaded"; `root=...`, "The root file system";
+`ro`, "Mount / read-only at first; systemd remounts it read/write later"
+(Round 4); `ipv6.disable=1`, "Typed at the end of the linux line in the GRUB2
+editor, so it comes last". Then "Wrapped here at spaces; the real output is a
+single line". The SCC lab's line differs (`rhel-root`, `rhgb quiet`; Round
+8). `check:slides`: 46.59px in every state.
+
+Components: default layout with `vertical: center`, `TextExplainer`.
 
 ##### 1.5 Inspect the Default Kernel
 
@@ -566,7 +597,7 @@ console during step 2's 45-second pause (Open question 5).
 `routeAlias: systemd-targets` (unused before; w04 has `systemd-services`).
 Alignments: RH134 chapter 12, cert guide chapters 17 and 18, the same as
 fragment 1's, so the week lists them once. Exercise: Switch systemd Targets
-Exercise, declared in `topicInfo`. Deck slides 19 to 28. Checked with
+Exercise, declared in `topicInfo`. Deck slides 20 to 29. Checked with
 `check:entry`, `check:exercises`, and `check:slides` (no overflow; clearances
 below are from its `--verbose` report), and every slide and click state was
 captured at 1920x1080. The transcripts are real output from `servera` and
@@ -742,7 +773,7 @@ pause on step 7's header (Open question 5).
 
 `routeAlias: repairing-file-systems-at-boot`. Alignments: RH134 chapter 12,
 cert guide chapter 18. Exercise: Repair a File System at Boot Exercise,
-declared in `topicInfo`. Deck slides 29 to 36. Checked with `check:entry`,
+declared in `topicInfo`. Deck slides 30 to 37. Checked with `check:entry`,
 `check:exercises`, and `check:slides` (no overflow; clearances below), and
 every slide and click state was captured at 1920x1080. The transcripts are
 real output from `servera` on the Round 3 lab copy, on 2026-10-31
@@ -782,19 +813,22 @@ Components: default layout, `AccentText`, Markdown table, `Callout`.
 
 ##### 3.2a What a Failed Boot Looks Like
 
-**Addition** (Decision 12). Two `v-switch` states over the instructor's
-console captures, copied in as `assets/boot-stalled-incorrect-uuid.placeholder.png`
-(1642 by 212) and `assets/emergency-mode.placeholder.png` (1260 by 418). First:
-"systemd waits 90 seconds for the device with the mistyped UUID" over the
-stalled job line, `(27s / 1min 30s)`. Second: "Then it gives up and opens the
-emergency shell" over the emergency banner and password prompt. Each alt text
-quotes the key lines, since the images are text. The banner in the second
-capture matches, word for word, the `systemd-sulogin-shell` string read in
-Round 3. `check:slides`: 138.83px, then 51.69px.
+**Addition** (Decision 12). Two `v-switch` states over console captures.
+Built over the instructor's captures as placeholders; on 2026-11-01 they were
+replaced by crops of the VDI screenshots V04 and V05 (Round 8), each with a
+16-pixel black margin so the theme's rounded image corners clip nothing:
+`assets/boot-stalled-incorrect-uuid.png` (the last six lines of V04, 1024 by
+128) and `assets/emergency-mode.png` (the banner and prompt from V05, 640 by
+112). First: "systemd waits 90 seconds for the device with the mistyped UUID"
+over the stalled job line, `(39s / 1min 30s)`, then "A splash screen instead
+of messages? Press <kbd>Esc</kbd>" (Decision 31: on the SCC lab, Plymouth
+hides the wait). Second: "Then it gives up and opens the emergency shell" over
+the emergency banner and password prompt, which match, word for word, the
+`systemd-sulogin-shell` string read in Round 3. Each alt text quotes the key
+lines, since the images are text. `check:slides`: 116.59px, then 138.34px.
 
-The stalled capture's UUID is `b688d484-3d0c-...`, which is neither the Round
-3 lab copy's `/boot` (`5c381752-...`, on 3.4) nor recorded for the home copy
-(Open question 6).
+The stalled capture's UUID is now the SCC lab's `/boot`, `2cd783eb-...`,
+which still differs from 3.4's (Open question 6: they need not match).
 
 Components: default layout, `v-switch` with an image per template.
 
@@ -884,7 +918,7 @@ Components: `exercise`.
 `routeAlias: recovering-superuser-access`. Alignments: RH134 chapter 13,
 *Recovering Superuser Access* (no other fragment aligns to it), and cert guide
 chapter 18. Exercise: Recover Root Access Exercise, declared in `topicInfo`.
-Deck slides 37 to 45, in the new chapter directory
+Deck slides 38 to 46, in the new chapter directory
 `course/chapters/rh134-ch13-recovering-superuser-access/`. Checked with
 `check:entry`, `check:exercises`, and `check:slides` (no overflow; clearances
 below), and every slide and click state was captured at 1920x1080. The
@@ -923,30 +957,44 @@ front of its password hash", then a `TextExplainer` over six lines:
 `passwd: password changed.`, and the same `grep` showing
 `root:!$y$j9T$...::0:99999:7:::`. Two steps: the hash, "The hash of the
 password, shortened here"; the `!`, "No password can match a hash that starts
-with !". A `Callout` keeps R3's closing line, now verified: "Setting a new
-password with `passwd` writes a fresh hash without the `!`, which unlocks the
-account". The prompts are `root@servera:~#`, since this aside runs on a
-normal boot. R3's `$6$rounds=4096$` (SHA-512) is yescrypt's `$y$j9T$` on RHEL
-10, and the fields after the hash are the lab's own. The hash is shortened
-with `...` as the plan proposed; it is never printed in full here or in this
-plan. `check:slides`: 23.5px in both states.
+with !". Built with a `Callout` keeping R3's closing line, verified in Round
+5: "Setting a new password with `passwd` writes a fresh hash without the `!`,
+which unlocks the account". The prompts are `root@servera:~#`, since this
+aside runs on a normal boot. R3's `$6$rounds=4096$` (SHA-512) is yescrypt's
+`$y$j9T$` on RHEL 10, and the fields after the hash are the lab's own. The
+hash is shortened with `...` as the plan proposed; it is never printed in
+full here or in this plan.
 
-Components: default layout, `TextExplainer`, `Callout`.
+Changed 2026-11-01 (Decision 31), because exercise 4 uses `passwd -S` in
+steps 1 and 7 and no slide taught it: two more lines, `passwd -S root` and
+`root L never 0 99999 7 -1` (Round 5), and a third step on the `L`: "passwd
+-S shows L for locked. A new password from passwd writes a fresh hash without
+the !, and the status reads P". The `Callout` folded into that step, since
+with it the slide overflowed by 22px. `check:slides`: 67.66px, then 35.27px on
+the last step.
+
+Components: default layout, `TextExplainer`.
 
 ##### 4.4 Edit the GRUB2 Entry
 
 Source R4. `two-cols-header` with `leftWidth: 45`: three `v-switch` states on
-the left, R4's editor image on the right as
+the left, an editor image on the right. Built with R4's image as
 `assets/grub-cmdline-edit.placeholder.png` (Decision 11; a RHA capture with
-kernel `6.12.0-55.12.1` and `init=/bin/bash` already appended). First:
+kernel `6.12.0-55.12.1`); since 2026-11-01 it is
+`assets/grub-editor-init-bin-bash.png`, the VDI capture V15 (Round 8): the
+SCC lab's `linux` line with `init=/bin/bash` appended after `rhgb quiet`,
+wrapped over four screen lines. `check:slides`: 76.8px in each state. First:
 "**Step 1:** Open the GRUB2 editor" and the three steps as on 2.8. Second:
 "**Step 2:** Clean up the `linux` line", "Remove any `console=` options", and
 a warning `Callout`, "Left in place, they can open the shell on a console you
 cannot reach" (R4 and RH134). Third: "**Step 3:** Append `init=/bin/bash`",
 "Press <kbd>End</kbd>, then type a space and", a `text` fence of
 `init=/bin/bash`, and "Press <kbd>Ctrl</kbd>+<kbd>X</kbd> to boot". The lab's
-kernel line has no `console=` options (Round 5), so the step stays "if any".
-`check:slides`: 28.48px in each state.
+kernel line has no `console=` options (Round 5), and neither has the SCC
+lab's (Round 8), so the step stays "if any". Round 6 showed what the step
+guards against: with `console=ttyS0` last, the `init=/bin/bash` shell opens on
+the serial port only. (The built version measured 28.48px with the
+placeholder.)
 
 Components: `two-cols-header`, `v-switch` with three templates, ordered list
 with `<kbd>`, `Callout`, `text` fence, image.
@@ -1056,8 +1104,11 @@ file's checksum does not return to the snapshot's (verified).
 
 **Console steps.** Every exercise has steps at the console. The command files
 write them as `#!` notes, which `kitty-demo` shows only to the instructor, and
-the written exercises describe them as prose (Decision 10). Screenshots from a
-VDI dry run go in once they exist.
+the written exercises describe them as prose (Decision 10). Since 2026-11-01
+they are verified: on the instructor lab over the serial console (Round 6) and
+on the SCC lab's VDI (Round 8). Under Decision 26 the `#!` notes become typed
+lines; a trial of exercise 3 written that way recorded cleanly (Round 6, step
+7), and the pattern for each reboot is under "Console delivery".
 
 **Reboots.** Each reboot ends the SSH session; the command file reconnects
 with `ssh servera` after a pause. Exercise 3 waits out systemd's 90-second
@@ -1169,8 +1220,22 @@ root password. `check:exercises`: no violations.
 
 Verified on `servera` on 2026-10-31 (Round 4), over SSH: step 1's edit (on a
 copy) and its effect on `mount --all` (on the real file), and steps 4 to 6's
-commands with `/boot` still mounted. The reboot into the emergency shell and
-everything typed there are console-only and unverified (Open question 1).
+commands with `/boot` still mounted. The console steps were verified on
+2026-11-01, by hand over the serial console and in a `kitty-demo` trial
+(Round 6), and on the VDI (Round 8).
+
+Changed 2026-11-01 (Decision 31), from the VDI run. The written exercise's
+step 2 now opens with "If the VM window shows a splash screen instead of boot
+messages, press <kbd>Esc</kbd> to see them": the SCC lab's `servera` boots
+with `rhgb quiet`, and Plymouth hid the wait until <kbd>Esc</kbd>. Step 7
+now says that two red `Failed to connect to system scope bus via local
+transport: No such file or directory` lines are expected after `systemctl
+reboot` from the emergency shell, and that the reboot goes ahead; they
+appeared on both labs. The command file gains matching `#!` notes in steps 2
+and 7 (`kitty-demo --check`: 35 presses, unchanged). The written exercise's
+"This time `mount --all` prints nothing" holds on the SCC lab; the instructor
+lab, without `quiet`, also prints the kernel's `XFS (sda2): Mounting V5
+Filesystem ...` line there (Rounds 6 and 8).
 
 ### Exercise 4, Recover Root Access, built 2026-10-31
 
@@ -1204,16 +1269,21 @@ week's start. `check:exercises`: no violations.
 Verified on `servera` on 2026-10-31 (Round 5), over SSH: step 1's lock and its
 `passwd -S` line, step 4's `passwd` output and its effect on the `!`, and step
 7's `P`, all in a side test that restored `/etc/shadow` afterwards. The
-`init=/bin/bash` boot and everything typed in it are console-only and
-unverified (Open question 1).
+`init=/bin/bash` boot and everything typed in it were verified on 2026-11-01
+over the serial console (Round 6) and on the VDI (Round 8).
+
+Changed 2026-11-01 (Decision 31): step 6 of the written exercise now says the
+relabel takes "about two minutes on the SCC lab". It took 2 minutes 3 seconds
+there (Round 8), against about 6 seconds on the instructor lab (Round 6).
 
 ## Console delivery
 
 Decision 26, accepted 2026-10-31: present and record the console steps through
 a serial console, attached with `virsh console` in the `kitty-demo`
 Presentation window, and keep the VM's graphical console as the fallback. The
-prototype below comes first; nothing changes in the lab or the course files
-until it has run.
+prototype ran on 2026-10-31 and 2026-11-01 and passed (Rounds 6 to 8; see
+"Prototype results"). Its lab settings are on the instructor-lab copy on this
+machine only, and the command files are not rewritten yet.
 
 ### Why
 
@@ -1236,11 +1306,54 @@ systemd's status lines, the rescue and emergency shells, the
 `init=/bin/bash` shell, and the relabel output go. With the kernel console
 on the serial port, systemd also starts a serial login prompt there.
 
-During an exercise, the Presentation window runs `virsh console servera`
-after a reboot, the console steps are typed there by `kitty-demo` like any
-other step, and `Ctrl+]` detaches before `ssh servera` reconnects. The words
-on screen are the same programs' output that students see in their VM
-windows; the frame, the wrapping, and the kernel line are not.
+The prototype added a third setting, a drop-in for `emergency.service` and
+`rescue.service` on each VM, `serial-size.conf` in
+`/etc/systemd/system/emergency.service.d/` and `rescue.service.d/`:
+
+```ini
+# Instructor lab only: the serial console in Kitty is 120x24
+[Service]
+TTYColumns=120
+TTYRows=24
+Environment=TERM=xterm-256color
+```
+
+Without it those two shells get `24 80` and `vt220` (Round 6): `vim` draws at
+80 columns in a 120-column window and leaves stray characters, and without an
+alternate screen `pnpm run casts` cannot clear the lab vimrc's whitespace
+dots. The serial login and the `init=/bin/bash` shell need nothing, since
+`agetty` and the kernel already give them `24 120`.
+
+Two side effects. GRUB2's `12_menu_auto_hide` skips itself when either
+terminal setting includes `serial`, so the menu shows on every boot and
+`menu_auto_hide` does nothing on these VMs; the exercises' `grub2-editenv`
+steps still run and print the same. And `grubby --update-kernel=ALL --args`
+also appends to `GRUB_CMDLINE_LINUX`, so no separate edit of
+`/etc/default/grub` is needed.
+
+During an exercise, the Presentation window attaches with `virsh -c
+qemu:///system console servera` after a reboot (plain `virsh` connects to the
+session URI and finds no VM), the console steps are typed there by
+`kitty-demo` like any other step, and `#@ key ctrl+]` detaches before `ssh
+servera` reconnects. GRUB2 draws its menu about 1.7 seconds after the
+reboot's Enter, and draws it only once, so the attach must come first. Record
+mode waits 3 seconds between typing a command and its Enter, too long here,
+so each reboot that needs the menu uses this pattern, which attached 0.6
+seconds after the Enter in the second trial (Round 6):
+
+```sh
+#@ pause 0.5
+systemctl reboot
+#@ noenter
+#@ pause 0
+virsh -c qemu:///system console servera
+#@ key enter
+```
+
+Then a short `#@ pause` and the keys for the menu. Live, press
+<kbd>F2</kbd> quickly; if the countdown is missed, reboot again (Decision
+28). The words on screen are the same programs' output that students see in
+their VM windows; the frame, the wrapping, and the kernel line are not.
 
 Known on 2026-10-31, read-only through `pnpm lab` on the lab copy on this
 machine: both `servera` and `workstation` already have a serial port (`ttyS0
@@ -1255,8 +1368,15 @@ The VM's graphical console in `virt-viewer`, full screen or beside the
 Presentation window, with scaling on so the 8x16 VGA text is readable. The
 command files keep working: at a console step, step past the console lines
 with <kbd>F3</kbd> and type them in the VM window. Use it when the serial
-console misbehaves in class, or if the prototype fails one of its exit
-criteria for a particular step.
+console misbehaves in class.
+
+It is a partial fallback (Round 6). With `ttyS0` as `/dev/console`, the VM
+window shows only kernel messages: systemd's status lines and the start job's
+countdown go to the serial port alone. `sulogin` prompts on every console, so
+the rescue and emergency shells can be reached from the VM window, but the
+`init=/bin/bash` shell opens on `/dev/console` only. To fall back for exercise
+4, delete `console=ttyS0,115200` in the GRUB2 editor for that boot, which is
+what 4.4's "Remove any `console=` options" does.
 
 ### Prototype plan
 
@@ -1323,17 +1443,38 @@ Record the results under "Verification" as a new round, then revert or keep
    snapshot after the change, or the change added to the lab's build
    automation, since `start-latest-snapshot` otherwise undoes it.
 
+### Prototype results
+
+Run 2026-10-31 and 2026-11-01; details under "Verification", Rounds 6 to 8.
+
+1. **Baseline:** passed. `servera` has a `pty` serial device and console.
+2. **GRUB2 on serial:** passed. Menu and editor readable at the presentation
+   size; any key, the arrows, <kbd>e</kbd>, <kbd>End</kbd>,
+   <kbd>Ctrl</kbd>+<kbd>E</kbd>, <kbd>Esc</kbd>, and
+   <kbd>Ctrl</kbd>+<kbd>X</kbd> all work. The menu now always shows.
+3. **The kernel on serial:** passed. Colour only in systemd's and
+   `systemctl`'s output on the serial login (`vt220`); accepted (Decision 27).
+4. **Exercise 3 by hand:** passed, after the size and `TERM` drop-in.
+5. **Exercise 4 by hand:** passed.
+6. **Exercise 2's console steps on `workstation`:** passed.
+7. **`kitty-demo`:** passed on the second trial, with the attach pattern
+   above. `#@ key ctrl+]` works, and the cast processes and checks cleanly.
+8. **The VDI:** done by the instructor (Round 8); the differences that matter
+   to students went into the written exercises and 3.2a (Decision 31).
+9. **Keep it:** not done; decided 2026-11-01 (Decision 32). The settings go
+   into `/source/rhel-lab/configure_vms.yml`, for all four VMs, and
+   the instructor takes the new snapshot. Nothing is applied by hand. The
+   prototype's changes on this lab copy (and the backups in
+   `/root/w12-serial-backup/` on `servera` and `workstation`) are discarded by
+   the `start-latest-snapshot -a` that comes before the playbook runs.
+
 ### What changes in week 12 if it is implemented
 
 Slides (students' view is unchanged, so no slide has to change):
 
-- **1.4, 2.8, 4.4:** Decision 11's editor rebuild comes from the serial capture
-  in prototype step 2 instead of a VDI capture.
-- **1.3:** the menu could also be rebuilt as text from the serial capture, or
-  stay a VDI screenshot, since the frame differs. Your call.
-- **3.2a:** the two console images could become text from a serial capture of
-  the same moments, which removes both placeholders and the images of text.
-  Optional.
+- **1.3, 1.4, 4.4, 3.2a:** done another way on 2026-11-01. The VDI
+  screenshots replaced the placeholders (Round 8), which shows students their
+  own lab; the serial captures stay unused.
 - **4.4:** "Remove any `console=` options" conflicts with what the recording
   shows, since the instructor keeps `ttyS0`. Keep RH134's wording and say why
   on camera, or reword the step. Your call.
@@ -1358,40 +1499,50 @@ run, and new pauses):
   boot.
 - **`repair-file-system-at-boot-exercise.sh`:** steps 2 to 7 typed in the
   emergency shell, including the `vim` keystrokes that remove `zzz`, with a
-  pause long enough for the 90-second device timeout.
+  pause long enough for the 90-second device timeout. The trial in the
+  scratchpad (Round 6) is the template: the attach pattern, `#@ pause 105` on
+  the attach's Enter (the prompt came 94 seconds after it), the password, a
+  `clear` before every console header, `/zzz`, `3x`, `:wq`, and `#@ key
+  ctrl+]` 30 seconds after the last reboot.
 - **`recover-root-access-exercise.sh`:** step 1's failed console login, step
-  2's GRUB2 edit, steps 3 to 6 at `bash-5.2#`, a pause for the relabel, and
-  step 7's console login.
-- **The `root` password.** The rescue shell, the emergency shell, `passwd`,
-  and both console logins need it typed, but `AGENTS.md` keeps credentials out
-  of exercise files. It does not echo, so a cast would not show it; the
-  command file would. Options: a `kitty-demo` directive that types a value
-  from an environment variable, typing it by hand during a `#@ pause`, or an
-  `AGENTS.md` exception for the lab password `docs/lab-environments.md`
-  already publishes. Your call before step 7 of the prototype.
+  2's GRUB2 edit, steps 3 to 6 at `bash-5.2#`, a pause for the relabel (about
+  6 seconds on the instructor lab, then the boot), and step 7's console login.
+- **The `root` password** is typed as an ordinary line at each prompt
+  (Decision 29). It does not echo, so a cast does not show it.
+- **Device names in notes.** Keep exercise 3's notes free of `/dev/sda2`:
+  a console-attached boot names the OS disk `sdd` about one time in four
+  (Round 7). Re-record a take that shows `sdd2`.
 
-Written exercises: no change. Students use the VM window, and the `.html`
-files already describe it.
+Written exercises: three notes added on 2026-11-01 (Decision 31), for what
+students see on the SCC lab; nothing about the serial console.
 
 This plan: Decision 10 (recordings for all four exercises), "Answer in brief"
-and "File inventory" (49 slides; fragment 3 has 9 and fragment 4 has 10; a
+and "File inventory" (50 slides; fragment 3 has 9 and fragment 4 has 10; a
 `.cast` for every exercise), "Additions" (3.7a and 4.9a), the exercise
-entries under "Exercises", Open questions 1 and 5, and a new "Verification"
-round for the prototype.
+entries under "Exercises", and Open question 5. The "Verification" rounds are
+written (Rounds 6 to 8).
 
 Outside week 12:
 
-- **Both instructor-lab copies:** the GRUB2 and kernel settings on `servera`
-  and `workstation`, and a new snapshot or the build automation (prototype
-  step 9).
-- **`docs/lab-environments.md`:** a new entry under "Differences that reach
-  the screen" for the kernel line (`console=tty0 console=ttyS0,115200n8` on
-  RHA, none on SCC, `console=tty0 console=ttyS0,115200` on the instructor lab)
-  and GRUB2's serial terminal, and a note under "The instructor lab".
+- **Both instructor-lab copies:** the GRUB2 and kernel settings and the two
+  drop-ins on all four VMs, through `/source/rhel-lab/configure_vms.yml`,
+  then a new snapshot taken by the instructor (Decision 32).
+- **`AGENTS.md`:** widen the credential allowance to cover the lab's `root`
+  and `student` passwords in command files (Decision 29), with the matching
+  line in `docs/course-authoring.md`. Not done.
+- **`docs/lab-environments.md`:** done on 2026-11-01: the disk-name
+  correction (Decision 30), and the differences Rounds 6 to 8 found (the
+  boot screen and kernel line, the volume group names, the prompt and `vim`,
+  `plymouth`, SCC's boot and relabel times, and the instructor lab's serial
+  ports). Still to add with step 9: the serial settings themselves
+  (`console=tty0 console=ttyS0,115200`, GRUB2's serial terminal, the
+  drop-ins), and RHA's kernel line (`console=tty0 console=ttyS0,115200n8` in
+  the RHA capture on 4.4's source).
 - **`docs/course-authoring.md`:** "Recording an exercise" gains how console
-  steps are recorded through `virsh console`, once the prototype settles it.
-- **`kitty-demo`:** the password directive, if that option is chosen, and
-  confirmation that `#@ key ctrl+]` works.
+  steps are recorded through `virsh console`: the attach pattern, the
+  password lines, and the detach.
+- **`kitty-demo`:** nothing. `#@ key ctrl+]` works (Round 6), and no password
+  directive is needed.
 - **Agent access, optional:** if you want me to drive the serial console for
   verification, a wrapper like `pnpm lab` that allows only the four lab
   domains, with matching approval rules in `.codex/rules/default.rules`,
@@ -1404,7 +1555,8 @@ Accepted 2026-10-29 (Decisions 7, 8, 12, 14, 15, 16, 21, 22):
 1. **Slide 1.1a, What Is GRUB2?** (O8), the GRUB2 section's intro. Built.
 2. **Slide 1.2a**, the second half of the split boot diagram (Decision 8).
    Built.
-3. **`cat /proc/cmdline` on 1.4** (Decision 14), as a sentence. Built.
+3. **`cat /proc/cmdline` on 1.4** (Decision 14), as a sentence. Built, then
+   replaced on 2026-11-01 by slide 1.4a (item 8).
 4. **Slide 2.8a, systemd Target Commands** (O6), optional (Decision 21).
    Built.
 5. **Slide 3.2a, What a Failed Boot Looks Like** (Decision 12). Built, with
@@ -1414,6 +1566,16 @@ Accepted 2026-10-29 (Decisions 7, 8, 12, 14, 15, 16, 21, 22):
 7. **Unhiding `workstation`'s menu in exercise 2** (Decision 15), and hiding
    both menus again in cleanup (Decision 16). Built for `workstation`.
 
+Accepted 2026-11-01 (Decision 31):
+
+8. **Slide 1.4a, Check the Running Kernel's Arguments**, so `/proc/cmdline`
+   is taught before exercise 1 uses it. Built.
+9. **`passwd -S` on 4.3**, which exercise 4 uses in steps 1 and 7. Built.
+10. **Notes in the written exercises** for what the SCC lab shows: the splash
+    screen and <kbd>Esc</kbd> (exercise 3, step 2, and on 3.2a), the two red
+    D-Bus lines (exercise 3, step 7), and the relabel's two minutes
+    (exercise 4, step 6). Built.
+
 Also in fragment 2, within existing slides rather than as new ones: the
 `workstation` terminal on 2.5, the closing line on 2.6, the third bullet on
 2.7, and the `Callout` explaining `●` and `○` on 2.4.
@@ -1422,14 +1584,19 @@ Also in fragment 2, within existing slides rather than as new ones: the
 
 Verified on the lab where marked; the rest are typos, logic, or to verify.
 
-- B3: `*` marks the highlighted entry, not the default (to verify on the
-  console).
+- B3: `*` marks the highlighted entry, not the default (verified 2026-11-01:
+  on the serial console the `*` moves with the arrow keys, and the VDI menu
+  shows it on the highlighted entry; Rounds 6 and 8).
 - B5, B6, B8, B9, B11: output from an older build (machine ID
   `f0523084...`, swap UUID `f60c96c7...`); the instructor lab now prints
   `62e8bf6f...` and `c0d07a5b...` (verified). B8 and B9 elide and comment
   inside the output.
 - B8: `rhgb` needs `plymouth`, which the lab servers do not have (verified),
-  so only `quiet` changes the console.
+  so only `quiet` changes the console. That is the instructor lab: the SCC
+  lab's `servera` already boots with `rhgb quiet` and shows a Plymouth splash
+  (Round 8), so 1.8's example adds what SCC has and 1.9's removes it.
+  Exercise 1 uses `ipv6.disable=1` instead (Decision 13), so no student
+  changes it.
 - B12: the menu also hides when `boot_indeterminate=1`, and only after a
   successful boot as `grub-boot-success.timer` defines one (verified in
   `grub.cfg` and the unit).
@@ -1775,27 +1942,170 @@ checksums match the baseline (`a2532004...` and `7541dbe1...`), both are
 `shadow_t`, `passwd -S` prints `root P never ...` again, and the copies were
 removed from `/root`. No `/.autorelabel` exists.
 
+**Round 6**, 2026-10-31 and 2026-11-01: Decision 26's prototype, on the Rounds
+1 and 2 lab copy, which runs on the machine with Kitty (`servera`'s machine ID
+`62e8bf6f...`; `virsh domuuid` and the guest's `product_uuid` agree). The
+instructor ran every console step in a Kitty window at the presentation font
+size, 120 by 24, recorded with `asciinema rec -c 'virsh -c qemu:///system
+console servera'`; I set up the lab through `pnpm lab` and read the casts. The
+casts and a fuller log are in the session scratchpad, not the repository.
+
+Baseline, read-only: `servera` at exercise 1's end state (`menu_auto_hide`
+unset, the running kernel booted with `ipv6.disable=1`; its `/proc/cmdline`
+is the line on 1.4a). SHA-256: `/etc/default/grub` `74bbee55...`, `grub.cfg`
+`7bbcb132...`, `grubenv` `7bc3e837...`, the kernel entry `1f8fd90a...`, the
+rescue entry `39bdfd7a...`, `/etc/fstab` `b96e219b...`. The domain has a `pty`
+serial device and a console on serial port 0; `/proc/consoles` lists only
+`tty0`; `serial-getty@ttyS0` is inactive. `virsh -c qemu:///system console`
+attaches without `sudo`; plain `virsh` sees no VM.
+
+- **GRUB2 on serial** (step 2). `grub2-mkconfig` left `grubenv` and both entry
+  files byte for byte as they were, and dropped `grub.cfg`'s
+  `12_menu_auto_hide` block: the script exits when `GRUB_TERMINAL_INPUT` or
+  `GRUB_TERMINAL_OUTPUT` includes `serial`. The menu: 80 columns in the
+  120-column window, a frame of `+`, `-`, and `|`, `^` and `v` in the help
+  line, the highlighted entry in reverse video with `*`, the rescue title cut
+  with `>`, and the countdown. Any key stops it; the arrows move the `*` with
+  the highlight; <kbd>e</kbd>, <kbd>End</kbd> and <kbd>Ctrl</kbd>+<kbd>E</kbd>
+  (both to the end of the `linux` line), <kbd>Esc</kbd>, and
+  <kbd>Ctrl</kbd>+<kbd>X</kbd> ("Booting a command list") work. The editor
+  shows `load_video`, `set gfxpayload=keep`, `insmod gzio`, the `linux` line
+  wrapped at 78 columns with `\`, and the `initrd` line.
+- **The kernel on serial** (step 3). `grubby --update-kernel=ALL --args=...`
+  also appended to `GRUB_CMDLINE_LINUX`. A boot prints about 1,260 lines to
+  the serial console in 6.5 seconds, since `servera` has no `quiet` and
+  `kernel.printk` is `7 4 1 7`. The serial login gets `TERM=vt220` and `stty
+  size` `24 120` (`agetty` asks the terminal); `systemctl` shows colour, `ls`
+  does not (`/etc/DIR_COLORS` has no `vt220` entry).
+- **Exercise 3 by hand** (step 4). From `systemctl reboot`: the start job
+  showed by 18 seconds, the banner at 105. The banner and prompt as in Round
+  3; `mount | grep root` shows `rw`; `mount --all` prints `mount: /boot: can't
+  find UUID=...zzz.`; after the fix it prints nothing, but the kernel adds
+  `XFS (sda2): Mounting V5 Filesystem ...` to the console. `systemctl reboot`
+  there prints `Failed to connect to system scope bus via local transport: No
+  such file or directory` twice, in red, and reboots. The emergency shell had
+  `vt220` and `stty size` `24 80`, so `vim` drew at 80 columns and left a
+  stray character at column 81 on wrapped lines; the drop-in under "Console
+  delivery" fixed both (`24 120`, then the alternate screen with
+  `TERM=xterm-256color`). A boot with `systemd.unit=emergency.target` leaves
+  `/` read-only (`vim` opens `[readonly]` and raises `E138` on `:q`). The VM
+  window showed only kernel messages during the wait, and `sulogin`'s
+  password prompt as well.
+- **Exercise 4 by hand** (step 5). A console login as the locked `root`:
+  `Login incorrect`. A first attempt typed `,init=/bin/bash`: the kernel took
+  it as part of `console=ttyS0,115200` and booted normally, without error.
+  The second reached `bash-5.2#` 3 seconds after <kbd>Ctrl</kbd>+<kbd>X</kbd>,
+  with `TERM=linux`, `24 120`, and no job-control warnings. `mount | grep
+  root`: `ro`, then `rw`, without `seclabel`. `passwd`'s output as in Round 5.
+  The relabel took about 6 seconds from `exec /sbin/init` to the reboot,
+  printing `*** Warning -- SELinux targeted policy relabel is required.` and
+  `Running: /sbin/fixfiles -T 0  restore`; the login prompt came about 15
+  seconds after `exec`. The `root` login then printed `Last failed login:
+  ... on ttyS0` and `There was 1 failed login attempt since the last
+  successful login.`
+- **Exercise 2's console steps on `workstation`** (step 6). The same settings
+  and drop-ins (its machine ID is `f1819db0...`; it was at the snapshot, with
+  `menu_auto_hide=1` and `rhgb quiet`). The menu showed anyway. The `quiet`
+  boot printed about 210 lines, mostly `[  OK  ]`, with three kernel warnings.
+  The rescue banner and prompt as in Round 3; `stty size` `24 120`; `mount |
+  grep ' / '` shows `rw`; `exit` printed `Reloading system manager
+  configuration.` and `Starting default.target`, then a serial login prompt.
+  The VM window kept its own `sulogin` prompt after the serial one was
+  answered.
+- **`kitty-demo`** (step 7), with a trial copy of exercise 3. The SSH session
+  ends 0.02 seconds after the reboot's Enter, and GRUB2 draws its menu at 1.7
+  seconds. The first trial attached `virsh` 6 seconds after the Enter and
+  caught only `in 0s`; it also lacked `clear` lines before the console
+  headers, which was my omission. The second, with the attach pattern under
+  "Console delivery", attached at 0.6 seconds and caught the whole menu and
+  countdown; `kitty-demo` typed the password, and the run was unattended.
+  `#@ key ctrl+]` detaches. `node scripts/process-casts.mjs` trimmed the cast,
+  cleared 330 whitespace dots (the console `vim` included), added 8 markers,
+  and found no local identity; `--check` passes.
+
+Restored: `servera`'s `/etc/fstab` and `/etc/shadow` match their baselines
+(`b96e219b...`; `9e7233b0...` and `9638ad4f...` for `shadow` and `shadow-`).
+The serial settings and drop-ins stay on both VMs, with the files they
+replaced in `/root/w12-serial-backup/`.
+
+**Round 7**, 2026-11-01: disk names on `servera`, the same lab copy. Its
+10 GB OS disk sits on SATA port 3, the blank disks on ports 4 to 6. 51 boots,
+the OS disk's name read after each (from `lsblk`, or from the kernel lines in
+a cast):
+
+- Nothing reading the serial console: 20 boots, all `sda` (10 of them, by a
+  quoting slip of mine, with only `console=ttyS0,115200`).
+- No `console=` arguments at all: 10 boots, one `sdd`.
+- The serial console attached: 21 boots, five `sdd` (none of the 7 by hand,
+  2 of 10 with a headless `virsh console`, 3 of the 4 `kitty-demo` trial
+  boots; the second trial's last boot, the one its `mount | grep /boot`
+  shows, was `sda`).
+
+The SCSI devices always register in port order, but `sd` takes its names in
+the order its asynchronous probes finish; each time, the OS disk finished last
+and the blank disks took `sda` to `sdc` in port order. None of the 64
+published casts was recorded on a shuffled boot. `docs/lab-environments.md`
+is corrected (Decision 30). The slip: arguments quoted inside `pnpm lab --
+servera sudo grubby --args='a b'` lose their quotes on the remote side, so
+`grubby` saw only `console=tty0`; restored with the script form (see
+"Authoring notes"), and a reboot confirmed `console=tty0
+console=ttyS0,115200` and `ttyS0` as `/dev/console`.
+
+**Round 8**, 2026-11-01: the VDI dry run (prototype step 8 and Open question
+1), by the instructor on the SCC lab, following the written exercises. Screenshots
+V01 to V16 except V11 and V14; four are now slide images (Decision 31), and the
+other eleven are kept in the ch12 topic's `assets/` under `scc-` names.
+
+- `servera`'s `/proc/cmdline` after exercise 1's edit: `root=/dev/mapper/rhel-root
+  ... rd.lvm.lv=rhel/root rd.lvm.lv=rhel/swap rhgb quiet ipv6.disable=1`. The
+  volume group is `rhel`, and `rhgb quiet` is on the line. `ip -br addr`:
+  `lo`, `enp0s3` at `10.0.2.15/24`, and `enp0s8` at `172.25.250.10/24`, no
+  IPv6. <kbd>Ctrl</kbd>+<kbd>E</kbd> works.
+- The menu (V01): 720 by 400 VGA text, a line-drawing frame, arrows in the
+  help line, `*` on the highlighted entry. The editor (V02, V03, V15): the
+  same 78-column wrap with `\` as on serial; the `initrd` line ends in
+  `$tuned_initrd`.
+- Exercise 3: about 40 seconds from the reboot to the start job, and the
+  Plymouth splash hid it until <kbd>Esc</kbd>. V04 shows `(39s / 1min 30s)`;
+  V05 shows `[ TIME ] Timed out waiting for device`, three `[DEPEND]` lines
+  (`boot.mount`, `local-fs.target`, `selinux-autorelabel-mark.service`),
+  `[FAILED] Failed to start kdump.service`, then the banner. `Warning:
+  Unmaintained driver is detected: e1000` lines. In the shell, `TERM=linux`
+  and `stty size` `50 160`; `/` `rw`; the `mount --all` error as expected;
+  the second `mount --all` printed nothing, with no XFS line, since `quiet`
+  lowers the console log level. The two red D-Bus lines appeared after
+  `systemctl reboot`. Afterwards `/boot` was `/dev/sda2`.
+- Exercise 2 on `workstation`: after the `unset`, `grub2-editenv - list`
+  showed `saved_entry`, `boot_success=0`, and `boot_indeterminate=0`. A
+  Plymouth splash came first; the rescue screen (V12) carries three
+  `vmwgfx ... [drm] *ERROR*` lines about an unsupported hypervisor above the
+  banner; `/` `rw` (V13); `exit` led to the graphical login.
+- Exercise 4: no `console=` options to remove. The `bash-5.2#` session (V16)
+  as on the instructor lab. The relabel took 2 minutes 3 seconds.
+- `serverb`, freshly booted and untouched by the exercises (checked
+  afterwards): `rhgb quiet` on its kernel line, and `grub2-editenv - list`
+  with `menu_auto_hide=1`, `boot_success=0`, and `boot_indeterminate=0`
+  (Open question 3).
+- Also seen, and left alone (Decision 31): the SCC prompt is
+  `root@servera:~#` in green, where the instructor lab shows RHEL's
+  `[root@servera ~]#`, and `vim` there has no line numbers or whitespace dots.
+
 **Still to verify over SSH**: nothing for this week.
 
-**Console only**, by Open question 1: the menu's `*`; the editor's text, for
-1.4's text rebuild; End and Ctrl+E in the editor; exercise 1's step 2 itself;
-the rescue and emergency shells' prompts and whether root is `rw` in each (the
-unit files say rescue `rw`, emergency `ro`); `exit` and Ctrl+D from rescue;
-exercise 2's steps 6 and 7; the 90-second wait and emergency prompt after a
-bad UUID (the instructor's captures on 3.2a show both, from an earlier run);
-whether root is `rw` in that emergency shell (the unit ordering says yes);
-exercise 3's steps 2 to 7; exercise 4's steps 1 (the console login) to 7; `systemctl reboot`
-against `reboot -f` there; the `init=/bin/bash` prompt; `passwd` there; the
-relabel's length and automatic reboot; a console login as a locked `root`.
+**Console only**, still unverified: <kbd>Ctrl</kbd>+<kbd>D</kbd> at the
+rescue prompt, and whether the SCC lab's `root` login in exercise 4 reads `on
+tty1`. The rest of what this list held is covered by Rounds 6 and 8, and the
+SCC lab's `menu_auto_hide=1` by the instructor's check on `serverb` (Open
+question 3).
 
-**Where the lab is.** Two copies now carry this week's checks. On the copy
-used in Rounds 1 and 2, `servera` was left at exercise 1's end state on
-2026-10-29: `menu_auto_hide` unset, the kernel line back to its original
-arguments (the entry file without its trailing space), and the running kernel
-booted with `ipv6.disable=1`. It has not been checked since. On the copy used
-in Rounds 3 to 5, `servera` and `workstation` are at their starting state. Before
-recording, the recording lab must go back to the week's start
-(`start-latest-snapshot -a`).
+**Where the lab is.** Two copies now carry this week's checks. The copy used
+in Rounds 1, 2, 6, and 7 is in the prototype state: both VMs carry the serial
+settings and drop-ins; `servera`'s `/etc/fstab` and `/etc/shadow` match
+Round 6's baseline, and its `menu_auto_hide` is still unset from exercise 1.
+On the copy used in Rounds 3 to 5, `servera` and `workstation` are at their
+starting state. Before recording, the recording lab must go back to the
+week's start (`start-latest-snapshot -a`), which also discards the serial
+settings until step 9 makes them part of the snapshot.
 
 ## Authoring notes
 
@@ -1834,11 +2144,27 @@ recording, the recording lab must go back to the week's start
 - No presenter notes. Anything learned on the lab goes under "Verification".
 - No em dashes. Search the new files for U+2014 before handing work back.
 - **Placeholders in a fresh clone.** `*.placeholder.*` files are ignored by
-  Git, so a clone made after fragment 1 was committed has no
-  `grub-menu.placeholder.png` or `grub-editor.placeholder.png`, and 1.3 and
-  1.4 show broken images. Copy them in from the working copy that has them.
+  Git, so a clone made after fragment 1 was committed lacked
+  `grub-menu.placeholder.png` and `grub-editor.placeholder.png`, and 1.3 and
+  1.4 showed broken images. Moot since 2026-11-01: every placeholder in the
+  week was replaced by a tracked image and deleted.
 - **`<kbd>` in captures** renders as letter-spaced monospace ("C t r l"), on
   1.3 as well as 2.8. A theme question, not a fragment one.
+- **A full-width `TextExplainer` holds about 90 columns** at `sm`, fewer than
+  a `TerminalWindow`'s 120: on 1.4a a 110-column line overflowed by 154px and
+  a 95-column one by 34.56px. 1.4a wraps at 77.
+- **The theme rounds image corners.** A console crop whose text starts at its
+  edge loses the corner characters (3.2a's first crops lost a `[`, a `Y`, and
+  a `(`), so pad a crop with a 16-pixel black border (`magick ... -bordercolor
+  black -border 16`).
+- **Quoting through `pnpm lab`.** `pnpm lab -- servera sudo grubby
+  --args='a b'` reaches the remote shell as one string with the quotes gone,
+  so only `a` is passed (Round 7). Anything with spaces goes in the base64
+  script form above.
+- **Reading a cast.** `asciinema convert -f txt` on a cast cut at a given
+  line prints the scrollback and the screen together, so text above a
+  `clear` still shows; and an escape sequence such as `\e[H\e[2J` can be split
+  across two events, so search the joined output, not single events.
 
 ## Decisions
 
@@ -1874,12 +2200,14 @@ the diagram. Each is reversible.
     them as prose, with screenshots from a VDI dry run once they exist.
     Recordings for exercises 1 and 2, whose results show over SSH; none for
     exercises 3 and 4, which happen almost entirely at the console. Accepted.
-    To be superseded by Decision 26 once its prototype succeeds: every
+    Superseded by Decision 26, whose prototype passed on 2026-11-01: every
     exercise is recorded, console steps included, and the `#!` console notes
-    become typed lines.
+    become typed lines once the command files are rewritten.
 11. **GRUB screens.** Recapture the menu (1.3) on the VDI, and rebuild the
     editor (1.4, 2.8, 4.4) as text from a VDI capture. Placeholders until
-    then. Accepted; fragment 1 carries both placeholders.
+    then. Accepted. On 2026-11-01 the VDI screenshots replaced the
+    placeholders on 1.3, 1.4, and 4.4 as images (Decision 31); 2.8 has no
+    image. Rebuilding the editor as text remains possible.
 12. **Use the two unreferenced console captures on a new slide 3.2a.**
     Accepted.
 13. **The exercises use `ipv6.disable=1`**, while the slides keep RH134's
@@ -1926,11 +2254,72 @@ the diagram. Each is reversible.
     `virsh console` in the Presentation window, with the VM's graphical
     console as the fallback. Accepted 2026-10-31, the instructor's own call:
     the recordings are worth the different kernel line and wrapping. A
-    prototype comes first; see "Console delivery".
+    prototype comes first; see "Console delivery". The prototype passed
+    (2026-11-01, Rounds 6 to 8); making the settings permanent and rewriting
+    the command files remain.
+27. **Serial console settings.** Keep the GRUB2 serial terminal, `console=tty0
+    console=ttyS0,115200`, and the `emergency.service` and `rescue.service`
+    drop-ins (`TTYColumns=120`, `TTYRows=24`, `TERM=xterm-256color`) on the
+    instructor lab. Colour on the serial login is not fixed: its `vt220`
+    shows no `ls` colour, and the console recordings can live without it.
+    The `TERM` drop-in was chosen over accepting `vim`'s whitespace dots in
+    casts. Accepted 2026-11-01.
+28. **GRUB2 timing.** No BIOS boot delay and no console-only exercises to
+    catch the menu. Record with the attach pattern under "Console delivery"
+    and re-record a take that misses; live, reboot again if the countdown is
+    missed. Accepted 2026-11-01; the second trial caught the whole menu.
+29. **Lab passwords in command files.** The `root` and `student` passwords may
+    be typed as lines in the command files, since the slides already show
+    them and this is a lab. Accepted 2026-11-01. `AGENTS.md` still allows
+    them only in slide content, so its allowance must be widened before a
+    command file carries one.
+30. **Disk names.** No lab change for the `sd` naming race (Round 7). A
+    snapshot revert keeps the snapshot's names, so only exercises that reboot
+    are exposed, and a shuffled boot is obvious. `docs/lab-environments.md`
+    corrected; re-record a take that shows a shuffled name. Accepted
+    2026-11-01.
+31. **VDI follow-ups.** Add 1.4a and `passwd -S` on 4.3; add the three notes
+    to the written exercises and the <kbd>Esc</kbd> line on 3.2a; replace the
+    placeholders on 1.3, 1.4, 3.2a, and 4.4 with the VDI screenshots, renamed
+    descriptively. The prompt and `vim` differences between the labs stay as
+    they are. Accepted 2026-11-01; built.
+32. **Making the serial settings permanent** (prototype step 9). Add them to
+    `/source/rhel-lab/configure_vms.yml`, the playbook in the instructor's lab
+    repository (branch `ansible_kickstart`), and apply them to all four VMs,
+    `workstation`, `servera`,
+    `serverb`, and `serverc`, so every VM behaves the same; the instructor
+    then takes the new snapshot. Not by hand. Accepted 2026-11-01; not done.
+    What the playbook has to do, from Round 6:
+    - In `/etc/default/grub`, set `GRUB_TERMINAL_INPUT="console serial"` and
+      `GRUB_TERMINAL_OUTPUT="console serial"`, add `GRUB_SERIAL_COMMAND="serial
+      --unit=0 --speed=115200"`, and run `grub2-mkconfig -o
+      /boot/grub2/grub.cfg`.
+    - Run `grubby --update-kernel=ALL --args="console=tty0
+      console=ttyS0,115200"`, only when the arguments are absent. It also
+      updates `GRUB_CMDLINE_LINUX`, so no separate edit is needed. Pass the
+      arguments as one string; the quoting slip in Round 7 passed only
+      `console=tty0`.
+    - Install `serial-size.conf` in `/etc/systemd/system/emergency.service.d/`
+      and `rescue.service.d/` with `TTYColumns=120`, `TTYRows=24`, and
+      `Environment=TERM=xterm-256color` under `[Service]`, then reload
+      systemd.
+    - Reboot, so the snapshot holds a kernel that uses the new arguments.
+
+    Before the snapshot, on each VM: `/proc/cmdline` ends with
+    `console=tty0 console=ttyS0,115200`; `/proc/consoles` lists `ttyS0` with
+    `C`; `serial-getty@ttyS0` is active; `systemctl show -p Environment
+    emergency.service rescue.service` includes `TERM=xterm-256color`;
+    `grub2-editenv - list` still has `menu_auto_hide=1`; and on `servera` and
+    `serverb` the 10 GB OS disk is `sda` (Round 7), since a snapshot keeps the
+    names it was taken with. Run the playbook on the `lab_config` state
+    (`start-latest-snapshot -a` first), and on both lab copies.
 
 ## Open questions
 
-1. **Console verification.** Deferred 2026-10-31: continue building and
+1. ~~**Console verification.**~~ Answered 2026-11-01: the instructor ran the
+   console steps over the instructor lab's serial console (Round 6) and on
+   the VDI with screenshots (Round 8). The original question follows.
+   Deferred 2026-10-31: continue building and
    decide later. I can verify only what SSH reaches. Decision 26's prototype
    covers most of it, run by you over the serial console, and its step 8 is
    the VDI dry run below.
@@ -1946,15 +2335,18 @@ the diagram. Each is reversible.
      `pnpm lab` path, so I have not touched it. If you want it, it would be a
      one-off approval or a rule added for all three harnesses.
 2. ~~**`workstation`.**~~ Answered 2026-10-29 for the instructor lab: graphical
-   login with `gdm` (see "Verification", Round 2). Still to confirm on the SCC
-   lab.
-3. **The SCC lab's GRUB environment.** Do SCC hosts start with
-   `menu_auto_hide=1`? Exercises 1 and 2's first step assume it. The
-   `/etc/fstab` half of this question is gone: exercise 3's `vim` edit now
-   searches for `/boot` instead of counting lines from the end.
-4. **The GRUB screenshots' origin.** Are `grub-menu-1.png`, `grub-editor.png`,
-   and `grub-cmdline-edit.png` your captures of the RHA lab? Either way they
-   do not match the SCC lab (Decision 11).
+   login with `gdm` (see "Verification", Round 2). Confirmed for the SCC lab
+   on 2026-11-01: a Plymouth splash, then a graphical login (Round 8).
+3. ~~**The SCC lab's GRUB environment.**~~ Answered 2026-11-01: yes. On a
+   freshly booted SCC `serverb`, which had run neither exercise,
+   `grub2-editenv - list` printed `saved_entry=e6d97f29...`,
+   `menu_auto_hide=1`, `boot_success=0`, and `boot_indeterminate=0` (Round 8),
+   so exercises 1 and 2's first step is right as written. `serverb` also
+   boots with `rhgb quiet`, like `servera`. The `/etc/fstab` half of this
+   question was already gone: exercise 3's `vim` edit searches for `/boot`
+   instead of counting lines from the end.
+4. ~~**The GRUB screenshots' origin.**~~ Moot since 2026-11-01: the VDI
+   screenshots replaced all three (Decision 31).
 5. ~~**Recording exercises 1 and 2.**~~ Superseded 2026-10-31 by Decision 26:
    over the serial console, `kitty-demo` types the console steps itself, so no
    take depends on editing the console by hand during a pause. The recording runs unattended, but
@@ -1968,7 +2360,8 @@ the diagram. Each is reversible.
    timed on the instructor lab; the VDI is slower.
 
 6. ~~**3.2a's capture and 3.4's UUID.**~~ Answered 2026-10-31: they do not
-   have to match. The stalled-boot capture on 3.2a waits
+   have to match. Since 2026-11-01 3.2a shows the SCC lab's `2cd783eb-...`
+   (Round 8). As first written: the stalled-boot capture on 3.2a waits
    on UUID `b688d484-3d0c-...`; 3.4 shows the Round 3 copy's `/boot`,
    `5c381752-...`, and the home copy's `/boot` UUID was never recorded. Do you
    want them to agree? If so, either 3.4 is recaptured on the lab the capture
@@ -1977,31 +2370,43 @@ the diagram. Each is reversible.
 
 ## Status
 
-As of 2026-10-31.
+As of 2026-11-01.
 
 **Done:**
 
 - This plan; your decisions 1 to 24 (all accepted except 9); Decision 25
-  overtaken by your redraw of the boot diagram; Decision 26 accepted; Open
-  question 6 answered.
+  overtaken by your redraw of the boot diagram; Decisions 26 to 32 accepted;
+  Open questions 1 to 4 and 6 answered.
 - `course/w12-draft.md`: cover, VM reminder, and the imports for all four
   fragments.
 - Fragments 1 to 4 and exercises 1 to 4: complete (`616d13c`, `784ed53`,
   `f4ef2e1`, `974a737`).
+- Decision 26's prototype, steps 1 to 8 (Rounds 6 to 8).
+- Decision 31's changes, unstaged for your review: 1.4a, `passwd -S` on 4.3,
+  the VDI images on 1.3, 1.4, 3.2a, and 4.4, the <kbd>Esc</kbd> line on 3.2a,
+  the notes in exercises 3 and 4 (and two `#!` notes in exercise 3's command
+  file), and Prettier's reflow of the three exercise pages that failed
+  `check:format` in HEAD. Checked with `check:entry`, `check:exercises`,
+  `check:slides` (no overflow), `check:format`, and captures of every changed
+  slide and click state.
+- `docs/lab-environments.md` corrected on disk names (Decision 30),
+  unstaged.
 
-All 45 non-recording slides now exist (47 in "Answer in brief", less the two
+All 46 non-recording slides now exist (48 in "Answer in brief", less the two
 recording slides).
-
-Decision 26 (serial console) accepted, with its prototype plan and change
-list under "Console delivery".
 
 **Next:**
 
-1. Decision 26's prototype, and your calls on the `root` password in command
-   files and on 4.4's `console=` step.
-2. The deferred items: console verification (Open question 1), the GRUB
-   screenshots (Decision 11), your boot diagram, and the placeholder images.
-3. Step 5 of the porting skill: recordings, then publication.
+1. Your review of the unstaged changes. Before staging, decide what happens to
+   the unreferenced VDI screenshots in the ch12 topic's `assets/`.
+2. Decision 26's implementation: prototype step 9 through the `rhel-lab`
+   playbook and your new snapshot (Decision 32), then the `AGENTS.md`
+   allowance for lab passwords (Decision 29), the four command files,
+   recording slides 3.7a and 4.9a, and the `docs/lab-environments.md` and
+   `docs/course-authoring.md` entries listed under "Console delivery". Your
+   call on 4.4's `console=` step is still open there.
+3. The remaining deferred item: your boot diagram.
+4. Step 5 of the porting skill: recordings, then publication.
 
 No review server was started; the slides were captured with
 `pnpm run capture:course`.

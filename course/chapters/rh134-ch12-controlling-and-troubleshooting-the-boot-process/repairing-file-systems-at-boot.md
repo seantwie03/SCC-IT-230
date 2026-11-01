@@ -46,7 +46,9 @@ A missing mount point does not stop the boot: systemd creates the directory
 
 systemd waits 90 seconds for the device with the mistyped UUID
 
-![The servera console during boot. The last line reads: Job dev-disk-by\x2duuid-b688d484\x2d3d0c\x2d485a\x2d840c\x2d5653127e2837zzz.device/start running (27s / 1min 30s), with the zzz at the end of the UUID highlighted](./assets/boot-stalled-incorrect-uuid.placeholder.png)
+![The servera console during boot. The last line reads: Job dev-disk-by\x2duuid-2cd783eb\x2db770\x2d42bd\x2dafc2\x2dc81ca4045d6fzzz.device/start running (39s / 1min 30s)](./assets/boot-stalled-incorrect-uuid.png)
+
+A splash screen instead of messages? Press <kbd>Esc</kbd>
 
 </template>
 
@@ -54,7 +56,7 @@ systemd waits 90 seconds for the device with the mistyped UUID
 
 Then it gives up and opens the emergency shell
 
-![The servera console after the timeout. It reads: You are in emergency mode. After logging in, type "journalctl -xb" to view system logs, "systemctl reboot" to reboot, or "exit" to continue bootup. Give root password for maintenance (or press Control-D to continue):](./assets/emergency-mode.placeholder.png)
+![The servera console after the timeout. It reads: You are in emergency mode. After logging in, type "journalctl -xb" to view system logs, "systemctl reboot" to reboot, or "exit" to continue bootup. Give root password for maintenance (or press Control-D to continue):](./assets/emergency-mode.png)
 
 </template>
 
