@@ -48,7 +48,7 @@ systemd waits 90 seconds for the device with the mistyped UUID
 
 ![The servera console during boot. The last line reads: Job dev-disk-by\x2duuid-2cd783eb\x2db770\x2d42bd\x2dafc2\x2dc81ca4045d6fzzz.device/start running (39s / 1min 30s)](./assets/boot-stalled-incorrect-uuid.png)
 
-A splash screen instead of messages? Press <kbd>Esc</kbd>
+A splash screen instead of messages? Press `Esc`
 
 </template>
 

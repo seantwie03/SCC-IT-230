@@ -169,7 +169,7 @@ Only targets with `AllowIsolate=yes` in their unit file can be isolated
 **Step 1:** Open the GRUB2 editor
 
 1. Reboot and stop the countdown
-2. Press <kbd>e</kbd> to edit the default entry
+2. Press `e` to edit the default entry
 3. Move to the line that starts with `linux`
 
 </template>
@@ -180,13 +180,13 @@ Only targets with `AllowIsolate=yes` in their unit file can be isolated
 
 **Step 2:** Append the target
 
-Press <kbd>End</kbd>, then type a space and the argument
+Press `End`, then type a space and the argument
 
 ```text
 systemd.unit=rescue.target
 ```
 
-Press <kbd>Ctrl</kbd>+<kbd>X</kbd> to boot
+Press `Ctrl`+`X` to boot
 
 </template>
 
@@ -200,7 +200,7 @@ Which repair shell?
 | **Services**     | Logging and devices; no network       | Almost none                              |
 | **Use when**     | A service breaks the normal boot      | `rescue.target` fails, as with a bad `/etc/fstab` line |
 
-Type `exit` or press <kbd>Ctrl</kbd>+<kbd>D</kbd> to leave the shell and continue the normal boot
+Type `exit` or press `Ctrl`+`D` to leave the shell and continue the normal boot
 
 </template>
 

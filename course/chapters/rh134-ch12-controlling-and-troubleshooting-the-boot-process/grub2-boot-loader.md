@@ -105,12 +105,12 @@ vertical: center
 - The default entry starts highlighted
 - A countdown boots it automatically
 
-| Key                             | Action                  |
-| ------------------------------- | ----------------------- |
-| Any key except <kbd>Enter</kbd> | Stop the countdown      |
-| Arrow keys                      | Select an entry         |
-| <kbd>Enter</kbd>                | Boot the selected entry |
-| <kbd>e</kbd>                    | Edit the selected entry |
+| Key                    | Action                  |
+|------------------------|-------------------------|
+| Any key except `Enter` | Stop the countdown      |
+| Arrow keys             | Select an entry         |
+| `Enter`                | Boot the selected entry |
+| `e`                    | Edit the selected entry |
 
 ::right::
 
@@ -125,11 +125,11 @@ vertical: center
 
 ::left::
 
-1. Press <kbd>e</kbd> on the selected entry
+1. Press `e` on the selected entry
 2. Move to the line that starts with `linux`
-3. Press <kbd>End</kbd> to reach the end of the line
+3. Press `End` to reach the end of the line
 4. Type a space and the kernel arguments
-5. Press <kbd>Ctrl</kbd>+<kbd>X</kbd> to boot
+5. Press `Ctrl`+`X` to boot
 
 <Callout>
 
