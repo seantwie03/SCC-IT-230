@@ -29,11 +29,12 @@ the Slidev deck's sections one for one, in source
 order. The LibreOffice deck contributes an intro slide for GRUB2 (1.1a), detail
 for the targets slides, and an optional command table (2.8a).
 
-**Proposed 2026-11-01, not accepted:** a fifth fragment, Flatpak from RH124
-chapter 13, with 18 slides (two optional) and a fifth exercise, which would
-bring the deck to 66. See "Flatpak" and Decisions 33 to 42. Deferred
-2026-11-03: week 12 publishes with the four fragments above, and Flatpak
-waits.
+**Fragment 5, Flatpak from RH124 chapter 13, built 2026-11-03** in
+`course/w12.md` itself (your call; week 12 is published): 20 slides, 51 to
+70, two of them optional, so the deck has 70. Exercises 5 and 6 are built,
+verified, and recorded, with their recording slides 5.9b and 5.17a. Your
+screenshots are on 5.15 and 5.16. Decisions 33 to 42 and 45 accepted
+2026-11-03. See "Flatpak".
 
 Where things stand on 2026-11-03:
 
@@ -2512,49 +2513,63 @@ the diagram. Each is reversible.
     names it was taken with. Run the playbook on the `lab_config` state
     (`start-latest-snapshot -a` first), and on both lab copies.
 
-Decisions 33 to 42, proposed 2026-11-01, are for the Flatpak fragment; see
-"Flatpak".
+Decisions 33 to 42, proposed 2026-11-01 and answered 2026-11-03, are for
+the Flatpak fragment; see "Flatpak".
 
 33. **Add fragment 5, `flatpak-applications.md`**, last in the deck, in a
     new `rh124-ch13-installing-and-updating-applications-by-using-flatpak/`
     directory, `routeAlias: flatpak`, aligned to RH124 chapter `"13"` and
-    cert guide chapter `"9"`. Open.
-    - Agreed
-34. **Section title "Flatpak Applications"**, short enough for the agenda.
-    RH124's own, "Installing and Updating Applications by Using Flatpak",
-    is the alternative. Open.
-    - Installing and Updating Applications by Using Flatpak
+    cert guide chapter `"9"`. Accepted 2026-11-03.
+34. **Section title "Installing and Updating Applications by Using
+    Flatpak"**, RH124's own. Accepted 2026-11-03 over the proposed
+    "Flatpak Applications". At 53 characters it is the cover's longest
+    agenda line by far (the next is 30); check the cover when it is built.
 35. **Cover:** a fifth agenda line and the summary clause under "Flatpak";
     the title stays "Controlling the Boot Process and Root Password Reset".
-    Open.
-    - Yes
+    Accepted 2026-11-03.
 36. **Your motivations lead** (5.2 newer applications, 5.3 no `sudo`); RHA's
-    dependency argument appears only as why a user install is safe. Open.
-    - Yes
+    dependency argument appears only as why a user install is safe.
+    Accepted 2026-11-03.
 37. **Not taught: authentication and `flatpak mask`**, mask because it
-    cannot stop a user installing a version (see "Analysis"). Open.
-    - Yes
-38. **One exercise after 15 content slides**, past the ten-slide guideline
-    as Decision 9's rejection allows. The alternative splits it: an
-    exercise after 5.9 (add Flathub, install) and one after 5.13 (inspect,
-    remove), at the cost of a second download pause. Open.
-    - Let's try to split it into two exercises. One early to start the download, then mroe slides. Then a final exercise to see the download finished.
+    cannot stop a user installing a version (see "Analysis"). Accepted
+    2026-11-03.
+38. **Two exercises.** Exercise 5, after 5.9, adds Flathub and starts the
+    Firefox install, so the download runs while 5.10 to 5.16 are taught;
+    exercise 6, after 5.16, checks that the install finished, inspects it,
+    and removes it. Each follows eight content slides or fewer, within the
+    ten-slide guideline. Accepted 2026-11-03 in this form, over the
+    proposed single exercise after 15 content slides.
 39. **Text Editor and Calculator on the slides, Firefox in the exercise.**
     Accepted 2026-11-02. First proposed as Inkscape on the slides; Round 10
     showed the download is the runtime's, not the application's, and RHEL
     10 ships older RPMs of both GNOME applications (47.3 and 46.1 against
     Flathub's 51.0 and 51.1), while neither Inkscape nor GIMP is in RHEL
     10.
-40. **GNOME Software shown, not practised:** 5.15 and 5.16 with your
-    screenshots, demonstrated live; the exercise and its recording stay on
-    the command line. The alternative adds a written-only GNOME Software
-    step to exercise 5. Open.
-    - written-only step is fine.
-41. **Optional 5.14 and 5.16**, and teaching `flatpak uninstall --unused`,
-    which RHA does not. Open.
-    - Put it in for now
-42. **`--user` on every command** that touches an installation. Open.
-    - Don't know what this does
+40. **GNOME Software in a written-only step:** 5.15 and 5.16 with your
+    screenshots, demonstrated live, and a step in exercise 6's written
+    version that its command file skips; the recordings stay on the
+    command line. Accepted 2026-11-03 over showing it only.
+41. **Optional 5.14 and 5.16 built**, and teaching `flatpak uninstall
+    --unused`, which RHA does not. Accepted 2026-11-03: both slides go in
+    for now.
+42. **`--user` on every command that changes an installation.** Accepted
+    2026-11-03.
+    Flatpak keeps two kinds of installation: the system installation,
+    `/var/lib/flatpak`, shared by every user and changed only with an
+    administrator's authorization, and each user's own,
+    `~/.local/share/flatpak`, which only that user sees. `--user` (`-u`)
+    points a command at your own. Without it, `remote-add` targets the
+    system installation, which for `student` means a polkit password prompt
+    or `error: Flatpak system operation ConfigureRemote not allowed for
+    user` (Round 10), and flatpak-install(1) gives the system installation
+    as `install`'s default too. Read-only commands (`remotes`, `search`,
+    `list`, `info`) show both installations without it. So `--user` goes
+    on `remote-add`, `install`, `update`, `uninstall`, and `remote-delete`,
+    as the cert guide's exercise 9-4 does (`flatpak install -u gimp`), and
+    every change visibly lands in the user's own installation, which is
+    what an RHCSA task such as "only user linda" checks. Rejected:
+    `--user` on `remote-add` alone, relying on later commands to find the
+    remote in the user installation.
 
 Decision 43 is outside the Flatpak fragment.
 
@@ -2571,6 +2586,15 @@ Decision 43 is outside the Flatpak fragment.
     alternative re-records both, each from its own starting state, and
     risks the same shuffle again. Accepted 2026-11-03: the instructor
     committed the takes and published the week with them.
+
+Decision 45 is for the Flatpak fragment.
+
+45. **Wireshark on the slides only.** Accepted 2026-11-03, from your
+    suggestion: a fourth row on 5.2 and the sandbox example on 5.5, from
+    `dnf list` and `flatpak remote-info`, never installed. Installing it
+    would download a third runtime, `org.kde.Platform` 6.11 (414.5 MB),
+    and Flathub's build cannot capture packets, so the exercises keep
+    Firefox (Round 14).
 
 ## Open questions
 
@@ -2770,353 +2794,472 @@ Software is not.
   what a user installs in their own installation.
 - **CLI, then GNOME Software.** Remotes added and removed, applications
   installed and removed, from the command line (5.6 to 5.13); GNOME Software
-  last (5.15, 5.16), shown by you rather than practised (Decision 40).
+  last (5.15, 5.16), shown by you, with a written-only step in exercise 6
+  (Decision 40).
 
-### 5. `flatpak-applications.md` (18 slides), proposed
+### 5. `flatpak-applications.md` (20 slides), built 2026-11-03
 
 New chapter directory
 `course/chapters/rh124-ch13-installing-and-updating-applications-by-using-flatpak/`,
 the course's first RH124 chapter in w12. `routeAlias: flatpak` (unused).
 Alignments: RH124 chapter `"13"`, *Installing and Updating Applications by
-Using Flatpak*, and cert guide chapter `"9"`, *Managing Software*. Exercise:
-Install a Flatpak Application Exercise, declared in `topicInfo`.
+Using Flatpak*, and cert guide chapter `"09"`, *Managing Software*, the cert
+guide file's own title. `topicInfo` declares both exercises, Install a
+Flatpak Application Exercise and Inspect and Remove a Flatpak Application
+Exercise.
 
-**Place in the deck:** last, after fragment 4 (Decision 33). It runs on
-`workstation` alone, so it is outside the `servera` chain, and the VM
-reminder already names `workstation`. The cover gains a fifth agenda line,
-"Flatpak Applications", and the summary a clause (Decision 35):
+**Place in the deck:** last, slides 51 to 68 of `course/w12.md`, after
+fragment 4 (Decision 33). It runs on `workstation` alone, so it is outside
+the `servera` chain, and the VM reminder already names `workstation`. The
+cover has a fifth agenda line, "Installing and Updating Applications by
+Using Flatpak" (Decision 34), and the summary its clause (Decision 35):
 
 ```yaml
 courseInfo:
   summary: >-
-    This week we will follow a RHEL system from power-on to the login
-    prompt, change how GRUB2 starts the kernel, choose which systemd target
-    the system boots into, repair a broken /etc/fstab from an emergency
-    shell, reset a lost root password, and install desktop applications for
-    one user with Flatpak.
+    This week we will follow a RHEL system from power-on to the login prompt,
+    change how GRUB2 starts the kernel, choose which systemd target the system
+    boots into, repair a broken /etc/fstab from an emergency shell, reset a
+    lost root password, and install desktop applications for one user with
+    Flatpak.
 ```
 
-**Numbering.** Fragment 5 has no source deck, so its numbers are its own
-and nothing in it carries a letter except the recording slide. Each entry
-names the RHA section, cert guide passage, or note of yours it rests on.
-No RHA text, figure, or transcript is copied; every transcript comes from
-the lab.
+**In `course/w12.md` directly.** Your call, 2026-11-03: week 12 is
+published, so fragment 5 is imported into `course/w12.md` rather than a
+draft. Until you commit, the change is unstaged; once committed and pushed,
+it publishes through `docs/publishing.md`'s roll-forward workflow. The two
+missing recording slides publish that way too if it is committed before
+the casts exist.
+
+**Numbering.** Fragment 5 has no source deck, so its numbers are its own.
+Only three slides carry a letter: exercise 5's two, 5.9a and 5.9b, added
+by Decision 38 so the other numbers stay as first proposed, and exercise
+6's recording, 5.17a. Each entry names the RHA section, cert guide passage,
+or note of yours it rests on. No RHA text, figure, or transcript is copied;
+every transcript comes from the lab (Round 15).
 
 **Three applications** (Decision 39, accepted). `docs/course-authoring.md`
 asks that an exercise not repeat the slides command for command, so the
 slides use GNOME **Text Editor** (`org.gnome.TextEditor`) and
-**Calculator** (`org.gnome.Calculator`), and the exercise **Firefox**. All
+**Calculator** (`org.gnome.Calculator`), and the exercises **Firefox**. All
 three ship in RHEL 10 as older RPMs, installed on `workstation`, so every
 comparison is RPM against Flatpak. The two GNOME applications share one
 runtime, `org.gnome.Platform//51`: the first install brings it, the second
-downloads about 2 MB (Round 10), which is 5.5's point made on the lab.
+downloads about 1.1 MB (Round 15), which is 5.5's point made on the lab.
 Firefox runs on a different runtime, `org.freedesktop.Platform//25.08`.
-Inkscape, the first proposal, is not in RHEL 10 and costs the same runtime
-download; so is GIMP, which the cert guide's practice exams name.
+Wireshark appears on 5.2 and 5.5 only, never installed (Decision 45).
 
-**`--user` on every command** (Decision 42) that touches an installation,
-as the cert guide's exercise 9-4 does (`flatpak install -u gimp`). It is the
-form that needs no `sudo`, and naming it each time keeps the user and system
-installations apart in students' heads.
+**`--user` on every command that changes an installation** (Decision 42):
+`remote-add`, `install`, `update`, `uninstall`, `remote-modify`, and
+`remote-delete`. Read-only commands (`remotes`, `search`, `list`, `info`,
+`remote-ls`) go without it.
 
-##### 5.1 Flatpak Applications
+##### 5.1 Installing and Updating Applications by Using Flatpak
 
-Section slide carrying the `routeAlias` and `topicInfo`. Title per
-Decision 34.
+Section slide carrying the `routeAlias` and `topicInfo` (Decision 34).
 
 Components: `section`.
 
 ##### 5.2 Why Flatpak? Newer Desktop Applications
 
 Your first motivation. "RHEL favors stable, tested versions; desktop
-applications release faster upstream", then a small table of what each
-source offers, captured on the lab and dated on the slide since the numbers
-move. As of 2026-11-02 (Round 10), RPM against Flathub: **Text Editor**
-47.3 against 51.0; **Calculator** 46.1 against 51.1; **Firefox**
-`128.8.0esr` against 159.0. Closing line: "For a desktop application, newer
-means new features and bug fixes sooner". The versions come from `rpm -q`
-and `flatpak remote-info flathub ID` on `workstation`; recheck them when
-the slide is built.
+applications release faster upstream", over a table of Application, RHEL
+10 RPM, and Flathub: Text Editor 47.3 and 51.0; Calculator 46.1 and 51.1;
+Firefox 128.8.0esr and 159.0; Wireshark 4.4.2 and 4.6.9 (Decision 45).
+Under it "Versions from `rpm -q NAME` and `flatpak remote-info flathub ID`
+on `workstation`, November 2026", since the numbers move, and since
+exercise 5's first step needs `rpm -q` taught (Round 17), and the closing line "For a desktop application, newer means new
+features and bug fixes sooner", its last words in `AccentText`. Rechecked
+on 2026-11-03 (Round 15): `rpm -q`, `firefox --version`, `dnf
+--cacheonly list --available wireshark` (not installed), and `flatpak
+remote-info --user flathub ID`.
 
 Components: default layout with `vertical: center`, Markdown table.
 
 ##### 5.3 Why Flatpak? No `sudo` Needed
 
 Your second motivation, with the cert guide's user-installation passage.
-"Any user can install a Flatpak for themselves", over four facts: the
-application brings everything it needs, in a shared runtime (5.5 explains);
-a user installation lives in `~/.local/share/flatpak`; nothing under `/usr`
-or `/etc` changes, so no other user notices; `dnf` needs `root` because it
-changes the whole system. Then a `Callout`: "RHCSA tasks ask for this:
-install an application so only one user can use it" (practice exams B and
-C).
+"Any user can install a Flatpak **for themselves**", over an `IconGrid` of
+four: `package`, "The app brings everything it needs"; `home`, "Installs
+under ~/.local/share/flatpak"; `user-multiple`, "Other users see no
+change"; `locked`, "dnf needs root: it changes the whole system". Then a
+`Callout`: "RHCSA tasks ask for this: install an application so only one
+user can use it" (practice exams B and C).
 
-Components: default layout; `IconGrid` with Carbon icons such as `user`,
-`package`, `home`, and `locked`; `Callout`.
+Components: default layout with `vertical: center`, `IconGrid`, `Callout`.
 
 ##### 5.4 RPM or Flatpak?
 
-RHA section 1 and the cert guide's "mainly graphical packages". A two-column
-table: **Best for**, "System software, services, command-line tools" against
-"Desktop applications"; **Comes from**, "RHEL repositories, with `dnf`"
-against "Remotes such as Flathub, with `flatpak`"; **Installs for**,
-"Everyone; needs `root`" against "One user, or everyone"; **Libraries**,
-"Shared from the system" against "Bundled, plus a shared runtime";
-**Supported by Red Hat**, "Yes" against "Not from Flathub" (RHA's warning on
-third-party remotes). Then the rule of thumb: "A desktop application:
-Flatpak. Everything else: RPM."
+RHA section 1 and the cert guide's "mainly graphical packages". A table
+with RPM and Flatpak columns: **Best for**, "System software, services,
+command-line tools" against "Desktop applications"; **Comes from**, "RHEL
+repositories, with `dnf`" against "Remotes such as Flathub, with
+`flatpak`"; **Installs for**, "Everyone; needs `root`" against "One user,
+or everyone"; **Libraries**, "Shared from the system" against "Bundled,
+plus a shared runtime"; **Supported by Red Hat**, "Yes" against "Not from
+Flathub". Then "Rule of thumb: a desktop application, Flatpak; everything
+else, RPM", the two answers in `AccentText`.
 
 Components: default layout, Markdown table.
 
 ##### 5.5 Applications and Runtimes
 
 RHA section 1, "Flatpak Runtimes" and the sandbox paragraph. "A Flatpak
-application runs on a **runtime**, a shared set of libraries", beside a
-Mermaid diagram of `org.gnome.TextEditor` and `org.gnome.Calculator` on
-`org.gnome.Platform` 51, with its GL and codec extensions under it, and the
-measured cost on each edge: the runtime about 750 MB at most, each
-application 1.3 MB and 2.0 MB (Round 10). Three points: the runtime
-downloads once and serves every application built on it, so the second
-application takes seconds; a fixed runtime gets its security update once,
-not per application; each application runs in a sandbox and reaches only
-what its permissions grant, which `install` lists (5.9).
+application runs on a **runtime**, a shared set of libraries". Left, a
+Mermaid diagram: Text Editor (up to 1.3 MB) and Calculator (up to 2.0 MB),
+in blue, both pointing to the GNOME Platform 51 runtime (up to 432.7 MB), in
+purple; the sizes are the install tables' upper bounds (Round 15). The
+first build had a fourth node under the runtime, GL and codec extensions,
+which ran under the bottom callout; `check:slides` did not report it, and
+it was dropped. Right: "The runtime downloads once and serves every app
+built on it"; "A second app on the same runtime installs in seconds"; "A
+fix to the runtime reaches every app on it"; "Each app runs in a
+**sandbox** and reaches only what its permissions allow". In the `bottom`
+band, a `Callout`: "Flathub's Wireshark has no network permission, so it
+opens saved captures but cannot capture packets" (Decision 45, Round 14).
 
-Components: `two-cols-header`, Mermaid left, list right.
+Components: `two-cols-header` with `leftWidth: 45`, Mermaid left, list
+right, `Callout` in `bottom`.
 
 ##### 5.6 Remotes
 
 RHA section 1, "Managing Flatpak Remote Repositories". "Flatpak installs
 from **remotes**, repositories of applications and runtimes", then
-`flatpak remotes` as `student` on a fresh `workstation`, with its real
-output: in a terminal, a `Name Options` header over
-`rhel system,oci,no-gpg-verify` (RHA shows the line without the header).
-Beneath it:
-"`rhel` is Red Hat's remote; it needs a Red Hat login, so this course does
-not use it" and "Flathub, at flathub.org, is the largest community remote;
-Red Hat does not support its applications".
+`flatpak remotes` on a fresh `workstation`: `Name Options` over `rhel
+system,oci,no-gpg-verify`. Beneath it: "`rhel` is Red Hat's remote; it
+needs a Red Hat login, so this course does not use it" and "**Flathub**, at
+flathub.org, is the largest community remote; Red Hat does not support its
+applications".
 
 Components: fixed `TerminalWindow`, list.
 
 ##### 5.7 Add a Remote
 
 RHA section 1, "Adding a Flatpak Remote Repository", and cert guide exercise
-9-4, step 2. `flatpak remote-add --user --if-not-exists flathub
-https://dl.flathub.org/repo/flathub.flatpakrepo`, which prints nothing,
-then `flatpak remotes` showing `flathub user` under `rhel` (Round 10). The
-command
-is about 125 columns with the prompt, so it breaks once with a `\` (see
-"Authoring notes"). `TextExplainer` marks: `--user` "for you alone; no
-`sudo`"; `--if-not-exists` "safe to run twice"; `flathub` "the name you
-choose"; the URL "a `.flatpakrepo` file describing the remote". Closing
-line: "Without `--user`, `flatpak` changes the system installation and asks
-for an administrator's password". Verified (Round 10): in a terminal,
-polkit asks `student`, a `wheel` member, for their own password; with no
-terminal, `flatpak` stops with `error: Flatpak system operation
-ConfigureRemote not allowed for user`.
+9-4, step 2. "`flatpak remote-add` adds a remote; `--user` adds it to your
+own installation", then one `TextExplainer` holding both commands: the
+`remote-add` line broken once with `\` before the URL (the real command is
+119 columns with the prompt), then `flatpak remotes` with `flathub user`
+under `rhel`. Five steps: `--user`, "For you alone, so no sudo";
+`--if-not-exists`, "Safe to run twice"; `flathub`, "The name you choose for
+the remote"; the URL, "A .flatpakrepo file that describes the remote"; the
+`flathub user` line, "Added to your user installation". The separate
+`TerminalWindow` was not needed. Closing line: "Without `--user`, `flatpak`
+changes the system installation, which needs an administrator's
+authorization". Round 10 verified it: polkit asks `student`, a `wheel`
+member, for their own password, and with no terminal `flatpak` stops with
+`error: Flatpak system operation ConfigureRemote not allowed for user`.
 
-Components: fixed `TerminalWindow` for the transcript, `TextExplainer` for
-the command, or the explainer alone if the two do not fit.
+Components: `TextExplainer`.
 
 ##### 5.8 Find an Application
 
 RHA section 3, "Flatpak Identifiers" and "Querying Remote Repositories".
-`flatpak search "text editor"`, real output: two rows, Text Editor
-(`org.gnome.TextEditor`, 51.0) and Micro, about 110 columns (Round 10).
-The quotes matter; `flatpak search calculator` returns 50 rows, which is
-why the slide searches for Text Editor. "`search` matches names,
-descriptions, and IDs in every remote you have", then "Every application
-has an ID in reverse-DNS form, such as `org.gnome.TextEditor`; later
-commands take the ID". One
-sentence names `flatpak remote-ls --app flathub` for listing a whole remote
-(the cert guide's answer key, chapter 9). Identifier triples and branches
-are not taught ("Not ported").
+"`flatpak search` matches names, descriptions, and IDs in every remote you
+have", then `flatpak search "text editor"`: Text Editor
+(`org.gnome.TextEditor`, 51.0), highlighted, and Micro Text Editor, 115
+columns. Beneath it: "Later commands take the **application ID**, in
+reverse-DNS form: `org.gnome.TextEditor`" and "`flatpak remote-ls --app
+flathub` lists every application in a remote" (Round 15: 3,521 lines, exit
+0). Identifier triples and branches are not taught ("Not ported").
 
-Components: fixed `TerminalWindow` with the ID column highlighted.
+Components: fixed `TerminalWindow` with line 3 highlighted, list.
 
 ##### 5.9 Install an Application
 
 RHA section 3, "Installing Flatpak Objects from Remote Repositories".
-`flatpak install --user flathub org.gnome.TextEditor`, real output with its
-prompts, the permissions list kept, the progress lines cut with
-`...output omitted...`. The shape, from Inkscape's install (Round 10):
-"Looking for matches…", "Required runtime for ... found in remote
-flathub", "Do you want to install it? [Y/n]", the permissions, a numbered
-transaction table (seven refs, with ID, Branch, Op, Remote, and Download
-columns), then "Proceed with these changes to the user installation?
-[Y/n]". Highlighted: the required-runtime prompt and the Proceed prompt.
-Three points: the runtime comes with it; the permissions list is what the
-sandbox allows; `-y` answers yes for you. If the transcript does not fit
-one frame, a two-state `v-switch` splits prompts from progress. Capture
-Text Editor's own transcript when building; my capture of it ran with
-`--noninteractive`, which prints no table.
+`flatpak install --user flathub org.gnome.TextEditor`, captured in a real
+terminal (Round 15), in a four-template `v-switch`, each template with its
+own sentence and a `TerminalWindow` at `rows` 12:
 
-Components: fixed `TerminalWindow` with line highlights.
+1. "The app needs a runtime, and `flatpak install` offers to add it": the
+   command, "Looking for matches…", the "Required runtime ... found in
+   remote flathub" line (118 columns) and "Do you want to install it?
+   [Y/n]: y", highlighted, and the permissions list.
+2. "The permissions are everything the app's sandbox can reach": the same
+   transcript with the permissions highlighted.
+3. "Then every ref it will download, and one last question": the command,
+   `...output omitted...`, the seven-ref table with its `< 432.7 MB` upper
+   bounds, and "Proceed with these changes to the user installation?
+   [Y/n]: y", highlighted.
+4. "Each ref gets a ✓ as it installs; add `-y` to answer every question
+   with yes": the table as it ends, each row marked `[✓]` with what it
+   downloaded against the bound, highlighted, then "Installation
+   complete.". Flatpak redraws the table in place and replaces the Proceed
+   line, so the finished screen no longer shows it.
+
+Components: `v-switch` of four `TerminalWindow`s with line highlights.
+
+##### 5.9a Exercise: Install a Flatpak Application
+
+Goal: "Install a newer Firefox for `student` alone, without `sudo`".
+Environment: "**Host:** `workstation`, as `student`". No prerequisite
+exercise. Workflow: "Check the version of the Firefox RPM"; "Add Flathub
+for yourself only"; "Find Firefox's application ID"; "Start installing
+Firefox in your user installation, and leave it running". Its files are
+under "Exercise 5".
+
+Components: `exercise`.
+
+##### 5.9b Exercise recording, built 2026-11-03
+
+`install-a-flatpak-application-exercise.cast`, recorded by you on
+2026-11-03 and processed with `pnpm run casts`: 92.7 seconds, 120 by 24, 5
+markers (the requirements and four steps). It ends on "Installation
+complete." with nothing cut off. The player's label walks the workflow, and
+the resources link opens the written exercise.
+
+Components: `exercise` with `variant: recording`, `AsciinemaPlayer`.
 
 ##### 5.10 List and Inspect
 
-RHA section 3, "Querying Flatpak Objects Locally". A two-state `v-switch`.
-First, 5.5 made real: `flatpak install --user -y flathub
-org.gnome.Calculator`, whose table holds only the application and its
-locale, done in about 2 seconds (Round 10), then `flatpak list`, showing
-both applications over one `org.gnome.Platform` 51 and its extensions, the
-`Installation` column `user` on every row. Second: `flatpak list --app`,
-then `flatpak info org.gnome.TextEditor`, with the `Installation: user`,
-`Origin: flathub`, and `Runtime: org.gnome.Platform/x86_64/51` lines
-highlighted. Closing line: "Without `--app`, `flatpak list` shows runtimes
-too". `flatpak list` is about 115 columns at 120 (Round 10, with
-Inkscape).
+RHA section 3, "Querying Flatpak Objects Locally". A three-template
+`v-switch` at `rows` 17, one more template than planned so that each fits:
 
-Components: fixed `TerminalWindow` per state.
+1. "A second app on the same runtime downloads only itself": `flatpak
+   install --user -y flathub org.gnome.Calculator`, whose table holds only
+   Calculator and its locale, both highlighted.
+2. "`flatpak list` shows runtimes too; `--app` shows applications only":
+   `flatpak list`, with its four runtime rows highlighted and `user` in
+   every Installation column, then `flatpak list --app`.
+3. "`flatpak info` shows where an app came from and what it runs on":
+   `flatpak info org.gnome.TextEditor` down to `Sdk`, then
+   `...output omitted...`, with `Origin: flathub`, `Installation: user`, and
+   `Runtime: org.gnome.Platform/x86_64/51` highlighted.
+
+Components: `v-switch` of three `TerminalWindow`s with line highlights.
 
 ##### 5.11 Run and Update
 
 RHA section 3, "Updating Flatpak Objects", and your freshness motivation.
-"An installed application appears in Activities like any other", then a
-`bash` fence of `flatpak run org.gnome.TextEditor` (it opens a window, so
-no transcript), then `flatpak update --user` with its real output, which
-was "Looking for updates…" and "Nothing to do." just after an install
-(Round 10). Running an application creates its data directory,
-`~/.var/app/ID`, which 5.12 removes. "Updates
-come as fast as Flathub publishes them; `flatpak update` takes every
-application and runtime at once". RHA's note that `update` stays on the
-installed branch is left out with branches.
+"An installed application appears in **Activities** like any other, or run
+it by ID", a `bash` fence of `flatpak run org.gnome.TextEditor` (it opens a
+window, so no transcript), "Running it creates its data directory,
+`~/.var/app/org.gnome.TextEditor`" (Round 15), then `flatpak update --user`:
+"Looking for updates…", a blank line, "Nothing to do.". Closing line:
+"`flatpak update --user` updates every application and runtime you
+installed, as soon as Flathub publishes them". RHA's note that `update`
+stays on the installed branch is left out with branches.
 
 Components: `bash` fence, fixed `TerminalWindow`.
 
 ##### 5.12 Remove an Application
 
-RHA section 3, "Uninstalling Flatpak Objects". `flatpak uninstall --user
---delete-data org.gnome.TextEditor`, then `flatpak uninstall --user
---unused`, both with real output. The first asks twice: "Proceed with
-these changes to the user installation? [Y/n]", then "Delete data for
-org.gnome.TextEditor? [y/n]" (Round 10, with Inkscape); highlight both.
-With Calculator still installed, `--unused` should find nothing to remove,
-since Calculator still needs the runtime; its exact output is to capture.
-Two points: "An application's data in `~/.var/app` stays unless you add
-`--delete-data`"; "`--unused` removes runtimes no installed application
-needs, and keeps the ones that are still needed". `--unused` is not in RHA,
-which removes the runtime by name and shows the "needed for" error first;
-it is the shorter path (Decision 41's list of additions).
+RHA section 3, "Uninstalling Flatpak Objects". A three-template `v-switch`
+at `rows` 11, each with its own sentence:
 
-Components: fixed `TerminalWindow`.
+1. "`flatpak uninstall` lists what it will remove and asks first": the
+   table of Text Editor and its locale, and "Proceed with these changes to
+   the user installation? [Y/n]: y", highlighted.
+2. "`--delete-data` also removes the app's data in `~/.var/app`": the rows
+   marked `[-]`, "Uninstall complete.", then "Delete data for
+   org.gnome.TextEditor? [y/n]: y", highlighted. Flatpak asks about the
+   data after the uninstall.
+3. "`--unused` removes runtimes no installed app needs; Calculator still
+   needs GNOME Platform 51": `flatpak uninstall --user --unused` and
+   "Nothing unused to uninstall", highlighted.
+
+`--unused` is not in RHA, which removes the runtime by name and shows the
+"needed for" error first; it is the shorter path (Decision 41).
+
+Components: `v-switch` of three `TerminalWindow`s with line highlights.
 
 ##### 5.13 Remove a Remote
 
-RHA section 1, "Removing a Flatpak Remote Repository". `flatpak
-remote-delete --user flathub` with Calculator still installed, real output,
-then `flatpak remotes` showing `rhel` alone. Verified (Round 10, with both
-GNOME applications): it prints "The following refs are installed from
-remote 'flathub':", a numbered list of every app and runtime ref, and
-"Remove them? [y/n]"; `y` uninstalls them all, then deletes the remote.
-"Delete a remote and Flatpak offers to remove what you installed from it",
-and one line: "`flatpak remote-modify --disable NAME` turns a remote off
-and keeps its applications".
+RHA section 1, "Removing a Flatpak Remote Repository". "Delete a remote and
+Flatpak offers to remove everything you installed from it", then `flatpak
+remote-delete --user flathub` with Calculator still installed: "The
+following refs are installed from remote 'flathub':", the seven refs,
+"Remove them? [y/n]: y", and `...output omitted...` for the seven
+"Uninstalling" lines. The planned `flatpak remotes` after it was cut: with
+it the slide overflowed by 8.2px. Closing line: "`flatpak remote-modify
+--user --disable NAME` turns a remote off instead, without removing what
+you installed". Round 15: a disabled remote drops out of `flatpak remotes`
+altogether; that it keeps installed applications is flatpak-remote-modify(1),
+not tested.
 
-Components: fixed `TerminalWindow`.
+Components: fixed `TerminalWindow` with lines 2 and 12 highlighted.
 
 ##### 5.14 Flatpak Commands
 
-Optional summary, as 2.8a is for targets (Decision 41). A two-column table
-in teaching order: `flatpak remotes`, `flatpak remote-add --user NAME URL`,
-`flatpak search WORD`, `flatpak install --user REMOTE ID`, `flatpak list
---app`, `flatpak info ID`, `flatpak run ID`, `flatpak update --user`,
-`flatpak uninstall --user --delete-data ID`, `flatpak uninstall --user
---unused`, `flatpak remote-delete --user NAME`. Close to the cert guide's
-Table 9-5, with the removal commands it lacks. Cut it if time is short.
+Optional summary, as 2.8a is for targets (Decision 41). A `bash` fence of
+twelve commands in teaching order, each with a `#` comment: `remotes`,
+`remote-add --user NAME URL`, `search WORD`, `install --user REMOTE ID`,
+`list --app`, `info ID`, `run ID`, `update --user`, `uninstall --user
+--delete-data ID`, `uninstall --user --unused`, `remote-modify --user
+--disable NAME`, and `remote-delete --user NAME`. Planned as a table, which
+overflowed by 169px at eleven rows; the fence holds twelve with 92px to
+spare, and its commands copy. Close to the cert guide's Table 9-5, with the
+removal commands it lacks. Cut it if time is short.
 
-Components: default layout with `vertical: center`, Markdown table.
+Components: default layout with `vertical: center`, `bash` fence.
 
 ##### 5.15 GNOME Software
 
 RHA section 3, "Managing Flatpak Objects with the GNOME Software Graphical
-Tool". "GNOME Software installs Flatpaks and RPMs from one window", beside
-your screenshot of an application's page in Software with its source
-showing Flathub, and three steps: search; choose the source and click
-**Install**; **Uninstall** from the Installed tab. Whether Software installs
-into the user installation when Flathub is a user remote is to verify; the
-slide says whichever it does.
+Tool". "GNOME Software installs Flatpaks and RPMs from one window", your
+screenshot left, three steps right: "Search for the application"; "Choose
+its source, such as Flathub, and click **Install**"; "Remove it with the
+trash button on its page". In the `bottom` band: "With Flathub added with
+`--user`, Software installs into your user installation too" (Round 16).
 
-Components: `two-cols-header`, image left, ordered list right.
+The screenshot is `assets/gnome-software-text-editor-flathub.png` (2101 by
+1310, 2026-11-03): Text Editor's page after you installed it from
+Software, with **Open**, the trash button, and **Flathub** as its source.
+It replaced `gnome-software-explore-page.png`, which no slide uses now.
+Used as taken, top bar and Red Hat logo included. 0px clearance, so it
+fits with nothing to spare.
+
+Components: `two-cols-header` with `leftWidth: 60`, image left, ordered
+list right, closing line in `bottom`.
 
 ##### 5.16 GNOME Software: Repositories
 
-Optional (Decision 41). RHA section 1's Software Repositories dialog: the
-main menu, **Software Repositories**, and the switch for each remote, beside
-your screenshot. "The same remotes as `flatpak remotes`, with a switch to
-turn each on or off".
+Optional (Decision 41). RHA section 1's Software Repositories dialog.
+"Flatpak remotes and RPM repositories in one dialog, each with a switch to
+turn it on or off", your screenshot left, and right: "Open the main menu";
+"Choose **Software Repositories**"; "Turn a remote on or off with its
+switch"; then "Flathub is a **User Installation** remote; `rhel` is a
+**System Installation** one", as the dialog labels them. The planned line,
+"The same remotes as `flatpak remotes`", was wrong: the dialog lists the
+`dnf` repositories too.
 
-Components: `two-cols-header`, image left, list right.
+The screenshot is `assets/gnome-software-repos.png` (2102 by 1312,
+2026-11-03): under **Apps (Flatpak)**, Flathub (`dl.flathub.org`, User
+Installation, with a trash button) and Red Hat Enterprise Linux
+(`flatpaks.redhat.io`, System Installation); under **Packages (RPM)**, Red
+Hat Enterprise Linux 10.0, RHEL DVD - AppStream, and RHEL DVD - BaseOS,
+every switch on. Used as taken. The dialog is small in the full-screen
+capture, so its labels are hard to read from the back of a room; a crop to
+the dialog would be your call.
 
-##### 5.17 Exercise: Install a Flatpak Application
+Your other two captures are not used: `gnome-software-menu.png`, the main
+menu open with Software Repositories, Keyboard Shortcuts, Preferences, and
+About Software, which confirms step 2's wording; and
+`gnome-software-vscode.png`, Visual Studio Code's page with **Install** and
+Flathub, whose Microsoft icon and branding the slides do not need.
 
-Goal: "Install a newer Firefox for `student` alone, without `sudo`".
-Environment: "**Host:** `workstation`, as `student`". No prerequisite
-exercise. Workflow: check the version of the Firefox RPM; add Flathub for
-yourself only; find Firefox's ID; install it in your user installation;
-compare the two versions; confirm the installation is yours alone; launch
-it from Activities; remove it with its data, the runtimes it leaves unused,
-and the remote. The exercise reaches back to 5.2 for its scenario, so it
-applies the slides rather than repeating them.
+Components: `two-cols-header` with `leftWidth: 60`, image left, ordered
+list and line right.
+
+##### 5.17 Exercise: Inspect and Remove a Flatpak Application
+
+Goal: "Confirm the new Firefox is yours alone, then remove it". Environment:
+"**Host:** `workstation`, as `student`" and "**Prerequisite exercise:**
+Install a Flatpak Application". Workflow: "Confirm the installation
+finished"; "Compare the Flatpak's version with the RPM's"; "Confirm the
+installation is yours alone"; "Launch Firefox from Activities"; "Find
+Firefox in GNOME Software"; "Remove Firefox with its data, then its unused
+runtimes and the remote". Removal is a workflow step here, not cleanup,
+since removing applications and remotes is what 5.12 and 5.13 teach.
+Its files are under "Exercise 6".
 
 Components: `exercise`.
 
-##### 5.17a Exercise recording
+##### 5.17a Exercise recording, built 2026-11-03
 
-Pending the cast. Everything except the Activities launch runs over SSH, so
-the take needs no console work.
+`inspect-and-remove-a-flatpak-application-exercise.cast`, recorded by you
+on 2026-11-03 right after exercise 5's, and processed: 99.8 seconds, 120 by
+24, 7 markers (the requirements and six steps, 4 and 5 headings only). It
+shows the typed `# root sees no Firefox` line after `sudo flatpak list
+--app`, two "Uninstall complete." lines, and ends on `rhel` alone, with no
+error anywhere. Afterwards `workstation` held only `rhel`, nothing
+installed, no `~/.var/app`, and 107M of downloaded objects that no
+exercise removes; `start-latest-snapshot` clears them before the next
+class.
 
-### Exercise 5, Install a Flatpak Application, proposed
+Components: `exercise` with `variant: recording`, `AsciinemaPlayer`.
 
-`install-a-flatpak-application-exercise.sh` and `.html` in the new topic's
-`exercises/`, written for the instructor lab's `workstation` as `student`.
-Steps, every one to verify:
+### Exercise 5, Install a Flatpak Application, built 2026-11-03
 
-1. Show the RPM's version with `rpm -q firefox` and `firefox --version`.
-2. `flatpak remotes`, then `flatpak remote-add --user --if-not-exists
-   flathub https://dl.flathub.org/repo/flathub.flatpakrepo`, then `flatpak
-   remotes` again.
-3. `flatpak search firefox`, picking out `org.mozilla.firefox`. Its row
-   reads `rhel,flathub` in the Remotes column and 153.5.0, the `rhel`
-   remote's version, in the Version column (Round 10); the exercise says
-   so, and that step 4 names `flathub` to install from Flathub. The search
-   prints 19 rows, several truncated at 120 columns.
-4. `flatpak install --user -y flathub org.mozilla.firefox`. Five refs:
-   Firefox, `org.freedesktop.Platform` 25.08, its locale, and its GL and
-   codec extensions; at most about 700 MB, 1.6 GB on disk, 20 seconds on the
-   instructor lab (Round 10).
-5. `flatpak info org.mozilla.firefox`'s `Version: 159.0` line beside step
-   1's version. Proposed over `flatpak run org.mozilla.firefox --version`,
-   which works over SSH but prints `[2] Sandbox: CanCreateUserNamespace()
-   clone() failure: EPERM` above `Mozilla Firefox 159.0` and creates
-   `~/.var/app/org.mozilla.firefox`.
-6. `flatpak list --app` shows `user` in the Installation column, and `sudo
-   flatpak list --app` prints nothing and exits 0 (Round 10), since `root`
-   sees only the system installation and its own.
-7. The written exercise only: launch Firefox from Activities and check
-   **About Firefox**. The command file skips it with a `#!` note.
-8. Cleanup: `flatpak uninstall --user -y --delete-data org.mozilla.firefox`,
-   `flatpak uninstall --user -y --unused`, `flatpak remote-delete --user
-   flathub`, and `flatpak remotes` showing `rhel` alone.
+`install-a-flatpak-application-exercise.sh` and `.html` in the topic's
+`exercises/`, written for the instructor lab's `workstation` as `student`
+and declared in 5.1's `topicInfo`. It follows 5.9, so students start the
+download and leave it running while 5.10 to 5.16 are taught (Decision 38).
+`kitty-demo --check`: 22 presses. Steps, verified in Round 17:
 
-Step 8 is verified (Round 10): `-y` also answers `--delete-data`'s
-question, and `~/.var/app/org.mozilla.firefox` goes; `--unused` removes
-the other four refs; `remote-delete` with nothing installed asks nothing
-and exits 0.
+1. `rpm -q firefox`: `firefox-128.8.0-2.el10_0.x86_64`. Planned with
+   `firefox --version` as well, which was dropped: no slide teaches it, and
+   the package name carries the version. No slide taught `rpm -q` either,
+   so 5.2's source line now names it: "Versions from `rpm -q NAME` and
+   `flatpak remote-info flathub ID` on `workstation`, November 2026".
+2. `flatpak remotes`, `flatpak remote-add --user --if-not-exists flathub
+   https://dl.flathub.org/repo/flathub.flatpakrepo` (prints nothing, exit
+   0), and `flatpak remotes` again, with `flathub user` under `rhel`.
+3. `flatpak search firefox`: 19 rows, the first `Firefox`, `Web Browser`,
+   `org.mozilla.firefox`, `153.5.0`, `stable`, `rhel,flathub`. The written
+   exercise says the version shown is the `rhel` remote's, and that naming
+   `flathub` installs Flathub's.
+4. `flatpak install --user -y flathub org.mozilla.firefox`: seven refs, not
+   the five Round 10 counted, 13 seconds, "Installation complete.". The
+   written exercise ends here: leave it running and return to the class.
+
+The command file holds 8 seconds on the requirements, 5 on the second
+`flatpak remotes`, 6 on the search, and 30 on the install, the last
+command, so the take does not end before "Installation complete.". The
+exercise reaches back to 5.2 for its scenario, so it applies the slides
+rather than repeating them.
+
+### Exercise 6, Inspect and Remove a Flatpak Application, built 2026-11-03
+
+`inspect-and-remove-a-flatpak-application-exercise.sh` and `.html` in the
+same `exercises/`, after 5.16, also declared in 5.1's `topicInfo`. It
+starts from exercise 5's end state, so its command file runs after
+exercise 5's, and the two takes are recorded back to back. `kitty-demo
+--check`: 30 presses. Steps, verified in Round 17 on exercise 5's end
+state:
+
+1. `flatpak list --app`: Firefox, `user`. If the list is empty, the
+   written exercise says to wait for "Installation complete.".
+2. `rpm -q firefox`, then `flatpak info org.mozilla.firefox`: `Version:
+   159.0`, `Origin: flathub`, `Installation: user`, `Runtime:
+   org.freedesktop.Platform/x86_64/25.08`. Chosen over `flatpak run
+   org.mozilla.firefox --version`, which works over SSH but prints `[2]
+   Sandbox: CanCreateUserNamespace() clone() failure: EPERM` above
+   `Mozilla Firefox 159.0`.
+3. `sudo flatpak list --app` prints nothing and exits 0, without a password
+   prompt, as on the SCC lab (`docs/lab-environments.md`). The command file
+   then types `# root sees no Firefox: it is in student's installation
+   only`, so the recording's audience sees why nothing printed.
+4. The written exercise only: open Activities, type `firefox`, and tell the
+   two entries apart with **Help**, **About Firefox** (159.0 or later is
+   the Flatpak, 128.8.0esr the RPM). Both are named Firefox: the RPM's
+   `/usr/share/applications/firefox.desktop` and the Flatpak's exported
+   `org.mozilla.firefox.desktop` each have `Name=Firefox` (Round 17). Seeing
+   two entries in Activities is inferred from that, not seen.
+5. The written exercise only (Decision 40): open Software, search for
+   Firefox, open its page, and choose Flathub as the source if it is not
+   already: **Open** and a trash button instead of **Install**. Inferred
+   from Text Editor's page (Round 16); not seen for Firefox, which has an
+   RPM source too.
+6. `flatpak uninstall --user -y --delete-data org.mozilla.firefox` (two
+   refs), `flatpak uninstall --user -y --unused` (five runtime refs),
+   `flatpak remote-delete --user flathub` (asks nothing, exit 0), and
+   `flatpak remotes` with `rhel` alone. A workflow step, not cleanup:
+   removal is what 5.12 and 5.13 teach. `-y` also answers the data
+   question, so the `~/.var/app/org.mozilla.firefox` that step 4 creates
+   goes with it (Round 10).
+
+Steps 4 and 5 are sections with only `#!` notes in the command file, which
+`kitty-demo --check` accepts; they cost a press each and run nothing. The
+command file holds 10 seconds on the requirements, 5 on `flatpak list
+--app`, 6 on `flatpak info` and on each uninstall, and 5 on the last
+`flatpak remotes`.
 
 At the end `student`'s user installation holds no remote, application, or
 runtime, and `~/.var/app` holds no Firefox data. Two things stay, and the
-exercise says so rather than removing them:
+exercise does not mention them: cleanup beyond the removal 5.12 and 5.13
+teach is not taught (decided 2026-11-03), so no `flatpak repair` step or
+note:
 
 - `~/.local/share/flatpak` itself, which was there before step 1: GNOME
   autologs `student` in on `workstation`, and GNOME Software creates the
   empty user installation at login (Round 10).
 - About 99 MB of downloaded objects in `~/.local/share/flatpak/repo` that
   no ref uses, until `flatpak repair --user` prunes them (down to 84 KB).
-  Proposed: a last cleanup step running it, with one sentence on why.
-  The alternative is a note only.
+  Round 17 measured 99M again.
 
-An empty `~/.var/app` also stays. GNOME Software is not in the exercise
-(Decision 40).
+An empty `~/.var/app` also stays.
 
 ### Not ported, Flatpak
 
@@ -3145,16 +3288,17 @@ From RH124 chapter 13 and the cert guide's chapter 9:
 ### Fitting the class period, with Flatpak
 
 The week's estimate was about two hours for 45 slides and four exercises.
-Fragment 5 adds about 15 content slides, call it 15 minutes, and an exercise
-of about 10 minutes plus the download: at most about 700 MB per student, 20
-seconds on the instructor lab, unmeasured with a class on the VDI at once
-(Open question 8). That puts the week at about two
+Fragment 5 adds about 15 content slides, call it 15 minutes, and two
+exercises of about 10 minutes together. The download, at most about 700 MB
+per student, 20 seconds on the instructor lab, unmeasured with a class on
+the VDI at once (Open question 8), overlaps 5.10 to 5.16 (Decision 38).
+That puts the week at about two
 and a half hours, the whole class period, with no margin. Candidates, with
 what each loses:
 
 - **Cut 5.14 and 5.16**, the optional slides. Loses the summary table and
   the repository switches; 5.13's line still names `remote-modify`.
-- **Run exercise 5 as a demonstration.** Loses hands-on Flatpak; saves the
+- **Run exercises 5 and 6 as a demonstration.** Loses hands-on Flatpak; saves the
   class's downloads. Students could run it after class.
 - **The cuts already listed** above under "Fitting the class period".
 
@@ -3225,7 +3369,7 @@ answering `200`. Transcripts were captured in a 120-column terminal
 - **`sudo flatpak list --app`:** prints nothing, exit 0.
 - **`flatpak update --user`:** "Looking for updates…", "Nothing to do.",
   exit 0.
-- **Removal:** see 5.12, 5.13, and exercise 5's step 8. When an
+- **Removal:** see 5.12, 5.13, and exercise 6's step 6. When an
   uninstall's data prompt goes unanswered, the data stays, and `flatpak
   uninstall --user --delete-data ID` then fails with `error: No installed
   refs found`; `flatpak uninstall --user --delete-data` with no ID removes
@@ -3239,12 +3383,80 @@ Restored: `workstation` reverted to its snapshot twice with
 `flatpak remotes` showed `rhel` alone, `flatpak list` was empty, and
 `~/.var` did not exist.
 
+**Round 14, 2026-11-03**, for Decision 45. Read-only through `pnpm lab` on
+`workstation` as `student`: `rpm -q wireshark wireshark-cli` reports
+neither installed; `dnf --cacheonly list --available wireshark` gives
+`1:4.4.2-1.el10` from `dvd-appstream`; `flatpak remotes` still shows `rhel`
+alone. On this machine's Flathub remote (Flatpak 1.18.4), `flatpak
+remote-info flathub org.wireshark.Wireshark` names it "Wireshark - Network
+protocol analyzer (without capture support)", 56.2 MB to download, on
+`org.kde.Platform` 6.11 (414.5 MB to download, 1.1 GB installed); its
+metadata's `[Context]` grants `shared=ipc`, Wayland and X11 sockets,
+`devices=dri`, and a read-only home, with no `network`. That summary gave
+version 4.6.4 and may be stale; you report 4.6.9. Recheck on `workstation`
+when 5.2 is built.
+
+**Round 15, 2026-11-03**, for building fragment 5, through `pnpm lab` on
+`workstation` as `student`. Baseline: Flatpak 1.16.0; `flatpak remotes`
+showing `rhel` alone; `flatpak list` empty; no `~/.var`;
+`~/.local/share/flatpak` at 4.0K, holding `.changed`, `db`, and `repo`; the
+three RPMs at 5.2's versions; `student` logged in at the console since
+13:02 UTC.
+
+- **Flatpak's table needs a real terminal.** Flatpak draws its fancy
+  output, the transaction table redrawn in place with a ✓ per ref and
+  "Installation complete.", only when the terminal answers its
+  cursor-position query (`ESC [6n`). Through `pnpm lab -- --tty` alone
+  nothing answers, and it falls back to one progress line per update, which
+  is not what a student sees; Rounds 9 and 10's install shapes came from
+  that fallback. The transcripts here were captured through a local
+  terminal emulator (the `pyte` Python library, in a throwaway environment
+  outside the repository) wrapped around `pnpm lab -- --tty workstation` at
+  120 by 50, which answers the query as GNOME Terminal does.
+- **The sequence**, in one session: `remotes`; `remote-add --user`;
+  `search "text editor"`; the interactive Text Editor install; Calculator
+  with `-y`; `list`; `list --app`; `info`; `update --user`; `flatpak run
+  --command=true org.gnome.TextEditor`, standing in for a launch from
+  Activities so that `~/.var/app/org.gnome.TextEditor` existed (it did);
+  the interactive `uninstall --user --delete-data`; `uninstall --user
+  --unused`; the interactive `remote-delete --user flathub`; `remotes`.
+- **Versions:** `flatpak remote-info --user flathub ID` gave Text Editor
+  51.0, Calculator 51.1, Firefox 159.0, and Wireshark 4.6.9, on
+  `org.kde.Platform/x86_64/6.11`; `org.gnome.Platform//51` is 432.7 MB to
+  download.
+- **Mentioned commands:** `flatpak remote-ls --app flathub` exits 0 with
+  3,521 tab-separated lines. `flatpak remote-modify --user --disable
+  flathub` exits 0, and `flatpak remotes` then lists `rhel` alone: a
+  disabled remote is hidden.
+- **Restored** with the slides' own removal commands, then `flatpak repair
+  --user` and `rm -rf ~/.var`: `flatpak remotes` shows `rhel` alone,
+  `flatpak list` is empty, and `~/.var` is gone. `~/.local/share/flatpak`
+  is 84K against the 4.0K baseline, Flatpak's leftover metadata. A
+  `start-latest-snapshot workstation` would clear it; not run, in case you
+  were using `workstation`'s desktop.
+
+**Round 16, 2026-11-03**, by the instructor on `workstation`'s desktop as
+`student`, with Flathub added by `flatpak remote-add --user`. Text Editor
+installed from GNOME Software lands in the user installation: `flatpak
+list --app` printed `Text Editor  org.gnome.TextEditor  51.0  stable
+user`. The main menu holds Software Repositories (<kbd>Ctrl</kbd>+<kbd>.</kbd>),
+Keyboard Shortcuts, Preferences, and About Software. Four screenshots, two
+used (5.15, 5.16). Afterwards, read-only through `pnpm lab`: `flatpak
+remotes` showed `rhel` alone, `flatpak list` was empty, and `~/.var/app`
+did not exist.
+
+**Round 17, 2026-11-03**, for exercises 5 and 6, through `pnpm lab` on
+`workstation` as `student`, run as the chain: exercise 5's commands, then
+exercise 6's on its end state. `sudo -n true` exits 0. Results are under
+"Exercise 5" and "Exercise 6". Afterwards `flatpak remotes` showed `rhel`
+alone, `flatpak list` was empty, `~/.var` did not exist, and
+`~/.local/share/flatpak` held 99M; `flatpak repair --user` brought it to
+84K, so a recording's install downloads what a student's first does. The
+lab is at the week's starting state for exercise 5.
+
 Still to run:
 
-- Whether GNOME Software installs into the user installation when Flathub is
-  a user remote (5.15). It needs the desktop, so it is yours, with the
-  screenshots for 5.15 and 5.16.
-- At build time, the exact transcripts: Text Editor's interactive install
-  (5.9), Calculator's install and `flatpak list` with both (5.10), and
-  `--unused` while Calculator still needs the runtime (5.12).
+- Exercise 6's desktop steps, during your live run: whether Activities
+  shows two Firefox entries, and whether Software's Firefox page, with
+  Flathub as the source, shows **Open** and a trash button (steps 4 and 5).
 - Open question 8's network half, on the VDI.
