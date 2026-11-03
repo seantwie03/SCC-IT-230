@@ -615,6 +615,11 @@ Write file edits as literal keystrokes: `i`, the text to insert, then
 instead of `jj:wq`; the latter depends on a Vim mapping that may not exist on
 the host being demonstrated.
 
+The lab accounts' passwords in `docs/lab-environments.md` are not secret. A
+command file types one as an ordinary line at a password prompt, where it does
+not echo, so a recording does not show it; a slide or a written exercise may
+name it.
+
 An exercise must be self-contained because students follow it on their own VMs
 in real time: include prerequisites, the expected environment, required setup,
 safe execution guidance, verification, and cleanup when needed. Target the SCC
@@ -725,6 +730,49 @@ with `#@ noenter` when both apply. Add one in these cases:
 
 These values are starting points. The first take will show which pauses are too
 short or too long, so play the recording back, adjust them, and record again.
+
+#### Console steps
+
+Some exercises happen at a VM's console: the GRUB2 menu, a rescue or emergency
+shell, or a shell started with `init=/bin/bash`. Students do those steps in the
+VM window. On the instructor lab, the command file does them through the VM's
+serial console, attached in the Presentation window with `virsh`, so they are
+presented and recorded like any other step. `docs/lab-environments.md` lists
+the lab settings that make this work. `virsh` is the instructor's tool, not a
+student's: the written exercise describes the same steps in the VM window and
+never mentions it.
+
+GRUB2 draws its menu under 2 seconds after a reboot's Enter, and draws it once,
+so attach straight after the reboot. Record mode waits 3 seconds between typing
+a command and its Enter, which is too long here, so type the `virsh` line
+without an Enter and send the Enter as a key:
+
+```sh
+#@ pause 0.5
+systemctl reboot
+#@ noenter
+#@ pause 0
+virsh -c qemu:///system console servera
+#@ pause 2
+#@ key enter
+```
+
+Then drive the menu with `#@ key` lines: `up` to stop the countdown, `e`, the
+arrows, and `end`; the text to append under `#@ noenter`; and `ctrl+x` to
+boot. Live, press <kbd>F2</kbd> promptly after the attach, and reboot again if
+the countdown runs out first. Re-record a take that misses the menu.
+
+At a console shell, write commands as ordinary lines, with a `clear` before
+each section header as anywhere else, and type a password as an ordinary line.
+A guest reboot does not end `virsh console`, so the session stays attached
+through a reboot started from the console. Once the boot reaches the login
+prompt, detach with `#@ key ctrl+]` and reconnect with `ssh`. Hold the step
+before a detach for the whole boot, and a step before a console wait, such as
+systemd's 90-second device timeout, for the whole wait.
+
+Leave device names such as `/dev/sda2` out of console notes and checks where
+the step does not need them: a boot with the serial console attached sometimes
+names the disks in another order. Re-record a take that shows a shuffled name.
 
 ## Assets
 

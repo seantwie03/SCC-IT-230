@@ -48,7 +48,7 @@ clear
 systemctl set-default multi-user.target
 systemctl get-default
 #! Let the countdown run out; workstation boots to a text login
-#@ pause 35
+#@ pause 25
 systemctl reboot
 ssh workstation
 systemctl get-default
@@ -62,21 +62,47 @@ systemctl get-default
 clear
 
 #^ 6. Boot once into rescue.target from the GRUB2 menu
-#! Bring the workstation console window forward before rebooting
-#! At the menu, press any key except Enter to stop the countdown, then press e
-#! Move down to the line that starts with linux and press End
-#! Type a space and systemd.unit=rescue.target, then press Ctrl+X to boot
-#! At the rescue prompt, type the root password
-#! When recording, make this edit in the console during the pause
-#@ pause 45
+#! Students do this step and the next in the workstation VM window
+#! Attach to the serial console straight after the reboot: GRUB2 draws its menu once, under 2 seconds in
+#@ pause 0.5
 systemctl reboot
+#@ noenter
+#@ pause 0
+virsh -c qemu:///system console workstation
+#! Press F2 promptly after this: the countdown runs 5 seconds
+#@ pause 2
+#@ key enter
+#! Any key except Enter stops the countdown; up keeps the default entry highlighted
+#@ key up
+#! e opens the highlighted entry in the editor
+#@ key e
+#! Three lines down is the line that starts with linux, which wraps onto the next screen lines
+#@ key down
+#@ key down
+#@ key down
+#! End jumps to the end of the linux line
+#@ key end
+#! The leading space separates systemd.unit=rescue.target from the last argument
+#@ noenter
+#@ pause 5
+ systemd.unit=rescue.target
+#! The boot stops at the rescue shell, which asks for the root password
+#@ pause 20
+#@ key ctrl+x
+#! The root password; it does not echo
+#@ pause 3
+redhat
+clear
 
-#@ pause 45
 #^ 7. Confirm the root file system is read/write, then continue the boot
-#! In the rescue shell on the console, run: mount | grep ' / '
 #! rw among the options: rescue.target mounted the root file system read/write
-#! Then run exit, and the boot continues to graphical.target
-#! When recording, do both in the console during the pause
+#@ pause 5
+mount | grep ' / '
+#! exit leaves the rescue shell, and the boot continues to graphical.target
+#@ pause 20
+exit
+#! Detach from the serial console once the login prompt appears
+#@ key ctrl+]
 ssh workstation
 #! active: the boot continued to the default target
 systemctl is-active graphical.target

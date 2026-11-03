@@ -206,3 +206,25 @@ Break the `/boot` entry in `/etc/fstab`, then repair it from the emergency shell
 5. Correct the entry in `/etc/fstab`
 6. Reload systemd and confirm `mount --all` succeeds
 7. Reboot and confirm a normal boot
+
+---
+layout: exercise
+variant: recording
+---
+
+<script setup>
+import castUrl from "./exercises/repair-file-system-at-boot-exercise.cast?url";
+</script>
+
+# Repair a File System at Boot
+
+::recording::
+
+<AsciinemaPlayer
+    :src="castUrl"
+    label="Screen recording of the instructor appending zzz to the UUID of the /boot entry in servera's /etc/fstab with vim, rebooting with servera's console on screen while systemd waits 90 seconds for the missing device and opens the emergency shell, logging in as root, confirming with mount that the root file system is read/write, finding the bad entry with mount --all, removing the zzz with vim, running systemctl daemon-reload and a mount --all that succeeds, rebooting, and confirming over SSH that /boot is mounted again."
+/>
+
+::resources::
+
+<a href="../resources/repair-file-system-at-boot-exercise.html" target="_blank" rel="noopener noreferrer" aria-label="Read the written Repair a File System at Boot exercise in a new tab">Written exercise</a>

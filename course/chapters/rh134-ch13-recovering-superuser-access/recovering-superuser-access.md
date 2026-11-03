@@ -231,3 +231,25 @@ Lock `root` out of `servera`, then get back in by booting with `init=/bin/bash`
 5. Schedule an SELinux relabel
 6. Hand control to systemd and wait for the relabel and reboot
 7. Log in as `root` at the console
+
+---
+layout: exercise
+variant: recording
+---
+
+<script setup>
+import castUrl from "./exercises/recover-root-access-exercise.cast?url";
+</script>
+
+# Recover Root Access
+
+::recording::
+
+<AsciinemaPlayer
+    :src="castUrl"
+    label="Screen recording of the instructor locking root on servera with passwd -l, confirming the lock with passwd -S and a failed root login on servera's console, rebooting and appending init=/bin/bash to the linux line at the GRUB2 menu, remounting the root file system read/write at the bash-5.2# prompt, resetting the root password with passwd, creating /.autorelabel, handing control to systemd with exec /sbin/init, waiting through the relabel and the reboot, logging in as root on the console, confirming over SSH with passwd -S that root has a password again, and hiding the GRUB2 menu with grub2-editenv."
+/>
+
+::resources::
+
+<a href="../resources/recover-root-access-exercise.html" target="_blank" rel="noopener noreferrer" aria-label="Read the written Recover Root Access exercise in a new tab">Written exercise</a>

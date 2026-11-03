@@ -147,8 +147,12 @@ would be reverted without changing anything. Use it when a revert is faster
 than cleaning up by hand, then check the baseline again.
 
 The snapshots were taken with the VMs running, so a reverted guest resumes
-with its clock at the snapshot's time, and dates in captured output show that
-day.
+with its clock at the snapshot's time. Since 2026-11-02 the script then sets
+each guest's clock to the host's through the QEMU guest agent, and prints "Set
+<vm>'s clock to the host's". If it warns instead, the clock is still at the
+snapshot's time: dates in captured output show that day, and HTTPS fails
+with "certificate is not yet valid". Chrony does not fix it, since it steps
+the clock only in its first updates after boot.
 
 The script is for the instructor and agents only. **Never use
 `start-latest-snapshot` in student-facing material**: not in slides, command

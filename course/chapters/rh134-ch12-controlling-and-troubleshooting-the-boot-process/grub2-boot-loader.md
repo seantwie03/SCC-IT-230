@@ -475,3 +475,25 @@ Boot `servera` once with an extra kernel argument, then make it persistent
 5. Add `ipv6.disable=1` persistently with `grubby`
 6. Reboot and confirm the argument is still there
 7. Remove the argument with `grubby`
+
+---
+layout: exercise
+variant: recording
+---
+
+<script setup>
+import castUrl from "./exercises/change-kernel-arguments-exercise.cast?url";
+</script>
+
+# Change Kernel Arguments
+
+::recording::
+
+<AsciinemaPlayer
+    :src="castUrl"
+    label="Screen recording of the instructor unsetting menu_auto_hide on servera with grub2-editenv, rebooting with servera's console on screen, stopping the GRUB2 countdown, appending ipv6.disable=1 to the linux line in the boot entry editor and booting with Ctrl+X, confirming the argument with cat /proc/cmdline and the missing IPv6 addresses with ip -br addr, rebooting without an edit to show both back to normal, adding the argument persistently with grubby --args, rebooting to show it stays, and removing it with grubby --remove-args."
+/>
+
+::resources::
+
+<a href="../resources/change-kernel-arguments-exercise.html" target="_blank" rel="noopener noreferrer" aria-label="Read the written Change Kernel Arguments exercise in a new tab">Written exercise</a>

@@ -27,13 +27,35 @@ grub2-editenv - list
 clear
 
 #^ 2. Boot once with ipv6.disable=1 added at the GRUB2 menu
-#! Bring the servera console window forward before rebooting
-#! At the menu, press any key except Enter to stop the countdown, then press e
-#! Move down to the line that starts with linux and press End
-#! Type a space and ipv6.disable=1, then press Ctrl+X to boot
-#! When recording, make this edit in the console during the pause
-#@ pause 45
+#! Students do this step in the servera VM window
+#! Attach to the serial console straight after the reboot: GRUB2 draws its menu once, under 2 seconds in
+#@ pause 0.5
 systemctl reboot
+#@ noenter
+#@ pause 0
+virsh -c qemu:///system console servera
+#! Press F2 promptly after this: the countdown runs 5 seconds
+#@ pause 2
+#@ key enter
+#! Any key except Enter stops the countdown; up keeps the default entry highlighted
+#@ key up
+#! e opens the highlighted entry in the editor
+#@ key e
+#! Three lines down is the line that starts with linux, which wraps onto the next screen lines
+#@ key down
+#@ key down
+#@ key down
+#! End jumps to the end of the linux line
+#@ key end
+#! The leading space separates ipv6.disable=1 from the last argument
+#@ noenter
+#@ pause 5
+ ipv6.disable=1
+#! Ctrl+X boots with the edit; it lasts this one boot
+#@ pause 20
+#@ key ctrl+x
+#! Detach from the serial console once the login prompt appears
+#@ key ctrl+]
 ssh servera
 clear
 
@@ -82,7 +104,7 @@ clear
 #^ 7. Remove the argument with grubby
 sudo -i
 grubby --update-kernel $(grubby --default-kernel) --remove-args="ipv6.disable=1"
-#! args ends with rd.lvm.lv=rhel_servera/swap again
+#! ipv6.disable=1 is gone from args
 #! The running kernel keeps IPv6 off until the next boot
 #@ pause 5
 grubby --info $(grubby --default-index)

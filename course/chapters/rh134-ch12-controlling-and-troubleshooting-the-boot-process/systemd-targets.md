@@ -245,3 +245,25 @@ Switch `workstation` between targets now, by default, and for a single boot
 5. Restore `graphical.target` as the default
 6. Boot once into `rescue.target` from the GRUB2 menu
 7. Confirm the root file system is read/write, then continue the boot
+
+---
+layout: exercise
+variant: recording
+---
+
+<script setup>
+import castUrl from "./exercises/switch-systemd-targets-exercise.cast?url";
+</script>
+
+# Switch systemd Targets
+
+::recording::
+
+<AsciinemaPlayer
+    :src="castUrl"
+    label="Screen recording of the instructor unsetting menu_auto_hide on workstation, checking the default target with systemctl get-default and its dependencies with systemctl list-dependencies, switching to multi-user.target with systemctl isolate and checking both targets with systemctl is-active, making multi-user.target the default with systemctl set-default and rebooting to confirm, restoring graphical.target as the default, then rebooting with workstation's console on screen, appending systemd.unit=rescue.target to the linux line at the GRUB2 menu, logging in to the rescue shell as root, confirming with mount that the root file system is read/write, continuing the boot with exit, checking that graphical.target is active, and hiding the menu again with grub2-editenv."
+/>
+
+::resources::
+
+<a href="../resources/switch-systemd-targets-exercise.html" target="_blank" rel="noopener noreferrer" aria-label="Read the written Switch systemd Targets exercise in a new tab">Written exercise</a>

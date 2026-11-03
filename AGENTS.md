@@ -10,10 +10,13 @@
 - Do not add student information, assessment solutions, instructor-only
   material, restricted curriculum material, or an asset whose publication
   rights are unclear. Do not add credentials or other confidential values to
-  demos, scripts, exercises, documentation, or configuration. A credential or
-  contact detail that already appeared in a previously used course slide deck
-  may be ported into slide content as-is; this narrow allowance covers only
-  slide content, not other repository material.
+  demos, scripts, exercises, documentation, or configuration. Two narrow
+  allowances apply. The lab accounts' passwords published in
+  `docs/lab-environments.md` are not secret, so slides, exercise command
+  files, and written exercises may show or type them. A credential or contact
+  detail that already appeared in a previously used course slide deck may be
+  ported into slide content as-is; that allowance covers only slide content,
+  not other repository material.
 - Use text references only for St. Charles Community College and Red Hat. Do
   not add their logos, branded artwork, or visual identity elements without
   explicit authorization.

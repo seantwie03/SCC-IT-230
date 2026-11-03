@@ -140,9 +140,32 @@ Transcripts and recordings made before then show those names.
 
 Each VM also has a serial port (`ttyS0`, a 16550A) that libvirt exposes as a
 `pty`, so `virsh -c qemu:///system console <vm>` attaches to it from the host.
-Plain `virsh` connects to the session URI and finds no VMs. Week 12
-prototyped presenting and recording console steps through it; until those
-settings are part of the lab build, the kernel and GRUB2 do not use it.
+Plain `virsh` connects to the session URI and finds no VMs. Since 2026-11-03
+every VM uses that port as its console, so `kitty-demo` can present and record
+console steps (the GRUB2 menu, the rescue and emergency shells, and
+`init=/bin/bash`) in the Presentation window:
+
+- GRUB2 reads from and draws on both the VGA console and the serial port:
+  `GRUB_TERMINAL_INPUT` and `GRUB_TERMINAL_OUTPUT` are `"console serial"`, and
+  `GRUB_SERIAL_COMMAND` is `"serial --unit=0 --speed=115200"`.
+- Every boot entry, and `GRUB_CMDLINE_LINUX`, ends with `console=tty0
+  console=ttyS0,115200`. The last `console=` becomes `/dev/console`, so
+  systemd's status lines, the rescue and emergency shells, the
+  `init=/bin/bash` shell, and the relabel output go to the serial port. A
+  serial login prompt (`serial-getty@ttyS0`) runs as well.
+- `emergency.service` and `rescue.service` each carry a drop-in,
+  `serial-size.conf`, setting `TTYColumns=120`, `TTYRows=24`, and
+  `TERM=xterm-256color`. Without it those shells get 80 columns and `vt220`,
+  and `vim` draws at the wrong width and without an alternate screen.
+
+Three side effects. GRUB2's `12_menu_auto_hide` script skips itself when a
+terminal setting includes `serial`, so the menu shows on every boot and
+`menu_auto_hide` does nothing, although `grubenv` still holds
+`menu_auto_hide=1` and `grub2-editenv` prints what it prints elsewhere. The VM
+window shows only kernel messages, since systemd writes to `/dev/console`
+alone; `sulogin` still prompts in both places, but the `init=/bin/bash` shell
+opens on the serial port only. And the serial login gets `TERM=vt220`, so `ls`
+shows no colour there.
 
 ### How it is built
 
@@ -151,6 +174,10 @@ From the same repository as the SCC lab, automated through
 which also sets the disk bus and the interface's PCI slot. Because it is
 rebuilt from source rather than exported once, it is the environment that most
 closely matches what the kickstart currently describes.
+[`configure_vms.yml`](https://github.com/seantwie03/rhel-lab/blob/ansible_kickstart/configure_vms.yml)
+then applies the `base` and `serial_console` roles, and the instructor takes
+the snapshot that `start-latest-snapshot` reverts to. The serial settings are
+in that snapshot, so a revert keeps them.
 
 ## Differences that reach the screen
 
@@ -293,6 +320,16 @@ behaves the same way, but its `servera` has neither `rhgb quiet` nor the
 kernel line therefore differs in `/proc/cmdline`, in `grubby --info`, and in
 the GRUB2 editor.
 
+The `console=` arguments differ too. SCC's kernel line has none. The
+instructor lab's ends with `console=tty0 console=ttyS0,115200` on every VM
+(see "The instructor lab"), so its recordings show them in `/proc/cmdline`,
+`grubby --info`, and the GRUB2 editor. RH134's own `grubby --info` example
+shows `console=tty0 console=ttyS0,115200n8 no_timer_check`, which suggests the
+RHA lab's VMs carry a serial console as well; that has not been checked on the
+RHA lab itself. Material that edits the kernel line in GRUB2 should not ask
+students to remove `console=` options, since SCC has none and the instructor
+lab keeps its own.
+
 `quiet` also lowers the console log level. The instructor lab's `servera`
 (`kernel.printk` `7 4 1 7`) prints kernel notices on its console, such as
 `XFS (sda2): Mounting V5 Filesystem ...` after a `mount`; SCC's servers do
@@ -302,12 +339,16 @@ detected: e1000` during `servera`'s boot, three `vmwgfx ... [drm]
 screen, and, in emergency mode, `[FAILED] Failed to start kdump.service` just
 above the emergency banner.
 
-GRUB2 behaves alike in both target labs. Both start with `menu_auto_hide=1`
-in `/boot/grub2/grubenv` (checked on SCC's `serverb` and the instructor lab's
-`servera` and `workstation`), so the menu stays hidden after a successful boot
-until an exercise unsets it. SCC's boot entries end their `initrd` line with
-`$tuned_initrd`, which the instructor lab's lack; it shows in the GRUB2
-editor.
+Both target labs start with `menu_auto_hide=1` in `/boot/grub2/grubenv`
+(checked on SCC's `serverb` and the instructor lab's `servera` and
+`workstation`). On SCC the menu therefore stays hidden after a successful
+boot until an exercise unsets it. On the instructor lab the serial terminal
+setting disables that behaviour, so the menu shows on every boot either way.
+SCC's boot entries end their `initrd` line with `$tuned_initrd`, which the
+instructor lab's lack; it shows in the GRUB2 editor. Over the serial console,
+GRUB2 draws its frame with `+`, `-`, and `|` and its help line with `^` and
+`v`, where the VM window uses line-drawing characters and arrows; the text and
+the 78-column wrap of the `linux` line are the same.
 
 The SCC lab is much slower at boot-time work. On the VDI, `servera` took about
 40 seconds from `systemctl reboot` to the wait for a missing device, against

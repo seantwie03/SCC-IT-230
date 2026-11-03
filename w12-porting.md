@@ -9,44 +9,52 @@ produce this plan. Nothing is built until the plan is approved.
 ## Answer in brief
 
 **Four topic fragments** in two chapter directories, **four exercises**, one
-per source exercise, and a deck of **48 slides** under the decisions accepted
-on 2026-10-29 and 2026-11-01: 41 from the source (39 content, section, and
-exercise slides plus the cover and VM reminder), 5 added (1.1a, 1.2a, 1.4a,
-2.8a, 3.2a), and 2 recording slides (1.14a, 2.9a) that wait on the casts
-(Decision 10).
+per source exercise, and a deck of **50 slides** under the decisions accepted
+on 2026-10-29, 2026-10-31, and 2026-11-01: 41 from the source (39 content,
+section, and exercise slides plus the cover and VM reminder), 5 added (1.1a,
+1.2a, 1.4a, 2.8a, 3.2a), and 4 recording slides (1.14a, 2.9a, 3.7a, 4.9a),
+one per exercise (Decision 26), all built 2026-11-03.
 
 | # | Fragment                             | Section title                  | Slides | Exercises |
 |--:|--------------------------------------|--------------------------------|-------:|----------:|
 | 1 | `grub2-boot-loader.md`               | GRUB2 Boot Loader              |     18 |         1 |
 | 2 | `systemd-targets.md`                 | systemd Targets                |     11 |         1 |
-| 3 | `repairing-file-systems-at-boot.md`  | Repairing File Systems at Boot |      8 |         1 |
-| 4 | `recovering-superuser-access.md`     | Recovering Superuser Access    |      9 |         1 |
+| 3 | `repairing-file-systems-at-boot.md`  | Repairing File Systems at Boot |      9 |         1 |
+| 4 | `recovering-superuser-access.md`     | Recovering Superuser Access    |     10 |         1 |
 |   | Entry file                           |                                |      2 |           |
-|   | **Total**                            |                                | **48** |     **4** |
+|   | **Total**                            |                                | **50** |     **4** |
 
-Slide counts include the recording slides Decision 10 gives casts (fragments 1
-and 2). The fragments follow the Slidev deck's sections one for one, in source
+Slide counts include each fragment's recording slide. The fragments follow
+the Slidev deck's sections one for one, in source
 order. The LibreOffice deck contributes an intro slide for GRUB2 (1.1a), detail
 for the targets slides, and an optional command table (2.8a).
 
-Where things stand on 2026-11-01:
+**Proposed 2026-11-01, not accepted:** a fifth fragment, Flatpak from RH124
+chapter 13, with 18 slides (two optional) and a fifth exercise, which would
+bring the deck to 66. See "Flatpak" and Decisions 33 to 42. Deferred
+2026-11-03: week 12 publishes with the four fragments above, and Flatpak
+waits.
+
+Where things stand on 2026-11-03:
 
 1. **Fragment 1 is complete** (committed 2026-10-31 as `616d13c`), with its
-   long output lines wrapped once at a space as built. Changed 2026-11-01,
-   unstaged: the VDI screenshots on 1.3 and 1.4, and the new 1.4a.
+   long output lines wrapped once at a space as built. Changed 2026-11-01
+   (`d86c1d5`): the VDI screenshots on 1.3 and 1.4, and the new 1.4a.
 2. **Fragment 2 is complete** (`784ed53`), its recording slide waiting on the
    cast.
-3. **Fragment 3 is complete** (`f4ef2e1`). Changed 2026-11-01, unstaged: the
-   VDI crops and the <kbd>Esc</kbd> line on 3.2a.
-4. **Fragment 4 is complete** (`974a737`). Changed 2026-11-01, unstaged:
+3. **Fragment 3 is complete** (`f4ef2e1`). Changed 2026-11-01 (`d86c1d5`):
+   the VDI crops and the <kbd>Esc</kbd> line on 3.2a.
+4. **Fragment 4 is complete** (`974a737`). Changed 2026-11-01 (`d86c1d5`):
    `passwd -S` on 4.3 and the VDI screenshot on 4.4.
 5. **The console steps are verified**, over the instructor lab's serial
    console (Round 6) and on the SCC lab's VDI (Round 8). Open question 1 is
    answered.
-6. **Decision 26's prototype passed** (Rounds 6 to 8). The lab settings it
-   needs are on the instructor-lab copy on this machine only; making them
-   permanent (prototype step 9) and rewriting the four command files are
-   still to do. See "Console delivery".
+6. **Decision 26's prototype passed** (Rounds 6 to 8), and its lab settings
+   are permanent on this machine's instructor-lab copy: the instructor ran
+   the `serial_console` role on all four VMs and took the `grub_console`
+   snapshot on 2026-11-03, and every check passed (Round 11). The four
+   command files were rewritten the same day to type the console steps
+   (Round 12); each still needs a live run. See "Console delivery".
 
 ## Scope
 
@@ -270,17 +278,17 @@ New, under
 |-------------------------------------|-------:|----------:|
 | `grub2-boot-loader.md`              |     18 |         1 |
 | `systemd-targets.md`                |     11 |         1 |
-| `repairing-file-systems-at-boot.md` |      8 |         1 |
+| `repairing-file-systems-at-boot.md` |      9 |         1 |
 
 New, under `course/chapters/rh134-ch13-recovering-superuser-access/`:
 
 | File                             | Slides | Exercises |
 |----------------------------------|-------:|----------:|
-| `recovering-superuser-access.md` |      9 |         1 |
+| `recovering-superuser-access.md` |     10 |         1 |
 
-Plus, in each topic's `exercises/`, one `.sh` command file and one `.html`
-written exercise per exercise (four of each), and a `.cast` beside each
-exercise that gets a recording (Decision 10). Since 2026-11-01 the ch12
+Plus, in each topic's `exercises/`, one `.sh` command file, one `.html`
+written exercise, and one processed `.cast` per exercise (four of each;
+Decision 26). Since 2026-11-01 the ch12
 topic's `assets/` holds the VDI screenshots that replaced the placeholders,
 `grub-menu.png` (1.3) and `grub-editor.png` (1.4), and the two crops on 3.2a,
 `boot-stalled-incorrect-uuid.png` and `emergency-mode.png`. The ch13 topic
@@ -587,10 +595,16 @@ confirm the argument is still there; remove the argument with `grubby`.
 
 Components: `exercise`.
 
-##### 1.14a Exercise recording
+##### 1.14a Exercise recording, built 2026-11-03
 
-Pending the cast. Recording it needs the GRUB2 edit made by hand in the
-console during step 2's 45-second pause (Open question 5).
+`exercise` layout, `variant: recording`, the same title as 1.14.
+`change-kernel-arguments-exercise.cast` through a `?url` import in an
+`AsciinemaPlayer`, 4:45 with 8 markers (Round 13), and the written exercise in
+`resources`. The `label` walks through the recorded workflow, console steps
+included. `check:slides`: 1px, as every recording slide in w11, since the
+player fills its slot.
+
+Components: `exercise` (`recording`), `AsciinemaPlayer`.
 
 ### 2. `systemd-targets.md` (11 slides), built 2026-10-31
 
@@ -763,13 +777,14 @@ out. `check:slides`: 98.73px.
 
 Components: `exercise`.
 
-##### 2.9a Exercise recording
+##### 2.9a Exercise recording, built 2026-11-03
 
-Pending the cast. Like exercise 1's, the take needs console work during its
-pauses: the GRUB2 edit after step 6's reboot and the rescue shell during the
-pause on step 7's header (Open question 5).
+As 1.14a, with `switch-systemd-targets-exercise.cast`, 4:56 with 9 markers.
+`check:slides`: 1px.
 
-### 3. `repairing-file-systems-at-boot.md` (8 slides), built 2026-10-31
+Components: `exercise` (`recording`), `AsciinemaPlayer`.
+
+### 3. `repairing-file-systems-at-boot.md` (9 slides), built 2026-10-31
 
 `routeAlias: repairing-file-systems-at-boot`. Alignments: RH134 chapter 12,
 cert guide chapter 18. Exercise: Repair a File System at Boot Exercise,
@@ -913,7 +928,15 @@ since 3.3 teaches it and the exercise is where it can be seen. `check:slides`:
 
 Components: `exercise`.
 
-### 4. `recovering-superuser-access.md` (9 slides), built 2026-10-31
+##### 3.7a Exercise recording, built 2026-11-03
+
+Added by Decision 26. As 1.14a, with `repair-file-system-at-boot-exercise.cast`,
+5:09 with 8 markers. `check:slides`: 1px. Checked in the review browser: the
+player loads, with its 8 markers on the timeline.
+
+Components: `exercise` (`recording`), `AsciinemaPlayer`.
+
+### 4. `recovering-superuser-access.md` (10 slides), built 2026-10-31
 
 `routeAlias: recovering-superuser-access`. Alignments: RH134 chapter 13,
 *Recovering Superuser Access* (no other fragment aligns to it), and cert guide
@@ -1072,6 +1095,13 @@ dropped, since step 1 locks the account instead. Its steps named the tools
 
 Components: `exercise`.
 
+##### 4.9a Exercise recording, built 2026-11-03
+
+Added by Decision 26. As 1.14a, with `recover-root-access-exercise.cast`,
+4:19 with 9 markers. `check:slides`: 1px.
+
+Components: `exercise` (`recording`), `AsciinemaPlayer`.
+
 ## Exercises
 
 | # | Title                          | Frag | Host        | Command file                             |
@@ -1102,13 +1132,13 @@ the same password. `grubby` rewrites the entry file when it changes it, which
 drops the trailing space the installer left on its `options` line, so the
 file's checksum does not return to the snapshot's (verified).
 
-**Console steps.** Every exercise has steps at the console. The command files
-write them as `#!` notes, which `kitty-demo` shows only to the instructor, and
-the written exercises describe them as prose (Decision 10). Since 2026-11-01
-they are verified: on the instructor lab over the serial console (Round 6) and
-on the SCC lab's VDI (Round 8). Under Decision 26 the `#!` notes become typed
-lines; a trial of exercise 3 written that way recorded cleanly (Round 6, step
-7), and the pattern for each reboot is under "Console delivery".
+**Console steps.** Every exercise has steps at the console. The written
+exercises describe them as prose, in the VM window. Since 2026-11-03 the
+command files type them through the instructor lab's serial console
+(Decision 26), as "Console delivery" describes; before that they were `#!`
+notes for the instructor (Decision 10). They are verified on the instructor
+lab over the serial console (Round 6) and on the SCC lab's VDI (Round 8). The
+rewritten command files still need a live run each (Round 12).
 
 **Reboots.** Each reboot ends the SSH session; the command file reconnects
 with `ssh servera` after a pause. Exercise 3 waits out systemd's 90-second
@@ -1117,7 +1147,8 @@ device timeout, and exercise 4 a full SELinux relabel, both at the console.
 ### Exercise 1, Change Kernel Arguments, built 2026-10-29
 
 `change-kernel-arguments-exercise.sh` and `.html` in the topic's
-`exercises/`; `kitty-demo --check` counts 59 presses. Steps as on 1.14. Ported
+`exercises/`; `kitty-demo --check` counts 70 presses since the 2026-11-03
+console rewrite (59 before; see "Console delivery"). Steps as on 1.14. Ported
 from `grub2_boot_loader.sh`, with these changes:
 
 - `ipv6.disable=1` in place of `rhgb quiet` (Decision 13), checked with `cat
@@ -1148,7 +1179,8 @@ argument set through `grubby`.
 ### Exercise 2, Switch systemd Targets, built 2026-10-31
 
 `switch-systemd-targets-exercise.sh` and `.html` in the topic's `exercises/`;
-`kitty-demo --check` counts 61 presses. Steps as on 2.9, plus an unnumbered
+`kitty-demo --check` counts 78 presses since the 2026-11-03 console rewrite (61
+before; see "Console delivery"). Steps as on 2.9, plus an unnumbered
 "Clean up" step that sets `menu_auto_hide=1` again (Decision 16) and is left off
 the slide, as `docs/course-authoring.md` asks. Ported from `systemd_targets.sh`,
 with these changes:
@@ -1191,9 +1223,11 @@ shell are console-only and unverified (Open question 1).
 ### Exercise 3, Repair a File System at Boot, built 2026-10-31
 
 `repair-file-system-at-boot-exercise.sh` and `.html` in the topic's
-`exercises/`; `kitty-demo --check` counts 35 presses. Steps as on 3.7. No
-recording (Decision 10), so the pauses are only the intro's and those on
-output. Ported from `repair_file_system_at_boot.sh`, with these changes:
+`exercises/`; `kitty-demo --check` counts 57 presses since the 2026-11-03
+console rewrite (35 before; see "Console delivery"). Steps as on 3.7. Built
+without a recording (Decision 10), so the pauses were only the intro's and
+those on output; Decision 26 gives it one. Ported from
+`repair_file_system_at_boot.sh`, with these changes:
 
 - The `vim` edit moves by search, not by counting lines from the end: `/boot`,
   `0`, `E`, `azzz` (with `#@ noenter` on the last three), `#@ key escape`,
@@ -1240,9 +1274,11 @@ Filesystem ...` line there (Rounds 6 and 8).
 ### Exercise 4, Recover Root Access, built 2026-10-31
 
 `recover-root-access-exercise.sh` and `.html` in the ch13 topic's
-`exercises/`; `kitty-demo --check` counts 30 presses. Steps as on 4.9, plus an
+`exercises/`; `kitty-demo --check` counts 73 presses since the 2026-11-03
+console rewrite (30 before; see "Console delivery"). Steps as on 4.9, plus an
 unnumbered "Clean up" step that sets `menu_auto_hide=1` again (Decision 16).
-No recording (Decision 10). Ported from `recover_root_access.sh` and
+Built without a recording (Decision 10); Decision 26 gives it one. Ported
+from `recover_root_access.sh` and
 `recover_root_access.md`, with these changes:
 
 - Step 1 locks `root` (Decision 18) and checks the lock over SSH with `sudo
@@ -1254,10 +1290,11 @@ No recording (Decision 10). Ported from `recover_root_access.sh` and
   the `rw`.
 - Step 7 reconnects and checks `sudo passwd -S root` (`P`), which shows the
   lock is gone as well as the password set.
-- Neither file writes the `root` password. The notes say "root's usual
-  password", and the written exercise says "the `root` password the lab
-  normally uses". The source wrote it out in four places; `AGENTS.md` allows
-  that only in slide content.
+- As built, neither file wrote the `root` password: the notes said "root's
+  usual password", and the written exercise says "the `root` password the lab
+  normally uses". Since 2026-11-03 `AGENTS.md` allows the lab passwords in
+  exercises (Decision 29), and the command file types it at each prompt; the
+  written exercise is unchanged.
 - `recover_root_access.md`, the source's separate console walk-through, is
   folded into the written exercise.
 
@@ -1461,7 +1498,9 @@ Run 2026-10-31 and 2026-11-01; details under "Verification", Rounds 6 to 8.
    above. `#@ key ctrl+]` works, and the cast processes and checks cleanly.
 8. **The VDI:** done by the instructor (Round 8); the differences that matter
    to students went into the written exercises and 3.2a (Decision 31).
-9. **Keep it:** not done; decided 2026-11-01 (Decision 32). The settings go
+9. **Keep it:** done 2026-11-03 on this machine's copy, with the
+   `grub_console` snapshot (Round 11); decided 2026-11-01 (Decision 32). The
+   copy on the other machine (Rounds 3 to 5) is unchecked. The settings go
    into `/source/rhel-lab/configure_vms.yml`, for all four VMs, and
    the instructor takes the new snapshot. Nothing is applied by hand. The
    prototype's changes on this lab copy (and the backups in
@@ -1476,71 +1515,99 @@ Slides (students' view is unchanged, so no slide has to change):
   screenshots replaced the placeholders (Round 8), which shows students their
   own lab; the serial captures stay unused.
 - **4.4:** "Remove any `console=` options" conflicts with what the recording
-  shows, since the instructor keeps `ttyS0`. Keep RH134's wording and say why
-  on camera, or reword the step. Your call.
+  shows, since the instructor keeps `ttyS0`. Decided 2026-11-03 (Decision
+  43): the exercises do not include that step, since the SCC lab has no
+  `console=` options and the instructor lab keeps its own. The written
+  exercise 4 and its command file no longer mention it. The slide itself
+  still carries RH134's step and its callout.
 - **Recording slides:** 1.14a and 2.9a as planned, plus new **3.7a** and
-  **4.9a** for exercises 3 and 4.
+  **4.9a** for exercises 3 and 4. All four built 2026-11-03 (Round 13).
 - Fragment 1's `grubby --info` transcripts (1.5, 1.8, 1.9) stay as captured,
   without `console=`. Any later recapture on a changed lab would show the
   extra arguments, so recapture with them removed or keep the old captures.
 
-Command files (all four change; each needs a new `kitty-demo --check`, a live
-run, and new pauses):
+Command files, rewritten 2026-11-03 (Round 12). Each passes `kitty-demo
+--check`; none has had its live run yet, and the pauses are first estimates.
+Every GRUB2 edit uses the attach pattern above with `#@ pause 2` on the
+attach's Enter, then `#@ key up` to stop the countdown, `e`, three `down`,
+`end`, the argument typed with a leading space under `#@ noenter` and
+`#@ pause 5`, and `ctrl+x`. Each console step carries a `#!` note saying that
+students do it in the VM window.
 
-- **`change-kernel-arguments-exercise.sh`:** step 2's four console notes
-  become `virsh console servera`, `#@ key` lines for the countdown, `e`, the
-  arrows, and <kbd>End</kbd>, the typed ` ipv6.disable=1` under `#@ noenter`,
-  `#@ key ctrl+x`, the detach, and `ssh servera`. The 45-second pause for a
-  manual edit goes. Its `cat /proc/cmdline` and `grubby --info` output in the
-  recording will include the `console=` arguments.
-- **`switch-systemd-targets-exercise.sh`:** step 6's GRUB2 edit the same way
-  with `systemd.unit=rescue.target`; step 7's `mount | grep ' / '` and `exit`
-  typed in the rescue shell; the two 45-second pauses become waits for the
-  boot.
-- **`repair-file-system-at-boot-exercise.sh`:** steps 2 to 7 typed in the
-  emergency shell, including the `vim` keystrokes that remove `zzz`, with a
-  pause long enough for the 90-second device timeout. The trial in the
-  scratchpad (Round 6) is the template: the attach pattern, `#@ pause 105` on
-  the attach's Enter (the prompt came 94 seconds after it), the password, a
-  `clear` before every console header, `/zzz`, `3x`, `:wq`, and `#@ key
-  ctrl+]` 30 seconds after the last reboot.
-- **`recover-root-access-exercise.sh`:** step 1's failed console login, step
-  2's GRUB2 edit, steps 3 to 6 at `bash-5.2#`, a pause for the relabel (about
-  6 seconds on the instructor lab, then the boot), and step 7's console login.
+- **`change-kernel-arguments-exercise.sh`** (70 presses, about 4.9 minutes
+  recorded): step 2 as above with ` ipv6.disable=1`, `#@ pause 20` on
+  <kbd>Ctrl</kbd>+<kbd>X</kbd> for the boot, the detach, and `ssh servera`.
+  Steps 4 and 6 stay SSH-only, with their 25-second pauses (`servera` answers
+  SSH 21.5 seconds after `systemctl reboot`). Step 7's note no longer names
+  the last argument, which is `console=ttyS0,115200` on the instructor lab.
+  The recording's `cat /proc/cmdline` and `grubby --info` show the
+  `console=` arguments, with `ipv6.disable=1` after them.
+- **`switch-systemd-targets-exercise.sh`** (78 presses, about 5.1 minutes):
+  step 4's pause cut from 35 to 25 seconds (`workstation` answered SSH 17.4
+  seconds after a reboot to `graphical.target`). Step 6 as above with
+  ` systemd.unit=rescue.target`, `#@ pause 20` on <kbd>Ctrl</kbd>+<kbd>X</kbd>,
+  and the `root` password at the rescue prompt. Step 7 types `mount | grep ' /
+  '` and `exit` in the rescue shell, holds 20 seconds for the boot to carry on,
+  detaches, and reconnects. The two 45-second pauses are gone.
+- **`repair-file-system-at-boot-exercise.sh`** (57 presses, about 5.3
+  minutes): the Round 6 trial, plus the two SCC notes from Decision 31, the
+  `mount -o remount,rw /` fallback note on step 3, and a note that only the
+  instructor lab prints the XFS line in step 6. The attach takes no menu keys:
+  the countdown runs out, and `#@ pause 105` on the attach's Enter covers the
+  device timeout. `/boot is mounted again` no longer names `/dev/sda2`.
+- **`recover-root-access-exercise.sh`** (73 presses, about 4.5 minutes):
+  step 1 leaves SSH with `exit`, attaches with no reboot, presses
+  <kbd>Enter</kbd> for a login prompt, fails a `root` login, detaches, and
+  reconnects. Step 2 as above with ` init=/bin/bash` and `#@ pause 8` on
+  <kbd>Ctrl</kbd>+<kbd>X</kbd>; no `console=` step (Decision 43). Steps 3 to
+  6 are typed at `bash-5.2#`, `passwd` with the password twice, and
+  `#@ pause 30` on `exec /sbin/init` for the relabel, the reboot, and the
+  boot. Step 6 has no `clear` after it: the step 7 header lands at the login
+  prompt, and in record mode a `clear` before a header is typed, so it would
+  become a user name. The header's own Enter brings up a fresh prompt. Step 7
+  logs in as `root`, logs out with `exit`, detaches, and reconnects.
 - **The `root` password** is typed as an ordinary line at each prompt
   (Decision 29). It does not echo, so a cast does not show it.
-- **Device names in notes.** Keep exercise 3's notes free of `/dev/sda2`:
-  a console-attached boot names the OS disk `sdd` about one time in four
+- **Device names in notes.** Exercise 3's notes are free of `/dev/sda2`: a
+  console-attached boot names the OS disk `sdd` about one time in four
   (Round 7). Re-record a take that shows `sdd2`.
+- **No header while the GRUB2 menu is up.** A header sends an
+  <kbd>Enter</kbd> to the window, which would boot the highlighted entry.
 
 Written exercises: three notes added on 2026-11-01 (Decision 31), for what
-students see on the SCC lab; nothing about the serial console.
+students see on the SCC lab, and on 2026-11-03 exercise 4's `console=`
+sentence removed (Decision 43). Nothing about the serial console.
 
-This plan: Decision 10 (recordings for all four exercises), "Answer in brief"
-and "File inventory" (50 slides; fragment 3 has 9 and fragment 4 has 10; a
-`.cast` for every exercise), "Additions" (3.7a and 4.9a), the exercise
-entries under "Exercises", and Open question 5. The "Verification" rounds are
-written (Rounds 6 to 8).
+This plan: "Answer in brief" and "File inventory" (50 slides; fragment 3 has
+9 and fragment 4 has 10; a `.cast` for every exercise), "Additions" (3.7a and
+4.9a), and the exercise entries under "Exercises" are updated; Decision 10
+and Open question 5 record that Decision 26 superseded them. The
+"Verification" rounds are written (Rounds 6 to 8 and 11 to 13).
 
 Outside week 12:
 
 - **Both instructor-lab copies:** the GRUB2 and kernel settings and the two
   drop-ins on all four VMs, through `/source/rhel-lab/configure_vms.yml`,
-  then a new snapshot taken by the instructor (Decision 32).
-- **`AGENTS.md`:** widen the credential allowance to cover the lab's `root`
-  and `student` passwords in command files (Decision 29), with the matching
-  line in `docs/course-authoring.md`. Not done.
+  then a new snapshot taken by the instructor (Decision 32). Done on this
+  machine's copy on 2026-11-03 (Round 11); the other copy is unchecked.
+- **`AGENTS.md`:** done 2026-11-03, unstaged. The lab passwords published in
+  `docs/lab-environments.md` may appear in slides, command files, and
+  written exercises (Decision 29); `docs/course-authoring.md` says so under
+  "Demonstrations and exercises".
 - **`docs/lab-environments.md`:** done on 2026-11-01: the disk-name
   correction (Decision 30), and the differences Rounds 6 to 8 found (the
   boot screen and kernel line, the volume group names, the prompt and `vim`,
   `plymouth`, SCC's boot and relabel times, and the instructor lab's serial
-  ports). Still to add with step 9: the serial settings themselves
-  (`console=tty0 console=ttyS0,115200`, GRUB2's serial terminal, the
-  drop-ins), and RHA's kernel line (`console=tty0 console=ttyS0,115200n8` in
-  the RHA capture on 4.4's source).
-- **`docs/course-authoring.md`:** "Recording an exercise" gains how console
-  steps are recorded through `virsh console`: the attach pattern, the
-  password lines, and the detach.
+  ports). Added 2026-11-03, unstaged: the serial settings and their side
+  effects under "The instructor lab", `configure_vms.yml` and the snapshot
+  under its "How it is built", and under "Booting and the console" the
+  `console=` arguments in each lab (RH134's `grubby --info` example shows
+  `console=tty0 console=ttyS0,115200n8 no_timer_check`; the RHA lab itself is
+  unchecked), the advice not to have students remove them, the menu showing
+  on every boot on the instructor lab, and the serial menu's ASCII frame.
+- **`docs/course-authoring.md`:** done 2026-11-03, unstaged: a "Console
+  steps" section under "Recording an exercise", with the attach pattern, the
+  menu keys, passwords, the detach, holds, and device names.
 - **`kitty-demo`:** nothing. `#@ key ctrl+]` works (Round 6), and no password
   directive is needed.
 - **Agent access, optional:** if you want me to drive the serial console for
@@ -1562,7 +1629,8 @@ Accepted 2026-10-29 (Decisions 7, 8, 12, 14, 15, 16, 21, 22):
 5. **Slide 3.2a, What a Failed Boot Looks Like** (Decision 12). Built, with
    the two captures as placeholders.
 6. **Recording slides** for the exercises Decision 10 gives casts. The source
-   has none.
+   has none. Decision 26 gave every exercise a cast, so there are four: 1.14a,
+   2.9a, 3.7a, and 4.9a. Built 2026-11-03.
 7. **Unhiding `workstation`'s menu in exercise 2** (Decision 15), and hiding
    both menus again in cleanup (Decision 16). Built for `workstation`.
 
@@ -2090,6 +2158,125 @@ other eleven are kept in the ch12 topic's `assets/` under `scc-` names.
   `root@servera:~#` in green, where the instructor lab shows RHEL's
   `[root@servera ~]#`, and `vim` there has no line numbers or whitespace dots.
 
+**Round 11**, 2026-11-03: Decision 32's checks, read-only through `pnpm lab`,
+on this machine's instructor-lab copy (`servera` `62e8bf6f...` and
+`workstation` `f1819db0...`, the machine IDs Round 6 recorded). The
+instructor had run the `serial_console` role on all four VMs and taken a
+snapshot; `start-latest-snapshot -n -a` names
+`2026-11-03T05:57-06:00-grub_console` as the newest for each. The VMs had
+been up 5 minutes, and the drop-ins are dated 11:56 UTC against the
+snapshot's 11:57, so the snapshot holds a boot with the new kernel line. On
+all four VMs:
+
+- `/proc/cmdline`, both boot entries' `args`, and `GRUB_CMDLINE_LINUX` end
+  with `console=tty0 console=ttyS0,115200`; on `workstation`, after `rhgb
+  quiet`.
+- `/proc/consoles` lists `ttyS0` first, with `C`, then `tty0`.
+  `serial-getty@ttyS0` is active.
+- `/etc/default/grub` sets `GRUB_TERMINAL_INPUT` and `GRUB_TERMINAL_OUTPUT`
+  to `console serial` and has `GRUB_SERIAL_COMMAND="serial --unit=0
+  --speed=115200"`; `grub.cfg` carries the matching `serial` and `terminal_`
+  lines, and its `12_menu_auto_hide` section is empty. `GRUB_TIMEOUT=5`.
+- `grub2-editenv - list`: `saved_entry`, `menu_auto_hide=1`,
+  `boot_success=1`, `boot_indeterminate=0`.
+- `serial-size.conf` in `emergency.service.d/` and `rescue.service.d/` holds
+  `TTYColumns=120`, `TTYRows=24`, and `Environment=TERM=xterm-256color`
+  under `[Service]`, without the comment line shown under "Console
+  delivery". `systemctl cat` loads both, and `systemctl show -p Environment`
+  gives `HOME=/root TERM=xterm-256color` for each service.
+- The 10 GB OS disk is `sda` (`2:0:0:0`) on `servera`, `serverb`, and
+  `serverc`, with the 5 GB disks as `sdb` to `sdd`; `workstation` has one
+  20 GB `sda`. Each VM has one interface, `enp0s8`.
+
+Nothing was changed. The console itself (menu, editor, shells) was not
+exercised; Round 6 covers it, and the command-file rewrites will run it
+again.
+
+**Round 12**, 2026-11-03, for the command-file rewrites, through `pnpm lab`
+on the same copy:
+
+- **Reboot times**, nothing attached to the serial console: `servera`
+  answered SSH 21.5 seconds after `sudo systemctl reboot` (the 5-second
+  countdown included), and `workstation` 17.4 seconds, to
+  `graphical.target`. Both came up `running`, with the OS disk as `sda`.
+- **`grubby` on the serial kernel line**, a side test on `servera`:
+  `--update-kernel $(grubby --default-kernel) --args="ipv6.disable=1"` puts
+  the argument after `console=ttyS0,115200`, so it is still last, and leaves
+  `GRUB_CMDLINE_LINUX` alone; `--remove-args` takes it out again.
+  `/etc/default/grub`, the boot entry, and `grubenv` hashed the same before
+  and after.
+- **`kitty-demo` itself**, read in its source: a header is written straight
+  to the terminal and then sends <kbd>Enter</kbd>, and in record mode a
+  `clear` merged into a header is typed as `clear` and <kbd>Enter</kbd>. So
+  no header may come while the GRUB2 menu is up, and no `clear` before a
+  header that lands at a login prompt. A `#@ noenter` line is sent as
+  written, leading space included.
+- `kitty-demo --check`: 70, 78, 57, and 73 presses. `check:exercises`: no
+  violations.
+
+Not run: the console steps themselves. They need `virsh console`, which is
+yours (Open question 1). Still to check in the live runs: that three
+<kbd>Down</kbd> presses reach the `linux` line in the editor, the 20-second
+holds after <kbd>Ctrl</kbd>+<kbd>X</kbd> and after the rescue shell's
+`exit`, the 30-second hold on `exec /sbin/init`, and that the rescue prompt
+is up before the password is typed.
+
+The lab is at the week's start: both reboots and the side test changed
+nothing that stays.
+
+**Round 13**, 2026-11-03: the recordings. The instructor ran the four command
+files live and recorded them in chain order, unchanged from Round 12, between
+12:26 and 12:47 UTC. Each cast went through `pnpm run casts` and passes
+`--check`; all are asciicast v3 at 120 by 24.
+
+| Exercise                 | Length | Markers | Processing                                 |
+|--------------------------|-------:|--------:|--------------------------------------------|
+| 1, Change Kernel Args    |   4:45 |       8 | trimmed 20 leading, 5 trailing             |
+| 2, Switch systemd Targets|   4:56 |       9 | trimmed 22 leading, 6 trailing             |
+| 3, Repair a File System  |   5:09 |       8 | trimmed 18 and 5; cleared 330 dots (`vim`) |
+| 4, Recover Root Access   |   4:19 |       9 | trimmed 20 leading, 5 trailing             |
+
+Read as text, every take does what its exercise says:
+
+- **Exercise 1.** The menu is caught at `in 5s` and stopped. The edited line
+  ends `console=tty0 console=ttyS0,115200 ipv6.disable=1`, then `Booting a
+  command list`. Step 3's `ip -br addr` has no IPv6 addresses, step 4's has
+  `::1` and `fe80::` again, step 6's has none, and step 7's `grubby --info`
+  ends with `console=ttyS0,115200`.
+- **Exercise 2.** Menu caught; ` systemd.unit=rescue.target` appended;
+  `Reached target rescue.target`, the rescue banner, and the password
+  accepted. The rescue shell's prompt is `root@workstation:~#`, not the
+  `[root@workstation ~]#` the SSH sessions show. `mount` shows `rw`; `exit`
+  prints `Reloading system manager configuration.` and `Starting
+  default.target`; the reconnect finds `graphical.target` `active`.
+- **Exercise 3.** The start job times out on the `zzz` UUID and the
+  emergency shell opens; `/` is `rw`; `mount --all` prints the expected
+  error, then, after the fix, only the kernel's two `XFS (sda2)` lines. The
+  two red D-Bus lines follow `systemctl reboot`, and the closing `mount |
+  grep /boot` shows `/dev/sda2`.
+- **Exercise 4.** `Login incorrect` at the console for the locked `root`;
+  ` init=/bin/bash` appended; the `bash-5.2#` session as in Round 6 (`ro`
+  then `rw`, no `seclabel`, `BAD PASSWORD`, `passwd: password updated
+  successfully`); the relabel's warnings; the `root` login reports `Last
+  failed login: ... on ttyS0` and the one failed attempt; `passwd -S` shows
+  `P`. The final `grub2-editenv - list` shows `boot_success=0`,
+  `boot_indeterminate=2`, and `menu_auto_hide=1`.
+
+Two boots in the chain named the OS disk `sdd` (Decision 30), and each
+reaches a cast only as kernel messages. The boot from exercise 1's step 6,
+which exercise 3 then ran on, shows in exercise 3's step 2 as two shutdown
+lines, `XFS (sdd2): Unmounting Filesystem ...` and `sd 2:0:0:0: [sdd]
+Synchronizing SCSI cache`. The boot after exercise 4's relabel shows in its
+step 6 as eight boot lines, among them `sdd: sdd1 sdd2 sdd3` and `XFS
+(sdd2): Mounting V5 Filesystem`. Nothing either exercise runs or checks shows
+`sdd`. Decision 30 says to re-record a take that shows a shuffled name; these
+are kept pending your call (Decision 44).
+
+The recording slides (1.14a, 2.9a, 3.7a, 4.9a) pass `check:entry` and
+`check:slides` (no overflow; 1px on each recording slide, as in w11);
+`check:exercises` and `check:format` pass. In the review browser at
+1920x1080, 3.7a's player loads, with its 8 markers on the timeline.
+
 **Still to verify over SSH**: nothing for this week.
 
 **Console only**, still unverified: <kbd>Ctrl</kbd>+<kbd>D</kbd> at the
@@ -2098,14 +2285,14 @@ tty1`. The rest of what this list held is covered by Rounds 6 and 8, and the
 SCC lab's `menu_auto_hide=1` by the instructor's check on `serverb` (Open
 question 3).
 
-**Where the lab is.** Two copies now carry this week's checks. The copy used
-in Rounds 1, 2, 6, and 7 is in the prototype state: both VMs carry the serial
-settings and drop-ins; `servera`'s `/etc/fstab` and `/etc/shadow` match
-Round 6's baseline, and its `menu_auto_hide` is still unset from exercise 1.
-On the copy used in Rounds 3 to 5, `servera` and `workstation` are at their
-starting state. Before recording, the recording lab must go back to the
-week's start (`start-latest-snapshot -a`), which also discards the serial
-settings until step 9 makes them part of the snapshot.
+**Where the lab is.** This machine's copy, the one with Kitty, carries the
+serial settings in its newest snapshot, `grub_console` (Round 11), so a
+`start-latest-snapshot -a` keeps them. After the recordings (Round 13), the
+chain's cleanups have returned `servera` and `workstation` to the week's
+configuration (`menu_auto_hide=1`, `/etc/fstab` fixed, `root` with a
+password), but `servera` is running on a boot that named its OS disk `sdd`.
+Revert or reboot it before any storage work. The copy on the other machine,
+used in Rounds 3 to 5, was not checked.
 
 ## Authoring notes
 
@@ -2270,9 +2457,9 @@ the diagram. Each is reversible.
     missed. Accepted 2026-11-01; the second trial caught the whole menu.
 29. **Lab passwords in command files.** The `root` and `student` passwords may
     be typed as lines in the command files, since the slides already show
-    them and this is a lab. Accepted 2026-11-01. `AGENTS.md` still allows
-    them only in slide content, so its allowance must be widened before a
-    command file carries one.
+    them and this is a lab. Accepted 2026-11-01. Widened on 2026-11-03 to
+    every exercise file and slide ("Lab passwords are not secret"): `AGENTS.md`
+    and `docs/course-authoring.md` now say so.
 30. **Disk names.** No lab change for the `sd` naming race (Round 7). A
     snapshot revert keeps the snapshot's names, so only exercises that reboot
     are exposed, and a shuffled boot is obvious. `docs/lab-environments.md`
@@ -2288,7 +2475,18 @@ the diagram. Each is reversible.
     repository (branch `ansible_kickstart`), and apply them to all four VMs,
     `workstation`, `servera`,
     `serverb`, and `serverc`, so every VM behaves the same; the instructor
-    then takes the new snapshot. Not by hand. Accepted 2026-11-01; not done.
+    then takes the new snapshot. Not by hand. Accepted 2026-11-01. On
+    2026-11-02 the settings became a `serial_console` role in `rhel-lab`,
+    run by `configure_vms.yml` after `base`. Run the same day on this
+    machine's old lab copy (virtio disks, `enp1s0`), before its rebuild, and
+    checked on all four VMs: the checks below pass except the disk names,
+    which are `vda` on that copy. `systemctl show` prints `TTYColumns` and
+    `TTYRows` as `[unprintable]` on systemd 257; `systemctl cat` shows both
+    drop-ins loaded. `grub.cfg`'s `12_menu_auto_hide` section is empty, so
+    the menu shows on every boot. On 2026-11-03 the instructor ran it on
+    this machine's rebuilt copy (`sda`, `enp0s8`) and took the snapshot
+    `2026-11-03T05:57-06:00-grub_console`; all four VMs pass the checks
+    below (Round 11).
     What the playbook has to do, from Round 6:
     - In `/etc/default/grub`, set `GRUB_TERMINAL_INPUT="console serial"` and
       `GRUB_TERMINAL_OUTPUT="console serial"`, add `GRUB_SERIAL_COMMAND="serial
@@ -2313,6 +2511,56 @@ the diagram. Each is reversible.
     `serverb` the 10 GB OS disk is `sda` (Round 7), since a snapshot keeps the
     names it was taken with. Run the playbook on the `lab_config` state
     (`start-latest-snapshot -a` first), and on both lab copies.
+
+Decisions 33 to 42, proposed 2026-11-01, are for the Flatpak fragment; see
+"Flatpak".
+
+33. **Add fragment 5, `flatpak-applications.md`**, last in the deck, in a
+    new `rh124-ch13-installing-and-updating-applications-by-using-flatpak/`
+    directory, `routeAlias: flatpak`, aligned to RH124 chapter `"13"` and
+    cert guide chapter `"9"`. Open.
+34. **Section title "Flatpak Applications"**, short enough for the agenda.
+    RH124's own, "Installing and Updating Applications by Using Flatpak",
+    is the alternative. Open.
+35. **Cover:** a fifth agenda line and the summary clause under "Flatpak";
+    the title stays "Controlling the Boot Process and Root Password Reset".
+    Open.
+36. **Your motivations lead** (5.2 newer applications, 5.3 no `sudo`); RHA's
+    dependency argument appears only as why a user install is safe. Open.
+37. **Not taught: authentication and `flatpak mask`**, mask because it
+    cannot stop a user installing a version (see "Analysis"). Open.
+38. **One exercise after 15 content slides**, past the ten-slide guideline
+    as Decision 9's rejection allows. The alternative splits it: an
+    exercise after 5.9 (add Flathub, install) and one after 5.13 (inspect,
+    remove), at the cost of a second download pause. Open.
+39. **Text Editor and Calculator on the slides, Firefox in the exercise.**
+    Accepted 2026-11-02. First proposed as Inkscape on the slides; Round 10
+    showed the download is the runtime's, not the application's, and RHEL
+    10 ships older RPMs of both GNOME applications (47.3 and 46.1 against
+    Flathub's 51.0 and 51.1), while neither Inkscape nor GIMP is in RHEL
+    10.
+40. **GNOME Software shown, not practised:** 5.15 and 5.16 with your
+    screenshots, demonstrated live; the exercise and its recording stay on
+    the command line. The alternative adds a written-only GNOME Software
+    step to exercise 5. Open.
+41. **Optional 5.14 and 5.16**, and teaching `flatpak uninstall --unused`,
+    which RHA does not. Open.
+42. **`--user` on every command** that touches an installation. Open.
+
+Decision 43 is outside the Flatpak fragment.
+
+43. **No `console=` step in the exercises.** The SCC lab's kernel line has no
+    `console=` options, and the instructor lab keeps its own for the serial
+    console, so neither exercise 4's written version nor its command file
+    asks to remove them. Decided by the instructor 2026-11-03.
+44. **Keep the exercise 3 and 4 takes** whose boot messages name the OS
+    disk `sdd` (Round 13). Proposed 2026-11-03, open. The shuffled names
+    appear only in kernel lines that scroll past during a boot or shutdown
+    (two in exercise 3, eight in exercise 4), and every name the exercises
+    show or check is `sda`. Decision 30's rule was written for a name in an
+    exercise's own output, such as `sdd2` in `mount | grep /boot`. The
+    alternative re-records both, each from its own starting state, and
+    risks the same shuffle again.
 
 ## Open questions
 
@@ -2368,9 +2616,51 @@ the diagram. Each is reversible.
    came from, or the capture is retaken on the lab 3.4 came from, which also
    settles the placeholder.
 
+7. ~~**The `rhel` remote without a login.**~~ Answered 2026-11-02 (Round
+   10): nothing the fragment or exercise runs shows an error from it, so
+   it stays enabled. `flatpak search` reads its cached catalogue silently;
+   only commands that query it live, such as `remote-info rhel` and
+   `remote-ls rhel`, fail. One visible effect: `flatpak search firefox`
+   lists Firefox under `rhel,flathub` at 153.5.0, the `rhel` remote's
+   version, which exercise 5 explains. As first written: if it puts errors
+   into `flatpak search` or `install` output, should exercise 5 disable it
+   first (`sudo flatpak remote-modify --disable rhel`, as RHA's guided
+   exercise does, and re-enable it in cleanup), or should the slides show
+   the error and say why?
+8. **Downloads on the VDI.** Measured on the instructor lab 2026-11-02
+   (Round 10): a student's first install is mostly the runtime and its GL
+   and codec extensions, whatever the application. Firefox: at most about
+   700 MB to download, 1.6 GB on disk, 20 seconds here. Text Editor or
+   Calculator: at most about 750 MB, 1.8 GB on disk, 26 seconds; the second
+   of the two then takes 2 seconds. `workstation` has 13 GB free. Still
+   open: can the SCC network take a class downloading about 700 MB each at
+   once through the NAT link? If not, the demonstration from "Fitting the
+   class period, with Flatpak".
+9. **Reading and lesson plan.** Outside this repository: should the week's
+   lesson plan assign RH124 chapter 13? Its guided exercises need RHA's
+   classroom repository, so they run only in the RHA lab.
+10. ~~**Internet for the instructor lab.**~~ Answered 2026-11-02: this copy
+    was rebuilt that day with Decision 32's role, and Round 10 ran on it.
+    Docker
+    on the host was blocking the lab's forwarded traffic, and with it
+    removed `workstation` reaches the internet. HTTPS still fails, because a
+    reverted VM resumes with its clock at the snapshot's time (January 2026
+    on this copy) and Flathub's certificate is "not yet valid"; chrony will
+    not step a clock that far after boot. Fixed the same day:
+    `start-latest-snapshot` now sets each resumed VM's clock to the host's
+    through the QEMU guest agent (homelab repository, `libvirt` role). Run by
+    hand on this copy's `workstation`, it set the clock, and Flathub
+    answered `200`. As first written: its `workstation` cannot reach
+    Flathub (Round 9), so nothing in fragment 5 can be verified or recorded
+    there. Options: give the lab network a route out (a change to the
+    `rhel-lab` setup, for every VM, like Decision 32); capture the
+    transcripts on the VDI yourself and record there; or record on the
+    instructor lab against a local mirror of the two applications, which
+    would put a non-Flathub URL in the recording. I would take the first.
+
 ## Status
 
-As of 2026-11-01.
+As of 2026-11-03.
 
 **Done:**
 
@@ -2381,32 +2671,29 @@ As of 2026-11-01.
   fragments.
 - Fragments 1 to 4 and exercises 1 to 4: complete (`616d13c`, `784ed53`,
   `f4ef2e1`, `974a737`).
-- Decision 26's prototype, steps 1 to 8 (Rounds 6 to 8).
-- Decision 31's changes, unstaged for your review: 1.4a, `passwd -S` on 4.3,
-  the VDI images on 1.3, 1.4, 3.2a, and 4.4, the <kbd>Esc</kbd> line on 3.2a,
-  the notes in exercises 3 and 4 (and two `#!` notes in exercise 3's command
-  file), and Prettier's reflow of the three exercise pages that failed
-  `check:format` in HEAD. Checked with `check:entry`, `check:exercises`,
-  `check:slides` (no overflow), `check:format`, and captures of every changed
-  slide and click state.
-- `docs/lab-environments.md` corrected on disk names (Decision 30),
-  unstaged.
+- Decision 26's prototype, steps 1 to 8 (Rounds 6 to 8), and step 9 on this
+  machine's copy (Round 11).
+- Decision 31's changes and the disk-name correction in
+  `docs/lab-environments.md` (Decision 30), committed in `d86c1d5` with the
+  eleven `scc-` screenshots, which no slide references.
 
-All 46 non-recording slides now exist (48 in "Answer in brief", less the two
-recording slides).
+All 46 non-recording slides exist (48 in "Answer in brief", less the two
+recording slides). No `*.placeholder.*` file or reference remains.
 
-**Next:**
+**Next**, for publishing the four fragments (Flatpak deferred 2026-11-03):
 
-1. Your review of the unstaged changes. Before staging, decide what happens to
-   the unreferenced VDI screenshots in the ch12 topic's `assets/`.
-2. Decision 26's implementation: prototype step 9 through the `rhel-lab`
-   playbook and your new snapshot (Decision 32), then the `AGENTS.md`
-   allowance for lab passwords (Decision 29), the four command files,
-   recording slides 3.7a and 4.9a, and the `docs/lab-environments.md` and
-   `docs/course-authoring.md` entries listed under "Console delivery". Your
-   call on 4.4's `console=` step is still open there.
-3. The remaining deferred item: your boot diagram.
-4. Step 5 of the porting skill: recordings, then publication.
+Done 2026-11-03, unstaged: the `AGENTS.md` password allowance (Decision 29),
+Decision 43 in exercise 4, the four command files (Round 12), the
+`docs/lab-environments.md` and `docs/course-authoring.md` entries, your live
+runs and recordings of all four exercises, and their processed casts and
+recording slides (Round 13). The deck has its 50 slides.
+
+1. Your call on Decision 44: keep the exercise 3 and 4 takes, or re-record.
+2. Your boot diagram, or publish with the Mermaid version and swap it in
+   later.
+3. Your review of the unstaged changes.
+4. Publication: this plan read as public material, the rename to
+   `course/w12.md`, `"w12"` in `tests/site.test.mjs`, and `pnpm check`.
 
 No review server was started; the slides were captured with
 `pnpm run capture:course`.
@@ -2422,3 +2709,532 @@ Another motivation is that flatpak is installable without sudo. This means regul
 I want to skip the auth part. I just want to use flathub unauthenticated. I only want to teach the mask command if it can be ran by an administrator to prevent users from installing a certain version of a flatpak.
 
 I do want to teach doing things like adding/removing a remote from cli. Same for installing/removing a flatpak. Then at the end show it can also be done through Gnome Software.
+
+### Analysis, 2026-11-01
+
+Proposed on 2026-11-01 from your notes above, RH124 chapter 13 sections 1
+and 3 (the lectures; sections 2 and 4 are guided exercises and are not
+copied), and the *RHCSA Cert Guide*'s chapter 9, "Managing Software with
+Flatpak". Nothing below is built. The command line is verified on
+`workstation` (Rounds 9 and 10, under "Verification to do"); GNOME
+Software is not.
+
+- **The gap is real, and it is on the exam.** The cert guide's chapter 9
+  lists two RHCSA 10 objectives, "Configure access to Flatpak repositories"
+  and "Install and remove Flatpak software packages", and two of its
+  practice exams ask for exactly your second motivation: B, task 13, "Install
+  the GIMP software package using Flatpak in such a way that it can only be
+  used by user linda", and C, task 6, "It should not be available for any
+  other users". `rhcsa-objectives.pdf` has no text layer, so I could not
+  check the list against Red Hat's own. (W01's course overview says IT-130
+  was on RHEL 9.3; your note says 9.4.)
+- **Motivation: yours, not RHA's.** RHA opens on developers packaging for
+  many distributions and on dependency conflicts; the cert guide on two
+  applications needing different library versions. The fragment leads with
+  newer desktop applications (5.2) and installing without `sudo` (5.3). The
+  dependency material survives only as the reason a user installation is
+  safe: the application brings its own runtime, so nothing outside the
+  user's home changes. The cert guide says the same of user installations,
+  "allowing users to add their own applications without any need for
+  administrative privileges". Freshness is in neither source, so 5.2 makes
+  its case with versions captured on the lab rather than a claim.
+- **Desktop only, as the rule of thumb.** RHA, and the cert guide's answer
+  key (chapter 9, question 9), both say it. 5.4 states it as the way to
+  choose between RPM and Flatpak.
+- **Authentication: skipped.** No `podman login registry.redhat.io` and no
+  `oci-auth.json`. RHEL 10 still ships the `rhel` remote
+  (`redhat-flatpak-repo`, `/etc/flatpak/remotes.d/rhel.flatpakrepo`), so
+  students will see it in `flatpak remotes`; 5.6 names it in one line and
+  says the course uses Flathub. Unauthenticated, it puts no errors into
+  anything the fragment runs (Open question 7, answered).
+- **`flatpak mask`: does not meet your condition, so not taught.** It cannot
+  stop a user from installing a version. flatpak-mask(1): "A masked ref will
+  never be updated or automatically installed ... You can still manually
+  install such refs, but once they are installed the version will be
+  pinned." Masks also belong to one installation (`--user`, `--system`, or
+  `--installation=NAME`), so an administrator's system mask does not reach a
+  user's own installation. It is a pin against updates for whoever sets it,
+  which is how RHA uses it (masking `com.redhat.Platform`). Read in this
+  machine's Flatpak 1.18.4 man page, and the same words are in the lab's
+  1.16.0 (Round 9). Neither RH124 nor the cert guide offers a way to restrict
+  what a user installs in their own installation.
+- **CLI, then GNOME Software.** Remotes added and removed, applications
+  installed and removed, from the command line (5.6 to 5.13); GNOME Software
+  last (5.15, 5.16), shown by you rather than practised (Decision 40).
+
+### 5. `flatpak-applications.md` (18 slides), proposed
+
+New chapter directory
+`course/chapters/rh124-ch13-installing-and-updating-applications-by-using-flatpak/`,
+the course's first RH124 chapter in w12. `routeAlias: flatpak` (unused).
+Alignments: RH124 chapter `"13"`, *Installing and Updating Applications by
+Using Flatpak*, and cert guide chapter `"9"`, *Managing Software*. Exercise:
+Install a Flatpak Application Exercise, declared in `topicInfo`.
+
+**Place in the deck:** last, after fragment 4 (Decision 33). It runs on
+`workstation` alone, so it is outside the `servera` chain, and the VM
+reminder already names `workstation`. The cover gains a fifth agenda line,
+"Flatpak Applications", and the summary a clause (Decision 35):
+
+```yaml
+courseInfo:
+  summary: >-
+    This week we will follow a RHEL system from power-on to the login
+    prompt, change how GRUB2 starts the kernel, choose which systemd target
+    the system boots into, repair a broken /etc/fstab from an emergency
+    shell, reset a lost root password, and install desktop applications for
+    one user with Flatpak.
+```
+
+**Numbering.** Fragment 5 has no source deck, so its numbers are its own
+and nothing in it carries a letter except the recording slide. Each entry
+names the RHA section, cert guide passage, or note of yours it rests on.
+No RHA text, figure, or transcript is copied; every transcript comes from
+the lab.
+
+**Three applications** (Decision 39, accepted). `docs/course-authoring.md`
+asks that an exercise not repeat the slides command for command, so the
+slides use GNOME **Text Editor** (`org.gnome.TextEditor`) and
+**Calculator** (`org.gnome.Calculator`), and the exercise **Firefox**. All
+three ship in RHEL 10 as older RPMs, installed on `workstation`, so every
+comparison is RPM against Flatpak. The two GNOME applications share one
+runtime, `org.gnome.Platform//51`: the first install brings it, the second
+downloads about 2 MB (Round 10), which is 5.5's point made on the lab.
+Firefox runs on a different runtime, `org.freedesktop.Platform//25.08`.
+Inkscape, the first proposal, is not in RHEL 10 and costs the same runtime
+download; so is GIMP, which the cert guide's practice exams name.
+
+**`--user` on every command** (Decision 42) that touches an installation,
+as the cert guide's exercise 9-4 does (`flatpak install -u gimp`). It is the
+form that needs no `sudo`, and naming it each time keeps the user and system
+installations apart in students' heads.
+
+##### 5.1 Flatpak Applications
+
+Section slide carrying the `routeAlias` and `topicInfo`. Title per
+Decision 34.
+
+Components: `section`.
+
+##### 5.2 Why Flatpak? Newer Desktop Applications
+
+Your first motivation. "RHEL favors stable, tested versions; desktop
+applications release faster upstream", then a small table of what each
+source offers, captured on the lab and dated on the slide since the numbers
+move. As of 2026-11-02 (Round 10), RPM against Flathub: **Text Editor**
+47.3 against 51.0; **Calculator** 46.1 against 51.1; **Firefox**
+`128.8.0esr` against 159.0. Closing line: "For a desktop application, newer
+means new features and bug fixes sooner". The versions come from `rpm -q`
+and `flatpak remote-info flathub ID` on `workstation`; recheck them when
+the slide is built.
+
+Components: default layout with `vertical: center`, Markdown table.
+
+##### 5.3 Why Flatpak? No `sudo` Needed
+
+Your second motivation, with the cert guide's user-installation passage.
+"Any user can install a Flatpak for themselves", over four facts: the
+application brings everything it needs, in a shared runtime (5.5 explains);
+a user installation lives in `~/.local/share/flatpak`; nothing under `/usr`
+or `/etc` changes, so no other user notices; `dnf` needs `root` because it
+changes the whole system. Then a `Callout`: "RHCSA tasks ask for this:
+install an application so only one user can use it" (practice exams B and
+C).
+
+Components: default layout; `IconGrid` with Carbon icons such as `user`,
+`package`, `home`, and `locked`; `Callout`.
+
+##### 5.4 RPM or Flatpak?
+
+RHA section 1 and the cert guide's "mainly graphical packages". A two-column
+table: **Best for**, "System software, services, command-line tools" against
+"Desktop applications"; **Comes from**, "RHEL repositories, with `dnf`"
+against "Remotes such as Flathub, with `flatpak`"; **Installs for**,
+"Everyone; needs `root`" against "One user, or everyone"; **Libraries**,
+"Shared from the system" against "Bundled, plus a shared runtime";
+**Supported by Red Hat**, "Yes" against "Not from Flathub" (RHA's warning on
+third-party remotes). Then the rule of thumb: "A desktop application:
+Flatpak. Everything else: RPM."
+
+Components: default layout, Markdown table.
+
+##### 5.5 Applications and Runtimes
+
+RHA section 1, "Flatpak Runtimes" and the sandbox paragraph. "A Flatpak
+application runs on a **runtime**, a shared set of libraries", beside a
+Mermaid diagram of `org.gnome.TextEditor` and `org.gnome.Calculator` on
+`org.gnome.Platform` 51, with its GL and codec extensions under it, and the
+measured cost on each edge: the runtime about 750 MB at most, each
+application 1.3 MB and 2.0 MB (Round 10). Three points: the runtime
+downloads once and serves every application built on it, so the second
+application takes seconds; a fixed runtime gets its security update once,
+not per application; each application runs in a sandbox and reaches only
+what its permissions grant, which `install` lists (5.9).
+
+Components: `two-cols-header`, Mermaid left, list right.
+
+##### 5.6 Remotes
+
+RHA section 1, "Managing Flatpak Remote Repositories". "Flatpak installs
+from **remotes**, repositories of applications and runtimes", then
+`flatpak remotes` as `student` on a fresh `workstation`, with its real
+output: in a terminal, a `Name Options` header over
+`rhel system,oci,no-gpg-verify` (RHA shows the line without the header).
+Beneath it:
+"`rhel` is Red Hat's remote; it needs a Red Hat login, so this course does
+not use it" and "Flathub, at flathub.org, is the largest community remote;
+Red Hat does not support its applications".
+
+Components: fixed `TerminalWindow`, list.
+
+##### 5.7 Add a Remote
+
+RHA section 1, "Adding a Flatpak Remote Repository", and cert guide exercise
+9-4, step 2. `flatpak remote-add --user --if-not-exists flathub
+https://dl.flathub.org/repo/flathub.flatpakrepo`, which prints nothing,
+then `flatpak remotes` showing `flathub user` under `rhel` (Round 10). The
+command
+is about 125 columns with the prompt, so it breaks once with a `\` (see
+"Authoring notes"). `TextExplainer` marks: `--user` "for you alone; no
+`sudo`"; `--if-not-exists` "safe to run twice"; `flathub` "the name you
+choose"; the URL "a `.flatpakrepo` file describing the remote". Closing
+line: "Without `--user`, `flatpak` changes the system installation and asks
+for an administrator's password". Verified (Round 10): in a terminal,
+polkit asks `student`, a `wheel` member, for their own password; with no
+terminal, `flatpak` stops with `error: Flatpak system operation
+ConfigureRemote not allowed for user`.
+
+Components: fixed `TerminalWindow` for the transcript, `TextExplainer` for
+the command, or the explainer alone if the two do not fit.
+
+##### 5.8 Find an Application
+
+RHA section 3, "Flatpak Identifiers" and "Querying Remote Repositories".
+`flatpak search "text editor"`, real output: two rows, Text Editor
+(`org.gnome.TextEditor`, 51.0) and Micro, about 110 columns (Round 10).
+The quotes matter; `flatpak search calculator` returns 50 rows, which is
+why the slide searches for Text Editor. "`search` matches names,
+descriptions, and IDs in every remote you have", then "Every application
+has an ID in reverse-DNS form, such as `org.gnome.TextEditor`; later
+commands take the ID". One
+sentence names `flatpak remote-ls --app flathub` for listing a whole remote
+(the cert guide's answer key, chapter 9). Identifier triples and branches
+are not taught ("Not ported").
+
+Components: fixed `TerminalWindow` with the ID column highlighted.
+
+##### 5.9 Install an Application
+
+RHA section 3, "Installing Flatpak Objects from Remote Repositories".
+`flatpak install --user flathub org.gnome.TextEditor`, real output with its
+prompts, the permissions list kept, the progress lines cut with
+`...output omitted...`. The shape, from Inkscape's install (Round 10):
+"Looking for matches…", "Required runtime for ... found in remote
+flathub", "Do you want to install it? [Y/n]", the permissions, a numbered
+transaction table (seven refs, with ID, Branch, Op, Remote, and Download
+columns), then "Proceed with these changes to the user installation?
+[Y/n]". Highlighted: the required-runtime prompt and the Proceed prompt.
+Three points: the runtime comes with it; the permissions list is what the
+sandbox allows; `-y` answers yes for you. If the transcript does not fit
+one frame, a two-state `v-switch` splits prompts from progress. Capture
+Text Editor's own transcript when building; my capture of it ran with
+`--noninteractive`, which prints no table.
+
+Components: fixed `TerminalWindow` with line highlights.
+
+##### 5.10 List and Inspect
+
+RHA section 3, "Querying Flatpak Objects Locally". A two-state `v-switch`.
+First, 5.5 made real: `flatpak install --user -y flathub
+org.gnome.Calculator`, whose table holds only the application and its
+locale, done in about 2 seconds (Round 10), then `flatpak list`, showing
+both applications over one `org.gnome.Platform` 51 and its extensions, the
+`Installation` column `user` on every row. Second: `flatpak list --app`,
+then `flatpak info org.gnome.TextEditor`, with the `Installation: user`,
+`Origin: flathub`, and `Runtime: org.gnome.Platform/x86_64/51` lines
+highlighted. Closing line: "Without `--app`, `flatpak list` shows runtimes
+too". `flatpak list` is about 115 columns at 120 (Round 10, with
+Inkscape).
+
+Components: fixed `TerminalWindow` per state.
+
+##### 5.11 Run and Update
+
+RHA section 3, "Updating Flatpak Objects", and your freshness motivation.
+"An installed application appears in Activities like any other", then a
+`bash` fence of `flatpak run org.gnome.TextEditor` (it opens a window, so
+no transcript), then `flatpak update --user` with its real output, which
+was "Looking for updates…" and "Nothing to do." just after an install
+(Round 10). Running an application creates its data directory,
+`~/.var/app/ID`, which 5.12 removes. "Updates
+come as fast as Flathub publishes them; `flatpak update` takes every
+application and runtime at once". RHA's note that `update` stays on the
+installed branch is left out with branches.
+
+Components: `bash` fence, fixed `TerminalWindow`.
+
+##### 5.12 Remove an Application
+
+RHA section 3, "Uninstalling Flatpak Objects". `flatpak uninstall --user
+--delete-data org.gnome.TextEditor`, then `flatpak uninstall --user
+--unused`, both with real output. The first asks twice: "Proceed with
+these changes to the user installation? [Y/n]", then "Delete data for
+org.gnome.TextEditor? [y/n]" (Round 10, with Inkscape); highlight both.
+With Calculator still installed, `--unused` should find nothing to remove,
+since Calculator still needs the runtime; its exact output is to capture.
+Two points: "An application's data in `~/.var/app` stays unless you add
+`--delete-data`"; "`--unused` removes runtimes no installed application
+needs, and keeps the ones that are still needed". `--unused` is not in RHA,
+which removes the runtime by name and shows the "needed for" error first;
+it is the shorter path (Decision 41's list of additions).
+
+Components: fixed `TerminalWindow`.
+
+##### 5.13 Remove a Remote
+
+RHA section 1, "Removing a Flatpak Remote Repository". `flatpak
+remote-delete --user flathub` with Calculator still installed, real output,
+then `flatpak remotes` showing `rhel` alone. Verified (Round 10, with both
+GNOME applications): it prints "The following refs are installed from
+remote 'flathub':", a numbered list of every app and runtime ref, and
+"Remove them? [y/n]"; `y` uninstalls them all, then deletes the remote.
+"Delete a remote and Flatpak offers to remove what you installed from it",
+and one line: "`flatpak remote-modify --disable NAME` turns a remote off
+and keeps its applications".
+
+Components: fixed `TerminalWindow`.
+
+##### 5.14 Flatpak Commands
+
+Optional summary, as 2.8a is for targets (Decision 41). A two-column table
+in teaching order: `flatpak remotes`, `flatpak remote-add --user NAME URL`,
+`flatpak search WORD`, `flatpak install --user REMOTE ID`, `flatpak list
+--app`, `flatpak info ID`, `flatpak run ID`, `flatpak update --user`,
+`flatpak uninstall --user --delete-data ID`, `flatpak uninstall --user
+--unused`, `flatpak remote-delete --user NAME`. Close to the cert guide's
+Table 9-5, with the removal commands it lacks. Cut it if time is short.
+
+Components: default layout with `vertical: center`, Markdown table.
+
+##### 5.15 GNOME Software
+
+RHA section 3, "Managing Flatpak Objects with the GNOME Software Graphical
+Tool". "GNOME Software installs Flatpaks and RPMs from one window", beside
+your screenshot of an application's page in Software with its source
+showing Flathub, and three steps: search; choose the source and click
+**Install**; **Uninstall** from the Installed tab. Whether Software installs
+into the user installation when Flathub is a user remote is to verify; the
+slide says whichever it does.
+
+Components: `two-cols-header`, image left, ordered list right.
+
+##### 5.16 GNOME Software: Repositories
+
+Optional (Decision 41). RHA section 1's Software Repositories dialog: the
+main menu, **Software Repositories**, and the switch for each remote, beside
+your screenshot. "The same remotes as `flatpak remotes`, with a switch to
+turn each on or off".
+
+Components: `two-cols-header`, image left, list right.
+
+##### 5.17 Exercise: Install a Flatpak Application
+
+Goal: "Install a newer Firefox for `student` alone, without `sudo`".
+Environment: "**Host:** `workstation`, as `student`". No prerequisite
+exercise. Workflow: check the version of the Firefox RPM; add Flathub for
+yourself only; find Firefox's ID; install it in your user installation;
+compare the two versions; confirm the installation is yours alone; launch
+it from Activities; remove it with its data, the runtimes it leaves unused,
+and the remote. The exercise reaches back to 5.2 for its scenario, so it
+applies the slides rather than repeating them.
+
+Components: `exercise`.
+
+##### 5.17a Exercise recording
+
+Pending the cast. Everything except the Activities launch runs over SSH, so
+the take needs no console work.
+
+### Exercise 5, Install a Flatpak Application, proposed
+
+`install-a-flatpak-application-exercise.sh` and `.html` in the new topic's
+`exercises/`, written for the instructor lab's `workstation` as `student`.
+Steps, every one to verify:
+
+1. Show the RPM's version with `rpm -q firefox` and `firefox --version`.
+2. `flatpak remotes`, then `flatpak remote-add --user --if-not-exists
+   flathub https://dl.flathub.org/repo/flathub.flatpakrepo`, then `flatpak
+   remotes` again.
+3. `flatpak search firefox`, picking out `org.mozilla.firefox`. Its row
+   reads `rhel,flathub` in the Remotes column and 153.5.0, the `rhel`
+   remote's version, in the Version column (Round 10); the exercise says
+   so, and that step 4 names `flathub` to install from Flathub. The search
+   prints 19 rows, several truncated at 120 columns.
+4. `flatpak install --user -y flathub org.mozilla.firefox`. Five refs:
+   Firefox, `org.freedesktop.Platform` 25.08, its locale, and its GL and
+   codec extensions; at most about 700 MB, 1.6 GB on disk, 20 seconds on the
+   instructor lab (Round 10).
+5. `flatpak info org.mozilla.firefox`'s `Version: 159.0` line beside step
+   1's version. Proposed over `flatpak run org.mozilla.firefox --version`,
+   which works over SSH but prints `[2] Sandbox: CanCreateUserNamespace()
+   clone() failure: EPERM` above `Mozilla Firefox 159.0` and creates
+   `~/.var/app/org.mozilla.firefox`.
+6. `flatpak list --app` shows `user` in the Installation column, and `sudo
+   flatpak list --app` prints nothing and exits 0 (Round 10), since `root`
+   sees only the system installation and its own.
+7. The written exercise only: launch Firefox from Activities and check
+   **About Firefox**. The command file skips it with a `#!` note.
+8. Cleanup: `flatpak uninstall --user -y --delete-data org.mozilla.firefox`,
+   `flatpak uninstall --user -y --unused`, `flatpak remote-delete --user
+   flathub`, and `flatpak remotes` showing `rhel` alone.
+
+Step 8 is verified (Round 10): `-y` also answers `--delete-data`'s
+question, and `~/.var/app/org.mozilla.firefox` goes; `--unused` removes
+the other four refs; `remote-delete` with nothing installed asks nothing
+and exits 0.
+
+At the end `student`'s user installation holds no remote, application, or
+runtime, and `~/.var/app` holds no Firefox data. Two things stay, and the
+exercise says so rather than removing them:
+
+- `~/.local/share/flatpak` itself, which was there before step 1: GNOME
+  autologs `student` in on `workstation`, and GNOME Software creates the
+  empty user installation at login (Round 10).
+- About 99 MB of downloaded objects in `~/.local/share/flatpak/repo` that
+  no ref uses, until `flatpak repair --user` prunes them (down to 84 KB).
+  Proposed: a last cleanup step running it, with one sentence on why.
+  The alternative is a note only.
+
+An empty `~/.var/app` also stays. GNOME Software is not in the exercise
+(Decision 40).
+
+### Not ported, Flatpak
+
+From RH124 chapter 13 and the cert guide's chapter 9:
+
+- **Authentication to the `rhel` remote**: `podman login
+  registry.redhat.io`, copying `auth.json` to `oci-auth.json` per user or
+  system-wide, and its `chmod 644`. Your call.
+- **`flatpak mask`** and `mask --remove`. See "Analysis".
+- **Identifier triples and branches**: `ID/arch/branch`, partial triples,
+  `flatpak remote-info` listing branches, installing a named branch, and
+  `update` staying on its branch.
+- **`flatpak install` options** beyond `--user` and `-y`: `--runtime`,
+  `--app`, `--or-update`, `--no-deploy`, `--no-pull`, `--noninteractive`.
+- **`flatpak -v search`**, and RHA's walk through the appstream cache.
+- **Removing a runtime by name** and its "needed for" error; 5.12 teaches
+  `--unused` instead.
+- **System-wide remotes** (`remote-add` without `--user`), and the Fedora
+  remote `oci+https://registry.fedoraproject.org`, beyond 5.7's one line.
+- **`remote-modify --enable`**, the other half of 5.13's line.
+- **RHA's figures 13.1 to 13.3**: extracted media, which
+  `docs/course-authoring.md` forbids. Your screenshots replace them.
+- **RHA's classroom repository** (`flatpak.lab.example.com`): an RHA lab
+  host, absent from the SCC and instructor labs.
+
+### Fitting the class period, with Flatpak
+
+The week's estimate was about two hours for 45 slides and four exercises.
+Fragment 5 adds about 15 content slides, call it 15 minutes, and an exercise
+of about 10 minutes plus the download: at most about 700 MB per student, 20
+seconds on the instructor lab, unmeasured with a class on the VDI at once
+(Open question 8). That puts the week at about two
+and a half hours, the whole class period, with no margin. Candidates, with
+what each loses:
+
+- **Cut 5.14 and 5.16**, the optional slides. Loses the summary table and
+  the repository switches; 5.13's line still names `remote-modify`.
+- **Run exercise 5 as a demonstration.** Loses hands-on Flatpak; saves the
+  class's downloads. Students could run it after class.
+- **The cuts already listed** above under "Fitting the class period".
+
+### Verification to do
+
+**Round 9, 2026-11-01**, read-only, on the instructor lab's `workstation`
+through `pnpm lab`, as `student`. Nothing was changed.
+
+- Flatpak 1.16.0: `flatpak`, `flatpak-libs`, `flatpak-selinux`, and
+  `flatpak-session-helper` 1.16.0-5.el10, and `redhat-flatpak-repo`
+  0.1-5.el10, the same set RHA lists. flatpak-mask(1) carries the "You can
+  still manually install such refs" sentence.
+- `flatpak remotes` prints one line, `rhel system,oci,no-gpg-verify`.
+- `flatpak search inkscape` prints "No matches found" and exits 0, with no
+  error from the unauthenticated `rhel` remote. That is without a network
+  (next item), so Open question 7 stays open.
+- **No internet.** `curl` to `dl.flathub.org` and to `flatpaks.redhat.io`
+  timed out after 10 seconds, over IPv4 and IPv6; DNS resolves. The only
+  route is the lab network's `172.25.250.1`. So no Flathub transcript can
+  be captured, and exercise 5 cannot be recorded, on this lab as it stands
+  (Open question 10).
+- The interface is `enp1s0`, not the `enp0s8` that
+  `docs/lab-environments.md` gives the rebuilt instructor lab. Noted, not
+  pursued: this may be the older lab copy. (It was; Round 10's rebuilt
+  copy shows `enp0s8`.)
+- 13 GB free on `/`, which holds `/home`.
+- `firefox-128.8.0-2.el10_0`; `firefox --version` prints `Mozilla Firefox
+  128.8.0esr`. 5.2's Firefox row and exercise 5's step 1 have their RPM
+  side.
+- `dnf info inkscape`: "No matching Packages to list". The enabled
+  repositories are the RHEL DVD's BaseOS and AppStream, so RHEL 10 does not
+  ship Inkscape. (5.2 had an Inkscape row then; Decision 39 replaced it.)
+
+**Round 10, 2026-11-02**, on this copy of the instructor lab, rebuilt that
+day with Decision 32's role, through `pnpm lab` as `student` on
+`workstation`. The lab: `enp0s8`, `sda` at 20 GB, 13 GB free, Flathub
+answering `200`. Transcripts were captured in a 120-column terminal
+(`--tty`); the slide entries above carry the results. In summary:
+
+- **Baseline.** `flatpak remotes` shows `rhel` alone, `flatpak list` is
+  empty, `~/.var` does not exist, and `~/.local/share/flatpak` exists,
+  empty, because GNOME Software creates it at `student`'s automatic login.
+- **The `rhel` remote** (Open question 7): `search` shows its cached
+  catalogue without an error; `remote-info rhel` and `remote-ls rhel` fail
+  with `error: Unable to load summary from remote rhel: Flatpak system
+  operation GenerateOciSummary not allowed for user`.
+- **System operations as `student`:** `remote-add` without `--user` fails
+  with `error: Flatpak system operation ConfigureRemote not allowed for
+  user` and exit 1 with no terminal; in one, polkit asks for `student`'s own
+  password ("Authentication is required to configure software
+  repositories"). Nothing was added.
+- **`remote-add --user`:** prints nothing, exits 0, and does the same run
+  twice.
+- **Versions** (RPM, then Flathub): Text Editor 47.3 and 51.0; Calculator
+  46.1 and 51.1; Firefox 128.8.0esr and 159.0; Inkscape not in RHEL, 1.4.4;
+  GIMP not in RHEL, 3.2.8. Characters, Clocks, Loupe, Papers, Snapshot,
+  and others ship in RHEL 10 too, all older than Flathub's.
+- **Runtimes and costs:** every first install brings a runtime with two GL
+  extensions and a codec extension. Inkscape: `org.gnome.Platform//50`,
+  seven refs, about 2 GB on disk. Calculator: `org.gnome.Platform//51`, 26
+  seconds, 1.8 GB on disk; Text Editor after it, 2 seconds and 1.3 MB.
+  Firefox: `org.freedesktop.Platform//25.08`, 20 seconds, 1.6 GB on disk.
+  `remote-info` gives `org.gnome.Platform//51` as 432.7 MB to download, 1.1
+  GB installed, and each 26.08 GL extension as 150.5 MB.
+- **`flatpak run ID --version` over SSH:** Inkscape prints `Inkscape 1.4.4
+  (dcaf3e7d9e, 2026-05-05)`; Firefox prints the sandbox line, then
+  `Mozilla Firefox 159.0`. Both create `~/.var/app/ID`.
+- **`sudo flatpak list --app`:** prints nothing, exit 0.
+- **`flatpak update --user`:** "Looking for updates…", "Nothing to do.",
+  exit 0.
+- **Removal:** see 5.12, 5.13, and exercise 5's step 8. When an
+  uninstall's data prompt goes unanswered, the data stays, and `flatpak
+  uninstall --user --delete-data ID` then fails with `error: No installed
+  refs found`; `flatpak uninstall --user --delete-data` with no ID removes
+  it ("When --delete-data is used without a REF, all 'unowned' app data is
+  removed", flatpak-uninstall(1)).
+- **Leftovers:** after everything is removed, 99 MB of objects stay in
+  `~/.local/share/flatpak/repo` until `flatpak repair --user`.
+
+Restored: `workstation` reverted to its snapshot twice with
+`start-latest-snapshot`, which set its clock each time; afterwards
+`flatpak remotes` showed `rhel` alone, `flatpak list` was empty, and
+`~/.var` did not exist.
+
+Still to run:
+
+- Whether GNOME Software installs into the user installation when Flathub is
+  a user remote (5.15). It needs the desktop, so it is yours, with the
+  screenshots for 5.15 and 5.16.
+- At build time, the exact transcripts: Text Editor's interactive install
+  (5.9), Calculator's install and `flatpak list` with both (5.10), and
+  `--unused` while Calculator still needs the runtime (5.12).
+- Open question 8's network half, on the VDI.
