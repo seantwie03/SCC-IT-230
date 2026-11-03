@@ -298,7 +298,7 @@ eleven VDI screenshots are kept beside them for later use, renamed with an
 `scc-servera-emergency-shell-vim-fstab.png`); no slide references them. The
 placeholders were deleted on 2026-11-01, so none remain in the week.
 
-Also new: `course/w12-draft.md`. At publication, `tests/site.test.mjs` gains
+Also new: `course/w12-draft.md`, published as `course/w12.md`, when `tests/site.test.mjs` gained
 `"w12"` in its published-week list.
 
 No theme change is planned.
@@ -1501,7 +1501,7 @@ Run 2026-10-31 and 2026-11-01; details under "Verification", Rounds 6 to 8.
 9. **Keep it:** done 2026-11-03 on this machine's copy, with the
    `grub_console` snapshot (Round 11); decided 2026-11-01 (Decision 32). The
    copy on the other machine (Rounds 3 to 5) is unchecked. The settings go
-   into `/source/rhel-lab/configure_vms.yml`, for all four VMs, and
+   into `rhel-lab`'s `configure_vms.yml`, for all four VMs, and
    the instructor takes the new snapshot. Nothing is applied by hand. The
    prototype's changes on this lab copy (and the backups in
    `/root/w12-serial-backup/` on `servera` and `workstation`) are discarded by
@@ -1587,7 +1587,7 @@ and Open question 5 record that Decision 26 superseded them. The
 Outside week 12:
 
 - **Both instructor-lab copies:** the GRUB2 and kernel settings and the two
-  drop-ins on all four VMs, through `/source/rhel-lab/configure_vms.yml`,
+  drop-ins on all four VMs, through `rhel-lab`'s `configure_vms.yml`,
   then a new snapshot taken by the instructor (Decision 32). Done on this
   machine's copy on 2026-11-03 (Round 11); the other copy is unchecked.
 - **`AGENTS.md`:** done 2026-11-03, unstaged. The lab passwords published in
@@ -2367,7 +2367,7 @@ the diagram. Each is reversible.
 2. **Section titles** kept from the source: "GRUB2 Boot Loader", "systemd
    Targets", "Repairing File Systems at Boot", "Recovering Superuser Access".
    Accepted.
-3. **Accent `green`**. Accepted; in `course/w12-draft.md`.
+3. **Accent `green`**. Accepted; in `course/w12.md`.
 4. **Title** "Controlling the Boot Process and Root Password Reset".
    Accepted.
 5. **Cover agenda of four lines**, one per fragment. Accepted; built.
@@ -2471,7 +2471,7 @@ the diagram. Each is reversible.
     descriptively. The prompt and `vim` differences between the labs stay as
     they are. Accepted 2026-11-01; built.
 32. **Making the serial settings permanent** (prototype step 9). Add them to
-    `/source/rhel-lab/configure_vms.yml`, the playbook in the instructor's lab
+    `configure_vms.yml`, the playbook in the instructor's `rhel-lab`
     repository (branch `ansible_kickstart`), and apply them to all four VMs,
     `workstation`, `servera`,
     `serverb`, and `serverc`, so every VM behaves the same; the instructor
@@ -2519,20 +2519,26 @@ Decisions 33 to 42, proposed 2026-11-01, are for the Flatpak fragment; see
     new `rh124-ch13-installing-and-updating-applications-by-using-flatpak/`
     directory, `routeAlias: flatpak`, aligned to RH124 chapter `"13"` and
     cert guide chapter `"9"`. Open.
+    - Agreed
 34. **Section title "Flatpak Applications"**, short enough for the agenda.
     RH124's own, "Installing and Updating Applications by Using Flatpak",
     is the alternative. Open.
+    - Installing and Updating Applications by Using Flatpak
 35. **Cover:** a fifth agenda line and the summary clause under "Flatpak";
     the title stays "Controlling the Boot Process and Root Password Reset".
     Open.
+    - Yes
 36. **Your motivations lead** (5.2 newer applications, 5.3 no `sudo`); RHA's
     dependency argument appears only as why a user install is safe. Open.
+    - Yes
 37. **Not taught: authentication and `flatpak mask`**, mask because it
     cannot stop a user installing a version (see "Analysis"). Open.
+    - Yes
 38. **One exercise after 15 content slides**, past the ten-slide guideline
     as Decision 9's rejection allows. The alternative splits it: an
     exercise after 5.9 (add Flathub, install) and one after 5.13 (inspect,
     remove), at the cost of a second download pause. Open.
+    - Let's try to split it into two exercises. One early to start the download, then mroe slides. Then a final exercise to see the download finished.
 39. **Text Editor and Calculator on the slides, Firefox in the exercise.**
     Accepted 2026-11-02. First proposed as Inkscape on the slides; Round 10
     showed the download is the runtime's, not the application's, and RHEL
@@ -2543,9 +2549,12 @@ Decisions 33 to 42, proposed 2026-11-01, are for the Flatpak fragment; see
     screenshots, demonstrated live; the exercise and its recording stay on
     the command line. The alternative adds a written-only GNOME Software
     step to exercise 5. Open.
+    - written-only step is fine.
 41. **Optional 5.14 and 5.16**, and teaching `flatpak uninstall --unused`,
     which RHA does not. Open.
+    - Put it in for now
 42. **`--user` on every command** that touches an installation. Open.
+    - Don't know what this does
 
 Decision 43 is outside the Flatpak fragment.
 
@@ -2560,7 +2569,8 @@ Decision 43 is outside the Flatpak fragment.
     show or check is `sda`. Decision 30's rule was written for a name in an
     exercise's own output, such as `sdd2` in `mount | grep /boot`. The
     alternative re-records both, each from its own starting state, and
-    risks the same shuffle again.
+    risks the same shuffle again. Accepted 2026-11-03: the instructor
+    committed the takes and published the week with them.
 
 ## Open questions
 
@@ -2660,14 +2670,15 @@ Decision 43 is outside the Flatpak fragment.
 
 ## Status
 
-As of 2026-11-03.
+As of 2026-11-03. **Published:** `course/w12-draft.md` renamed to
+`course/w12.md` on 2026-11-03, with the four fragments; Flatpak deferred.
 
 **Done:**
 
 - This plan; your decisions 1 to 24 (all accepted except 9); Decision 25
-  overtaken by your redraw of the boot diagram; Decisions 26 to 32 accepted;
-  Open questions 1 to 4 and 6 answered.
-- `course/w12-draft.md`: cover, VM reminder, and the imports for all four
+  overtaken by your redraw of the boot diagram; Decisions 26 to 32, 43, and
+  44 accepted; Open questions 1 to 4 and 6 answered.
+- `course/w12.md`: cover, VM reminder, and the imports for all four
   fragments.
 - Fragments 1 to 4 and exercises 1 to 4: complete (`616d13c`, `784ed53`,
   `f4ef2e1`, `974a737`).
@@ -2676,27 +2687,26 @@ As of 2026-11-03.
 - Decision 31's changes and the disk-name correction in
   `docs/lab-environments.md` (Decision 30), committed in `d86c1d5` with the
   eleven `scc-` screenshots, which no slide references.
+- The `AGENTS.md` password allowance (Decision 29), Decision 43 in exercise 4,
+  the four rewritten command files (Round 12), the `docs/lab-environments.md`
+  and `docs/course-authoring.md` entries, your live runs and recordings of all
+  four exercises, and their casts and recording slides (Round 13), committed
+  in `e445d39`.
+- Publication, 2026-11-03: no `*.placeholder.*` file or reference remains;
+  this plan read as public material, with three local paths to the
+  `rhel-lab` repository reduced to the file's name (the lab network's
+  `172.25.250.x` addresses and the lab passwords stay, as
+  `docs/lab-environments.md` publishes them); the rename to `course/w12.md`
+  with plain `mv`; `"w12"` added to `tests/site.test.mjs`; and `pnpm check`.
 
-All 46 non-recording slides exist (48 in "Answer in brief", less the two
-recording slides). No `*.placeholder.*` file or reference remains.
+All 50 slides exist. The boot diagram on 1.2 and 1.2a ships as the Mermaid
+version; your redraw replaces it later (Decision 25).
 
-**Next**, for publishing the four fragments (Flatpak deferred 2026-11-03):
+**Next:**
 
-Done 2026-11-03, unstaged: the `AGENTS.md` password allowance (Decision 29),
-Decision 43 in exercise 4, the four command files (Round 12), the
-`docs/lab-environments.md` and `docs/course-authoring.md` entries, your live
-runs and recordings of all four exercises, and their processed casts and
-recording slides (Round 13). The deck has its 50 slides.
-
-1. Your call on Decision 44: keep the exercise 3 and 4 takes, or re-record.
-2. Your boot diagram, or publish with the Mermaid version and swap it in
-   later.
-3. Your review of the unstaged changes.
-4. Publication: this plan read as public material, the rename to
-   `course/w12.md`, `"w12"` in `tests/site.test.mjs`, and `pnpm check`.
-
-No review server was started; the slides were captured with
-`pnpm run capture:course`.
+1. Your review of the unstaged publication changes, then commit and push.
+2. The post-deploy checks in `docs/publishing.md`.
+3. Later: your boot diagram, and the Flatpak fragment.
 
 ## Flatpak
 
