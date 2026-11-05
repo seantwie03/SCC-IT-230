@@ -71,8 +71,10 @@ The VMs are not always running. Check before concluding that a command hangs:
 ping -c1 -W2 servera.lab.example.com
 ```
 
-If the host does not answer, stop and tell the maintainer the lab is down
-rather than retrying or guessing at output.
+If the host does not answer, bring the lab back up with
+`start-latest-snapshot -a` (see "Restoring the lab"), then check again. Never
+guess at output while it is down. If it still does not answer after the
+script reports success, stop and tell the maintainer.
 
 ## Rewrite prompts for the theme
 

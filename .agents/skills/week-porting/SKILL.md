@@ -153,6 +153,12 @@ Reproducing plausible output is a correctness failure, not a style problem:
 ported material frequently predates RHEL 10.
 
 - Reach the lab only through `pnpm lab`.
+- If the lab is down (a host does not answer
+  `ping -c1 -W2 servera.lab.example.com`), bring it back up with
+  `start-latest-snapshot -a` rather than stopping to ask. The revert discards
+  any exercise chain on the hosts, so if the plan's Verification section says
+  the lab was partway through the chain, re-run the verified exercises to put
+  it back there before going on.
 - Restore any host you change, in the same session, and say so in the plan's
   Verification section. Removing a package, closing a port, deleting a file, and
   reverting a config edit are part of the work, not follow-up.
