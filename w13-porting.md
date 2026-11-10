@@ -8,48 +8,48 @@ is built until the plan is approved.
 
 ## Answer in brief
 
-**Six topic fragments** in one chapter directory, one per source section,
-**seven exercises**, one per source exercise, and a deck of **55 slides**: 44
-from the source (42 content, section, and exercise slides plus the cover and
-VM reminder), 4 additions (5.5a, which teaches `usermod -u` before exercise 6
-uses it, and 1.2a, 3.3a, and 3.4a from the coverage check), and 7 recording
-slides, one per exercise.
+**Six topic fragments** in one chapter directory, one per source section, **seven exercises**, one per source exercise, and a deck of **57 slides**: 44 from the source (42 content, section, and exercise slides plus the cover and VM reminder), 6 additions (5.5a, which teaches `usermod -u` before exercise 6 uses it; 1.2a, 3.3a, and 3.4a from the coverage check; 2.7a, which holds Decision 12's no-space warning because it did not fit on 2.3; and 5.6a, a `root_squash` demonstration split off 5.6 during review), and 7 recording slides, one per exercise. **Everything was built**: the slides and exercises on 2026-11-05, and the seven recording slides and 5.6a on 2026-11-10, after the recordings. All 57 slides render.
 
 | # | Fragment                      | Section title            | Slides | Exercises |
 |--:|-------------------------------|--------------------------|-------:|----------:|
-| 1 | `network-file-system.md`      | Network File System      |      4 |         0 |
-| 2 | `nfs-server.md`               | NFS Server               |      9 |         1 |
-| 3 | `mounting-nfs-exports.md`     | Mounting NFS Exports     |     10 |         1 |
+| 1 | `network-file-system.md`      | Network File System      |      3 |         0 |
+| 2 | `nfs-server.md`               | NFS Server               |     10 |         1 |
+| 3 | `mounting-nfs-exports.md`     | Mounting NFS Exports     |     11 |         1 |
 | 4 | `automounting-with-autofs.md` | Automounting with autofs |     15 |         2 |
-| 5 | `nfs-permissions.md`          | NFS Permissions          |     11 |         2 |
+| 5 | `nfs-permissions.md`          | NFS Permissions          |     12 |         2 |
 | 6 | `per-user-automounting.md`    | Per-User Automounting    |      4 |         1 |
 |   | Entry file                    |                          |      2 |           |
-|   | **Total**                     |                          | **55** |     **7** |
+|   | **Total**                     |                          | **57** |     **7** |
 
-Slide counts include each fragment's recording slide and the accepted
-additions.
+Slide counts include each fragment's recording slide (not built until its cast
+exists) and the additions.
 
 Where things stand on 2026-11-05:
 
-1. **The plan is written; nothing is built.**
-2. **The slide claims are verified** on the instructor lab (Rounds 1 to 6
-   under "Verification"). Four of the source's facts are wrong and two of my
-   first corrections were wrong too; both are recorded under "Corrections".
-   The exercises themselves are verified as each is written, during the
-   build.
-3. **The lab is back at the week's start**: both hosts were reverted to the
-   2026-11-03 snapshot after the side tests and match the baseline.
-4. **There is no LibreOffice deck for w13.** The Slidev deck is the only
+1. **All six fragments, the entry file `course/w13-draft.md`, and all seven
+   exercises (command file and written exercise each) were built on
+   2026-11-05**, in one pass at your request rather than fragment by
+   fragment. They are untracked and uncommitted.
+2. **Every transcript is real.** The slide transcripts come from one slide
+   chain on the lab (Round 10), and every exercise's commands were run on the
+   lab in chain order, cleanup included (Round 11).
+3. **Checks pass:** `check:entry`, `check:exercises` (no violations), and
+   `check:slides` (no overflow), and `kitty-demo --check` on all seven command
+   files. Every slide and click state was captured at 1920x1080 and looked at.
+4. **Recorded and added, 2026-11-10:** all seven casts are processed and their recording slides built (see "Recording"), and 5.6a is built.
+5. **Published locally, 2026-11-10:** `course/w13-draft.md` renamed to `course/w13.md` with plain `mv`, and `"w13"` added to the published-week list in `tests/site.test.mjs`. The first `pnpm check` stopped at `check:format` on the seven written exercises; `pnpm format` rewrapped them (the text and every `<pre>` block are unchanged, checked against a copy), and the second `pnpm check` passed: 85 tests, links, the showcase, `check:slides --all` including w13, and `check:exercises --all`. Its one "Course-site reload failed" line is the test that makes an invalid edit on purpose. Nothing is staged or committed.
+6. **The lab is at the week's start**: both hosts were reverted to the 2026-11-03 snapshot after Round 16.
+7. **There is no LibreOffice deck for w13.** The Slidev deck is the only
    deck, so there is nothing to combine.
-5. **Decisions 1 to 23 are accepted** and the open questions answered.
-6. **A coverage check against RH134 and the Cert Guide** added three slides
+8. **Decisions 1 to 31 are settled** and the open questions answered.
+9. **A coverage check against RH134 and the Cert Guide** added three slides
    (1.2a, 3.3a, 3.4a), a `-fstype=` row on 4.8, five one-line additions, and
    one sentence on 6.2 tying per-user automounting to home directories, all
    accepted 2026-11-05 (Decisions 24 and 26 to 29 and 31). The
    `use_nfs_home_dirs` callout and systemd automount were left out
    (Decisions 25 and 30). See "Coverage check against RH134 and the Cert
    Guide".
-7. **Every decision is settled.** The next step is building fragment 1.
+10. **Review changes, 2026-11-09:** 1.2a NFS Versions moved from fragment 1 to between 3.3 and 3.3a, after the slides that introduce `rpcbind`, `mountd`, and `showmount`.
 
 ## Scope
 
@@ -186,65 +186,65 @@ Forced changes, not choices:
 
 From `accessing_network_attached_storage.md`:
 
-| Source | Title                                | Goes to     |
-|-------:|--------------------------------------|-------------|
-|     N1 | Section: Network File System         | 1.1         |
-|     N2 | What Is Network File System (NFS)?   | 1.2         |
-|     N3 | NFS in the Lab                       | 1.3         |
-|     N4 | Section: NFS Server                  | 2.1         |
-|     N5 | Install the `nfs-utils` Package      | 2.2         |
-|     N6 | The /etc/exports File                | 2.3         |
-|     N7 | Common Export Options                | 2.4         |
-|     N8 | Enable the NFS Server                | 2.5         |
-|     N9 | Configure the Firewall for NFS       | 2.6         |
-|    N10 | Manage Exports with `exportfs`       | 2.7         |
-|    N11 | Exercise: Configure an NFS Server    | 2.8         |
-|    N12 | Section: Mounting NFS Exports        | 3.1         |
-|    N13 | Install the `nfs-utils` Package      | 3.2         |
-|    N14 | Discover Available Exports           | 3.3         |
-|    N15 | Manually Mount an NFS Export         | 3.4         |
-|    N16 | Persistent Mount via /etc/fstab      | 3.5         |
-|    N17 | Unmount an NFS Export                | 3.6         |
-|    N18 | Exercise: Mount NFS Exports          | 3.7         |
-|    N19 | Section: Automounting with autofs    | 4.1         |
-|    N20 | What Is the Automounter?             | 4.2         |
-|    N21 | autofs sequence diagram (no heading) | 4.3         |
-|    N22 | Why Use the Automounter?             | 4.4         |
-|    N23 | Install `autofs`                     | 4.5         |
-|    N24 | The Master Map File                  | 4.6         |
-|    N25 | Direct Maps                          | 4.7         |
-|    N26 | Direct Maps (fields)                 | 4.8         |
-|    N27 | Enable the `autofs` Service          | 4.9         |
-|    N28 | Exercise: Direct Map                 | 4.10        |
-|    N29 | Indirect Maps                        | 4.11        |
-|    N30 | Wildcard Maps                        | 4.12        |
-|    N31 | Exercise: Indirect Map               | 4.13        |
-|    N32 | Section: NFS Permissions             | 5.1         |
-|    N33 | NFS Trusts UIDs, Not Usernames       | 5.2         |
-|    N34 | UID Mismatch (list)                  | 5.3         |
-|    N35 | UID Mismatch (table)                 | 5.4         |
-|    N36 | Synchronizing UIDs                   | 5.5         |
-|    N37 | What about the SuperUser UID (0)?    | 5.6         |
-|    N38 | Exercise: UID-Based Access Control   | 5.7         |
-|    N39 | Exercise: Observe a UID Mismatch     | 5.8         |
-|    N40 | Section: Per-User Automounting       | 6.1         |
-|    N41 | Per-User Shares with Indirect Maps   | 6.2         |
-|    N42 | Exercise: Per-User Automounting      | 6.3         |
+| Source | Title                                | Goes to |
+|-------:|--------------------------------------|---------|
+|     N1 | Section: Network File System         | 1.1     |
+|     N2 | What Is Network File System (NFS)?   | 1.2     |
+|     N3 | NFS in the Lab                       | 1.3     |
+|     N4 | Section: NFS Server                  | 2.1     |
+|     N5 | Install the `nfs-utils` Package      | 2.2     |
+|     N6 | The /etc/exports File                | 2.3     |
+|     N7 | Common Export Options                | 2.4     |
+|     N8 | Enable the NFS Server                | 2.5     |
+|     N9 | Configure the Firewall for NFS       | 2.6     |
+|    N10 | Manage Exports with `exportfs`       | 2.7     |
+|    N11 | Exercise: Configure an NFS Server    | 2.8     |
+|    N12 | Section: Mounting NFS Exports        | 3.1     |
+|    N13 | Install the `nfs-utils` Package      | 3.2     |
+|    N14 | Discover Available Exports           | 3.3     |
+|    N15 | Manually Mount an NFS Export         | 3.4     |
+|    N16 | Persistent Mount via /etc/fstab      | 3.5     |
+|    N17 | Unmount an NFS Export                | 3.6     |
+|    N18 | Exercise: Mount NFS Exports          | 3.7     |
+|    N19 | Section: Automounting with autofs    | 4.1     |
+|    N20 | What Is the Automounter?             | 4.2     |
+|    N21 | autofs sequence diagram (no heading) | 4.3     |
+|    N22 | Why Use the Automounter?             | 4.4     |
+|    N23 | Install `autofs`                     | 4.5     |
+|    N24 | The Master Map File                  | 4.6     |
+|    N25 | Direct Maps                          | 4.7     |
+|    N26 | Direct Maps (fields)                 | 4.8     |
+|    N27 | Enable the `autofs` Service          | 4.9     |
+|    N28 | Exercise: Direct Map                 | 4.10    |
+|    N29 | Indirect Maps                        | 4.11    |
+|    N30 | Wildcard Maps                        | 4.12    |
+|    N31 | Exercise: Indirect Map               | 4.13    |
+|    N32 | Section: NFS Permissions             | 5.1     |
+|    N33 | NFS Trusts UIDs, Not Usernames       | 5.2     |
+|    N34 | UID Mismatch (list)                  | 5.3     |
+|    N35 | UID Mismatch (table)                 | 5.4     |
+|    N36 | Synchronizing UIDs                   | 5.5     |
+|    N37 | What about the SuperUser UID (0)?    | 5.6     |
+|    N38 | Exercise: UID-Based Access Control   | 5.7     |
+|    N39 | Exercise: Observe a UID Mismatch     | 5.8     |
+|    N40 | Section: Per-User Automounting       | 6.1     |
+|    N41 | Per-User Shares with Indirect Maps   | 6.2     |
+|    N42 | Exercise: Per-User Automounting      | 6.3     |
 
 From `slides.md`: S1 (cover) and S2 (VM reminder) go to the entry file.
 
 From `demonstrations/accessing_network_attached_storage/`:
 
-| Source file                    | Goes to    |
-|--------------------------------|------------|
-| `configure_nfs_server.sh`      | Exercise 1 |
-| `mount_nfs_exports.sh`         | Exercise 2 |
-| `direct_map.sh`                | Exercise 3 |
-| `indirect_map.sh`              | Exercise 4 |
-| `uid_based_access_control.sh`  | Exercise 5 |
-| `observe_uid_mismatch.sh`      | Exercise 6 |
-| `per_user_automounting.sh`     | Exercise 7 |
-| `troubleshooting.md`           | not ported |
+| Source file                   | Goes to    |
+|-------------------------------|------------|
+| `configure_nfs_server.sh`     | Exercise 1 |
+| `mount_nfs_exports.sh`        | Exercise 2 |
+| `direct_map.sh`               | Exercise 3 |
+| `indirect_map.sh`             | Exercise 4 |
+| `uid_based_access_control.sh` | Exercise 5 |
+| `observe_uid_mismatch.sh`     | Exercise 6 |
+| `per_user_automounting.sh`    | Exercise 7 |
+| `troubleshooting.md`          | not ported |
 
 Slides with no source row: the additions 1.2a, 3.3a, 3.4a, and 5.5a, and the
 recording slides 2.8a, 3.7a, 4.10a, 4.13a, 5.7a, 5.8a, and 6.3a.
@@ -255,11 +255,11 @@ New, under `course/chapters/rh134-ch15-accessing-network-attached-storage/`:
 
 | File                          | Slides | Exercises |
 |-------------------------------|-------:|----------:|
-| `network-file-system.md`      |      4 |         0 |
+| `network-file-system.md`      |      3 |         0 |
 | `nfs-server.md`               |      9 |         1 |
-| `mounting-nfs-exports.md`     |     10 |         1 |
+| `mounting-nfs-exports.md`     |     11 |         1 |
 | `automounting-with-autofs.md` |     15 |         2 |
-| `nfs-permissions.md`          |     11 |         2 |
+| `nfs-permissions.md`          |     12 |         2 |
 | `per-user-automounting.md`    |      4 |         1 |
 
 Plus, in the topic's `exercises/`, one `.sh` command file, one `.html`
@@ -292,7 +292,14 @@ shows commands only, the slide keeps a plain `bash` fence, since
 `docs/course-authoring.md` forbids a transcript that implies a command printed
 nothing when its output was only left out.
 
-### 1. `network-file-system.md` (4 slides)
+**Built 2026-11-05.** The entries below describe what shipped. Where the build
+changed an entry, a "Built:" paragraph says how. Every transcript comes from
+Round 10, one slide chain on the lab with these names; the `readme.txt` in
+`/srv/share` exists for 4.9's `ls`. `check:slides` reports no overflow, and
+every slide and click state was captured with `capture:course --with-clicks`
+and looked at.
+
+### 1. `network-file-system.md` (3 slides), built 2026-11-05
 
 `routeAlias: network-file-system`. Alignments: RH134 chapter 15, cert guide
 chapter 24. No exercise: the source section has none, and the next section's
@@ -315,27 +322,8 @@ Components: default layout with `vertical: center`; `IconGrid` of six items
 in two rows of three, Carbon icons chosen at build. The source's bullet list
 is the fallback if you prefer it.
 
-##### 1.2a NFS Versions
-
-**Addition, accepted 2026-11-05** (Decision 26), from RH134 section 1 and
-its lecture. RHEL 10 mounts with NFS 4.2 by default and supports versions 3
-and 4. Side by side:
-
-- **NFSv3:** TCP or UDP; each export stands alone; a client asks `rpcbind`
-  (port 111) where `mountd` listens and asks `mountd` what is exported,
-  which is what `showmount` does.
-- **NFSv4:** TCP only, everything on port 2049; the server presents its
-  exports as one export tree.
-
-The slide is the reason 2.6 opens three firewalld services: `nfs` alone is
-enough for an NFSv4 mount, and `rpc-bind` and `mountd` are there for
-`showmount`. It also sets up the `vers=4.2` students see on 3.4 and the
-export tree on 3.3a. Verified (Rounds 3 and 7): every mount on the lab
-negotiated `vers=4.2`, and with only `nfs` open an NFSv4 mount worked while
-`showmount` failed.
-
-Components: `two-cols-header`, NFSv3 left and NFSv4 right, each a short list,
-with the RHEL 10 default in the header.
+Built: Carbon `network-3`, `chip`, `locked`, `folder-shared`, `folder-add`,
+and `document`, with the source's six sentences as captions.
 
 ##### 1.3 NFS in the Lab
 
@@ -346,7 +334,10 @@ Role, Machine, Action.
 Components: default layout; Mermaid `flowchart LR` with the two hosts as
 subgraphs and the port on the link; the source's three-column table.
 
-### 2. `nfs-server.md` (9 slides)
+Built: Carbon `folder-shared` and `folder` icon nodes in white subgraphs, as
+w07's firewall diagrams draw them, at `scale: 1.3`.
+
+### 2. `nfs-server.md` (10 slides), built 2026-11-05
 
 `routeAlias: nfs-server`. Alignment: cert guide chapter 24. Exercise:
 Configure an NFS Server Exercise.
@@ -402,6 +393,11 @@ exports to the subnet read-only and to everyone else read/write (`exports(5)`:
 `172.25.250.0/24(...,ro,...)` and `<world>(...,rw,...)`. It is the classic
 `/etc/exports` mistake and costs one line.
 
+Built: the slide is the source's, without the callout and the drop-in line.
+With them it overflowed by 112px: the field table's rows are tall. The
+`/etc/exports.d/` line moved to 2.7's first template, where `exportfs -r`
+reads that directory, and the callout became slide 2.7a.
+
 ##### 2.4 Common Export Options
 
 Source N7. The example line again, and a table of Option, Default, Meaning:
@@ -423,6 +419,10 @@ Components: titled `text` fence, table.
 
 ##### 2.5 Enable the NFS Server
 
+Built with the `sync` correction, the `root_squash` row, and a closing line,
+"`root_squash` comes back under NFS Permissions". The Default column is
+centered and uses ✓ as the source does.
+
 Source N8. `systemctl enable nfs-server --now` starts the server and enables
 it at boot.
 
@@ -439,6 +439,9 @@ requires `nfs-mountd` and wants `rpcbind.socket`. `rpcbind` is enabled by its
 package preset when `nfs-utils` pulls it in, not by this command, and
 `nfs-mountd` is `static`, so it cannot be enabled at all. The callout becomes
 "`rpcbind` and `nfs-mountd` start with it".
+
+Built: the symlink line is 128 columns, so it is wrapped once at the space
+after `→`.
 
 ##### 2.6 Configure the Firewall for NFS
 
@@ -478,6 +481,24 @@ Verified (Round 2): `exportfs -r` prints nothing. `exportfs -v` prints
 `TextExplainer` (about 90 at `sm`, per w12), so it is highlighted rather than
 explained.
 
+Built: the first template has a third bullet, "Also reads files ending in
+`.exports` in `/etc/exports.d/`" (Decision 31's line from 2.3). The second
+highlights the `exportfs -v` line and closes with "`rw` and `sync` as
+written, and `root_squash` by default".
+
+##### 2.7a No Space Before the Options
+
+**Addition, built 2026-11-05**, carrying Decision 12, whose callout did not
+fit on 2.3. It sits after 2.7 because it uses `exportfs -r` and `-v`. A
+sentence ("One stray space gives the subnet read-only access and everyone
+else read/write"), the broken line in a titled fence,
+`/srv/share  172.25.250.0/24 (rw,sync)`, and a fixed `TerminalWindow` with
+Round 2's real output: the two `exportfs` warnings, then `exportfs -v`
+listing the subnet with `ro` and `<world>` with `rw`, all four highlighted.
+Closing line: "`exportfs` only warns, so check `exportfs -v` after every
+edit". **Your call:** keep it, or drop it and put the callout back on 2.3 in
+place of the second example fence, which 2.4 repeats anyway.
+
 ##### 2.8 Exercise: Configure an NFS Server
 
 Source N11. Goal: share a directory on `servera` with the lab network.
@@ -496,9 +517,9 @@ and the slide says nothing about why; with Decision 13, 2.4 has said why.
 
 ##### 2.8a Exercise: Configure an NFS Server (recording)
 
-Addition. Recording slide, built once the cast exists.
+Addition. Recording slide, built 2026-11-10: the `?url` import of the processed cast, an `AsciinemaPlayer` whose `label` describes the recorded workflow step by step, and the written exercise in `resources`. See "Recording" for its length and markers.
 
-### 3. `mounting-nfs-exports.md` (10 slides)
+### 3. `mounting-nfs-exports.md` (11 slides), built 2026-11-05
 
 `routeAlias: mounting-nfs-exports`. Alignments: RH134 chapter 15, cert guide
 chapter 24. Exercise: Mount NFS Exports Exercise.
@@ -533,6 +554,31 @@ Verified (Round 2): the output is `Export list for servera:` then
 receive` (exit 1). Proposed: quote that error in the callout, since it is
 what a student who skipped two of the three services will see.
 
+Built with the error quoted in the callout.
+
+##### 1.2a NFS Versions
+
+**Moved 2026-11-09** from fragment 1, where it followed 1.2, to sit between 3.3 and 3.3a. In fragment 1 it used `rpcbind`, `mountd`, and `showmount` before any slide had introduced them; here 2.2, 2.5, 2.6, and 3.3 have taught all three, and it leads into 3.3a's "When `showmount` is blocked". The slide itself did not change, and it keeps its number. `check:slides` passes (0px clearance, as before), and the capture of slides 17 to 19 reads in order.
+
+**Addition, accepted 2026-11-05** (Decision 26), from RH134 section 1 and
+its lecture. RHEL 10 mounts with NFS 4.2 by default and supports versions 3
+and 4. Side by side:
+
+- **NFSv3:** TCP or UDP; each export stands alone; a client asks `rpcbind`
+  (port 111) where `mountd` listens and asks `mountd` what is exported,
+  which is what `showmount` does.
+- **NFSv4:** TCP only, everything on port 2049; the server presents its
+  exports as one export tree.
+
+The slide explains why 2.6 opens three firewalld services and why 3.3's `showmount` needs two of them: `nfs` alone is enough for an NFSv4 mount, and `rpc-bind` and `mountd` are there for `showmount`. It also sets up the export tree on 3.3a and the `vers=4.2` students see on 3.4. Verified (Rounds 3 and 7): every mount on the lab negotiated `vers=4.2`, and with only `nfs` open an NFSv4 mount worked while `showmount` failed.
+
+Components: `two-cols-header`, NFSv3 left and NFSv4 right, each a short list,
+with the RHEL 10 default in the header.
+
+Built with `vertical: start` so the two columns line up, `### NFSv3` and
+`### NFSv4` headings, and the closing line in the `bottom` band. 0px
+clearance: it fits exactly.
+
 ##### 3.3a Browse the NFSv4 Export Tree
 
 **Addition, accepted 2026-11-05** (Decision 27, which reverses Decision 19),
@@ -553,6 +599,11 @@ Components: fixed `TerminalWindow`; one closing line that the `/` is the
 export tree's root, not `servera`'s root file system. It uses `mount` and
 `umount` before 3.4, which is fine: w10 taught both, and RH134 orders it the
 same way.
+
+Built from Round 10: `ls /mnt/srv` shows `share`. Closing line: "`servera:/`
+is the top of the export tree, not `servera`'s root file system: only
+exported paths appear". Verified in Round 11's side test: with `/srv/share`
+exported and `/srv/private` not, `ls /mnt/srv` listed only `share`.
 
 ##### 3.4 Manually Mount an NFS Export
 
@@ -575,6 +626,15 @@ One-line addition (Decision 31, accepted): `-t nfs` is optional, since the
 `server:/export` form implies it (RH134; Cert Guide review question 3). Round
 7's root mount used no `-t` and mounted `nfs4`.
 
+Built: the check is `mount | grep /nfs/share`, not the source's `mount | grep
+nfs`, reversing the withdrawal above. Round 11 found that after a reboot the
+client mounts `sunrpc on /var/lib/nfs/rpc_pipefs`, which `grep nfs` also
+matches, so exercise 2's check after its reboot printed two lines. Grepping
+for the mount point matches w10 and the autofs slides and exercises. The
+209-column line has no space in its option list, so it is wrapped after the
+last comma before column 118 (`hard,`), where a real terminal would wrap near
+its edge too; lines 4 and 5 are highlighted.
+
 ##### 3.4a The Server Has the Final Say
 
 **Addition, accepted 2026-11-05** (Decision 28), from RH134 section 3 and the
@@ -591,6 +651,14 @@ Components: fixed `TerminalWindow` (the mount, `mount | grep`, the failed
 `touch`), and a one-line `Callout`. The capture is redone in the slide chain,
 which adds a read-only export to `servera` for this slide and removes it
 after.
+
+Built from Round 10 with `/srv/archive` (an archive reads naturally as
+read-only): a titled fence with `servera`'s `/srv/archive  172.25.250.0/24(ro)`
+line, then `mkdir -p`, the `rw,sync` mount, `mount | grep /nfs/archive` (the
+wrapped `rw` line), and `root`'s `touch` failing with `Read-only file system`.
+Squashed `root` gets that error too, so the terminal stays at one `root`
+prompt. The closing line replaced the callout: "`mount` still says `rw`: the
+client cannot see the server's `ro` from its side".
 
 ##### 3.5 Persistent Mount via /etc/fstab
 
@@ -626,6 +694,11 @@ That makes `nofail` a lesson in itself for a lab where `servera` is often
 off when `workstation` boots. The lab's own `/mnt/dvd` line uses
 `defaults,nofail`, which makes a good aside.
 
+Built: the line is `servera:/srv/share  /nfs/share  nfs  rw,sync,nofail  0 0`,
+with six `TextExplainer` steps (device, mount point, type, options,
+`nofail`, and `0 0`), then "Apply it without rebooting" over a terminal whose
+two commands print nothing (Round 10). The `/mnt/dvd` aside was left out.
+
 ##### 3.6 Unmount an NFS Export
 
 Source N17. Three steps in a `v-switch`: `umount /nfs/share` (the
@@ -658,6 +731,11 @@ One-line addition (Decision 31, accepted), on the third template: first
 leave the mount point or close the program; `umount -f` forces the unmount
 and can lose unwritten data (RH134 section 1).
 
+Built from Round 10, with the four `lsof` warnings shown (Decision 21) and a
+closing paragraph: "The warnings come from the desktop session's own file
+systems and are harmless", then Decision 31's line. Its `bash` row carries
+PID 4280 and device `0,62` from that capture.
+
 ##### 3.7 Exercise: Mount NFS Exports
 
 Source N18. Goal: mount `servera`'s export on `workstation` by hand, then at
@@ -669,15 +747,17 @@ source's seven steps with Decision 9's names:
 2. Verify `servera`'s export is visible with `showmount --exports`
 3. Mount it on `/nfs/reports` and confirm `student` can write a file
 4. Unmount the export
-5. Add the export to `/etc/fstab` with `rw,sync` options
+5. Add the export to `/etc/fstab` with `rw,sync,nofail` options
 6. Mount it from `/etc/fstab` and verify it is mounted
 7. Reboot `workstation` and confirm the export mounts automatically
 
+Built: step 5 names `nofail`, which 3.5 now teaches (Decision 14).
+
 ##### 3.7a Exercise: Mount NFS Exports (recording)
 
-Addition. Recording slide, built once the cast exists.
+Addition. Recording slide, built 2026-11-10: the `?url` import of the processed cast, an `AsciinemaPlayer` whose `label` describes the recorded workflow step by step, and the written exercise in `resources`. See "Recording" for its length and markers.
 
-### 4. `automounting-with-autofs.md` (15 slides)
+### 4. `automounting-with-autofs.md` (15 slides), built 2026-11-05
 
 `routeAlias: automounting-with-autofs`. Alignments: RH134 chapter 15, cert
 guide chapter 24. Exercises: Configure a Direct Map Exercise and Configure an
@@ -701,6 +781,10 @@ name the default timeout in the last bullet, five minutes (verified:
 `timeout = 300` in `/etc/autofs.conf`, and `timeout=300` on every `autofs`
 mount line).
 
+Built with the timeout in the fourth bullet and the source's flowchart at
+`scale: 0.62`. At 0.8 its last node ran off the right edge, which
+`check:slides` does not report; the capture showed it.
+
 ##### 4.3 autofs Mounts on First Access
 
 Source N21. The same cycle as a sequence diagram between the user, `autofs`,
@@ -714,6 +798,8 @@ Mounts on First Access" is a placeholder for your wording. **The unmount
 arrow:** the source draws `autofs->>servera: unmount`, but unmounting happens
 on `workstation` and sends nothing to the server, so it becomes a note over
 `autofs`. 4.2 and 4.3 show one cycle twice; both stay, as in the source.
+
+Built as planned at `scale: 0.8`; at 0.9 it overflowed the bottom by 4px.
 
 ##### 4.4 Why Use the Automounter?
 
@@ -787,6 +873,9 @@ assigned writes `-rw,sync,fstype=nfs4`, so they meet it in the homework.
 Verified (Rounds 5 and 8): maps without it mount `nfs4`, and
 `-fstype=nfs4,rw,sync` mounts the same way.
 
+Built as a table row between Options and Source, with `-fstype=nfs4,rw` as
+the example.
+
 ##### 4.9 Enable the `autofs` Service
 
 Source N27. `systemctl enable autofs --now`; the mount point need not exist,
@@ -811,6 +900,14 @@ a non-root user triggering the mount. Exercise 3's last two steps use it.
 Also verified: the `enable` line has the quoted form 2.5 shows, and `autofs`
 created both `/nfs` and `/nfs/share` itself, so the first bullet holds.
 
+Built as a `v-switch` at 1. The first template is the source's: the `enable`
+sentence, a fixed terminal (the 120-column symlink line fits unwrapped), and
+the two bullets. The second, `#1-4`, holds the three-state Magic Move
+(`{at:2}`, `rows` 10) from Round 10, run as `root`; its 128-column `autofs`
+line and 209-column `nfs4` line are wrapped after a comma. Without `{at:2}`
+the Magic Move's first transition fired on the click that showed its
+template, so its first state never appeared; the captures showed it.
+
 ##### 4.10 Exercise: Configure a Direct Map
 
 Source N28. Goal: have `workstation` mount a share at a fixed path the first
@@ -831,7 +928,7 @@ Step 8 drops the source's "with `mount | grep autofs`" (Decision 16).
 
 ##### 4.10a Exercise: Configure a Direct Map (recording)
 
-Addition. Recording slide, built once the cast exists.
+Addition. Recording slide, built 2026-11-10: the `?url` import of the processed cast, an `AsciinemaPlayer` whose `label` describes the recorded workflow step by step, and the written exercise in `resources`. See "Recording" for its length and markers.
 
 ##### 4.11 Indirect Maps
 
@@ -848,6 +945,11 @@ map was active and came back when it was removed, and `ls /nfs` lists only
 keys already mounted (`browse_mode = no`). Proposed (Decision 22): a
 one-line `Callout` saying to give an indirect map a base directory of its
 own, which is what the exercises do.
+
+Built without the callout, which overflowed the slide by 6px even at one
+line: its fact joined the source's closing line instead, "The share mounts at
+`/nfs/share`; `autofs` creates and removes `share` itself, and hides whatever
+was already in `/nfs`".
 
 ##### 4.12 Wildcard Maps
 
@@ -871,6 +973,9 @@ exported, gave the same "No such file or directory". So the slide's
 `/srv/data`, or `/srv` itself. The callout becomes "`servera` must export each
 requested directory, or a directory above it".
 
+Built: "`servera` must export each requested directory, or a directory above
+it, or the access fails with "No such file or directory"".
+
 ##### 4.13 Exercise: Configure an Indirect Map
 
 Source N31. Goal: mount each subdirectory of a share on demand with one map
@@ -890,9 +995,9 @@ eight steps with Decision 9's names:
 
 ##### 4.13a Exercise: Configure an Indirect Map (recording)
 
-Addition. Recording slide, built once the cast exists.
+Addition. Recording slide, built 2026-11-10: the `?url` import of the processed cast, an `AsciinemaPlayer` whose `label` describes the recorded workflow step by step, and the written exercise in `resources`. See "Recording" for its length and markers.
 
-### 5. `nfs-permissions.md` (11 slides)
+### 5. `nfs-permissions.md` (12 slides), built 2026-11-05
 
 `routeAlias: nfs-permissions`. Alignments: cert guide chapter 24, RH124
 chapter 10, cert guide chapter 06. Exercises: UID-Based Access Control
@@ -916,6 +1021,10 @@ side, the callout "NFS trusts the UID the client sends" in the `bottom` band.
 Correction, small: the client sends its group IDs as well, and group
 permissions are checked against them; exercise 5's group-owned directories
 depend on that. The first bullet becomes "a UID and GID numbers".
+
+Built with `vertical: start`, so the Client and Server fences line up, and
+the first bullet reading "the server receives the user's **UID and GID
+numbers**".
 
 ##### 5.3 UID Mismatch
 
@@ -954,6 +1063,10 @@ exercise 5 uses 1100 and 1101 for `con_john` and `dev_jane` and 1201 for
 `developers`. GID 2000 and UID 2001 on the slide keep each number meaning one
 thing.
 
+Built from Round 10, with the `id` output wrapped once at the space before
+`groups=` in both terminals: at 60 columns it overflowed a half-width frame
+by 23px. The closing line sits in the `bottom` band.
+
 ##### 5.5a Change an Existing User's UID
 
 **Addition, proposed** (Decision 17). Exercise 6 runs `usermod -ou 1101
@@ -986,6 +1099,13 @@ Verified (Round 6):
 
 The alternative is two lines added to 5.5, at the cost of a fuller slide.
 
+Built as a `v-switch` at 1 from Round 10 on `workstation` (with a `bob` at
+UID 2003 there): template 1, `usermod -u 2002 alice` and `id alice`;
+template 2 repeats them and adds `usermod -u 2003 alice` (`usermod: UID
+'2003' already exists`), `usermod -o -u 2003 alice`, and `id alice`, with
+the line "`usermod` also refuses while any process runs under the account's
+old UID".
+
 ##### 5.6 What about the Superuser UID (0)?
 
 Source N37. By default NFS applies `root_squash`: a client's `root` (UID 0)
@@ -1002,6 +1122,22 @@ Verified (Rounds 3 and 6): `root` on `workstation` gets `touch: cannot touch
 UID and GID 65534, on both hosts. Optional (Decision 23): those two results
 as a fixed `TerminalWindow` under the table, which shows the squash rather
 than describing it.
+
+Built with the terminal (Decision 23) from Round 10, in a directory `drop`
+made mode 777 on `servera` for the capture. To fit, the source's three
+bullets became one sentence: "By default, NFS applies `root_squash`: a
+client's `root` (UID 0) becomes the unprivileged `nobody` on the server,
+which limits what a compromised client can do", the source's callout folded
+in. Closing line: "In `drop`, a directory anyone may write to, `root`'s new
+file belongs to `nobody`".
+
+**Rebuilt 2026-11-10** after review found it cluttered and its terminal unclear: the terminal showed two results and a `drop` directory that appears nowhere else, without saying why `root` was refused. 5.6 is back to the source's layout: three bullets ("By default, NFS applies **`root_squash`** to every export", "If a client connects as `root` (UID 0), the server remaps that UID to `nobody`", "`nobody` is an unprivileged account with minimal permissions"), the table, and the source's callout as "`root_squash` limits what a compromised client can do on the server". The demonstration moved to 5.6a. `check:slides`: 70px clearance; captured and checked.
+
+##### 5.6a `root_squash` in Action
+
+**Addition, accepted and built 2026-11-10.** One self-explaining demonstration in place of 5.6's old terminal: a fixed `TerminalWindow` on `workstation` with `ls -ld /nfs/share` (owned by `student`, mode 755), then `root`'s `touch /nfs/share/rootfile` failing with `Permission denied`, and one line: "`root` on `workstation` is `nobody` on `servera`, and only `student` may write here". The `drop` directory is gone. Both results were seen in Round 3, but not in one capture with the slide chain's `/srv/share`, so it needs a fresh one. The lab is mid-recording, so the capture waited until the recordings were done: from the snapshot, export `/srv/share` (owned by `student`, with `readme.txt`) from `servera`, mount it on `workstation`, capture, and revert.
+
+Built from Round 16: `drwxr-xr-x. 2 student student 24 Nov 10 12:54 /nfs/share`, then `touch: cannot touch '/nfs/share/rootfile': Permission denied`, captured in an interactive root shell (`pnpm lab -- --tty workstation sudo -i`). The sentence sits above the terminal. `check:slides` passes; captured and checked.
 
 ##### 5.7 Exercise: UID-Based Access Control
 
@@ -1032,7 +1168,7 @@ removing that note; withdrawn.)
 
 ##### 5.7a Exercise: UID-Based Access Control (recording)
 
-Addition. Recording slide, built once the cast exists.
+Addition. Recording slide, built 2026-11-10: the `?url` import of the processed cast, an `AsciinemaPlayer` whose `label` describes the recorded workflow step by step, and the written exercise in `resources`. See "Recording" for its length and markers.
 
 ##### 5.8 Exercise: Observe a UID Mismatch
 
@@ -1057,9 +1193,9 @@ exercise, `consultants` will show `1100`.
 
 ##### 5.8a Exercise: Observe a UID Mismatch (recording)
 
-Addition. Recording slide, built once the cast exists.
+Addition. Recording slide, built 2026-11-10: the `?url` import of the processed cast, an `AsciinemaPlayer` whose `label` describes the recorded workflow step by step, and the written exercise in `resources`. See "Recording" for its length and markers.
 
-### 6. `per-user-automounting.md` (4 slides)
+### 6. `per-user-automounting.md` (4 slides), built 2026-11-05
 
 `routeAlias: per-user-automounting`. Alignments: RH134 chapter 15, cert guide
 chapter 24. Exercise: Per-User Automounting Exercise.
@@ -1086,6 +1222,12 @@ how the RHCSA practice exams phrase this task." No new slide, and exercise 7
 does not change. Verified (Round 7): `useradd -d` on a wildcard map's path
 works and `su -` lands in the NFS home.
 
+Built: the second bullet shortened to "Each user's `/nfs/username` mounts
+`servera:/srv/shares/username`", and the home-directory sentence shortened
+and placed in the callout as its second sentence, "Point a user's home
+directory here and the same map serves home directories". As a paragraph of
+its own it overflowed the slide.
+
 ##### 6.3 Exercise: Per-User Automounting
 
 Source N42. Goal: give each user an automounted directory of their own from
@@ -1111,19 +1253,19 @@ example, where the command file uses `/srv/usershares` under
 
 ##### 6.3a Exercise: Per-User Automounting (recording)
 
-Addition. Recording slide, built once the cast exists.
+Addition. Recording slide, built 2026-11-10: the `?url` import of the processed cast, an `AsciinemaPlayer` whose `label` describes the recorded workflow step by step, and the written exercise in `resources`. See "Recording" for its length and markers.
 
 ## Exercises
 
-| # | Title                    | Frag | Hosts               | Command file                            |
-|--:|--------------------------|-----:|---------------------|-----------------------------------------|
-| 1 | Configure an NFS Server  |    2 | servera             | `configure-nfs-server-exercise.sh`      |
-| 2 | Mount NFS Exports        |    3 | servera, workstation | `mount-nfs-exports-exercise.sh`        |
-| 3 | Configure a Direct Map   |    4 | servera, workstation | `configure-direct-map-exercise.sh`     |
-| 4 | Configure an Indirect Map |   4 | servera, workstation | `configure-indirect-map-exercise.sh`   |
-| 5 | UID-Based Access Control |    5 | servera, workstation | `uid-based-access-control-exercise.sh` |
-| 6 | Observe a UID Mismatch   |    5 | workstation         | `observe-uid-mismatch-exercise.sh`      |
-| 7 | Per-User Automounting    |    6 | servera, workstation | `per-user-automounting-exercise.sh`    |
+| # | Title                     | Frag | Hosts                | Command file                           |
+|--:|---------------------------|-----:|----------------------|----------------------------------------|
+| 1 | Configure an NFS Server   |    2 | servera              | `configure-nfs-server-exercise.sh`     |
+| 2 | Mount NFS Exports         |    3 | servera, workstation | `mount-nfs-exports-exercise.sh`        |
+| 3 | Configure a Direct Map    |    4 | servera, workstation | `configure-direct-map-exercise.sh`     |
+| 4 | Configure an Indirect Map |    4 | servera, workstation | `configure-indirect-map-exercise.sh`   |
+| 5 | UID-Based Access Control  |    5 | servera, workstation | `uid-based-access-control-exercise.sh` |
+| 6 | Observe a UID Mismatch    |    5 | workstation          | `observe-uid-mismatch-exercise.sh`     |
+| 7 | Per-User Automounting     |    6 | servera, workstation | `per-user-automounting-exercise.sh`    |
 
 Each declared title ends in "Exercise". The command files port the source's
 seven, rewritten to the current `kitty-demo` format: `#@ key escape` and
@@ -1175,6 +1317,88 @@ question 4).
 **Nothing happens at a console.** Every step runs over SSH, so all seven are
 recorded the ordinary way (Decision 8).
 
+### Built 2026-11-05
+
+All seven exist as a command file and a written exercise in the topic's
+`exercises/`, sharing one stem. `kitty-demo --check` passes on every command
+file, and `check:exercises` reports no violations. Every command was run on
+the lab in chain order on 2026-11-05 (Round 11), with `vim` edits replaced by
+the equivalent file writes; the keystrokes themselves need your live run.
+
+Conventions in every command file:
+
+- Opens with `kitten @ set-font-size 30.0 && ssh HOST`, then a requirements
+  block under `#@ pause 10`, as w12's do.
+- Edits use `vim`, `#@ noenter` on the keystroke lines, `#@ pause 5` on the
+  last insert, `#@ key escape`, and `:wq`. `/etc/exports` is empty at the start
+  of every exercise (each cleanup deletes its line), so new lines go in with
+  `i`; `/etc/fstab` uses `G` then `o`. Deleting a line is `/pattern` then `dd`,
+  or `dd` alone in a one-line file.
+- Changing hosts is `exit`, `exit`, `ssh OTHER`, as the source's do.
+- Installs hold `#@ pause 6` (Round 11: `dnf` took 1 to 3 seconds on the
+  instructor lab).
+- Files and their contents are meaningful but short: `q3-summary.txt`,
+  `printer-reset.txt`, `orders.txt` per region, the source's
+  `5_point_plan.md` and `lol_no_docs.md`, and `readme.txt` per user (the
+  source's `welcome.txt` renamed, since the SCC lab assignment uses that
+  name).
+
+Per exercise, with presses from `kitty-demo --check`:
+
+| # | Stem                       | Presses | Starts on   |
+|--:|----------------------------|--------:|-------------|
+| 1 | `configure-nfs-server`     |      40 | servera     |
+| 2 | `mount-nfs-exports`        |      99 | workstation |
+| 3 | `configure-direct-map`     |     100 | servera     |
+| 4 | `configure-indirect-map`   |     106 | servera     |
+| 5 | `uid-based-access-control` |      96 | servera     |
+| 6 | `observe-uid-mismatch`     |      66 | workstation |
+| 7 | `per-user-automounting`    |     153 | servera     |
+
+What changed from the source's command files, beyond the format:
+
+- **Exercise 1** drops `systemctl status nfs-server --no-pager` (`--no-pager`
+  is taught nowhere, and `enable` already reports) and keeps `firewall-cmd
+  --list-all` from w07.
+- **Exercise 2** drops `chown` on the client's mount point, drops `_netdev`,
+  and checks with `mount | grep /nfs/reports` (see 3.4's build note).
+- **Exercises 3, 4, and 7** check with `mount | grep` on the mount point, never
+  `grep autofs`.
+- **Exercise 6** adds `ls -l /nfs/teams` during the mismatch and `id` as
+  `con_john`, and its notes say why both directories open.
+- **Exercise 7** creates no users (exercise 5 did) and confirms their IDs on
+  both hosts instead.
+- **Every exercise** gains the cleanup Decision 18 describes. The last one's
+  ends with `dnf remove` on both hosts and `rmdir /nfs`.
+
+The written exercises mirror the command files step for step, describe the
+real output from Round 11 in prose, and add notes where a student needs one:
+`root_squash` (exercise 1), `nofail` and the two-minute VDI reboot
+(exercise 2), grepping for the path rather than `autofs` (exercise 3), the
+expected "Permission denied" lines (exercise 5), and `usermod`'s refusal
+while a process holds the UID (exercise 6). Exercise 7 does not mention home
+directories (Decision 24 keeps that to 6.2).
+
+## Recording
+
+**Done 2026-11-10.** All seven exercises were recorded in order from the snapshot (exercise 1 again too), after the `rm -f` fix below. Each cast was processed with `pnpm run casts` and passes `pnpm run casts -- --check`; the seven recording slides follow their exercise slides, and one player was captured loading with its markers.
+
+| # | Cast                                     | Length | Markers |
+|--:|------------------------------------------|-------:|--------:|
+| 1 | `configure-nfs-server-exercise.cast`     | 2m 08s |       7 |
+| 2 | `mount-nfs-exports-exercise.cast`        | 5m 30s |       9 |
+| 3 | `configure-direct-map-exercise.cast`     | 5m 14s |      10 |
+| 4 | `configure-indirect-map-exercise.cast`   | 5m 32s |      10 |
+| 5 | `uid-based-access-control-exercise.cast` | 4m 54s |       7 |
+| 6 | `observe-uid-mismatch-exercise.cast`     | 3m 19s |       6 |
+| 7 | `per-user-automounting-exercise.cast`    | 7m 58s |       9 |
+
+Every length is within 10 seconds of its estimate (presses times 3 seconds plus the pauses).
+
+Read through before processing: no `rm` prompts, every host change a clean `exit`, `exit`, `ssh`, and the only errors the expected "Permission denied" lines. Three harmless messages were new and are now in the written exercises: `dnf install nfs-utils` warns that `gssproxy.service` changed on disk (exercises 1 and 2); `root`'s `ls -l /nfs/teams` during the mismatch prints both "Permission denied" lines (exercise 6); and `dnf remove` warns it could not remove `/var/lib/nfs/rpc_pipefs` while it is mounted (exercise 7). After exercise 7's cleanup both hosts matched the week's start.
+
+**The first takes, 2026-11-09.** Exercises 1 to 4 were first recorded on 2026-11-09, and the cleanups of 2, 3, and 4 did not run: on these hosts `root`'s `rm` is an alias for `rm -i`, so each `rm` stopped at "remove regular file …?" or "descend into directory …?", and the next line typed was taken as the answer. In exercise 4's take an `exit` was eaten too, so its cleanup went on over a nested `ssh` from `workstation`. Round 11 ran the commands in a non-interactive shell, where aliases do not expand, so it missed this. The command files now use `rm -f` and `rm -rf`, with a `#!` note; the written exercises match, and exercise 2's explains `-f`.
+
 ## Additions
 
 Proposed, each with its decision:
@@ -1182,7 +1406,8 @@ Proposed, each with its decision:
 1. **Slide 5.5a, Change an Existing User's UID** (Decision 17), so exercise 6
    uses no untaught command.
 2. **A `dnf install nfs-utils` fence on 2.2** (Decision 10).
-3. **The no-space `Callout` on 2.3** (Decision 12).
+3. **The no-space warning** (Decision 12), built as slide 2.7a because the
+   `Callout` did not fit on 2.3.
 4. **A `root_squash` row on 2.4** (Decision 13), so exercises 1 and 2 can
    explain `student`.
 5. **`nofail` explained on 3.5** (Decision 14).
@@ -1197,7 +1422,7 @@ Proposed, each with its decision:
 
 Accepted 2026-11-05 from the coverage check:
 
-10. **Slide 1.2a, NFS Versions** (Decision 26).
+10. **Slide 1.2a, NFS Versions** (Decision 26), moved after 3.3 on 2026-11-09.
 11. **Slide 3.3a, Browse the NFSv4 Export Tree** (Decision 27).
 12. **Slide 3.4a, The Server Has the Final Say** (Decision 28).
 13. **A `-fstype=` row on 4.8** (Decision 29).
@@ -1254,9 +1479,11 @@ Verified on the instructor lab on 2026-11-05 where marked with a round (see
 
 Withdrawn after verification, so the source stands:
 
-- **N15's `mount | grep nfs`** is right on the client, where it matches only
-  the share. I had said it also matched `rpc_pipefs`; that line appears only
-  on the server (Round 3).
+- ~~**N15's `mount | grep nfs`** is right on the client, where it matches only
+  the share.~~ Reinstated 2026-11-05: right after `nfs-utils` is installed
+  the client has no `rpc_pipefs` line (Round 3), but after a reboot it does,
+  `sunrpc on /var/lib/nfs/rpc_pipefs` (Round 11), so `grep nfs` matches it
+  too. 3.4 and exercise 2 grep for the mount point instead.
 - **`uid_based_access_control.sh`'s note** that `root`'s `ls -l` shows
   "Permission denied" for the team directories is right (Round 6). I had
   expected the listing to be clean because the parent is mode 755.
@@ -1371,11 +1598,7 @@ released all of them.
 
 Proposed:
 
-- **1.2a NFS Versions**, after 1.2: NFSv3 and NFSv4 side by side
-  (`two-cols-header`): transport, how exports are found, the ports involved,
-  and that RHEL 10 mounts with 4.2 (the `vers=4.2` students will see on
-  3.4). It also explains 2.6: `nfs` alone serves NFSv4, and `rpc-bind` and
-  `mountd` are there for `showmount`.
+- **1.2a NFS Versions**, after 1.2: NFSv3 and NFSv4 side by side (`two-cols-header`): transport, how exports are found, the ports involved, and that RHEL 10 mounts with 4.2 (the `vers=4.2` students will see on 3.4). It also explains 2.6: `nfs` alone serves NFSv4, and `rpc-bind` and `mountd` are there for `showmount`. Moved after 3.3 on 2026-11-09, once those terms are taught.
 - **3.3a Browse the NFSv4 Export Tree**, after 3.3: the root mount, `ls`,
   and `umount`, for when `showmount` is blocked. This reverses Decision 19.
 
@@ -1572,18 +1795,84 @@ hosts match the baseline.
 45-second idle wait. Reverted again; both hosts match the baseline. **The lab
 is at the week's start.**
 
-Still to verify, during the build:
+**Round 10, the slide chain.** From the snapshot, with the slides' names:
+`nfs-utils` and the `/srv/share` export on `servera` (with `readme.txt`),
+`showmount`, the export tree, the manual mount, the read-only `/srv/archive`
+export (added for 3.4a and removed after), the `/etc/fstab` line with
+`nofail`, the plain and busy unmounts and `lsof` (a `student` shell held in
+the mount point with a shell `read`, so `lsof` lists `bash`), `autofs` with a
+direct map on `/nfs/share`, `developers` 2000 and `alice` 2001 on both hosts,
+`bob` 2003 on `workstation` for 5.5a, and a mode 777 `drop` directory for
+5.6. The first 4.9 capture listed `drop`, made too early for 5.6, so 4.9 was
+captured again after an `autofs` restart and `drop` removed. Reverted
+afterwards.
 
-- Each exercise's command file, run on the lab as it is written, leaving each
-  host in that exercise's end state, recorded here.
-- Exercise 7's cleanup, against this baseline.
-- The `workstation` reboot in exercise 2 with `servera` up, for its pause.
+**Round 11, the exercise chain.** From the snapshot, each exercise's commands
+in order on the hosts its command file uses, `vim` edits replaced by the
+same file writes, through exercise 7's cleanup:
+
+- Exercise 1: as written; `dnf` took 2 seconds.
+- Exercise 2: as written, with the reboot (SSH back after 16 seconds). After
+  the reboot `mount | grep nfs` also showed `sunrpc on
+  /var/lib/nfs/rpc_pipefs`, which is why the command file now greps for
+  `/nfs/reports`. Its cleanup left `/etc/fstab` as it started, and `/nfs`
+  empty; `/etc/exports` empty (0 bytes) on `servera`.
+- Exercise 3: as written. Its cleanup's `autofs` restart removed
+  `/nfs/manuals` too.
+- Exercise 4: as written; `ls /nfs/regions` printed nothing before access,
+  then `east`, then `east` and `west`.
+- A side test for 3.3a, restored at once: with `/srv/share` exported and
+  `/srv/private` not, the export tree showed only `share`.
+- Exercise 5: as written; `root`'s `ls -l` printed the two expected "Permission
+  denied" lines. `report.txt` showed the year in place of the time in `ls -l`
+  on `workstation`, a sign that `servera`'s clock was a few seconds ahead
+  after the revert; students may see it too.
+- Exercise 6: as written. During the mismatch `ls -l /nfs/teams` showed
+  `consultants` owned by `1100` and `developers` owned by `con_john`, and
+  `con_john` read both files; the restore went straight through.
+- Exercise 7: as written, cleanup included. Both hosts then matched the
+  baseline except the residue under "Exercises", plus `rpc_pipefs` (and
+  `nfsd` on `servera`) still mounted until the next reboot.
+
+Both hosts were then reverted with `start-latest-snapshot servera
+workstation`. **The lab is at the week's start.**
+
+**Round 12, review questions, 2026-11-09.** Two questions from the slide review, checked on the lab; both hosts were reverted to the snapshot afterwards and match the baseline. **The lab is at the week's start.**
+
+- **2.4, where is `ro` in `man exports`?** RHEL 10's `exports(5)`, extracted from `nfs-utils-2.8.2-3.el10` with `dnf download` and `rpm2cpio` without installing it, has no `ro` heading. `ro` appears inside the `rw` entry ("This can also be made explicit by using the ro option"), in the list of options that may vary per client, and in the EXAMPLE section. The slide stands: Rounds 2, 7, and 10 showed `ro` working and an export with no options coming up `ro`.
+- **2.7a, does a missing client mean everyone?** Yes. `exports(5)` defines `*` as "anonymous… will match all clients", and `exportfs(8)` says "To export a directory to the world, simply specify :/path". The lab shows the bare option list is treated the same way. With `/srv/share  servera (rw,sync)`, `exportfs -r` warned "No host name given with /srv/share (rw,sync), suggest *(rw,sync)"; `exportfs -v` listed `servera.lab.example.com(...,ro,...)` and `<world>(...,rw,...)`; and `/var/lib/nfs/etab` stored the second entry as `*`. `workstation`, which the line does not name, mounted it and `student` wrote a file. With the space removed, the same mount failed with `mount.nfs: access denied by server while mounting servera:/srv/share` (exit 32). With the slide's own line, `/srv/share  172.25.250.0/24 (rw,sync)`, `workstation` (inside the subnet) got the subnet's `ro` entry: the mount succeeded and `student`'s `touch` failed with `Read-only file system`. So hosts in the subnet get read-only and every other host read/write, as 2.7a says.
+
+**Round 13, 3.3a's "only works with NFSv4", 2026-11-09.** From `workstation` with all three firewall services open on `servera` (`/proc/fs/nfsd/versions` shows `+3 +4 +4.1 +4.2`): `mount -o vers=4.2`, `4.1`, and `4.0 servera:/ /mnt` each mounted the export tree and listed `srv`; `mount -o vers=3 servera:/ /mnt` failed with `mount.nfs: access denied by server while mounting servera:/` (exit 32). That error is `mountd` answering over NFSv3 that `/` is not exported; an unsupported version would fail with a different error. RH134 and the Cert Guide both tie the root mount to NFSv4. The claim holds.
+
+**A slip during Round 13.** The lab was not at the snapshot: the instructor had run exercise 1 at 12:59 UTC and recorded it at 13:01, and this test did not check first. It overwrote `servera`'s `/etc/exports` (the live export table was untouched, since `exportfs -r` never ran), created `/srv/share`, and installed `nfs-utils` on `workstation`, where the NFSv3 attempt also started `rpc-statd`. Restored the same session: `servera`'s `/etc/exports` back to `/srv/reports  172.25.250.0/24(rw,sync)`, `/srv/share` removed, `/srv`'s time reset from `/srv/reports`; `workstation`, which exercise 1 does not touch, reverted to the snapshot. Both checked afterwards: **the lab is at exercise 1's end state**, ready for exercise 2. From now on, a side test starts with a read-only look at the hosts.
+
+**Round 14, can 3.4a show `ro` with `showmount`? 2026-11-09.** No. With the lab at exercise 1's end state (checked first, no recording running), a temporary `/srv/archive  172.25.250.0/24(ro)` line was added on `servera` beside `/srv/reports` and `showmount --exports servera` run there: it listed `/srv/archive 172.25.250.0/24` and `/srv/reports 172.25.250.0/24`, paths and clients only, while `exportfs -v` showed `ro` and `rw`. `servera` was restored to exercise 1's end state in the same script; `workstation` was not touched.
+
+**Round 15, must a map file be named `/etc/auto.*`? 2026-11-09.** No; it is a convention (RH134: "The naming convention for a map file is `/etc/auto.name`"). With the lab at exercise 2's end state (checked first, no recording running), on `workstation` only: `autofs` installed, a master map `/etc/auto.master.d/w13test.autofs` pointing at `/etc/w13-test.map`, and a second master map named `w13test2.conf`, both using `-fstype=bind` maps so `servera` stayed untouched. `/w13test` mounted from `/etc/w13-test.map`; `/w13test2` never appeared, because a master map file must end in `.autofs`, as `auto.master(5)` says ("A file will be ignored if its name is not ended with the suffix"; dot files are ignored too). Restored the same session: the test files removed, `autofs` stopped, and its install undone with `dnf history undo`; `workstation` is back at exercise 2's end state (`nfs-utils` installed, `/nfs` empty, `/etc/fstab` original, no `autofs`).
+
+**Round 16, 5.6a's capture, 2026-11-10.** After the recordings, with both hosts at the week's start (checked read-only, no recording running): `nfs-utils` and the `/srv/share` export (owned by `student`, with `readme.txt`) on `servera`, a manual mount on `workstation`, then `ls -ld /nfs/share` and `root`'s `touch` in an interactive root shell. Both hosts were reverted to the snapshot afterwards and checked: **the lab is at the week's start.**
 
 ## Authoring notes
 
-- **Long lines are wrapped once at a space**, as w12 settled. `mount`'s
-  options line for an NFS mount is 209 columns, and a full-width terminal
-  frame holds 120. The `autofs` trigger line is about 130.
+- **Long lines are wrapped once at a space**, as w12 settled, and where the
+  line has no space within reach, after the last comma before column 118.
+  `mount`'s line for an NFS mount is 209 columns and its options contain no
+  space; the `autofs` trigger line is 128. Both break after a comma. A
+  half-width terminal holds about 58 columns, so 5.5's `id` output breaks
+  before `groups=`.
+- **`check:slides` does not see a Mermaid diagram running off the side.** 4.2's
+  flowchart passed the checker at `scale: 0.8` with its last node off the
+  slide; the capture showed it.
+- **A Magic Move in a later `v-switch` template needs `{at:N}`.** On 4.9 the
+  template is `#1-4` and the Magic Move `{at:2}`; without it, the first
+  transition fired with the template and its first state never showed.
+- **Review in the browser drifted.** The review server on 3131 kept showing
+  slide 9 whatever hash was set, so every capture came from `pnpm run
+  capture:course -- course/w13-draft.md --with-clicks` instead.
+- **Verify interactively what an interactive shell will run.** `root`'s `rm`, `cp`, and `mv` are aliases for their `-i` forms on these hosts. Round 11 ran commands through `sudo bash`, which reads no aliases, so the `rm -i` prompts first showed up in the recordings. Run a command file's root steps through `pnpm lab -- --tty HOST sudo -i` before calling them verified.
+- **`exportfs -v` pads with a tab.** The transcripts replace it with the spaces
+  a terminal shows (to column 16). A path of 15 or more characters, such as
+  `/srv/usershares`, puts the options on a second line.
 - **The `autofs` start limit.** Several `systemctl restart autofs` in a few
   seconds leave it failed until `systemctl reset-failed autofs`. Worth a note
   in the written exercises only if a student is likely to restart it in a
@@ -1593,9 +1882,8 @@ Still to verify, during the build:
   `package.json`.
 - **A full-width `TextExplainer` holds about 90 columns** at `sm` (w12), so
   `exportfs -v` output is highlighted rather than explained.
-- **`rows` only on Magic Move**: 4.9's proposed first-access transcript is the
-  only growing one planned. Every other `TerminalWindow` is fixed and omits
-  it.
+- **`rows` only on Magic Move**: 4.9's first-access transcript (`rows` 10) is
+  the only growing one. Every other `TerminalWindow` is fixed and omits it.
 - **A line that starts with `AccentText` loses its paragraph**; start such
   lines with text.
 - **Mermaid** diagrams (1.3, 4.2, 4.3) checked by eye at 1920x1080, not only
@@ -1631,12 +1919,12 @@ and 30 rejected. Each is reversible.
 8. **Record all seven exercises.** Nothing happens at a console.
 9. **Meaningful names in exercises 1 to 4**, generic ones on the slides:
 
-   | Source                         | Proposed                            |
-   |--------------------------------|-------------------------------------|
-   | `/srv/share` (ex 1, 2)         | `/srv/reports`                      |
-   | `/nfs/share` (ex 2)            | `/nfs/reports`                      |
-   | `/srv/direct`, `/nfs/direct`   | `/srv/manuals`, `/nfs/manuals`      |
-   | `/srv/indirect`, `/nfs/indirect` | `/srv/regions`, `/nfs/regions`    |
+   | Source                             | Proposed                         |
+   |------------------------------------|----------------------------------|
+   | `/srv/share` (ex 1, 2)             | `/srv/reports`                   |
+   | `/nfs/share` (ex 2)                | `/nfs/reports`                   |
+   | `/srv/direct`, `/nfs/direct`       | `/srv/manuals`, `/nfs/manuals`   |
+   | `/srv/indirect`, `/nfs/indirect`   | `/srv/regions`, `/nfs/regions`   |
    | `indirect.autofs`, `auto.indirect` | `regions.autofs`, `auto.regions` |
 
    Exercise 3 keeps `direct.autofs` and `auto.direct`, since one direct map
@@ -1672,7 +1960,7 @@ Added 2026-11-05 after verification:
 22. **4.11:** add a one-line `Callout` that an indirect map hides whatever
     was already in its base directory (verified).
 23. **5.6:** optionally show `root_squash` happening, `Permission denied` and
-    a file owned by `nobody`, in a fixed `TerminalWindow` (verified).
+    a file owned by `nobody`, in a fixed `TerminalWindow` (verified). Built 2026-11-05; reworked 2026-11-10 during review: 5.6 went back to the source's layout and the demonstration became its own slide, 5.6a, without the `drop` directory.
 
 Proposed 2026-11-05 after the coverage check (see "Coverage check against
 RH134 and the Cert Guide"):
@@ -1684,7 +1972,7 @@ RH134 and the Cert Guide"):
     teaches.
 25. ~~**`use_nfs_home_dirs`:** a one-line `Callout` on 6.2a that SSH key
     logins to an NFS home need it.~~ Rejected 2026-11-05 with 6.2a.
-26. **Add 1.2a, NFS Versions.** Accepted 2026-11-05.
+26. **Add 1.2a, NFS Versions.** Accepted 2026-11-05. Moved from after 1.2 to after 3.3 on 2026-11-09, so `rpcbind`, `mountd`, and `showmount` are taught before it uses them.
 27. **Add 3.3a, Browse the NFSv4 Export Tree**, reversing Decision 19.
     Accepted 2026-11-05.
 28. **Add 3.4a, The Server Has the Final Say.** Accepted 2026-11-05.
@@ -1710,9 +1998,9 @@ RH134 and the Cert Guide"):
    folder, so I cannot check that the exercise scenarios (`reports`,
    `manuals`, `regions`, `teams`, `usershares`) stay clear of it.
    - Checked 2026-11-05: exercises 1 and 3 teach this formula with other
-     names, and no exercise uses `lab_files` or `/nfs/lab`. The assignment
-     text above is graded material, so take it out of this plan before the
-     plan is committed.
+     names, and no exercise uses `lab_files`, `/nfs/lab`, or `welcome.txt`
+     (exercise 7's file is `readme.txt`). The assignment text was removed
+     before the plan was committed.
 4. **Exercise 2's reboot on the VDI.** How long does a graphical
    `workstation` take to come back there? If it is minutes, the reboot is the
    first cut candidate.
