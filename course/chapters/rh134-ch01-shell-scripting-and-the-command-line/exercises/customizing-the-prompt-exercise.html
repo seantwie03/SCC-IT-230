@@ -505,7 +505,9 @@
                     </li>
 
                     <li class="step">
-                        <h2>Change \W to \w for the full working directory</h2>
+                        <h2>
+                            Change \W to \w to show the full working directory
+                        </h2>
                         <p>
                             Move somewhere with a path worth showing.
                             <code>\W</code> displays only <code>log</code>;
@@ -516,7 +518,10 @@ PS1='\u@\h:\w\$ '</code></pre>
                     </li>
 
                     <li class="step">
-                        <h2>Judge the result</h2>
+                        <h2>
+                            Move into a deeply nested directory and judge the
+                            result
+                        </h2>
                         <p>
                             A full path is informative until it eats half the
                             line. Create a deeply nested directory and see.
@@ -531,7 +536,7 @@ cd ~/app/backend/config/db_settings</code></pre>
                     </li>
 
                     <li class="step">
-                        <h2>Confirm the change disappears</h2>
+                        <h2>Confirm the change disappears in a new session</h2>
                         <p>Log out of <code>servera</code> and log back in.</p>
                         <pre><code>exit
 ssh servera
@@ -539,7 +544,7 @@ echo $PS1</code></pre>
                     </li>
 
                     <li class="step">
-                        <h2>Persist the prompt you prefer</h2>
+                        <h2>Persist the prompt you prefer in ~/.bashrc</h2>
                         <p>
                             <code>~/.bashrc</code> is read every time you open a
                             new session, so a line added here runs every time.
@@ -556,7 +561,11 @@ echo $PS1</code></pre>
                             greets you at every login. Set it in the shell first
                             and make sure you like it.
                         </aside>
-                        <h3>Clean up</h3>
+                    </li>
+
+                    <li class="step">
+                        <h2>Clean up</h2>
+                        <p>Nothing later uses the practice directories.</p>
                         <pre><code>rm -rf ~/app</code></pre>
                     </li>
                 </ol>

@@ -17,7 +17,7 @@ topicInfo:
 
 # Bash Scripts
 
-## Commands in a squence
+## Commands in a sequence
 
 ---
 layout: two-cols-header
@@ -91,45 +91,45 @@ Line 1 is the <AccentText>hashbang</AccentText> `#!`
 
 It tells the kernel which interpreter should read the rest of the file
 
-The remaining lines are commands that will be ran one after the other
+The remaining lines are commands that run one after the other
 
 ---
 
 # Running a Shell Script
 
-<TerminalWindow title="student@servera:~/scripts">
+<TerminalWindow title="student@servera:~" :rows="9">
 
 ````md magic-move
 ```bash-session
-student@servera:~/scripts$ vim take_inventory.sh
-student@servera:~/scripts$ bash take_inventory.sh
+student@servera:~$ vim take_inventory.sh
+student@servera:~$ bash take_inventory.sh
 Taking inventory
-student@servera:~/scripts$
+student@servera:~$
 ```
 ```bash-session
-student@servera:~/scripts$ vim take_inventory.sh
-student@servera:~/scripts$ bash take_inventory.sh
+student@servera:~$ vim take_inventory.sh
+student@servera:~$ bash take_inventory.sh
 Taking inventory
-student@servera:~/scripts$ ./take_inventory.sh
+student@servera:~$ ./take_inventory.sh
 -bash: ./take_inventory.sh: Permission denied
-student@servera:~/scripts$
+student@servera:~$
 ```
 ```bash-session
-student@servera:~/scripts$ vim take_inventory.sh
-student@servera:~/scripts$ bash take_inventory.sh
+student@servera:~$ vim take_inventory.sh
+student@servera:~$ bash take_inventory.sh
 Taking inventory
-student@servera:~/scripts$ ./take_inventory.sh
+student@servera:~$ ./take_inventory.sh
 -bash: ./take_inventory.sh: Permission denied
-student@servera:~/scripts$ chmod a+x take_inventory.sh
-student@servera:~/scripts$ ./take_inventory.sh
+student@servera:~$ chmod a+x take_inventory.sh
+student@servera:~$ ./take_inventory.sh
 Taking inventory
-student@servera:~/scripts$
+student@servera:~$
 ```
 ````
 
 </TerminalWindow>
 
-`bash script.sh` runs it without the execute bit. `./script.sh` requires it
+`bash script.sh` runs it without the execute bit, `./script.sh` requires it
 
 ---
 vertical: center
@@ -168,7 +168,7 @@ student@servera:~$ take_inventory.sh
 
 Bash only searches `PATH`, and your home directory is not on it
 
-<TerminalWindow title="student@servera:~" :rows="9">
+<TerminalWindow title="student@servera:~" :rows="12">
 
 ```bash-session {6,7,8}
 #^ 1. Executable, but not found
@@ -187,9 +187,9 @@ student@servera:~$ echo $PATH
 
 <template #3>
 
-`~/scripts` is on the list, because you put it there this morning
+`~/scripts` is on the list, because you put it there earlier
 
-<TerminalWindow title="student@servera:~" :rows="9">
+<TerminalWindow title="student@servera:~" :rows="12">
 
 ```bash-session {9-12}
 #^ 1. Executable, but not found
@@ -213,12 +213,32 @@ Taking inventory
 </v-switch>
 
 ---
-layout: center
+layout: two-cols-header
+vertical: start
 ---
 
-# `./` says <AccentText>run the file at this path</AccentText>
+# A Path or a Bare Name?
 
-# a bare name says <AccentText>go find it on `PATH`</AccentText>
+::left::
+
+## A path
+
+```bash
+./take_inventory.sh
+/home/student/scripts/take_inventory.sh
+```
+
+Contains a `/`, so run the file <AccentText>at this path</AccentText>
+
+::right::
+
+## A bare name
+
+```bash
+take_inventory.sh
+```
+
+No `/`, so go find it <AccentText>on `PATH`</AccentText>
 
 ---
 layout: exercise
@@ -233,6 +253,8 @@ Write a script, make it runnable, and get it to run by name from anywhere
 ::environment::
 
 **Host:** `servera`
+
+**Prerequisite exercise:** Putting Scripts on the `PATH`
 
 ::workflow::
 

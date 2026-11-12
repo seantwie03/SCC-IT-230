@@ -82,18 +82,18 @@ With spaces Bash reads `course` as a command name, and `=` and `IT-230` as its a
 
 `env` lists the variables that are available to <AccentText>every executable you run</AccentText>
 
-<TerminalWindow title="student@servera:~" :rows="10">
+<TerminalWindow title="student@servera:~">
 
 ```bash-session
 student@servera:~$ env
+SHELL=/bin/bash
+PWD=/home/student
+LOGNAME=student
 HOME=/home/student
 LANG=en_US.UTF-8
-LOGNAME=student
-PATH=/home/student/.local/bin:/home/student/bin:/usr/local/bin:/usr/bin
-PWD=/home/student
-SHELL=/bin/bash
 USER=student
-...
+PATH=/home/student/.local/bin:/home/student/bin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin
+...output omitted...
 ```
 
 </TerminalWindow>
@@ -177,13 +177,15 @@ IT-230
 ---
 ---
 
-# Each Executable runs in a SubShell
+# Each Executable Runs in a Subshell
 
-Every executable is ran from a subshell
-
-If you want a variable to be available when executables are ran, <AccentText>they must be exported</AccentText>
-
-Over time some programs have begun to rely on certain variables being exported
+<IconGrid
+  :items="[
+    { icon: 'parent-child', caption: 'Every executable runs in a subshell' },
+    { icon: 'export', caption: 'Only exported variables reach it' },
+    { icon: 'application', caption: 'Some programs rely on exported variables' },
+  ]"
+/>
 
 Two common ones are `PAGER` and `EDITOR`
 

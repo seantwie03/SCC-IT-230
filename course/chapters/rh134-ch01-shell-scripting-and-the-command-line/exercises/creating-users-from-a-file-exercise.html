@@ -507,7 +507,10 @@
 
                 <ol class="steps">
                     <li class="step">
-                        <h2>Stage the input file</h2>
+                        <h2>
+                            Write the list of accounts to create into an input
+                            file
+                        </h2>
                         <p>
                             Create the scripts directory and write the list of
                             accounts, one name per line. This stands in for a
@@ -523,23 +526,40 @@ paul_atreides</code></pre>
                     </li>
 
                     <li class="step">
-                        <h2>Create an executable script</h2>
+                        <h2>
+                            Create an executable script that reads the file line
+                            by line
+                        </h2>
                         <pre><code>vim user_creator.sh</code></pre>
                         <pre><code>#!/bin/bash
 echo "Starting $0"</code></pre>
                         <pre><code>chmod a+x user_creator.sh
-sudo ./user_creator.sh</code></pre>
-                    </li>
-
-                    <li class="step">
-                        <h2>Read the file line by line</h2>
+./user_creator.sh</code></pre>
                         <p>
                             A <code>while read</code> loop with input
-                            redirection processes one line per iteration.
+                            redirection processes one line per iteration. Add
+                            one below the <code>echo</code>.
                         </p>
                         <pre><code>vim user_creator.sh</code></pre>
                         <pre><code>#!/bin/bash
+echo "Starting $0"
 while read -r new_user; do
+    echo "Processing: $new_user"
+done &lt; "new_users.txt"</code></pre>
+                        <pre><code>./user_creator.sh</code></pre>
+                    </li>
+
+                    <li class="step">
+                        <h2>
+                            Create each listed account and report whether it
+                            worked
+                        </h2>
+                        <p>
+                            Add <code>useradd</code> to the loop body. It needs
+                            root, so run the script with <code>sudo</code>.
+                        </p>
+                        <pre><code>vim user_creator.sh</code></pre>
+                        <pre><code>while read -r new_user; do
     echo "Processing: $new_user"
     useradd "$new_user"
 done &lt; "new_users.txt"</code></pre>
@@ -552,10 +572,6 @@ done &lt; "new_users.txt"</code></pre>
                             <em>Processing</em> either way. The output is
                             misleading.
                         </p>
-                    </li>
-
-                    <li class="step">
-                        <h2>Report whether each account was created</h2>
                         <p>
                             <code>useradd</code> returns <code>0</code> on
                             success like any other command, so an
@@ -580,7 +596,10 @@ sudo ./user_creator.sh</code></pre>
                     </li>
 
                     <li class="step">
-                        <h2>Refuse to run without root privileges</h2>
+                        <h2>
+                            Refuse to run unless the script was started with
+                            root privileges
+                        </h2>
                         <p>
                             <code>EUID</code> is the effective user ID of the
                             running process. Root is always <code>0</code>.
@@ -596,7 +615,7 @@ sudo bash -c 'echo $EUID'</code></pre>
                         <pre><code>#!/bin/bash
 if [[ $EUID -ne 0 ]]; then
     echo "You must be root to run this script!"
-    exit 9
+    exit 1
 fi</code></pre>
                         <p>
                             Without <code>sudo</code> the script now stops
@@ -609,7 +628,10 @@ sudo ./user_creator.sh</code></pre>
                     </li>
 
                     <li class="step">
-                        <h2>Skip blank lines</h2>
+                        <h2>
+                            Skip blank lines, then rerun the script to confirm
+                            it is safe to repeat
+                        </h2>
                         <p>
                             A stray blank line at the end of an input file is
                             very common. Add one and watch what happens.
@@ -648,15 +670,18 @@ done &lt; "new_users.txt"</code></pre>
                     <li class="step">
                         <h2>Clean up</h2>
                         <p>
-                            Remove the accounts and their home directories so
-                            the host returns to its starting state, then delete
-                            the script and its input file.
+                            Nothing later uses these accounts. Remove them and
+                            their home directories, then delete the script and
+                            its input file. If you kept the
+                            <code>rm -i</code> alias from the aliases exercise,
+                            the backslash stops <code>rm</code> from asking
+                            first.
                         </p>
                         <pre><code>sudo userdel -r thufir_hawat
 sudo userdel -r lady_jessica
 sudo userdel -r paul_atreides
 sudo userdel -r feyd_rautha
-rm ~/scripts/user_creator.sh ~/scripts/new_users.txt
+\rm ~/scripts/user_creator.sh ~/scripts/new_users.txt
 cd ~</code></pre>
                         <aside class="warning">
                             <strong

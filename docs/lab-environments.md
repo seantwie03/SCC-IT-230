@@ -363,10 +363,9 @@ SCC's prompt already has the slides' form, `student@servera:~$`, in colour.
 The instructor lab keeps RHEL's default, `[student@servera ~]$`, which is what
 every recording shows.
 
-`root` on the instructor lab has a `~/.vimrc` that turns on line numbers and
-draws each space as a faint dot (`set list`); SCC's `root` has none, so `vim`
-there shows plain text. Those dots are what `pnpm run casts` replaces with
-spaces in recordings.
+`root` and `student` on the instructor lab have the same `~/.vimrc`. It turns on line numbers and draws each space as a faint dot (`set list`); SCC's `root` has none, so `vim` there shows plain text. Those dots are what `pnpm run casts` replaces with spaces in recordings.
+
+The same file stops `vim` from continuing a comment onto a new line (`formatoptions-=r` and `formatoptions-=o`). RHEL's stock `vim` does continue one, so after `#!/bin/bash`, pressing <kbd>Enter</kbd> or `o` starts the next line with `#`. Recordings never show that `#`, but a student without the file sees it, so material that has students type a hashbang in `vim` says how to remove it.
 
 ## Writing material
 

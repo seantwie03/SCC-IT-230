@@ -488,6 +488,10 @@
                             <dd><code>servera</code></dd>
                         </div>
                         <div>
+                            <dt>Prerequisite</dt>
+                            <dd>Putting Scripts on the PATH Exercise</dd>
+                        </div>
+                        <div>
                             <dt>Script</dt>
                             <dd>
                                 <code
@@ -500,7 +504,10 @@
 
                 <ol class="steps">
                     <li class="step">
-                        <h2>Create a new script and make it executable</h2>
+                        <h2>
+                            Create a new script from scratch and make it
+                            executable
+                        </h2>
                         <p>
                             Same three steps as the last script: hashbang,
                             content, <code>chmod</code>. You will do this in
@@ -528,42 +535,45 @@ echo "Shift report filed"</code></pre>
                             seeing once. Then run it with a name.
                         </p>
                         <pre><code>./shift_report.sh
-./shift_report.sh "Jon Luc Picard"</code></pre>
+./shift_report.sh "Jean-Luc Picard"</code></pre>
                         <aside class="note">
                             <strong>Quote a name with spaces</strong>
                             Without the quotes the shell splits it, and
-                            <code>$1</code> holds only <code>Jon</code>.
+                            <code>$1</code> holds only <code>Jean-Luc</code>.
                         </aside>
                     </li>
 
                     <li class="step">
-                        <h2>Read the starship name from standard input</h2>
+                        <h2>Read the starship name from stdin</h2>
                         <p>
                             <code>read</code> takes a line from stdin and stores
                             it in a variable.
                         </p>
                         <pre><code>vim shift_report.sh</code></pre>
                         <pre><code>echo "Which starship did you command?"
-read -r system_name
-echo "The $system_name"</code></pre>
+read -r starship_name
+echo "The $starship_name"</code></pre>
                         <p>
                             Run it and type <code>USS Enterprise</code> when it
                             asks.
                         </p>
                         <pre><code>cat shift_report.sh
-./shift_report.sh "Jon Luc Picard"</code></pre>
+./shift_report.sh "Jean-Luc Picard"</code></pre>
                     </li>
 
                     <li class="step">
-                        <h2>Supply that input from a file</h2>
+                        <h2>
+                            Supply that input from a file instead of the
+                            keyboard
+                        </h2>
                         <p>
                             The script cannot tell the difference. It just reads
                             a line from stdin, wherever stdin happens to come
                             from.
                         </p>
-                        <pre><code>echo "USS Enterprise" &gt; worked_system.txt
-cat worked_system.txt
-./shift_report.sh "Jon Luc Picard" &lt; worked_system.txt</code></pre>
+                        <pre><code>echo "USS Enterprise" &gt; starship.txt
+cat starship.txt
+./shift_report.sh "Jean-Luc Picard" &lt; starship.txt</code></pre>
                         <aside class="note">
                             <strong>Why this matters</strong>
                             A script that reads stdin can be run by a person or
@@ -580,9 +590,13 @@ cat worked_system.txt
                         <pre><code>vim shift_report.sh</code></pre>
                         <pre><code>log_file=$(basename /var/log/audit/audit.log)
 echo "Recorded in $log_file"</code></pre>
-                        <pre><code>./shift_report.sh "Jon Luc Picard" &lt; worked_system.txt</code></pre>
-                        <h3>Clean up</h3>
-                        <pre><code>rm -f shift_report.sh worked_system.txt
+                        <pre><code>./shift_report.sh "Jean-Luc Picard" &lt; starship.txt</code></pre>
+                    </li>
+
+                    <li class="step">
+                        <h2>Clean up</h2>
+                        <p>Nothing later uses this script or its input file.</p>
+                        <pre><code>rm -f shift_report.sh starship.txt
 cd ~</code></pre>
                     </li>
                 </ol>

@@ -82,9 +82,9 @@ leftWidth: 55
 
 ```bash [greeter.sh]
 #!/bin/bash
-echo "Enter your last name:"
-read -r last_name
-echo "Hello $1 $last_name from $0"
+echo "Enter your name:"
+read -r name
+echo "Hello $name"
 ```
 
 - `-r` treats backslashes literally, so use it every time
@@ -93,7 +93,31 @@ echo "Hello $1 $last_name from $0"
 
 ::right::
 
-![Screen recording of a script prompting for a name and printing a greeting once the name is typed.](./assets/prompting-greeter.gif)
+<TerminalWindow title="student@servera:~" :rows="5">
+
+````md magic-move
+```bash-session
+student@servera:~$ ./greeter.sh
+```
+```bash-session
+student@servera:~$ ./greeter.sh
+Enter your name:
+```
+```bash-session
+student@servera:~$ ./greeter.sh
+Enter your name:
+Student Extraordinaire
+```
+```bash-session
+student@servera:~$ ./greeter.sh
+Enter your name:
+Student Extraordinaire
+Hello Student Extraordinaire
+student@servera:~$
+```
+````
+
+</TerminalWindow>
 
 ---
 layout: two-cols-header
@@ -137,9 +161,29 @@ Standard input normally comes from the keyboard
 
 # Feeding `read` from a File
 
-![Screen recording of the greeter script being run with input redirection, so the name is read from a file instead of the keyboard.](./assets/prompting-greeter-input-redirection.gif)
+<TerminalWindow title="student@servera:~" :rows="5">
 
-The script cannot tell the difference. It just reads a line from **stdin**
+````md magic-move
+```bash-session
+student@servera:~$ echo "Student Extraordinaire" > file_name.txt
+student@servera:~$
+```
+```bash-session
+student@servera:~$ echo "Student Extraordinaire" > file_name.txt
+student@servera:~$ ./greeter.sh < file_name.txt
+```
+```bash-session
+student@servera:~$ echo "Student Extraordinaire" > file_name.txt
+student@servera:~$ ./greeter.sh < file_name.txt
+Enter your name:
+Hello Student Extraordinaire
+student@servera:~$
+```
+````
+
+</TerminalWindow>
+
+Either way, the script just reads a line from **stdin**
 
 ---
 layout: two-cols-header
@@ -178,7 +222,7 @@ echo "All: $@"
 
 Bash substitutes each value before the script runs
 
-<TerminalWindow title="student@servera:~/scripts">
+<TerminalWindow title="student@servera:~/scripts" :rows="7">
 
 ````md magic-move
 ```bash-session
@@ -250,6 +294,8 @@ Build a second script and feed it data as an argument, as typed input, and from 
 ::environment::
 
 **Host:** `servera`
+
+**Prerequisite exercise:** Putting Scripts on the `PATH`
 
 ::workflow::
 

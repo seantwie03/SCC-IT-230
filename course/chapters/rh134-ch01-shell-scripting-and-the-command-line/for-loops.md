@@ -40,32 +40,30 @@ The variable takes each value in the list, one at a time
 
 ::right::
 
-
 ## Visualization
 
 ````md magic-move
-```sh
+```bash
 for host in servera serverb serverc; do
     echo "$host"
 done
 ```
-```sh
+```bash
 for servera in serverb serverc; do
     echo "servera"
 done
 ```
-```sh
+```bash
 for serverb in serverc; do
     echo "serverb"
 done
 ```
-```sh
+```bash
 for serverc in ; do
     echo "serverc"
 done
 ```
 ````
-
 
 <v-click>
 
@@ -112,7 +110,7 @@ echo "$host"
 
 # Watching It Iterate
 
-<TerminalWindow title="student@servera:~/scripts">
+<TerminalWindow title="student@servera:~/scripts" :rows="5">
 
 ````md magic-move
 ```bash-session
@@ -161,7 +159,7 @@ ping -c1 -W1 172.25.250.4
 ...
 ```
 
-Twelve more lines, and one typo away from a wrong answer
+Eleven more lines, and one typo away from a wrong answer
 
 ::right::
 
@@ -291,7 +289,7 @@ Gather disk information from every host named on the command line into one file 
 3. Loop over a fixed list of hosts and confirm the loop runs once per host
 4. Get the disk commands working on one host, then move them into the loop
 5. Replace the fixed list with `"$@"` so the caller chooses the hosts
-6. Verify the collected files and remove them
+6. Verify the collected files
 
 ---
 layout: exercise

@@ -1,4 +1,4 @@
-kitten @ set-font-size 30.0 && ssh workstation
+kitten @ action --self change_font_size current 30 && ssh workstation
 clear
 
 #@ pause 18

@@ -20,25 +20,26 @@ topicInfo:
 ## A closer look at the `bashrc`
 
 ---
-listSpacing: padded
 ---
 
 # A Closer Look at `~/.bashrc`
 
 The `~/.bashrc` file is loaded every time a new shell is launched
 
-The `bashrc` contains `shell` code
+It holds ordinary shell code, typically:
 
-A `bashrc` file will typically contain:
-
-- Source declarations (imports)
-- Variables
-- Aliases
-- Custom Functions
+<IconGrid
+  :items="[
+    { icon: 'document-import', caption: 'Source declarations (imports)' },
+    { icon: 'label', caption: 'Variables' },
+    { icon: 'link', caption: 'Aliases' },
+    { icon: 'function', caption: 'Custom functions' },
+  ]"
+/>
 
 ---
 
-# Sourcing other Files
+# Sourcing Other Files
 
 Typically the first thing a `bashrc` does is import the settings from `/etc/bashrc`
 
@@ -53,7 +54,7 @@ The `.` is a synonym for the `source` command
 
 The command `. /etc/bashrc` means:
 
-- Execute all the code from `/etc/bashrc` as if it was typed here
+- Execute all the code from `/etc/bashrc` as if it were typed here
 
 ---
 ---
@@ -74,7 +75,7 @@ Customizations in that file end up being applied to all users
 
 # `bashrc` Also Sets Your `PATH`
 
-<TerminalWindow title="student@servera:~" :rows="3">
+<TerminalWindow title="student@servera:~">
 
 ```bash-session
 student@servera:~$ echo $PATH
@@ -110,7 +111,7 @@ The highlighted line is why `/home/student/bin` is on your `PATH`
 
 <Callout>
 
-Don't worry about the `if` yet, we will learn that tonight!
+Don't worry about the `if` yet, we will learn it later in this lesson!
 
 </Callout>
 
@@ -124,7 +125,7 @@ Don't worry about the `if` yet, we will learn that tonight!
 
 `$PATH` on the right keeps what was already there
 
-<TerminalWindow title="student@workstation:~" :rows="10">
+<TerminalWindow title="student@servera:~" :rows="10">
 
 ````md magic-move
 ```bash-session
@@ -149,7 +150,7 @@ student@servera:~$ echo $PATH
 
 The change is not persisted when you open a new session
 
-<TerminalWindow title="student@workstation:~" :rows="10">
+<TerminalWindow title="student@servera:~" :rows="10">
 
 ```bash-session {6,7,8,9,10}
 #^ 1. Append a directory, keeping what was already there
@@ -189,10 +190,9 @@ fi
 unset rc
 ```
 
+<Callout>
 
-<Callout type="warning">
-
-You cannot read this yet. By the end of today you will: it is a loop, two tests, and the `.` you just met.
+You cannot read this yet. By the end of this lesson you will: it is a loop, two tests, and the `.` you just met.
 
 </Callout>
 

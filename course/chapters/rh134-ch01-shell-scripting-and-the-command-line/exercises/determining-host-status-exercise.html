@@ -517,13 +517,16 @@ echo "Starting $0"</code></pre>
                     </li>
 
                     <li class="step">
-                        <h2>Make it executable</h2>
+                        <h2>Make it executable and run it</h2>
                         <pre><code>chmod a+x pinger.sh
 ./pinger.sh</code></pre>
                     </li>
 
                     <li class="step">
-                        <h2>Write a basic for loop</h2>
+                        <h2>
+                            Loop over a list of addresses and announce each one
+                            as it is checked
+                        </h2>
                         <p>
                             Store the addresses in a variable and loop over
                             them. Three of these are on the lab network and two
@@ -541,7 +544,10 @@ done</code></pre>
                     </li>
 
                     <li class="step">
-                        <h2>Branch on the result of ping</h2>
+                        <h2>
+                            Branch on the result of ping to report each host as
+                            up or down
+                        </h2>
                         <p>
                             <code>ping</code> returns <code>0</code> when the
                             host answers and <code>1</code> when it does not.
@@ -567,7 +573,10 @@ done</code></pre>
                     </li>
 
                     <li class="step">
-                        <h2>Silence the ping output</h2>
+                        <h2>
+                            Silence the ping output so only your own report
+                            remains
+                        </h2>
                         <p>
                             Your report is buried in <code>ping</code>'s own
                             output. Send that output to <code>/dev/null</code>
@@ -576,9 +585,23 @@ done</code></pre>
                         </p>
                         <pre><code>vim pinger.sh</code></pre>
                         <pre><code>    if ping -c1 -W1 "$host" > /dev/null; then</code></pre>
-                        <p>Read the finished script back, then run it.</p>
-                        <pre><code>cat pinger.sh
-./pinger.sh</code></pre>
+                        <p>Read the finished script back.</p>
+                        <pre><code>cat pinger.sh</code></pre>
+                        <aside class="note">
+                            <strong><code>/dev/null</code></strong>
+                            A special file that discards everything written to
+                            it. Redirecting to it is the standard way to throw
+                            output away without hiding errors, which travel on a
+                            separate channel.
+                        </aside>
+                    </li>
+
+                    <li class="step">
+                        <h2>
+                            Confirm that both a reachable and an unreachable
+                            address are reported correctly
+                        </h2>
+                        <pre><code>./pinger.sh</code></pre>
                         <p>The output is now a clean status report:</p>
                         <pre><code>Starting ./pinger.sh
 Checking 172.25.250.9...
@@ -591,19 +614,17 @@ Checking 19.19.19.19...
 19.19.19.19 is DOWN
 Checking 172.25.250.11...
 172.25.250.11 is UP</code></pre>
-                        <aside class="note">
-                            <strong><code>/dev/null</code></strong>
-                            A special file that discards everything written to
-                            it. Redirecting to it is the standard way to throw
-                            output away without hiding errors, which travel on a
-                            separate channel.
-                        </aside>
                     </li>
 
                     <li class="step">
                         <h2>Clean up</h2>
-                        <p>Remove the script.</p>
-                        <pre><code>rm ~/scripts/pinger.sh
+                        <p>
+                            Nothing later uses this script. If you kept the
+                            <code>rm -i</code> alias from the aliases exercise,
+                            the backslash stops <code>rm</code> from asking
+                            first.
+                        </p>
+                        <pre><code>\rm ~/scripts/pinger.sh
 cd ~</code></pre>
                     </li>
                 </ol>

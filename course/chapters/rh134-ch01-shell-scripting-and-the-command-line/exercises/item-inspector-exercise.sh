@@ -1,44 +1,46 @@
-kitten @ set-font-size 30.0 && ssh servera
+kitten @ action --self change_font_size current 30 && ssh servera
 clear
 
 #@ pause 10
 #^ Exercise: Item Inspector
 # Requirements
 #   Host: servera
-#   Script location: /home/student/scripts/backup_auditor.sh
+#   Script location: /home/student/scripts/item_inspector.sh
 #   Inspect each path a backup job was told to collect
 #   Report each path as a regular file, a directory, or neither
 #   Every path must produce exactly one message
-# Tasks
+# Steps
 #   1. Create a basic script file
-#   2. Make it executable
-#   3. Write a basic for loop
-#   4. Report the regular files
-#   5. Add branches for directories and everything else
-#   6. Clean up
+#   2. Make it executable and run it
+#   3. Loop over a list of paths and print each one
+#   4. Report the paths that are regular files
+#   5. Add a branch for directories, then a final branch for everything else
+#   6. Confirm that every item in the list produces exactly one message
 clear
 
 #^ 1. Create a basic script file
 mkdir -p ~/scripts
 cd ~/scripts
-vim backup_auditor.sh
-#! Press enter, backspace, enter after the next command.
+vim item_inspector.sh
+#! Students' vim adds # after the hashbang; Enter, Backspace, Enter clears it
 i#!/bin/bash
 #@ pause 5
 #@ noenter
 echo "Starting $0"
 #@ key escape
 :wq
-
-#^ 2. Make it executable
-chmod a+x backup_auditor.sh
-./backup_auditor.sh
 clear
 
-#^ 3. Write a basic for loop
-#! The backup job lists a directory, a file, and a path that no longer exists.
-vim backup_auditor.sh
+#^ 2. Make it executable and run it
+chmod a+x item_inspector.sh
+./item_inspector.sh
+clear
+
+#^ 3. Loop over a list of paths and print each one
+#! The backup job lists a directory, a file, and a path that no longer exists
+vim item_inspector.sh
 /Starting \$0
+#@ noenter
 o
 for item in /etc/skel /etc/passwd /srv/nightly-backup; do
     echo "$item"
@@ -47,12 +49,12 @@ for item in /etc/skel /etc/passwd /srv/nightly-backup; do
 done
 #@ key escape
 :wq
-./backup_auditor.sh
+./item_inspector.sh
 clear
 
-#^ 4. Report the regular files
-#! Replace the bare echo so each path produces one message, not two.
-vim backup_auditor.sh
+#^ 4. Report the paths that are regular files
+#! Replace the bare echo so each path produces one message, not two
+vim item_inspector.sh
 /echo "\$item"
 #@ noenter
 dd
@@ -65,12 +67,12 @@ O
     fi
 #@ key escape
 :wq
-./backup_auditor.sh
-#! Only one path is reported. The other two produce no message at all.
+./item_inspector.sh
+#! Only one path is reported; the other two produce no message at all
 clear
 
-#^ 5. Add branches for directories and everything else
-vim backup_auditor.sh
+#^ 5. Add a branch for directories, then a final branch for everything else
+vim item_inspector.sh
 /is a file
 #@ noenter
 o
@@ -80,9 +82,9 @@ o
         echo "$item is a directory"
 #@ key escape
 :wq
-./backup_auditor.sh
+./item_inspector.sh
 clear
-vim backup_auditor.sh
+vim item_inspector.sh
 /is a directory
 #@ noenter
 o
@@ -93,12 +95,17 @@ o
 #@ key escape
 :wq
 #@ pause 5
-cat backup_auditor.sh
-#@ pause 5
-./backup_auditor.sh
-#! Now every path produces exactly one message, which is what the requirement asked for.
+cat item_inspector.sh
 clear
 
-#^ 6. Clean up
-rm ~/scripts/backup_auditor.sh
-y
+#^ 6. Confirm that every item in the list produces exactly one message
+#@ pause 5
+./item_inspector.sh
+#! Every path now produces exactly one message, as the requirement asked
+clear
+
+#^ Clean up
+#! Nothing later uses this script
+\rm ~/scripts/item_inspector.sh
+
+# Complete

@@ -495,17 +495,16 @@
 
                 <ol class="steps">
                     <li class="step">
-                        <h2>Inspect the current PATH</h2>
+                        <h2>
+                            Inspect the current PATH and find where it is
+                            already set in ~/.bashrc
+                        </h2>
                         <p>
                             <code>PATH</code> is a list of directories separated
                             by colons. Bash searches them left to right and the
                             first match wins.
                         </p>
                         <pre><code>echo $PATH</code></pre>
-                    </li>
-
-                    <li class="step">
-                        <h2>Find where PATH is already set</h2>
                         <p>
                             Open <code>~/.bashrc</code> and search for
                             <code>PATH</code>. Red Hat already customizes it
@@ -525,7 +524,10 @@
                     </li>
 
                     <li class="step">
-                        <h2>Add a directory for this shell only</h2>
+                        <h2>
+                            Create a scripts directory and append it to PATH for
+                            this shell only
+                        </h2>
                         <p>
                             Create the directory and append it to
                             <code>PATH</code>. Naming <code>$PATH</code> on the
@@ -555,14 +557,18 @@ echo $PATH</code></pre>
                     </li>
 
                     <li class="step">
-                        <h2>Persist it in ~/.bashrc</h2>
+                        <h2>Add the same line to ~/.bashrc</h2>
                         <p>
                             Add the same line to the end of
-                            <code>~/.bashrc</code>, then log out and back in to
-                            confirm a new session picks it up.
+                            <code>~/.bashrc</code>.
                         </p>
                         <pre><code>vim ~/.bashrc</code></pre>
                         <pre><code>PATH=$PATH:~/scripts</code></pre>
+                    </li>
+
+                    <li class="step">
+                        <h2>Confirm a new session now finds the directory</h2>
+                        <p>Log out of <code>servera</code> and log back in.</p>
                         <pre><code>exit
 ssh servera
 echo $PATH</code></pre>

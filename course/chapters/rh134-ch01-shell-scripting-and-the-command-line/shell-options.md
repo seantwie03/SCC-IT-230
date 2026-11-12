@@ -20,7 +20,7 @@ topicInfo:
 
 # Toggling Bash Options with `set`
 
-<TerminalWindow title="student@servera:~" :rows="11">
+<TerminalWindow title="student@servera:~">
 
 ```bash-session
 student@servera:~$ set -o
@@ -33,7 +33,7 @@ history        	on
 interactive-comments	on
 monitor        	on
 noclobber      	off
-...
+...output omitted...
 ```
 
 </TerminalWindow>
@@ -85,7 +85,7 @@ Appending with `>>` still works, and `>|` still overwrites on purpose
 <TerminalWindow title="student@servera:~" :rows="8">
 
 ````md magic-move
-```bash-session {5-7}
+```bash-session {6-7}
 #^ 1. noclobber refuses to overwrite an existing file
 student@servera:~$ echo "Important Data" > file.txt
 student@servera:~$ set -o noclobber

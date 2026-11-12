@@ -22,7 +22,7 @@ topicInfo:
 
 What is displayed in your Bash prompt is configurable by changing the `PS1` variable
 
-<TerminalWindow title="student@servera:~" :rows="3">
+<TerminalWindow title="student@servera:~" :rows="5">
 
 ````md magic-move
 ```bash-session
@@ -43,7 +43,7 @@ Hello World
 student@servera:~$ PS1='> '
 > echo "Hello World"
 Hello World
-> PS1='servera '
+> PS1='servera: '
 ```
 ```bash-session
 student@servera:~$ PS1='> '
@@ -62,7 +62,7 @@ layout: center
 
 # Dynamic Content in `PS1` Variable
 
-Bash provides special character sequences. The ones below build the prompt you have been using
+Bash's special sequences build the prompt you have been using
 
 **<AccentText>student@workstation:~$</AccentText>**
 
@@ -80,7 +80,7 @@ Bash provides special character sequences. The ones below build the prompt you h
 
 ---
 
-# Shortening the Working Directory
+# Showing the Full Working Directory
 
 The default is `\W` which only shows the last segment in the current working directory
 
@@ -161,38 +161,38 @@ Setting variables with `PS1=...` syntax does not survive a logout and back in
 
 `PS1` and many other variables are set in configuration files
 
-When you login, those files are read and variables are set to whatever value they contain
+When you log in, those files are read and variables are set to whatever value they contain
 
-<TerminalWindow title="student@servera:/var/log" :rows="5">
+<TerminalWindow title="student@workstation:~" :rows="5">
 
 ````md magic-move
 ```bash-session
-student@workstation:log$ ssh servera
+student@workstation:~$ ssh servera
 student@servera:~$ PS1='> '
 >
 ```
 ```bash-session
-student@workstation:log$ ssh servera
+student@workstation:~$ ssh servera
 student@servera:~$ PS1='> '
 > exit
 ```
 ```bash-session
-student@workstation:log$ ssh servera
+student@workstation:~$ ssh servera
 student@servera:~$ PS1='> '
 > exit
-student@workstation:log$
+student@workstation:~$
 ```
 ```bash-session
-student@workstation:log$ ssh servera
+student@workstation:~$ ssh servera
 student@servera:~$ PS1='> '
 > exit
-student@workstation:log$ ssh servera
+student@workstation:~$ ssh servera
 ```
 ```bash-session
-student@workstation:log$ ssh servera
+student@workstation:~$ ssh servera
 student@servera:~$ PS1='> '
 > exit
-student@workstation:log$ ssh servera
+student@workstation:~$ ssh servera
 student@servera:~$
 ```
 ````

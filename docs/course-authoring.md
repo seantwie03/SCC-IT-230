@@ -606,9 +606,11 @@ Enter landing in an editor.
 Every exercise file opens with the target host and a clear screen:
 
 ```sh
-kitten @ set-font-size 30.0 && ssh {HOSTNAME}
+kitten @ action --self change_font_size current 30 && ssh {HOSTNAME}
 clear
 ```
+
+`--self` sizes the Presentation window that runs the line. `kitten @ set-font-size` cannot be aimed at a window: it changes whichever Kitty OS window has focus, so a recording left running while you work in another window enlarges that window instead.
 
 Write file edits as literal keystrokes: `i`, the text to insert, then
 `#@ key escape` to leave insert mode and `:wq` to save. Use the key directive

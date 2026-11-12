@@ -501,7 +501,10 @@ cat finance_report.txt</code></pre>
                     </li>
 
                     <li class="step">
-                        <h2>Enable noclobber and try to overwrite it</h2>
+                        <h2>
+                            Enable noclobber and attempt to overwrite the file
+                            with &gt;
+                        </h2>
                         <p>
                             <code>set -o</code> with no arguments lists every
                             shell option and whether it is on.
@@ -519,7 +522,10 @@ cat finance_report.txt</code></pre>
                     </li>
 
                     <li class="step">
-                        <h2>Append, then overwrite on purpose</h2>
+                        <h2>
+                            Add to the file with &gt;&gt;, then overwrite it
+                            deliberately with &gt;|
+                        </h2>
                         <p>
                             Appending is never destructive, so
                             <code>noclobber</code> allows it.
@@ -546,7 +552,10 @@ set -o | grep noclobber</code></pre>
                     </li>
 
                     <li class="step">
-                        <h2>Persist noclobber in ~/.bashrc</h2>
+                        <h2>
+                            Persist noclobber in ~/.bashrc and confirm it
+                            applies at next login
+                        </h2>
                         <pre><code>vim ~/.bashrc</code></pre>
                         <pre><code>set -o noclobber</code></pre>
                         <pre><code>exit
@@ -559,8 +568,16 @@ echo "test" &gt; finance_report.txt</code></pre>
                             shells. A script that needs
                             <code>noclobber</code> has to set it for itself.
                         </aside>
-                        <h3>Clean up</h3>
-                        <pre><code>rm finance_report.txt</code></pre>
+                    </li>
+
+                    <li class="step">
+                        <h2>Clean up</h2>
+                        <p>
+                            If you kept the <code>rm -i</code> alias from the
+                            aliases exercise, the backslash stops
+                            <code>rm</code> from asking first.
+                        </p>
+                        <pre><code>\rm finance_report.txt</code></pre>
                     </li>
                 </ol>
             </article>

@@ -70,7 +70,8 @@ A condition that is always true produces a loop that runs forever
 
 ::left::
 
-```bash
+```bash [scanner.sh]
+#!/bin/bash
 while true; do
     echo "Scanning for new files"
     sleep 10
@@ -87,7 +88,35 @@ An accidental one fills a disk or pegs a CPU.
 
 ::right::
 
-![Screen recording of an infinite loop printing repeatedly until it is interrupted from the keyboard.](./assets/infinite-loop.gif)
+<TerminalWindow title="student@servera:~" :rows="6">
+
+````md magic-move
+```bash-session
+student@servera:~$ ./scanner.sh
+Scanning for new files
+```
+```bash-session
+student@servera:~$ ./scanner.sh
+Scanning for new files
+Scanning for new files
+```
+```bash-session
+student@servera:~$ ./scanner.sh
+Scanning for new files
+Scanning for new files
+Scanning for new files
+```
+```bash-session
+student@servera:~$ ./scanner.sh
+Scanning for new files
+Scanning for new files
+Scanning for new files
+^C
+student@servera:~$
+```
+````
+
+</TerminalWindow>
 
 ---
 layout: two-cols-header
@@ -156,6 +185,36 @@ graph TD
 ```
 
 ---
+---
+
+# Remember This Part of `~/.bashrc`?
+
+<TextExplainer
+  :lines="[
+    'if [ -d ~/.bashrc.d ]; then',
+    '    for rc in ~/.bashrc.d/*; do',
+    '        if [ -f &quot;$rc&quot; ]; then',
+    '            . &quot;$rc&quot;',
+    '        fi',
+    '    done',
+    'fi',
+    'unset rc',
+  ]"
+  :steps="[
+    { line: 1, explanation: 'Only run this if the directory exists' },
+    { line: 2, explanation: 'Loop over every name the glob matches' },
+    { line: 3, explanation: 'Skip anything that is not a regular file' },
+    { line: 4, explanation: 'Source what is left' },
+  ]"
+/>
+
+<Callout>
+
+`[ ]` is the older `test` command. Red Hat Academy material uses the newer `[[ ]]`
+
+</Callout>
+
+---
 layout: exercise
 ---
 
@@ -176,7 +235,6 @@ Create a user account for every name listed in an input file
 3. Create each listed account and report whether it worked
 4. Refuse to run unless the script was started with root privileges
 5. Skip blank lines, then rerun the script to confirm it is safe to repeat
-6. Remove the accounts the script created
 
 ---
 layout: exercise
@@ -199,105 +257,3 @@ import castUrl from "./exercises/creating-users-from-a-file-exercise.cast?url";
 ::resources::
 
 <a href="../resources/creating-users-from-a-file-exercise.html" target="_blank" rel="noopener noreferrer" aria-label="Read the written Creating Users from a File exercise in a new tab">Written exercise</a>
-
----
-
-# Remember This?
-
-<v-switch at="1">
-
-<template #0>
-
-This morning it was the part of `~/.bashrc` you could not read yet
-
-<TerminalWindow title="student@servera:~" :rows="9">
-
-```bash-session
-#^ The block at the bottom of ~/.bashrc
-if [ -d ~/.bashrc.d ]; then
-    for rc in ~/.bashrc.d/*; do
-        if [ -f "$rc" ]; then
-            . "$rc"
-        fi
-    done
-fi
-unset rc
-```
-
-</TerminalWindow>
-
-</template>
-
-<template #1>
-
-Only run this if the directory exists
-
-<TerminalWindow title="student@servera:~" :rows="9">
-
-```bash-session {2,8}
-#^ The block at the bottom of ~/.bashrc
-if [ -d ~/.bashrc.d ]; then
-    for rc in ~/.bashrc.d/*; do
-        if [ -f "$rc" ]; then
-            . "$rc"
-        fi
-    done
-fi
-unset rc
-```
-
-</TerminalWindow>
-
-</template>
-
-<template #2>
-
-Loop over every name the glob matches
-
-<TerminalWindow title="student@servera:~" :rows="9">
-
-```bash-session {3,7}
-#^ The block at the bottom of ~/.bashrc
-if [ -d ~/.bashrc.d ]; then
-    for rc in ~/.bashrc.d/*; do
-        if [ -f "$rc" ]; then
-            . "$rc"
-        fi
-    done
-fi
-unset rc
-```
-
-</TerminalWindow>
-
-</template>
-
-<template #3>
-
-Skip anything that is not a regular file, then source what is left
-
-<TerminalWindow title="student@servera:~" :rows="9">
-
-```bash-session {4,5,6,9}
-#^ The block at the bottom of ~/.bashrc
-if [ -d ~/.bashrc.d ]; then
-    for rc in ~/.bashrc.d/*; do
-        if [ -f "$rc" ]; then
-            . "$rc"
-        fi
-    done
-fi
-unset rc
-```
-
-</TerminalWindow>
-
-</template>
-
-</v-switch>
-
-<Callout>
-
-`[ ]` is the older syntax for `[[ ]]`. RHA Material uses `[[ ]]`
-
-</Callout>

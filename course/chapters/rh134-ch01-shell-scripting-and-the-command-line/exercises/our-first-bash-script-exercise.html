@@ -487,6 +487,10 @@
                             <dd><code>servera</code></dd>
                         </div>
                         <div>
+                            <dt>Prerequisite</dt>
+                            <dd>Putting Scripts on the PATH Exercise</dd>
+                        </div>
+                        <div>
                             <dt>Script</dt>
                             <dd>
                                 <code
@@ -499,7 +503,10 @@
 
                 <ol class="steps">
                     <li class="step">
-                        <h2>Write the script in your home directory</h2>
+                        <h2>
+                            Write the script in your home directory with a
+                            hashbang
+                        </h2>
                         <p>
                             Line 1 is the hashbang. It names the interpreter
                             that will run the rest of the file.
@@ -509,11 +516,19 @@ vim take_inventory.sh</code></pre>
                         <pre><code>#!/bin/bash
 echo "Taking inventory"
 ls &gt; inventory</code></pre>
+                        <aside class="note">
+                            <strong>Watch line 2</strong>
+                            Vim treats the hashbang as a comment, so pressing
+                            <kbd>Enter</kbd> after it can start the next line
+                            with <code>#</code>. Delete that
+                            <code>#</code> before you type the
+                            <code>echo</code> line.
+                        </aside>
                         <pre><code>cat take_inventory.sh</code></pre>
                     </li>
 
                     <li class="step">
-                        <h2>Try to run it and fix the permission</h2>
+                        <h2>Try to run it, then add the execute permission</h2>
                         <p>
                             A new file is not executable, so the kernel will not
                             run it.
@@ -543,7 +558,8 @@ cat inventory</code></pre>
                         <aside class="note">
                             <strong>You have been here before</strong>
                             <code>~/scripts</code> is on that list because you
-                            added it to <code>~/.bashrc</code> earlier today.
+                            added it to <code>~/.bashrc</code> in the Putting
+                            Scripts on the PATH exercise.
                         </aside>
                     </li>
 
@@ -556,7 +572,11 @@ take_inventory.sh</code></pre>
                             <code>PATH</code>, exactly the way it finds
                             <code>ls</code>.
                         </p>
-                        <h3>Clean up</h3>
+                    </li>
+
+                    <li class="step">
+                        <h2>Clean up</h2>
+                        <p>Nothing later uses the inventory file.</p>
                         <pre><code>rm -f ~/inventory</code></pre>
                     </li>
                 </ol>

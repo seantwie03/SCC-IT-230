@@ -494,7 +494,7 @@
 
                 <ol class="steps">
                     <li class="step">
-                        <h2>Confirm neither variable is set</h2>
+                        <h2>Confirm that neither PAGER nor EDITOR is set</h2>
                         <p>The brackets make an empty value visible.</p>
                         <pre><code>echo "PAGER=[$PAGER]"
 echo "EDITOR=[$EDITOR]"</code></pre>
@@ -507,7 +507,10 @@ echo "EDITOR=[$EDITOR]"</code></pre>
                     </li>
 
                     <li class="step">
-                        <h2>Export PAGER</h2>
+                        <h2>
+                            Export PAGER so that man prints straight to the
+                            terminal
+                        </h2>
                         <p>
                             First see the default. Press <kbd>q</kbd> to leave
                             <code>less</code>.
@@ -519,7 +522,10 @@ man ls</code></pre>
                     </li>
 
                     <li class="step">
-                        <h2>Install nano and export EDITOR</h2>
+                        <h2>
+                            Install nano and export EDITOR so it opens instead
+                            of vi
+                        </h2>
                         <p>
                             <code>nano</code> is not installed by default, so
                             add it first.

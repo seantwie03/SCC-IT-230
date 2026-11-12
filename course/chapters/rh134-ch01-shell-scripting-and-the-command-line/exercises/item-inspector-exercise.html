@@ -493,7 +493,7 @@
                         <div>
                             <dt>Script location</dt>
                             <dd>
-                                <code>~/scripts/backup_auditor.sh</code>
+                                <code>~/scripts/item_inspector.sh</code>
                             </dd>
                         </div>
                     </dl>
@@ -508,7 +508,7 @@
                         </p>
                         <pre><code>mkdir -p ~/scripts
 cd ~/scripts
-vim backup_auditor.sh</code></pre>
+vim item_inspector.sh</code></pre>
                         <p>
                             Start with the hashbang and a line that proves the
                             script ran.
@@ -518,41 +518,41 @@ echo "Starting $0"</code></pre>
                     </li>
 
                     <li class="step">
-                        <h2>Make it executable</h2>
-                        <pre><code>chmod a+x backup_auditor.sh
-./backup_auditor.sh</code></pre>
+                        <h2>Make it executable and run it</h2>
+                        <pre><code>chmod a+x item_inspector.sh
+./item_inspector.sh</code></pre>
                     </li>
 
                     <li class="step">
-                        <h2>Write a basic for loop</h2>
+                        <h2>Loop over a list of paths and print each one</h2>
                         <p>
                             The backup list contains a directory, a regular
                             file, and a path that no longer exists.
                         </p>
-                        <pre><code>vim backup_auditor.sh</code></pre>
+                        <pre><code>vim item_inspector.sh</code></pre>
                         <pre><code>#!/bin/bash
 echo "Starting $0"
 for item in /etc/skel /etc/passwd /srv/nightly-backup; do
     echo "$item"
 done</code></pre>
-                        <pre><code>./backup_auditor.sh</code></pre>
+                        <pre><code>./item_inspector.sh</code></pre>
                     </li>
 
                     <li class="step">
-                        <h2>Report the regular files</h2>
+                        <h2>Report the paths that are regular files</h2>
                         <p>
                             Replace the bare <code>echo</code> with a test, so
                             each path produces one message rather than two.
                             <code>-f</code> is true when the path exists and is
                             a regular file.
                         </p>
-                        <pre><code>vim backup_auditor.sh</code></pre>
+                        <pre><code>vim item_inspector.sh</code></pre>
                         <pre><code>for item in /etc/skel /etc/passwd /srv/nightly-backup; do
     if [[ -f "$item" ]]; then
         echo "$item is a file"
     fi
 done</code></pre>
-                        <pre><code>./backup_auditor.sh</code></pre>
+                        <pre><code>./item_inspector.sh</code></pre>
                         <p>
                             Only one path is reported. The other two produce no
                             message at all, which does not yet meet the
@@ -562,37 +562,32 @@ done</code></pre>
 
                     <li class="step">
                         <h2>
-                            Add branches for directories and everything else
+                            Add a branch for directories, then a final branch
+                            for everything else
                         </h2>
                         <p>
                             Add the <code>elif</code> first. It is reached only
                             when the test above it failed.
                         </p>
-                        <pre><code>vim backup_auditor.sh</code></pre>
+                        <pre><code>vim item_inspector.sh</code></pre>
                         <pre><code>    if [[ -f "$item" ]]; then
         echo "$item is a file"
     elif [[ -d "$item" ]]; then
         echo "$item is a directory"
     fi</code></pre>
-                        <pre><code>./backup_auditor.sh</code></pre>
+                        <pre><code>./item_inspector.sh</code></pre>
                         <p>
                             Two paths report now, but the one that no longer
                             exists is still silent. Add an <code>else</code> to
                             catch whatever is left.
                         </p>
-                        <pre><code>vim backup_auditor.sh</code></pre>
+                        <pre><code>vim item_inspector.sh</code></pre>
                         <pre><code>    elif [[ -d "$item" ]]; then
         echo "$item is a directory"
     else
         echo "$item is neither a file nor a directory"
     fi</code></pre>
-                        <pre><code>cat backup_auditor.sh
-./backup_auditor.sh</code></pre>
-                        <p>Every path now produces exactly one message:</p>
-                        <pre><code>Starting ./backup_auditor.sh
-/etc/skel is a directory
-/etc/passwd is a file
-/srv/nightly-backup is neither a file nor a directory</code></pre>
+                        <pre><code>cat item_inspector.sh</code></pre>
                         <aside class="note">
                             <strong>Order matters</strong>
                             The branches are checked from the top down and the
@@ -604,9 +599,27 @@ done</code></pre>
                     </li>
 
                     <li class="step">
+                        <h2>
+                            Confirm that every item in the list produces exactly
+                            one message
+                        </h2>
+                        <pre><code>./item_inspector.sh</code></pre>
+                        <p>Every path now produces exactly one message:</p>
+                        <pre><code>Starting ./item_inspector.sh
+/etc/skel is a directory
+/etc/passwd is a file
+/srv/nightly-backup is neither a file nor a directory</code></pre>
+                    </li>
+
+                    <li class="step">
                         <h2>Clean up</h2>
-                        <p>Remove the script.</p>
-                        <pre><code>rm ~/scripts/backup_auditor.sh
+                        <p>
+                            Nothing later uses this script. If you kept the
+                            <code>rm -i</code> alias from the aliases exercise,
+                            the backslash stops <code>rm</code> from asking
+                            first.
+                        </p>
+                        <pre><code>\rm ~/scripts/item_inspector.sh
 cd ~</code></pre>
                     </li>
                 </ol>

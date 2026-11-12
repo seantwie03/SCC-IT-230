@@ -508,7 +508,7 @@
 
                 <ol class="steps">
                     <li class="step">
-                        <h2>Create a basic script file</h2>
+                        <h2>Create a basic script file and run it with bash</h2>
                         <p>
                             Create the scripts directory, move into it, and open
                             a new file.
@@ -534,7 +534,7 @@ echo "Starting $0"</code></pre>
                     </li>
 
                     <li class="step">
-                        <h2>Make it executable</h2>
+                        <h2>Make it executable and run it with ./</h2>
                         <p>
                             Add the execute bit, then run the file itself rather
                             than handing it to <code>bash</code>.
@@ -550,10 +550,13 @@ echo "Starting $0"</code></pre>
                     </li>
 
                     <li class="step">
-                        <h2>Write a basic for loop</h2>
+                        <h2>
+                            Loop over a fixed list of hosts and confirm the loop
+                            runs once per host
+                        </h2>
                         <p>
-                            Replace the announcement with a loop over a fixed
-                            list of hosts. Get the loop itself working before
+                            Add a loop over a fixed list of hosts below the
+                            announcement. Get the loop itself working before
                             adding anything else to the body.
                         </p>
                         <pre><code>vim collect_disk_data.sh</code></pre>
@@ -570,7 +573,10 @@ done</code></pre>
                     </li>
 
                     <li class="step">
-                        <h2>Iterate on the logic</h2>
+                        <h2>
+                            Get the disk commands working on one host, then move
+                            them into the loop
+                        </h2>
                         <p>
                             Get one host working by hand before putting the
                             commands in the loop, so you know what they produce.
@@ -607,7 +613,10 @@ cat /tmp/disk-data/workstation-disk-data.txt</code></pre>
                     </li>
 
                     <li class="step">
-                        <h2>Make the script take arguments</h2>
+                        <h2>
+                            Replace the fixed list with "$@" so the caller
+                            chooses the hosts
+                        </h2>
                         <p>
                             The host list is still hard coded, so the script can
                             only ever inspect those two machines. Replace the
@@ -622,9 +631,7 @@ cat /tmp/disk-data/workstation-disk-data.txt</code></pre>
                         </p>
                         <pre><code>cat collect_disk_data.sh
 rm -f /tmp/disk-data/*
-./collect_disk_data.sh workstation servera
-ls -l /tmp/disk-data
-cat /tmp/disk-data/servera-disk-data.txt</code></pre>
+./collect_disk_data.sh workstation servera</code></pre>
                         <aside class="note">
                             <strong>Quote <code>"$@"</code></strong>
                             The quotes keep each argument as one item, even if
@@ -635,10 +642,25 @@ cat /tmp/disk-data/servera-disk-data.txt</code></pre>
                     </li>
 
                     <li class="step">
+                        <h2>Verify the collected files</h2>
+                        <p>
+                            Each host named on the command line has a file of
+                            its own.
+                        </p>
+                        <pre><code>ls -l /tmp/disk-data
+cat /tmp/disk-data/servera-disk-data.txt</code></pre>
+                    </li>
+
+                    <li class="step">
                         <h2>Clean up</h2>
-                        <p>Remove the collected data and the script.</p>
+                        <p>
+                            Nothing later uses the collected data or the script.
+                            If you kept the <code>rm -i</code> alias from the
+                            aliases exercise, the backslash stops
+                            <code>rm</code> from asking first.
+                        </p>
                         <pre><code>rm -rf /tmp/disk-data
-rm ~/scripts/collect_disk_data.sh
+\rm ~/scripts/collect_disk_data.sh
 cd ~</code></pre>
                     </li>
                 </ol>

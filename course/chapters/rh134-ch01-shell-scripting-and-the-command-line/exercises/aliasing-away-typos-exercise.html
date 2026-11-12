@@ -500,14 +500,16 @@
                         <aside class="note">
                             <strong>RHEL defines very few</strong>
                             Mostly <code>--color</code> wrappers around the
-                            <code>grep</code> family. RHEL 10 has no
-                            <code>ls</code> or <code>ll</code> alias, so
-                            anything of that sort is yours to create.
+                            <code>grep</code> family and <code>ls</code>, plus
+                            the <code>ll</code> and <code>l.</code> shortcuts.
                         </aside>
                     </li>
 
                     <li class="step">
-                        <h2>Alias a typo you make often</h2>
+                        <h2>
+                            Define an alias for a typo you make often and
+                            confirm it expands
+                        </h2>
                         <p>
                             Move somewhere with something to list, confirm the
                             typo fails, then define the alias.
@@ -519,7 +521,7 @@ sl</code></pre>
                     </li>
 
                     <li class="step">
-                        <h2>Bypass an alias once</h2>
+                        <h2>Bypass the alias once without removing it</h2>
                         <p>
                             An alias can shadow a real command. Make
                             <code>rm</code> ask first, then answer
@@ -537,7 +539,7 @@ ls scratch_file.txt</code></pre>
                     </li>
 
                     <li class="step">
-                        <h2>Confirm the aliases are gone in a new session</h2>
+                        <h2>Confirm the alias is gone in a new session</h2>
                         <p>Log out of <code>servera</code> and log back in.</p>
                         <pre><code>exit
 ssh servera
@@ -546,7 +548,10 @@ sl</code></pre>
                     </li>
 
                     <li class="step">
-                        <h2>Put them in ~/.bashrc.d/aliases</h2>
+                        <h2>
+                            Put it in ~/.bashrc.d/aliases and confirm a new
+                            session loads it
+                        </h2>
                         <p>
                             Aliases could go straight into
                             <code>~/.bashrc</code>, but they are easier to find
@@ -566,7 +571,7 @@ sl</code></pre>
                             The loop at the bottom of
                             <code>~/.bashrc</code> sources everything in
                             <code>~/.bashrc.d/</code> for you. By the end of
-                            today you will be able to read that loop.
+                            this lesson you will be able to read that loop.
                         </aside>
                     </li>
                 </ol>

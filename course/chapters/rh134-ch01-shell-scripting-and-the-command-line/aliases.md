@@ -25,23 +25,12 @@ vertical: center
 
 # Aliases
 
-**<AccentText class='h3'>Aliases allow you to define shortcuts for long or frequently used commands</AccentText>**
+Aliases define <AccentText>shortcuts</AccentText> for long or frequently used commands
 
-<br />
-<br />
-
-<div>
-
-## Common Examples
-
-```bash
-alias ls='ls --color=auto'
-alias sl='ls'
-alias ..='cd ..'
-alias tf='podman run --rm -it -v $(pwd):/workspace:Z -w /workspace hashicorp/terraform:latest'
-```
-
-</div>
+| You type | Bash runs            |
+| -------- | -------------------- |
+| `ls`     | `ls --color=auto`    |
+| `ll`     | `ls -l --color=auto` |
 
 ---
 layout: center
@@ -92,11 +81,13 @@ Run `alias` with no arguments to see every alias in the current shell
 
 ```bash-session
 student@servera:~$ alias
+alias egrep='grep -E --color=auto'
+alias fgrep='grep -F --color=auto'
 alias grep='grep --color=auto'
 alias l.='ls -d .* --color=auto'
 alias ll='ls -l --color=auto'
 alias ls='ls --color=auto'
-...
+...output omitted...
 student@servera:~$
 ```
 
@@ -212,7 +203,7 @@ alias tf='podman run --rm -it -v $(pwd):/workspace:Z -w /workspace hashicorp/ter
 
 Aliases could go in `~/.bashrc`, but they are easier to find in a file of their own
 
-<TerminalWindow title="student@workstation:~" :rows="7">
+<TerminalWindow title="student@servera:~">
 
 ```bash-session
 student@servera:~$ mkdir -p ~/.bashrc.d

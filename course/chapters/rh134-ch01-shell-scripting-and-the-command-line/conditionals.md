@@ -23,11 +23,12 @@ topicInfo:
 
 ---
 layout: two-cols-header
+leftWidth: 32
 ---
 
 # Exit Codes
 
-Every command reports whether it worked. The value is not printed, so ask for it with `$?`
+Every command reports whether it worked, and `$?` holds the answer
 
 ::left::
 
@@ -37,28 +38,22 @@ Every command reports whether it worked. The value is not printed, so ask for it
 - `0` means <SuccessText>success</SuccessText>
 - Above `0` means <DangerText>something went wrong</DangerText>
 
-<TerminalWindow title="student@servera:~">
-
-```bash-session
-student@servera:~$ ping -c1 -W1 172.25.250.10
-...
-1 packets transmitted, 1 received, 0% packet loss
-student@servera:~$ echo $?
-0
-```
-
-</TerminalWindow>
-
 ::right::
 
-## A failure
-
 <TerminalWindow title="student@servera:~">
 
 ```bash-session
+#^ A success
+student@servera:~$ ping -c1 -W1 172.25.250.10
+...output omitted...
+1 packets transmitted, 1 received, 0% packet loss, time 0ms
+...output omitted...
+student@servera:~$ echo $?
+0
+#^ A failure
 student@servera:~$ ping -c1 -W1 19.19.19.19
-...
-1 packets transmitted, 0 received, 100% packet loss
+...output omitted...
+1 packets transmitted, 0 received, 100% packet loss, time 0ms
 student@servera:~$ echo $?
 1
 ```
@@ -77,8 +72,8 @@ The condition is a **command**, and its exit code is the answer
 ::left::
 
 ```bash
-if <CONDITION>; then
-    <STATEMENT>
+if CONDITION; then
+    COMMAND
 fi
 ```
 
@@ -110,10 +105,10 @@ Now every outcome is handled
 ::left::
 
 ```bash
-if <CONDITION>; then
-    <STATEMENT>
+if CONDITION; then
+    COMMAND
 else
-    <STATEMENT>
+    COMMAND
 fi
 ```
 
@@ -142,15 +137,15 @@ leftWidth: 55
 
 # `if` … `elif` … `else`
 
-`elif` is only reached when the test above it failed
-
 ::left::
 
 ```bash
-if <CONDITION>; then
-    <STATEMENT>
-elif <CONDITION>; then
-    <STATEMENT>
+if CONDITION; then
+    COMMAND
+elif CONDITION; then
+    COMMAND
+else
+    COMMAND
 fi
 ```
 
@@ -170,11 +165,13 @@ fi
 flowchart TD
     a1[Ping primary DNS] --> q1{Exit code is 0?}
     q1 -- Yes --> m1(Report success)
-    q1 -- No --> a2[Ping secondary DNS]
+    q1 -- No --> a2[Ping backup DNS]
     a2 --> q2{Exit code is 0?}
     q2 -- Yes --> m2(Report backup success)
     q2 -- No --> m3(Report failure)
 ```
+
+`elif` is only reached when the test above it failed
 
 ---
 layout: exercise
@@ -307,7 +304,7 @@ Stop early with a clear message and a nonzero exit code
 
 <Callout type="warning">
 
-Always quote variables in a string comparison. An unquoted empty variable becomes a syntax error.
+Quote variables anyway. `[[ ]]` handles an empty one, but in the older `[ ]` test an unquoted empty variable can become a syntax error.
 
 </Callout>
 

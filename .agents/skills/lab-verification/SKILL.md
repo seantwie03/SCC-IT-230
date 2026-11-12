@@ -105,14 +105,16 @@ started. Capture the form a student will actually see, which is interactive.
 - An alias defined and used in the same noninteractive `bash -c` never expands,
   because aliases are resolved when a line is parsed. That is an artifact of the
   test, not the behavior a student will see.
+- The `ls`, `ll`, and `l.` aliases exist only when standard input is a
+  terminal, because `/etc/profile.d/colorls.sh` returns early otherwise. A
+  probe without `--tty` shows only the `grep` family, `which`, and the
+  `xz`/`z` compression wrappers; a student's shell has all of them.
 
 ## Verified RHEL 10.0 differences from RHEL 9
 
 Older course material predates these. Recheck rather than assuming this list is
 complete.
 
-- There is no `ls`, `ll`, or `l.` alias. The predefined aliases are the `grep`
-  family, `which`, and the `xz`/`z` compression wrappers.
 - `PAGER` and `EDITOR` are unset. `man` falls back to `less` and editors fall
   back to `vi` on their own, so do not describe those as the variables' values.
 - A successful `ping` summary omits the `0 errors` field that RHEL 9 printed.
