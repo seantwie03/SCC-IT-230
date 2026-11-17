@@ -69,7 +69,6 @@ vertical: center
   - Python 3.12
 - Server
   - Python 2.7
-- Dev: "Works on my machine!"
 
 ::right::
 
@@ -143,6 +142,7 @@ block-beta
 ---
 layout: two-cols-header
 vertical: center
+leftWidth: 65
 ---
 
 # Why Containers?
@@ -152,6 +152,7 @@ vertical: center
 - Manager: "All developers must use Python 2.7!"
 - Dev: Rewrites App3 in Python 2.7
   - Not happy about it
+- App3 becomes a big hit! Users love it.
 - Later: Python 2.x goes End of Life
 
 ::right::
@@ -185,8 +186,13 @@ block-beta
 ```
 
 ---
+layout: two-cols-header
+leftWidth: 55
+---
 
 # Why Containers?
+
+::left::
 
 - Manager: "Please upgrade App3 to Python 3.12"
 - Devs: "We can't, the server only has Python 2.7"
@@ -212,6 +218,34 @@ block-beta
   class l2 libs
   class o2 os
   class i2 infra
+```
+
+::right::
+
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+
+```mermaid {scale: 1.2}
+block-beta
+  columns 3
+  t1["New Server"]:3
+  l1["Bins/Libs (Python 3.12)"]:3
+  o1["Operating System (RHEL 10)"]:3
+  i1["Infrastructure (Virtual Machine)"]:3
+  classDef label fill:none,stroke:none,color:#25252b
+  classDef app fill:#ffffff,stroke:#55555b,stroke-width:2px,color:#25252b
+  classDef app3 fill:#f6dce9,stroke:#d56199,stroke-width:2px,color:#25252b
+  classDef libs fill:#d3e4f9,stroke:#3584e4,stroke-width:2px,color:#25252b
+  classDef os fill:#e7d5ed,stroke:#9141ac,stroke-width:2px,color:#25252b
+  classDef infra fill:#ebebed,stroke:#9aa4ad,stroke-width:2px,color:#25252b
+  class t1,t2 label
+  class l1,l2 libs
+  class o1,o2 os
+  class i1,i2 infra
 ```
 
 ---
@@ -273,43 +307,19 @@ block-beta
   class i1,i2,i3 infra
 ```
 
+<br />
+
 Every app carries a whole operating system
 
 ---
 layout: two-cols-header
-vertical: start
+vertical: center
+horizontal: center
 ---
 
-# Traditional Apps vs Containerized Apps
+# Containerized Apps
 
-::left::
-
-**Traditional Apps**
-
-```mermaid {scale: 0.8}
-block-beta
-  columns 11
-  a1["App1"] space:2 space a2["App2"] space:2 space a3["App3"] space:2
-  l1["Python 2.7"]:3 space l2["Python 2.7"]:3 space l3["Python 3.12"]:3
-  o1["RHEL 8"]:3 space o2["RHEL 8"]:3 space o3["RHEL 10"]:3
-  i1["Hardware"]:3 space i2["Hardware"]:3 space i3["Hardware"]:3
-  classDef app fill:#ffffff,stroke:#55555b,stroke-width:2px,color:#25252b
-  classDef app3 fill:#f6dce9,stroke:#d56199,stroke-width:2px,color:#25252b
-  classDef libs fill:#d3e4f9,stroke:#3584e4,stroke-width:2px,color:#25252b
-  classDef os fill:#e7d5ed,stroke:#9141ac,stroke-width:2px,color:#25252b
-  classDef infra fill:#ebebed,stroke:#9aa4ad,stroke-width:2px,color:#25252b
-  class a1,a2 app
-  class a3 app3
-  class l1,l2,l3 libs
-  class o1,o2,o3 os
-  class i1,i2,i3 infra
-```
-
-::right::
-
-**Containerized Apps**
-
-```mermaid {scale: 0.8}
+```mermaid {scale: 1.5}
 block-beta
   columns 3
   block:ctrs:3
@@ -365,7 +375,6 @@ block-beta
 | Kernel       | Its own                               | The host's                   |
 | Size         | Gigabytes                             | Megabytes                    |
 | Starts by    | Booting an operating system           | Starting a process           |
-| Moves to     | The same kind of hypervisor           | Any OCI container engine     |
 
 At scale, Kubernetes and Red Hat OpenShift run containers across many hosts
 
@@ -378,10 +387,12 @@ layout: center
 A <AccentText>process</AccentText> packaged with <AccentText>everything it needs</AccentText> to run
 
 ---
-vertical: center
+horizontal: center
 ---
 
 # How Containers Are Isolated
+
+Containers make use of Linux kenel features for isolation
 
 <IconGrid>
 <IconGridItem icon="view-off">
@@ -406,7 +417,6 @@ seccomp: fewer kernel calls allowed
 </IconGridItem>
 </IconGrid>
 
-All four are features of the <AccentText>host's kernel</AccentText>
 
 ---
 layout: two-cols-header

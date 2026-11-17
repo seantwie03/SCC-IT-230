@@ -300,7 +300,7 @@ Source O18. `two-cols-header` with `leftWidth: 28`: your cube image (`assets/pod
 
 ##### 2.7c Pulling, Listing, and Removing Images (addition, Decision 48)
 
-Between 2.7a and 2.7b in the deck, so the order runs pull, list, inspect. A fixed `TerminalWindow` of a real `podman pull registry.access.redhat.com/ubi10/ubi-minimal` (with its blob and config lines), `podman images` (one image, 87.9 MB), and `podman rmi` (`Untagged:` and `Deleted:`). `ubi10/ubi-minimal` keeps the slide apart from the exercise's httpd images. One line under it: Docker Hub keeps its official images under `library/`, as in `docker.io/library/httpd`, which exercise 2 pulls. Transcript from Round 7.
+Between 2.7a and 2.7b in the deck, so the order runs pull, list, inspect. A Magic Move `TerminalWindow` (`rows` 15) that shows a real `podman pull registry.access.redhat.com/ubi10/ubi-minimal` (with its blob and config lines) on entry, then adds `podman images` (one image, 87.9 MB) and `podman rmi` (`Untagged:` and `Deleted:`) one click each; it was a fixed transcript until the instructor called it a wall of text on 2026-11-17. `ubi10/ubi-minimal` keeps the slide apart from the exercise's httpd images. One line under it: Docker Hub keeps its official images under `library/`, as in `docker.io/library/httpd`, which exercise 2 pulls. Transcript from Round 7.
 
 ##### 2.7b Inspecting an Image (addition, A13)
 

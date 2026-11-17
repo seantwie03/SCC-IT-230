@@ -21,7 +21,7 @@ vertical: center
 
 # Images, Registries, and Containers
 
-```mermaid {scale: 1}
+```mermaid {scale: 1.1}
 flowchart TB
     R@{ icon: "carbon:container-registry", form: "square", label: "Registry", pos: "b" }
     subgraph H ["Container engine"]
@@ -44,6 +44,7 @@ flowchart TB
 ---
 layout: two-cols-header
 vertical: center
+leftWidth: 65
 ---
 
 # Images vs Instances
@@ -136,6 +137,7 @@ block-beta
 ---
 layout: two-cols-header
 vertical: center
+leftWidth: 53
 ---
 
 # Container Registries
@@ -164,9 +166,12 @@ registries:
 
 ::bottom::
 
-The list is `unqualified-search-registries` in `/etc/containers/registries.conf`, or in your own `~/.config/containers/registries.conf`
+Configured via `unqualified-search-registries` in:
 
-Browse Red Hat's images at [catalog.redhat.com](https://catalog.redhat.com); keep your own on [Quay.io](https://quay.io)
+- `/etc/containers/registries.conf` (System)
+- `~/.config/containers/registries.conf` (User)
+
+Browse Red Hat's images at [catalog.redhat.com](https://catalog.redhat.com) community images on [Quay.io](https://quay.io) or [Docker Hub](https://hub.docker.com/)
 
 ---
 layout: two-cols-header
@@ -193,7 +198,7 @@ vertical: center
 | `podman rmi IMAGE`                | Remove a local image                |
 
 ---
-vertical: center
+horizontal: center
 ---
 
 # Image Names and Tags
@@ -213,8 +218,34 @@ UBI images are Red Hat's Universal Base Images, free to use and share
 
 # Pulling, Listing, and Removing Images
 
-<TerminalWindow title="student@servera:~">
+<TerminalWindow title="student@servera:~" :rows="15">
 
+````md magic-move
+```bash-session
+student@servera:~$ podman pull registry.access.redhat.com/ubi10/ubi-minimal
+Trying to pull registry.access.redhat.com/ubi10/ubi-minimal:latest...
+Getting image source signatures
+Checking if image destination supports signatures
+Copying blob 3cfd5e1005a3 done   |
+Copying config 73bcecbe7e done   |
+Writing manifest to image destination
+Storing signatures
+73bcecbe7ef2422772a19f70bea7df93d76c6281d3ef1381fc1f4dea1d3814c9
+```
+```bash-session
+student@servera:~$ podman pull registry.access.redhat.com/ubi10/ubi-minimal
+Trying to pull registry.access.redhat.com/ubi10/ubi-minimal:latest...
+Getting image source signatures
+Checking if image destination supports signatures
+Copying blob 3cfd5e1005a3 done   |
+Copying config 73bcecbe7e done   |
+Writing manifest to image destination
+Storing signatures
+73bcecbe7ef2422772a19f70bea7df93d76c6281d3ef1381fc1f4dea1d3814c9
+student@servera:~$ podman images
+REPOSITORY                                    TAG         IMAGE ID      CREATED     SIZE
+registry.access.redhat.com/ubi10/ubi-minimal  latest      73bcecbe7ef2  2 days ago  87.9 MB
+```
 ```bash-session
 student@servera:~$ podman pull registry.access.redhat.com/ubi10/ubi-minimal
 Trying to pull registry.access.redhat.com/ubi10/ubi-minimal:latest...
@@ -232,6 +263,7 @@ student@servera:~$ podman rmi registry.access.redhat.com/ubi10/ubi-minimal
 Untagged: registry.access.redhat.com/ubi10/ubi-minimal:latest
 Deleted: 73bcecbe7ef2422772a19f70bea7df93d76c6281d3ef1381fc1f4dea1d3814c9
 ```
+````
 
 </TerminalWindow>
 
