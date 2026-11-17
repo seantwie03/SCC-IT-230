@@ -16,9 +16,12 @@ topicInfo:
 
 ---
 vertical: center
+horizontal: center
 ---
 
 # The Containerfile
+
+Each instruction adds a layer to the image
 
 | Instruction  | Does                                                       |
 | ------------ | ---------------------------------------------------------- |
@@ -29,10 +32,10 @@ vertical: center
 | `CMD`        | The command a container runs, unless `podman run` names another |
 | `ENTRYPOINT` | Like `CMD`, but a command on `podman run` cannot replace it |
 
-Each instruction adds a layer to the image
 
 ---
 vertical: center
+horizontal: center
 ---
 
 # A Containerfile, Line by Line
@@ -84,7 +87,7 @@ ac757c23222fde8b30598b4ed243bb0347100e5753956acc6ff42bca625513be
 
 </TerminalWindow>
 
-`-t` names and tags the image, and `.` is the build directory; a rebuild reuses each unchanged layer from the cache
+`-t` names and tags the image and `.` is the build directory
 
 ---
 horizontal: center
@@ -105,7 +108,11 @@ flowchart LR
     style R fill:#ffffff,stroke:#55555b,color:#25252b
 ```
 
-A page copied in with `COPY` is part of the image: the running container never sees an edit until you rebuild, retag, and replace it
+A page copied in with `COPY` is part of the image
+
+If you change index.html you must rebuild to create a new image
+
+Then run an instance of the new image
 
 ---
 vertical: center
@@ -113,14 +120,12 @@ vertical: center
 
 # Tags and Registries
 
-| Command                                          | Does                                              |
-| ------------------------------------------------ | ------------------------------------------------- |
-| `podman tag img01:1.0 img01:latest`              | Give an image another name or tag                 |
-| `podman image push img01:1.0 REGISTRY/img01:1.0` | Upload it to a registry you can log in to         |
+| Command                                          | Does                                                |
+|--------------------------------------------------|-----------------------------------------------------|
+| `podman tag img01:1.0 img01:latest`              | Give an image another name or tag                   |
+| `podman image push img01:1.0 REGISTRY/img01:1.0` | Upload it to a registry you can log in to           |
 | `podman image prune`                             | Remove dangling images: old builds left as `<none>` |
-| `podman image prune -a`                          | Remove every image that no container uses         |
-
-Rebuilding a tag leaves the old image as `<none>`; practice `push` in the RHA lab, which has a registry to push to
+| `podman image prune -a`                          | Remove every image that no container uses           |
 
 ---
 layout: exercise

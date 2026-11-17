@@ -46,18 +46,17 @@ vertical: center
 
 ```bash-session
 student@servera:~$ podman run -d --name con01 -p 8000:8080 registry.access.redhat.com/ubi10/httpd-24
-e97bfd12c14c547bbba100f37fff43e2715ebbc3e94d912840cdfa3a60a238d1
-student@servera:~$ podman ps --format "{{.Names}}  {{.Status}}  {{.Ports}}"
-con01  Up 4 seconds  0.0.0.0:8000->8080/tcp, 8443/tcp
+ef0fe2ca9b193825b3d4afa2b2f6816b207a6fb2eecb04ec43b0b1743af46be1
+student@servera:~$ podman ps
+CONTAINER ID  IMAGE                                             STATUS        PORTS                             NAMES
+ef0fe2ca9b19  registry.access.redhat.com/ubi10/httpd-24:latest  Up 4 seconds  0.0.0.0:8000->8080/tcp, 8443/tcp  con01
 student@servera:~$ curl -s localhost:8000 | grep '<title>'
 		<title>Test Page for the HTTP Server on Red Hat Enterprise Linux</title>
 ```
 
 </TerminalWindow>
 
-Without `-d`, a container runs in the foreground: it holds the terminal and prints its log until Ctrl+C stops it
-
-Plain `podman ps` also shows each container's ID, image, command, and age; `curl -s` drops curl's progress meter
+Without `-d`, a container runs in the foreground: it holds the terminal and prints its log
 
 ---
 vertical: center
@@ -93,9 +92,11 @@ student@servera:~$
 
 </TerminalWindow>
 
-`exec` runs a command in a container that is already running; the prompt changes because the shell is inside it
+`exec` runs a command in a container that is already running
 
-The image carries what httpd needs, not every tool, and `exit` leaves the shell while the container keeps running
+Running `/bin/bash` starts the `bash` process, giving you a shell inside the container
+
+The image carries only what *httpd* needs, not every tool
 
 ---
 vertical: center
