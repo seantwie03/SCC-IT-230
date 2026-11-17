@@ -28,14 +28,28 @@ The `~/.bashrc` file is loaded every time a new shell is launched
 
 It holds ordinary shell code, typically:
 
-<IconGrid
-  :items="[
-    { icon: 'document-import', caption: 'Source declarations (imports)' },
-    { icon: 'label', caption: 'Variables' },
-    { icon: 'link', caption: 'Aliases' },
-    { icon: 'function', caption: 'Custom functions' },
-  ]"
-/>
+<IconGrid>
+<IconGridItem icon="document-import">
+
+Source declarations (imports)
+
+</IconGridItem>
+<IconGridItem icon="label">
+
+Variables
+
+</IconGridItem>
+<IconGridItem icon="link">
+
+Aliases
+
+</IconGridItem>
+<IconGridItem icon="function">
+
+Custom functions
+
+</IconGridItem>
+</IconGrid>
 
 ---
 

@@ -298,17 +298,38 @@ vertical: center
 
 # Facts at a glance
 
-<IconGrid
-  clicks
-  :items="[
-    { icon: 'time', caption: 'An older partitioning scheme' },
-    { icon: 'chip', caption: 'Used with BIOS firmware' },
-    { icon: 'partition-collection', caption: 'At most four primary partitions' },
-    { icon: 'ruler', caption: 'Disks up to 2 TiB' },
-    { icon: 'warning-alt', caption: 'One copy of the partition table' },
-    { icon: 'add-alt', caption: 'Extended partitions hold more' },
-  ]"
-/>
+<IconGrid>
+<IconGridItem v-click icon="time">
+
+An older partitioning scheme
+
+</IconGridItem>
+<IconGridItem v-click icon="chip">
+
+Used with BIOS firmware
+
+</IconGridItem>
+<IconGridItem v-click icon="partition-collection">
+
+At most four primary partitions
+
+</IconGridItem>
+<IconGridItem v-click icon="ruler">
+
+Disks up to 2 TiB
+
+</IconGridItem>
+<IconGridItem v-click icon="warning-alt">
+
+One copy of the partition table
+
+</IconGridItem>
+<IconGridItem v-click icon="add-alt">
+
+Extended partitions hold more
+
+</IconGridItem>
+</IconGrid>
 
 Six items in rows of three, one per click. The caption carries the meaning.
 

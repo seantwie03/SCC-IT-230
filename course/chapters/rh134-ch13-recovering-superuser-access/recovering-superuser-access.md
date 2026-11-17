@@ -27,13 +27,23 @@ If the `root` password is unknown or locked, nobody can administer the system
 
 `init=/bin/bash` on the kernel command line starts bash as PID 1 instead of systemd
 
-<IconGrid
-  :items="[
-    { icon: 'login', caption: 'No login, no password' },
-    { icon: 'user-admin', caption: 'A root shell at once' },
-    { icon: 'locked', caption: '/ is mounted read-only' },
-  ]"
-/>
+<IconGrid>
+<IconGridItem icon="login">
+
+No login, no password
+
+</IconGridItem>
+<IconGridItem icon="user-admin">
+
+A root shell at once
+
+</IconGridItem>
+<IconGridItem icon="locked">
+
+/ is mounted read-only
+
+</IconGridItem>
+</IconGrid>
 
 <Callout>
 

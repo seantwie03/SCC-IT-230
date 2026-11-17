@@ -5,10 +5,12 @@ import test from "node:test";
 import carbon from "@iconify-json/carbon/icons.json" with { type: "json" };
 
 import {
-    buildIconGrid,
     CARBON_BROWSER_URL,
+    checkColumns,
+    checkGridChildren,
     defaultColumns,
     resolveIcon,
+    resolveItemIcon,
 } from "../setup/icon-grid.ts";
 
 const SET = {
@@ -25,18 +27,12 @@ const SET = {
     },
 };
 
-const TWO = [
-    { icon: "chip", caption: "Used with BIOS firmware" },
-    { icon: "ruler", caption: "Disks up to 2 TiB" },
-];
+const items = (count) => Array.from({ length: count }, () => ({ item: true }));
 
-test("resolves each icon to its body and view box", () => {
-    const grid = buildIconGrid(TWO, undefined, SET);
-
-    assert.equal(grid.columns, 2);
-    assert.deepEqual(grid.cells[0], {
-        caption: "Used with BIOS firmware",
-        icon: { body: '<path d="M1 1"/>', viewBox: "0 0 32 32" },
+test("resolves an item's icon to its body and view box", () => {
+    assert.deepEqual(resolveItemIcon("chip", SET), {
+        body: '<path d="M1 1"/>',
+        viewBox: "0 0 32 32",
     });
 });
 
@@ -48,6 +44,31 @@ test("uses an icon's own width when it has one", () => {
     assert.equal(resolveIcon(SET, "wide")?.viewBox, "0 0 48 32");
 });
 
+test("checks the icon name before the icon set has loaded", () => {
+    assert.equal(resolveItemIcon("not-loaded-yet", null), null);
+    assert.throws(
+        () => resolveItemIcon("  ", null),
+        /IconGridItem needs an icon/,
+    );
+});
+
+test("points an unknown icon at the icon browser", () => {
+    assert.throws(
+        () => resolveItemIcon("harddrive", SET),
+        (error) =>
+            error.message.includes(
+                'IconGridItem names "harddrive", which is not a Carbon icon',
+            ) && error.message.includes(CARBON_BROWSER_URL),
+    );
+});
+
+test("tells an author to drop a carbon: prefix", () => {
+    assert.throws(
+        () => resolveItemIcon("carbon:chip", SET),
+        /Use the bare Carbon name, without a prefix/,
+    );
+});
+
 test("keeps up to four items on one row, then avoids a lone straggler", () => {
     assert.deepEqual(
         [1, 2, 3, 4, 5, 6, 7, 8].map(defaultColumns),
@@ -55,77 +76,59 @@ test("keeps up to four items on one row, then avoids a lone straggler", () => {
     );
 });
 
-test("an explicit column count wins over the default", () => {
-    assert.equal(buildIconGrid(TWO, 1, SET).columns, 1);
-});
-
-test("checks structure before the icon set has loaded", () => {
-    const grid = buildIconGrid(
-        [{ icon: "not-loaded-yet", caption: "Waiting" }],
-        undefined,
-        null,
+test("the grid's CSS applies the same column rule", async () => {
+    const source = await readFile(
+        new URL("../components/IconGrid.vue", import.meta.url),
+        "utf8",
     );
-
-    assert.deepEqual(grid.cells, [{ caption: "Waiting", icon: null }]);
-    assert.throws(
-        () => buildIconGrid([], undefined, null),
-        /at least one item/,
+    const base = source.match(
+        /\.it230-icon-grid--auto \{\s*--it230-icon-grid-columns: (\d+);/,
     );
-});
+    assert.ok(base, "the automatic grid should set a one-item column count");
+    const thresholds = [
+        [1, Number(base[1])],
+        ...[
+            ...source.matchAll(
+                /:nth-child\((\d+)\)\) \{\s*--it230-icon-grid-columns: (\d+);/g,
+            ),
+        ].map((match) => [Number(match[1]), Number(match[2])]),
+    ];
 
-test("rejects an empty or oversized grid", () => {
-    assert.throws(() => buildIconGrid([], undefined, SET), /at least one item/);
-
-    const nine = Array.from({ length: 9 }, () => TWO[0]);
-    assert.throws(
-        () => buildIconGrid(nine, undefined, SET),
-        /at most 8 items, and this one has 9/,
-    );
-});
-
-test("names the item that is missing an icon or a caption", () => {
-    assert.throws(
-        () => buildIconGrid([TWO[0], { caption: "No icon" }], undefined, SET),
-        /item 2 needs an icon/,
-    );
-    assert.throws(
-        () => buildIconGrid([{ icon: "chip", caption: "  " }], undefined, SET),
-        /item 1 needs a caption/,
-    );
-});
-
-test("rejects a column count outside 1 to 4", () => {
-    for (const columns of [0, 5, 2.5]) {
-        assert.throws(
-            () => buildIconGrid(TWO, columns, SET),
-            /whole number from 1 to 4/,
+    for (let count = 1; count <= 8; count += 1) {
+        const applied = thresholds.filter(([from]) => from <= count).at(-1);
+        assert.equal(
+            applied[1],
+            defaultColumns(count),
+            `${count} items should make ${defaultColumns(count)} columns`,
         );
     }
 });
 
-test("points an unknown icon at the icon browser", () => {
+test("rejects a column count outside 1 to 4", () => {
+    assert.doesNotThrow(() => checkColumns(undefined));
+    assert.doesNotThrow(() => checkColumns(4));
+    for (const columns of [0, 5, 2.5]) {
+        assert.throws(() => checkColumns(columns), /whole number from 1 to 4/);
+    }
+});
+
+test("accepts one to eight items", () => {
+    assert.doesNotThrow(() => checkGridChildren(items(1)));
+    assert.doesNotThrow(() => checkGridChildren(items(8)));
+});
+
+test("rejects an empty or oversized grid", () => {
+    assert.throws(() => checkGridChildren([]), /at least one IconGridItem/);
     assert.throws(
-        () =>
-            buildIconGrid(
-                [{ icon: "harddrive", caption: "x" }],
-                undefined,
-                SET,
-            ),
-        (error) =>
-            error.message.includes('"harddrive", which is not a Carbon icon') &&
-            error.message.includes(CARBON_BROWSER_URL),
+        () => checkGridChildren(items(9)),
+        /at most 8 items, and this one has 9/,
     );
 });
 
-test("tells an author to drop a carbon: prefix", () => {
+test("names a child that is not an IconGridItem", () => {
     assert.throws(
-        () =>
-            buildIconGrid(
-                [{ icon: "carbon:chip", caption: "x" }],
-                undefined,
-                SET,
-            ),
-        /Use the bare Carbon name, without a prefix/,
+        () => checkGridChildren([{ item: true }, { item: false }]),
+        /child 2 is not an IconGridItem/,
     );
 });
 
@@ -134,9 +137,9 @@ test("every icon the gallery names exists in the installed Carbon set", async ()
         new URL("../example.md", import.meta.url),
         "utf8",
     );
-    const names = [...gallery.matchAll(/\{\s*icon:\s*'([^']+)'/g)].map(
-        (match) => match[1],
-    );
+    const names = [
+        ...gallery.matchAll(/<IconGridItem\b[^>]*\bicon="([^"]+)"/g),
+    ].map((match) => match[1]);
 
     assert.ok(names.length > 0, "the gallery should show an IconGrid");
     for (const name of names) {

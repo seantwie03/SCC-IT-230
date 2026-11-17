@@ -46,14 +46,28 @@ vertical: center
 
 Any user can install a Flatpak **for themselves**
 
-<IconGrid
-  :items="[
-    { icon: 'package', caption: 'The app brings everything it needs' },
-    { icon: 'home', caption: 'Installs under ~/.local/share/flatpak' },
-    { icon: 'user-multiple', caption: 'Other users see no change' },
-    { icon: 'locked', caption: 'dnf needs root: it changes the whole system' },
-  ]"
-/>
+<IconGrid>
+<IconGridItem icon="package">
+
+The app brings everything it needs
+
+</IconGridItem>
+<IconGridItem icon="home">
+
+Installs under ~/.local/share/flatpak
+
+</IconGridItem>
+<IconGridItem icon="user-multiple">
+
+Other users see no change
+
+</IconGridItem>
+<IconGridItem icon="locked">
+
+dnf needs root: it changes the whole system
+
+</IconGridItem>
+</IconGrid>
 
 <Callout>
 

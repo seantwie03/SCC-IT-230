@@ -27,14 +27,28 @@ vertical: center
 
 The **GRand Unified Bootloader 2** is the boot loader RHEL uses
 
-<IconGrid
-  :items="[
-    { icon: 'chip', caption: 'Loads the kernel, the heart of the OS' },
-    { icon: 'archive', caption: 'Loads the initramfs, a small OS with drivers' },
-    { icon: 'parameter', caption: 'Passes arguments to the kernel' },
-    { icon: 'list', caption: 'Offers a menu of kernels to boot' },
-  ]"
-/>
+<IconGrid>
+<IconGridItem icon="chip">
+
+Loads the kernel, the heart of the OS
+
+</IconGridItem>
+<IconGridItem icon="archive">
+
+Loads the initramfs, a small OS with drivers
+
+</IconGridItem>
+<IconGridItem icon="parameter">
+
+Passes arguments to the kernel
+
+</IconGridItem>
+<IconGridItem icon="list">
+
+Offers a menu of kernels to boot
+
+</IconGridItem>
+</IconGrid>
 
 ---
 

@@ -25,13 +25,23 @@ horizontal: center
 
 Swap is a <AccentText>backup plan</AccentText> for when RAM is full: the kernel moves idle memory pages to disk
 
-<IconGrid
-  :items="[
-    { icon: 'dashboard', caption: 'Used when RAM is full' },
-    { icon: 'checkmark-outline', caption: 'Keeps the system from crashing' },
-    { icon: 'face-dissatisfied', caption: 'Much slower than RAM' },
-  ]"
-/>
+<IconGrid>
+<IconGridItem icon="dashboard">
+
+Used when RAM is full
+
+</IconGridItem>
+<IconGridItem icon="checkmark-outline">
+
+Keeps the system from crashing
+
+</IconGridItem>
+<IconGridItem icon="face-dissatisfied">
+
+Much slower than RAM
+
+</IconGridItem>
+</IconGrid>
 
 Swap is <DangerText>not a substitute</DangerText> for enough RAM
 

@@ -20,16 +20,38 @@ vertical: center
 
 # What Is Network File System (NFS)?
 
-<IconGrid
-  :items="[
-    { icon: 'network-3', caption: 'A protocol for sharing directories over a network' },
-    { icon: 'chip', caption: 'Built into the Linux kernel' },
-    { icon: 'locked', caption: 'Uses native Linux permissions' },
-    { icon: 'folder-shared', caption: 'The NFS server exports a directory' },
-    { icon: 'folder-add', caption: 'The NFS client mounts it on a local path' },
-    { icon: 'document', caption: 'The client reads and writes files normally' },
-  ]"
-/>
+<IconGrid>
+<IconGridItem icon="network-3">
+
+A protocol for sharing directories over a network
+
+</IconGridItem>
+<IconGridItem icon="chip">
+
+Built into the Linux kernel
+
+</IconGridItem>
+<IconGridItem icon="locked">
+
+Uses native Linux permissions
+
+</IconGridItem>
+<IconGridItem icon="folder-shared">
+
+The NFS server exports a directory
+
+</IconGridItem>
+<IconGridItem icon="folder-add">
+
+The NFS client mounts it on a local path
+
+</IconGridItem>
+<IconGridItem icon="document">
+
+The client reads and writes files normally
+
+</IconGridItem>
+</IconGrid>
 
 ---
 horizontal: center

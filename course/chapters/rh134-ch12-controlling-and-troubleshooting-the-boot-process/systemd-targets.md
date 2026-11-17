@@ -27,16 +27,38 @@ vertical: center
 
 A **target** is a named group of units the system starts to reach a state
 
-<IconGrid
-  :items="[
-    { icon: 'application', caption: 'Decides which services start at boot' },
-    { icon: 'tree-view', caption: 'Can contain other targets' },
-    { icon: 'terminal', caption: 'Servers boot to text logins only' },
-    { icon: 'tools', caption: 'Rescue and emergency targets for repairs' },
-    { icon: 'renew', caption: 'Switch targets without a reboot' },
-    { icon: 'star', caption: 'One target is the boot default' },
-  ]"
-/>
+<IconGrid>
+<IconGridItem icon="application">
+
+Decides which services start at boot
+
+</IconGridItem>
+<IconGridItem icon="tree-view">
+
+Can contain other targets
+
+</IconGridItem>
+<IconGridItem icon="terminal">
+
+Servers boot to text logins only
+
+</IconGridItem>
+<IconGridItem icon="tools">
+
+Rescue and emergency targets for repairs
+
+</IconGridItem>
+<IconGridItem icon="renew">
+
+Switch targets without a reboot
+
+</IconGridItem>
+<IconGridItem icon="star">
+
+One target is the boot default
+
+</IconGridItem>
+</IconGrid>
 
 ---
 

@@ -14,7 +14,8 @@
  * sitting inside the slide, so measuring the slide edge would miss it.
  *
  * Every click state is measured. Content revealed by a later click can overflow
- * even when the slide's final state fits.
+ * even when the slide's final state fits. A state that cannot be measured
+ * after a few attempts fails the check, so a slide is never skipped silently.
  *
  * Run `pnpm run check:slides -- course/w03-draft.md` while authoring, or
  * `pnpm run check:slides -- --all` after changing a shared layout, component,
@@ -40,6 +41,15 @@ const VIEWPORT = { height: 1080, width: 1920 };
 const PHONE_VIEWPORT = { height: 390, width: 844 };
 /** How far the controls must stay clear of the layout's content box. */
 const CONTROL_CLEARANCE = 24;
+/**
+ * Slidev loads each slide's component on demand, so a navigation can report
+ * the new slide before its layout is in the page. Each click state gets this
+ * many tries, navigating again and waiting a little longer before each retry,
+ * and fails the check if none produces a measurement. Before retries existed,
+ * a state measured too early was simply left out of the report.
+ */
+const MEASURE_ATTEMPTS = 3;
+const RETRY_DELAY_MS = 500;
 
 const root = fileURLToPath(new URL("../", import.meta.url));
 const args = userArguments(process.argv.slice(2));
@@ -94,14 +104,20 @@ await withBrowser(async (browser) => {
             await page.close();
 
             const overflowing = findings.filter((finding) => finding.overflow);
+            const unmeasured = findings.filter((finding) => finding.unmeasured);
             failures +=
-                overflowing.length + diagnostics.length + controls.length;
-            report(relative, overflowing, diagnostics, controls);
+                overflowing.length +
+                unmeasured.length +
+                diagnostics.length +
+                controls.length;
+            report(relative, overflowing, unmeasured, diagnostics, controls);
             if (verbose)
                 for (const finding of findings)
                     console.log(
                         `  slide ${finding.slide}${state(finding)}: ` +
-                            `${finding.clearance ?? "n/a"}px clearance` +
+                            (finding.unmeasured
+                                ? "not measured"
+                                : `${finding.clearance ?? "n/a"}px clearance`) +
                             (finding.frames.length
                                 ? `, terminal ${finding.frames.join(" / ")}px`
                                 : "") +
@@ -125,6 +141,8 @@ if (failures > 0) {
 }
 
 async function measureSlide(page, slide) {
+    // navigate() waits for the slide's layout, so by now the slide has
+    // registered its clicks and these totals are its own, not the last slide's.
     await navigate(page, slide, 0);
     const clicksTotal = await page.evaluate(
         () => window.__slidev__.nav.clicksTotal ?? 0,
@@ -134,14 +152,45 @@ async function measureSlide(page, slide) {
     );
     const states = [];
     for (let clicks = clicksStart; clicks <= clicksTotal; clicks += 1) {
-        if (clicks !== clicksStart) await navigate(page, slide, clicks);
-        const measurement = await page.evaluate(measureInPage, {
-            threshold: OVERFLOW_THRESHOLD,
-        });
-        if (measurement)
-            states.push({ ...measurement, clicks, clicksTotal, slide });
+        const measurement = await measureState(
+            page,
+            slide,
+            clicks,
+            clicks !== clicksStart,
+        );
+        states.push(
+            measurement
+                ? { ...measurement, clicks, clicksTotal, slide }
+                : {
+                      clearance: null,
+                      clicks,
+                      clicksTotal,
+                      frames: [],
+                      overflow: null,
+                      slide,
+                      unmeasured: true,
+                  },
+        );
     }
     return states;
+}
+
+/**
+ * Measure one click state, retrying when the slide's layout is not in the
+ * page yet. Returns `null` once every attempt has failed.
+ */
+async function measureState(page, slide, clicks, navigateFirst) {
+    for (let attempt = 1; attempt <= MEASURE_ATTEMPTS; attempt += 1) {
+        if (navigateFirst || attempt > 1) await navigate(page, slide, clicks);
+        const measurement = await page.evaluate(measureInPage, {
+            slide,
+            threshold: OVERFLOW_THRESHOLD,
+        });
+        if (measurement) return measurement;
+        if (attempt < MEASURE_ATTEMPTS)
+            await page.waitForTimeout(RETRY_DELAY_MS * attempt);
+    }
+    return null;
 }
 
 /**
@@ -285,6 +334,23 @@ async function navigate(page, slide, clicks) {
         undefined,
         { timeout: 15_000 },
     );
+    // Slidev reports the new slide number before the slide's component, which
+    // it loads on demand, has rendered. Wait for that slide's own layout, found
+    // through the `data-slidev-no` attribute Slidev puts on each slide's
+    // wrapper. A timeout is not an error here: measureState() retries and
+    // reports a slide that never renders.
+    await page
+        .waitForFunction(
+            (no) =>
+                [
+                    ...document.querySelectorAll(
+                        `[data-slidev-no="${no}"] .slidev-layout`,
+                    ),
+                ].some((element) => element.getBoundingClientRect().height > 0),
+            slide,
+            { timeout: 15_000 },
+        )
+        .catch(() => {});
     await page.waitForTimeout(90);
 }
 
@@ -295,7 +361,7 @@ async function navigate(page, slide, clicks) {
  * any viewport size. Slidev scales the whole slide to fit, so a raw device
  * pixel would otherwise change meaning with the window.
  */
-function measureInPage({ threshold }) {
+function measureInPage({ slide, threshold }) {
     const HIDDEN_CLASSES = [
         "slidev-vclick-hidden",
         "slidev-vclick-gone",
@@ -306,9 +372,14 @@ function measureInPage({ threshold }) {
     // that class exactly: Slidev also puts `slidev-code-line-numbers` on the
     // code wrapper itself, and a loose match would skip whole code blocks.
     const GUTTER = "shiki-magic-move-line-number";
-    const layout = [...document.querySelectorAll(".slidev-layout")].find(
-        (element) => element.getBoundingClientRect().height > 0,
-    );
+    // Only the requested slide's layout. Any visible layout could be the
+    // outgoing slide's, which would report that slide's numbers under this
+    // one's.
+    const layout = [
+        ...document.querySelectorAll(
+            `[data-slidev-no="${slide}"] .slidev-layout`,
+        ),
+    ].find((element) => element.getBoundingClientRect().height > 0);
     if (!layout || !layout.offsetHeight) return null;
 
     const rect = layout.getBoundingClientRect();
@@ -426,16 +497,22 @@ function measureInPage({ threshold }) {
     }
 }
 
-function report(relative, overflowing, diagnostics, controls) {
+function report(relative, overflowing, unmeasured, diagnostics, controls) {
     console.log(`\n${relative}`);
     if (
         overflowing.length === 0 &&
+        unmeasured.length === 0 &&
         diagnostics.length === 0 &&
         controls.length === 0
     ) {
         console.log("  no overflow, navigation, or render errors");
         return;
     }
+    for (const finding of unmeasured)
+        console.log(
+            `  FAIL slide ${finding.slide}${state(finding)}: ` +
+                `not measured after ${MEASURE_ATTEMPTS} attempts; its layout never rendered`,
+        );
     for (const finding of overflowing)
         console.log(
             `  FAIL slide ${finding.slide}${state(finding)}: ` +

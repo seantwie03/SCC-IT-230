@@ -1,19 +1,12 @@
 /**
- * Resolution logic for the IconGrid component.
+ * Validation and icon lookup for the IconGrid and IconGridItem components.
  *
- * Kept free of Vue, and of the 1.1 MB icon set itself, so the validation,
- * lookup, and column rules can be tested directly against a small stand-in
- * set. The component renders whatever `buildIconGrid` returns.
+ * Kept free of Vue, and of the 1.1 MB icon set itself, so the lookup, the
+ * column rule, and the authoring errors can be tested directly against a small
+ * stand-in set. The components call these and render what they return.
  */
 
-export interface IconGridItem {
-    /** A Carbon icon name such as `chip` or `data-base`, without a prefix. */
-    icon: string;
-    /** The short text shown beneath the icon, which carries the meaning. */
-    caption: string;
-}
-
-/** The part of an Iconify JSON icon set that IconGrid reads. */
+/** The part of an Iconify JSON icon set that IconGridItem reads. */
 export interface IconSet {
     width?: number;
     height?: number;
@@ -26,15 +19,9 @@ export interface ResolvedIcon {
     viewBox: string;
 }
 
-export interface IconGridCell {
-    caption: string;
-    /** `null` until the icon set has loaded. */
-    icon: ResolvedIcon | null;
-}
-
-export interface IconGridState {
-    columns: number;
-    cells: IconGridCell[];
+/** One element the grid's list rendered: an IconGridItem or something else. */
+export interface GridChild {
+    item: boolean;
 }
 
 export const ICON_GRID_MAX_ITEMS = 8;
@@ -47,7 +34,8 @@ const MAX_ALIAS_HOPS = 8;
 /**
  * Up to four items share one row. Five or six become rows of three, and seven
  * or eight rows of four, so no row is left with a single straggler beside a
- * full one.
+ * full one. IconGrid applies this rule in CSS, since it cannot count its slot
+ * content in script; a test keeps the two in step.
  */
 export function defaultColumns(count: number): number {
     if (count <= ICON_GRID_MAX_COLUMNS) return count;
@@ -71,40 +59,36 @@ export function resolveIcon(set: IconSet, name: string): ResolvedIcon | null {
     return null;
 }
 
-function requireText(value: unknown, what: string, index: number): string {
-    if (typeof value === "string" && value.trim().length) return value;
-    throw new Error(`IconGrid item ${index + 1} needs ${what}.`);
-}
-
-function unknownIcon(name: string, index: number): Error {
+function unknownIcon(name: string): Error {
     if (name.includes(":")) {
         return new Error(
-            `IconGrid item ${index + 1} names "${name}". Use the bare Carbon name, without a prefix.`,
+            `IconGridItem names "${name}". Use the bare Carbon name, without a prefix.`,
         );
     }
     return new Error(
-        `IconGrid item ${index + 1} names "${name}", which is not a Carbon icon. Browse names at ${CARBON_BROWSER_URL}`,
+        `IconGridItem names "${name}", which is not a Carbon icon. Browse names at ${CARBON_BROWSER_URL}`,
     );
 }
 
 /**
- * Validate the props and resolve each icon. Pass `null` for the icon set while
- * it is still loading: the structure is checked at once, and icon names are
- * checked as soon as the set arrives.
+ * Resolve one IconGridItem's icon. The name is checked at once; `null` while
+ * the icon set is still loading, after which the name is looked up.
  */
-export function buildIconGrid(
-    items: IconGridItem[],
-    columns: number | undefined,
+export function resolveItemIcon(
+    name: unknown,
     set: IconSet | null,
-): IconGridState {
-    if (!Array.isArray(items) || items.length === 0) {
-        throw new Error("IconGrid needs at least one item.");
+): ResolvedIcon | null {
+    if (typeof name !== "string" || !name.trim().length) {
+        throw new Error("IconGridItem needs an icon.");
     }
-    if (items.length > ICON_GRID_MAX_ITEMS) {
-        throw new Error(
-            `IconGrid shows at most ${ICON_GRID_MAX_ITEMS} items, and this one has ${items.length}. Split the slide.`,
-        );
-    }
+    if (!set) return null;
+    const icon = resolveIcon(set, name);
+    if (!icon) throw unknownIcon(name);
+    return icon;
+}
+
+/** Reject a `columns` value outside 1 to 4; `undefined` means automatic. */
+export function checkColumns(columns: number | undefined): void {
     if (
         columns !== undefined &&
         (!Number.isInteger(columns) ||
@@ -115,16 +99,26 @@ export function buildIconGrid(
             `IconGrid columns must be a whole number from 1 to ${ICON_GRID_MAX_COLUMNS}.`,
         );
     }
+}
 
-    const cells = items.map((item, index) => {
-        const name = requireText(item?.icon, "an icon", index);
-        const caption = requireText(item?.caption, "a caption", index);
-        if (!set) return { caption, icon: null };
-
-        const icon = resolveIcon(set, name);
-        if (!icon) throw unknownIcon(name, index);
-        return { caption, icon };
-    });
-
-    return { columns: columns ?? defaultColumns(items.length), cells };
+/**
+ * Check what the grid's list rendered: one to eight children, each an
+ * IconGridItem. Text written straight inside IconGrid, rather than inside an
+ * item, renders as a paragraph and fails here.
+ */
+export function checkGridChildren(children: GridChild[]): void {
+    if (children.length === 0) {
+        throw new Error("IconGrid needs at least one IconGridItem.");
+    }
+    const stray = children.findIndex((child) => !child.item);
+    if (stray !== -1) {
+        throw new Error(
+            `IconGrid child ${stray + 1} is not an IconGridItem. Put each caption inside its own IconGridItem.`,
+        );
+    }
+    if (children.length > ICON_GRID_MAX_ITEMS) {
+        throw new Error(
+            `IconGrid shows at most ${ICON_GRID_MAX_ITEMS} items, and this one has ${children.length}. Split the slide.`,
+        );
+    }
 }

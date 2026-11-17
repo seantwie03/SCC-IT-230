@@ -29,14 +29,7 @@ pnpm run check:slides -- course/w03-draft.md
 pnpm run check:exercises -- course/w03-draft.md
 ```
 
-`check:entry` applies the complete catalog validation to a draft under the week
-ID it will publish as, so a rename is never the first time a metadata error
-appears. `check:slides` and `check:exercises` accept the same argument or
-`--all`. `check:slides` fails only on content that leaves the content box and on
-rendering errors; a slide that fills its box is not a problem. Add `--verbose`
-to print how much room remains below the content on every slide, which is useful
-when judging how much a slide can still take. Run `--all` after changing a shared layout, component, or theme token,
-because those changes can push content past the content box on any week.
+`check:entry` applies the complete catalog validation to a draft under the week ID it will publish as, so a rename is never the first time a metadata error appears. `check:slides` and `check:exercises` accept the same argument or `--all`. `check:slides` fails only on content that leaves the content box, on rendering errors, and on a slide or click state it could not measure after three attempts; a slide that fills its box is not a problem. Add `--verbose` to print how much room remains below the content on every slide, which is useful when judging how much a slide can still take. Run `--all` after changing a shared layout, component, or theme token, because those changes can push content past the content box on any week.
 
 A new or re-made screen recording is processed before it is published, which
 trims it, marks its section boundaries, replaces Neovim's whitespace dots with

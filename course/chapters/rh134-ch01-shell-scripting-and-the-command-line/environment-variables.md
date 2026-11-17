@@ -179,13 +179,23 @@ IT-230
 
 # Each Executable Runs in a Subshell
 
-<IconGrid
-  :items="[
-    { icon: 'parent-child', caption: 'Every executable runs in a subshell' },
-    { icon: 'export', caption: 'Only exported variables reach it' },
-    { icon: 'application', caption: 'Some programs rely on exported variables' },
-  ]"
-/>
+<IconGrid>
+<IconGridItem icon="parent-child">
+
+Every executable runs in a subshell
+
+</IconGridItem>
+<IconGridItem icon="export">
+
+Only exported variables reach it
+
+</IconGridItem>
+<IconGridItem icon="application">
+
+Some programs rely on exported variables
+
+</IconGridItem>
+</IconGrid>
 
 Two common ones are `PAGER` and `EDITOR`
 

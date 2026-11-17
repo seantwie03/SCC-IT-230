@@ -1,83 +1,80 @@
 <script setup lang="ts">
-import { shallowRef } from "vue";
+import { onMounted, onUpdated, ref, watch } from "vue";
 
 import { guardAuthoring } from "../setup/authoring-error.ts";
-import {
-    buildIconGrid,
-    type IconGridItem,
-    type IconSet,
-} from "../setup/icon-grid.ts";
+import { checkColumns, checkGridChildren } from "../setup/icon-grid.ts";
 import AuthoringError from "./AuthoringError.vue";
 
-const props = withDefaults(
-    defineProps<{
-        items: IconGridItem[];
-        columns?: number;
-        /** Reveal the items one per click, in order. */
-        clicks?: boolean;
-    }>(),
-    { columns: undefined, clicks: false },
+/*
+ * A grid of IconGridItem children, each an icon above a caption. The items are
+ * slot content, so Slidev compiles each caption as Markdown, and its own
+ * directives, such as v-click, work on each item as written.
+ */
+const props = withDefaults(defineProps<{ columns?: number }>(), {
+    columns: undefined,
+});
+
+const { error: columnsError } = guardAuthoring("IconGrid", () =>
+    checkColumns(props.columns),
 );
 
 /*
- * The same dynamic import the Mermaid setup registers, so a deck that draws
- * Mermaid icon shapes and an IconGrid loads the 1.1 MB Carbon set once, as one
- * chunk, and a deck that uses neither never loads it. Until it arrives each
- * icon box renders empty at its final size, so nothing moves when it fills.
+ * Slot content is not data the script can count, so the rendered list is
+ * checked instead, after every render: one to eight children, each an
+ * IconGridItem. The message is also written to the console, as
+ * guardAuthoring does, because check-slides.mjs fails a deck on console
+ * errors. The list stays rendered under the message, so the check runs again
+ * on the next hot update and clears once the slide is fixed.
  */
-const iconSet = shallowRef<IconSet | null>(null);
-import("@iconify-json/carbon/icons.json")
-    .then((module) => {
-        iconSet.value = module.default as IconSet;
-    })
-    .catch((cause) => {
-        console.error("[IconGrid] The Carbon icon set did not load.", cause);
-    });
+const list = ref<HTMLUListElement | null>(null);
+const childrenError = ref<string | null>(null);
 
-const { error, value: grid } = guardAuthoring("IconGrid", () =>
-    buildIconGrid(props.items, props.columns, iconSet.value),
-);
+function checkRenderedChildren(): void {
+    const element = list.value;
+    if (!element) return;
+    try {
+        checkGridChildren(
+            Array.from(element.children, (child) => ({
+                item: child.classList.contains("it230-icon-grid__item"),
+            })),
+        );
+        childrenError.value = null;
+    } catch (cause) {
+        childrenError.value =
+            cause instanceof Error ? cause.message : String(cause);
+    }
+}
+
+onMounted(checkRenderedChildren);
+onUpdated(checkRenderedChildren);
+watch(childrenError, (message) => {
+    if (message) console.error(`[IconGrid] ${message}`);
+});
 </script>
 
 <template>
-    <AuthoringError v-if="error" component="IconGrid" :message="error" />
+    <AuthoringError
+        v-if="columnsError"
+        component="IconGrid"
+        :message="columnsError"
+    />
     <div
-        v-else-if="grid"
+        v-else
         class="it230-icon-grid"
-        :style="{ '--it230-icon-grid-columns': grid.columns }"
+        :class="{ 'it230-icon-grid--auto': columns === undefined }"
+        :style="
+            columns === undefined
+                ? undefined
+                : { '--it230-icon-grid-columns': columns }
+        "
     >
-        <!--
-            Vue cannot apply a directive conditionally, so the item appears
-            twice: once with Slidev's v-click, which reveals it on the next
-            click and keeps its space while hidden, and once without.
-        -->
-        <ul class="it230-icon-grid__list">
-            <template v-for="(cell, index) in grid.cells" :key="index">
-                <li v-if="clicks" v-click class="it230-icon-grid__item">
-                    <svg
-                        class="it230-icon-grid__icon"
-                        :viewBox="cell.icon?.viewBox ?? '0 0 32 32'"
-                        aria-hidden="true"
-                        focusable="false"
-                        v-html="cell.icon?.body ?? ''"
-                    />
-                    <span class="it230-icon-grid__caption">{{
-                        cell.caption
-                    }}</span>
-                </li>
-                <li v-else class="it230-icon-grid__item">
-                    <svg
-                        class="it230-icon-grid__icon"
-                        :viewBox="cell.icon?.viewBox ?? '0 0 32 32'"
-                        aria-hidden="true"
-                        focusable="false"
-                        v-html="cell.icon?.body ?? ''"
-                    />
-                    <span class="it230-icon-grid__caption">{{
-                        cell.caption
-                    }}</span>
-                </li>
-            </template>
+        <AuthoringError
+            v-if="childrenError"
+            component="IconGrid"
+            :message="childrenError"
+        />
+        <ul ref="list" class="it230-icon-grid__list">
+            <slot />
         </ul>
     </div>
 </template>
@@ -86,9 +83,9 @@ const { error, value: grid } = guardAuthoring("IconGrid", () =>
 /*
  * The list sits inside a wrapper so the layouts' `listSpacing: padded` rules,
  * which match a list placed directly on the slide or in a column, never reach
- * it. The theme's ordinary list markers, indent, and item margins are reset
- * here for the same reason: this is a set of facts laid out as a grid, not a
- * bulleted list.
+ * it. The theme's ordinary list markers and indent are reset here for the
+ * same reason: this is a set of facts laid out as a grid, not a bulleted list.
+ * IconGridItem resets each item's own margins.
  */
 .it230-icon-grid {
     margin-block: 0 var(--it230-space-6);
@@ -104,36 +101,38 @@ const { error, value: grid } = guardAuthoring("IconGrid", () =>
     padding: 0;
     row-gap: var(--it230-space-6);
 }
+</style>
 
-.it230-icon-grid__item {
-    align-items: center;
-    box-sizing: border-box;
-    display: flex;
-    flex: 0 0 calc(100% / var(--it230-icon-grid-columns));
-    flex-direction: column;
-    gap: var(--it230-space-3);
-    margin: 0;
-    padding: 0 var(--it230-space-4);
-    text-align: center;
-}
-
+<style>
 /*
- * The accent fill, the bright shade the theme gives list markers, the title
- * rule, and borders. The icons are decorative, so they need no text contrast.
+ * The automatic column count, from how many items the list holds, following
+ * defaultColumns in setup/icon-grid.ts: up to four items share a row, five or
+ * six make rows of three, seven or eight rows of four. A test checks these
+ * rules against that function. Unscoped, because Vue's scoping does not reach
+ * into :has(); the class names are the component's own. An explicit `columns`
+ * drops the --auto class and sets the property inline instead.
  */
-.it230-icon-grid__icon {
-    color: var(--it230-color-accent-fill);
-    display: block;
-    flex: none;
-    height: 3rem;
-    width: 3rem;
+.it230-icon-grid--auto {
+    --it230-icon-grid-columns: 1;
 }
 
-.it230-icon-grid__caption {
-    color: var(--it230-color-text);
-    font-size: 1.1rem;
-    line-height: 1.35;
-    max-width: 16em;
-    overflow-wrap: break-word;
+.it230-icon-grid--auto:has(> .it230-icon-grid__list > :nth-child(2)) {
+    --it230-icon-grid-columns: 2;
+}
+
+.it230-icon-grid--auto:has(> .it230-icon-grid__list > :nth-child(3)) {
+    --it230-icon-grid-columns: 3;
+}
+
+.it230-icon-grid--auto:has(> .it230-icon-grid__list > :nth-child(4)) {
+    --it230-icon-grid-columns: 4;
+}
+
+.it230-icon-grid--auto:has(> .it230-icon-grid__list > :nth-child(5)) {
+    --it230-icon-grid-columns: 3;
+}
+
+.it230-icon-grid--auto:has(> .it230-icon-grid__list > :nth-child(7)) {
+    --it230-icon-grid-columns: 4;
 }
 </style>

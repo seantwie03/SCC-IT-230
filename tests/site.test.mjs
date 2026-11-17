@@ -81,6 +81,7 @@ test("production metadata publishes canonical weeks with reviewed Week 01 detail
             "w11",
             "w12",
             "w13",
+            "w14",
         ],
     );
     const week = catalog.presentations.find(({ id }) => id === "w01");

@@ -262,11 +262,7 @@ pnpm run check:exercises -- course/wNN-draft.md
 Run `pnpm check` before publication. It is the full suite, needs a browser, and
 takes longer.
 
-`check:slides` fails on content that leaves the slide and on console errors. It
-does not judge how full a slide looks, and it cannot see overflow inside a
-fenced code block, which scrolls in its own container. So capture every slide
-that carries a fence in the browser at 1920x1080 and look at it. Two overflows
-in w07 were invisible to the checker and obvious in a screenshot.
+`check:slides` fails on content that leaves the slide, on console errors, and on a slide it could not measure after three attempts. It does not judge how full a slide looks, and it cannot see overflow inside a fenced code block, which scrolls in its own container. So capture every slide that carries a fence in the browser at 1920x1080 and look at it. Two overflows in w07 were invisible to the checker and obvious in a screenshot.
 
 Overflow is the only bar. A slide with no room to spare is fine, so never trim
 content for headroom. The `--verbose` clearance tells you how much a slide can

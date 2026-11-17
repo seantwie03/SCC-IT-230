@@ -126,16 +126,38 @@ horizontal: center
 
 # Master Boot Record (MBR)
 
-<IconGrid
-  :items="[
-    { icon: 'time', caption: 'An older scheme, from 1983' },
-    { icon: 'ruler', caption: 'Disks up to 2 TiB' },
-    { icon: 'warning-alt', caption: 'One partition table, no copy' },
-    { icon: 'chip', caption: 'Used with BIOS firmware' },
-    { icon: 'partition-collection', caption: 'Only four primary partitions' },
-    { icon: 'add-alt', caption: 'Extended partitions hold more' },
-  ]"
-/>
+<IconGrid>
+<IconGridItem icon="time">
+
+An older scheme, from 1983
+
+</IconGridItem>
+<IconGridItem icon="ruler">
+
+Disks up to 2 TiB
+
+</IconGridItem>
+<IconGridItem icon="warning-alt">
+
+One partition table, no copy
+
+</IconGridItem>
+<IconGridItem icon="chip">
+
+Used with BIOS firmware
+
+</IconGridItem>
+<IconGridItem icon="partition-collection">
+
+Only four primary partitions
+
+</IconGridItem>
+<IconGridItem icon="add-alt">
+
+Extended partitions hold more
+
+</IconGridItem>
+</IconGrid>
 
 ---
 
@@ -174,15 +196,33 @@ horizontal: center
 
 # GUID Partition Table (GPT)
 
-<IconGrid
-  :items="[
-    { icon: 'partition-collection', caption: 'Up to 128 partitions' },
-    { icon: 'ruler', caption: 'Disks up to 8 ZiB' },
-    { icon: 'copy', caption: 'Two copies of the partition table' },
-    { icon: 'chip', caption: 'Works with UEFI firmware' },
-    { icon: 'fingerprint-recognition', caption: 'A Globally Unique ID (GUID) for each disk and partition' },
-  ]"
-/>
+<IconGrid>
+<IconGridItem icon="partition-collection">
+
+Up to 128 partitions
+
+</IconGridItem>
+<IconGridItem icon="ruler">
+
+Disks up to 8 ZiB
+
+</IconGridItem>
+<IconGridItem icon="copy">
+
+Two copies of the partition table
+
+</IconGridItem>
+<IconGridItem icon="chip">
+
+Works with UEFI firmware
+
+</IconGridItem>
+<IconGridItem icon="fingerprint-recognition">
+
+A Globally Unique ID (GUID) for each disk and partition
+
+</IconGridItem>
+</IconGrid>
 
 ```mermaid {scale: 1.1}
 block-beta
@@ -209,14 +249,23 @@ horizontal: center
 
 # Why Two Sets of Units
 
-<IconGrid
-  clicks
-  :items="[
-    { icon: 'data-base', caption: 'Decimal: 1 KB is 1000 bytes, the way drive makers count' },
-    { icon: 'chip', caption: 'Binary: 1 KB is 1024 bytes, the power of 2 closest to 1000' },
-    { icon: 'warning-alt', caption: 'The same names, KB, MB, and GB, for two different sizes' },
-  ]"
-/>
+<IconGrid>
+<IconGridItem v-click icon="data-base">
+
+Decimal: 1 KB is 1000 bytes, the way drive makers count
+
+</IconGridItem>
+<IconGridItem v-click icon="chip">
+
+Binary: 1 KB is 1024 bytes, the power of 2 closest to 1000
+
+</IconGridItem>
+<IconGridItem v-click icon="warning-alt">
+
+The same names, KB, MB, and GB, for two different sizes
+
+</IconGridItem>
+</IconGrid>
 
 <v-click>
 

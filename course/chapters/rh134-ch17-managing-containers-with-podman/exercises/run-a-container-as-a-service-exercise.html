@@ -1,0 +1,695 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Run a Container as a Service Exercise</title>
+        <style>
+            :root {
+                color-scheme: light;
+                --it230-color-canvas: #fafafb;
+                --it230-color-surface: #ffffff;
+                --it230-color-raised: #ebebed;
+                --it230-color-line: #b9b9bf;
+                --it230-color-text: #25252b;
+                --it230-color-muted: #55555b;
+                --it230-color-accent-text: #0461be;
+                --it230-color-accent-fill: #3584e4;
+                --it230-color-accent-wash: rgb(53 132 228 / 14%);
+                --it230-color-warning: #905400;
+                --it230-font-sans:
+                    "Lato", "Segoe UI", "Noto Sans", "Liberation Sans",
+                    sans-serif;
+                --it230-font-mono:
+                    "Cascadia Code", "JetBrains Mono", "Noto Sans Mono",
+                    "DejaVu Sans Mono", monospace;
+                --it230-space-1: 0.25rem;
+                --it230-space-2: 0.5rem;
+                --it230-space-3: 0.75rem;
+                --it230-space-4: 1rem;
+                --it230-space-5: 1.5rem;
+                --it230-space-6: 2rem;
+                --it230-space-7: 3rem;
+                --it230-radius-sm: 0.5rem;
+                --it230-radius-md: 0.75rem;
+                --it230-radius-lg: 0.9375rem;
+                --it230-shadow-raised:
+                    0 0.125rem 0.25rem rgb(0 0 6 / 10%),
+                    0 1.2rem 3rem rgb(0 0 6 / 10%);
+                line-height: 1.6;
+                color: var(--it230-color-text);
+                background: var(--it230-color-canvas);
+            }
+
+            * {
+                box-sizing: border-box;
+            }
+
+            body {
+                min-width: 20rem;
+                margin: 0;
+                color: var(--it230-color-text);
+                background:
+                    radial-gradient(
+                        circle at 95% 5%,
+                        var(--it230-color-accent-wash),
+                        transparent 40%
+                    ),
+                    radial-gradient(
+                            circle,
+                            rgb(0 0 6 / 2%) 0 0.035rem,
+                            transparent 0.04rem
+                        )
+                        0 0 / 0.22rem 0.22rem,
+                    linear-gradient(
+                        145deg,
+                        var(--it230-color-surface),
+                        #f5f6f8 72%
+                    );
+                /*
+                 * The accent wash is pinned to the viewport so it stays in the
+                 * corner as a long exercise scrolls under it. Only the wash is
+                 * fixed; the dot texture and the base gradient still travel
+                 * with the content.
+                 */
+                background-attachment: fixed, scroll, scroll;
+                font-family: var(--it230-font-sans);
+                font-feature-settings:
+                    "liga" 0,
+                    "calt" 0;
+                font-variant-ligatures: none;
+                text-rendering: optimizeLegibility;
+            }
+
+            ::selection {
+                color: var(--it230-color-text);
+                background: color-mix(
+                    in srgb,
+                    var(--it230-color-accent-fill) 22%,
+                    white
+                );
+            }
+
+            :focus-visible {
+                border-radius: var(--it230-radius-sm);
+                outline: 0.18rem solid var(--it230-color-accent-fill);
+                outline-offset: 0.16rem;
+            }
+
+            a {
+                color: var(--it230-color-accent-text);
+                text-decoration: underline;
+                text-decoration-thickness: 0.08em;
+                text-underline-offset: 0.16em;
+            }
+
+            a:hover {
+                text-decoration-thickness: 0.14em;
+            }
+
+            .skip-link {
+                position: fixed;
+                z-index: 10;
+                top: var(--it230-space-3);
+                left: var(--it230-space-3);
+                padding: var(--it230-space-3) var(--it230-space-4);
+                border: 1px solid var(--it230-color-line);
+                border-radius: var(--it230-radius-sm);
+                background: var(--it230-color-surface);
+                box-shadow: var(--it230-shadow-raised);
+                transform: translateY(-200%);
+            }
+
+            .skip-link:focus {
+                transform: translateY(0);
+            }
+
+            .site-header {
+                position: sticky;
+                z-index: 5;
+                top: 0;
+                border-bottom: 1px solid var(--it230-color-line);
+                background: color-mix(
+                    in srgb,
+                    var(--it230-color-surface) 92%,
+                    transparent
+                );
+                box-shadow: 0 0.125rem 0.35rem rgb(0 0 6 / 8%);
+                backdrop-filter: blur(0.75rem);
+            }
+
+            .header-inner,
+            main,
+            footer {
+                width: min(64rem, calc(100% - 2rem));
+                margin-inline: auto;
+            }
+
+            .header-inner {
+                display: flex;
+                min-height: 3.5rem;
+                align-items: center;
+                gap: var(--it230-space-3);
+            }
+
+            .header-inner p {
+                margin: 0;
+            }
+
+            /*
+             * The course identity is chrome, not prose, so it keeps the
+             * surrounding text color and takes its underline on hover. It
+             * appears in the header and again in the footer, and both lead to
+             * the course home.
+             */
+            .header-inner a,
+            footer a {
+                color: inherit;
+                text-decoration: none;
+            }
+
+            .header-inner a:hover,
+            footer a:hover {
+                text-decoration: underline;
+            }
+
+            .course-code,
+            .course-code a {
+                color: var(--it230-color-accent-text);
+                font-weight: 800;
+                letter-spacing: 0.04em;
+            }
+
+            .course-code {
+                display: flex;
+                align-items: center;
+            }
+
+            .course-code::after {
+                content: "";
+                display: inline-block;
+                width: 1px;
+                height: 1.1em;
+                margin-left: var(--it230-space-3);
+                background: var(--it230-color-line);
+            }
+
+            h1,
+            h2 {
+                line-height: 1.2;
+            }
+
+            h1 {
+                max-width: 30ch;
+                margin: 0;
+                font-size: clamp(2rem, 6vw, 3rem);
+            }
+
+            main {
+                padding-block: clamp(2.1rem, 5.6vw, 3.85rem)
+                    var(--it230-space-7);
+                scroll-margin-top: 4rem;
+            }
+
+            .exercise-document {
+                overflow: hidden;
+                border: 1px solid var(--it230-color-line);
+                border-radius: var(--it230-radius-lg);
+                background: var(--it230-color-surface);
+                box-shadow: var(--it230-shadow-raised);
+            }
+
+            .exercise-header {
+                padding: clamp(1.5rem, 4vw, 2.25rem);
+                border-bottom: 0.25rem solid var(--it230-color-accent-fill);
+                background: var(--it230-color-accent-wash);
+            }
+
+            .exercise-kicker {
+                margin: 0 0 var(--it230-space-2);
+                color: var(--it230-color-accent-text);
+                font-size: 0.82rem;
+                font-weight: 800;
+                letter-spacing: 0.06em;
+                text-transform: uppercase;
+            }
+
+            .overview {
+                padding: var(--it230-space-5);
+                border-bottom: 1px solid var(--it230-color-line);
+            }
+
+            .overview h2,
+            .step h2 {
+                margin: 0 0 var(--it230-space-4);
+                padding-left: var(--it230-space-3);
+                border-left: 0.22rem solid var(--it230-color-accent-fill);
+                font-size: clamp(1.35rem, 3vw, 1.65rem);
+            }
+
+            .requirements {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+                margin: var(--it230-space-5) 0;
+                border-block: 1px solid var(--it230-color-line);
+            }
+
+            .requirements div {
+                padding-block: var(--it230-space-3);
+            }
+
+            .requirements dt {
+                color: var(--it230-color-muted);
+                font-weight: 700;
+            }
+
+            .requirements dd {
+                margin: 0.25rem 0 0;
+            }
+
+            .steps {
+                margin: 0;
+                padding: 0;
+                list-style: none;
+                counter-reset: exercise-step;
+            }
+
+            .step {
+                counter-increment: exercise-step;
+                padding: var(--it230-space-5);
+                border-bottom: 1px solid var(--it230-color-line);
+            }
+
+            .step:last-child {
+                border-bottom: 0;
+            }
+
+            .step h2::before {
+                content: "Step " counter(exercise-step);
+                display: block;
+                margin-bottom: var(--it230-space-1);
+                color: var(--it230-color-accent-text);
+                font-size: 0.72rem;
+                font-weight: 800;
+                letter-spacing: 0.06em;
+                text-transform: uppercase;
+            }
+
+            code,
+            kbd {
+                font-family: var(--it230-font-mono);
+                font-weight: 600;
+            }
+
+            code:not(pre code) {
+                overflow-wrap: anywhere;
+                color: var(--it230-color-accent-text);
+            }
+
+            kbd {
+                padding: 0.1rem 0.3rem;
+                color: var(--it230-color-text);
+                background: var(--it230-color-raised);
+                border: 1px solid var(--it230-color-line);
+                border-radius: 0.25rem;
+                box-shadow: 0 1px 0 var(--it230-color-line);
+            }
+
+            pre {
+                max-width: 100%;
+                padding: var(--it230-space-4);
+                overflow-x: auto;
+                overflow-wrap: anywhere;
+                color: var(--it230-color-text);
+                border: 1px solid var(--it230-color-line);
+                border-radius: var(--it230-radius-md);
+                background: #f7f7f8;
+                box-shadow: inset 0 1px 0 rgb(255 255 255 / 80%);
+                tab-size: 4;
+                white-space: pre-wrap;
+            }
+
+            pre code {
+                font-size: 0.95rem;
+            }
+
+            .note,
+            .warning {
+                margin-block: var(--it230-space-5);
+                padding: var(--it230-space-3) var(--it230-space-4);
+                border-left: 0.3rem solid;
+            }
+
+            .note {
+                background: var(--it230-color-accent-wash);
+                border-color: var(--it230-color-accent-fill);
+            }
+
+            .note strong {
+                color: var(--it230-color-accent-text);
+            }
+
+            .warning {
+                background: color-mix(
+                    in srgb,
+                    var(--it230-color-warning) 9%,
+                    var(--it230-color-canvas)
+                );
+                border-color: var(--it230-color-warning);
+            }
+
+            .warning strong {
+                color: var(--it230-color-warning);
+            }
+
+            .note strong,
+            .warning strong {
+                display: block;
+            }
+
+            .exercise-navigation {
+                margin-top: var(--it230-space-6);
+                padding-top: var(--it230-space-4);
+            }
+
+            .exercise-navigation a {
+                font-weight: 700;
+            }
+
+            footer {
+                padding-block: 0 var(--it230-space-7);
+                color: var(--it230-color-muted);
+            }
+
+            footer::before {
+                display: block;
+                width: 100%;
+                height: 0.125rem;
+                margin-bottom: 0.35rem;
+                border-radius: 999px;
+                background: linear-gradient(
+                    90deg,
+                    var(--it230-color-line) 0 52%,
+                    color-mix(
+                            in srgb,
+                            var(--it230-color-accent-fill) 25%,
+                            transparent
+                        )
+                        100%
+                );
+                content: "";
+            }
+
+            footer p {
+                margin: 0;
+            }
+
+            @media (max-width: 32rem) {
+                .header-inner,
+                main,
+                footer {
+                    width: min(100% - 1.5rem, 64rem);
+                }
+
+                .header-inner {
+                    min-height: 3.25rem;
+                }
+
+                .overview,
+                .step {
+                    padding: var(--it230-space-4);
+                }
+
+                h1 {
+                    overflow-wrap: anywhere;
+                }
+            }
+
+            @media print {
+                :root {
+                    background: #ffffff;
+                }
+
+                body {
+                    background: #ffffff;
+                }
+
+                .skip-link,
+                .site-header {
+                    display: none;
+                }
+
+                main {
+                    width: 100%;
+                    padding: 0;
+                }
+
+                .exercise-document {
+                    border: 0;
+                    box-shadow: none;
+                }
+
+                .step {
+                    break-inside: avoid;
+                }
+            }
+        </style>
+    </head>
+
+    <body>
+        <a class="skip-link" href="#main-content">Skip to exercise</a>
+
+        <header class="site-header">
+            <div class="header-inner">
+                <p class="course-code"><a href="../../../">IT-230</a></p>
+                <p class="course-title">
+                    <a href="../../../">Linux Administration</a>
+                </p>
+            </div>
+        </header>
+
+        <main id="main-content">
+            <article class="exercise-document">
+                <header class="exercise-header">
+                    <p class="exercise-kicker">Exercise</p>
+                    <h1>Run a Container as a Service Exercise</h1>
+                </header>
+
+                <section class="overview" aria-labelledby="overview-heading">
+                    <h2 id="overview-heading">Task</h2>
+                    <p>
+                        Give the intranet page a user of its own on
+                        <code>servera</code>, run it in a container as that
+                        user, and turn the container into a systemd service with
+                        <code>podman generate systemd</code>. Then make the
+                        service start at boot, with nobody logged in, by
+                        enabling lingering. The cleanup at the end returns
+                        <code>servera</code> to where the week started.
+                    </p>
+
+                    <dl class="requirements">
+                        <div>
+                            <dt>Host</dt>
+                            <dd><code>servera</code></dd>
+                        </div>
+                        <div>
+                            <dt>Prerequisite</dt>
+                            <dd>Mount Web Content</dd>
+                        </div>
+                    </dl>
+                </section>
+
+                <ol class="steps">
+                    <li class="step">
+                        <h2>Create the user webapp with a password</h2>
+                        <pre><code>ssh servera
+sudo useradd webapp
+sudo passwd webapp</code></pre>
+                        <p>
+                            Type <code>redhat</code> at both prompts.
+                            <code>passwd</code> warns that the password is short
+                            and sets it anyway:
+                        </p>
+                        <pre><code>New password:
+BAD PASSWORD: The password is shorter than 8 characters
+Retype new password:
+passwd: password updated successfully</code></pre>
+                    </li>
+                    <li class="step">
+                        <h2>
+                            Log in as webapp with SSH and run a web container on
+                            host port 8083
+                        </h2>
+                        <pre><code>ssh webapp@servera</code></pre>
+                        <p>
+                            Enter <code>webapp</code>'s password,
+                            <code>redhat</code>. If SSH asks whether to trust
+                            <code>servera</code>'s host key, answer
+                            <code>yes</code>.
+                        </p>
+                        <aside class="warning">
+                            <strong>Log in with SSH, not su</strong>
+                            <code>systemctl --user</code> needs a login session
+                            of the user's own. After <code>su - webapp</code> or
+                            <code>sudo -iu webapp</code>, it fails with
+                            <code
+                                >Failed to connect to user scope bus via local
+                                transport</code
+                            >, and Podman keeps its runtime files in
+                            <code>/tmp</code>, where they stop the service from
+                            starting after a reboot.
+                        </aside>
+                        <pre><code>podman images
+mkdir ~/html
+echo '&lt;h1&gt;Intranet: running as a service&lt;/h1&gt;' &gt; ~/html/index.html
+podman run -d --name intranet -p 8083:8080 -v ~/html:/var/www/html:Z registry.access.redhat.com/ubi10/httpd-24
+curl -s localhost:8083</code></pre>
+                        <pre><code>&lt;h1&gt;Intranet: running as a service&lt;/h1&gt;</code></pre>
+                        <p>
+                            <code>podman images</code> lists nothing. Each user
+                            has an image store of their own, so
+                            <code>webapp</code> cannot use the images
+                            <code>student</code> pulled, and
+                            <code>podman run</code> pulls
+                            <code>ubi10/httpd-24</code> again.
+                        </p>
+                    </li>
+                    <li class="step">
+                        <h2>
+                            Generate a unit for the container and start it as a
+                            service
+                        </h2>
+                        <pre><code>mkdir -p ~/.config/systemd/user
+cd ~/.config/systemd/user
+podman generate systemd --new --files --name \
+--wants podman-user-wait-network-online.service \
+--after podman-user-wait-network-online.service intranet</code></pre>
+                        <pre><code>DEPRECATED command:
+It is recommended to use Quadlets for running containers and pods under systemd.
+
+Please refer to podman-systemd.unit(5) for details.
+/home/webapp/.config/systemd/user/container-intranet.service</code></pre>
+                        <p>
+                            The warning is expected: Podman 5 prefers Quadlet,
+                            but <code>generate systemd</code> still works. The
+                            <code>--wants</code> and <code>--after</code>
+                            options make the service wait for
+                            <code>servera</code>'s network at boot. Without
+                            them, the container starts before the network is up,
+                            and its published port gives only empty replies
+                            until the service is restarted.
+                        </p>
+                        <pre><code>podman rm -f intranet
+systemctl --user daemon-reload
+systemctl --user enable --now container-intranet
+curl -s localhost:8083</code></pre>
+                        <pre><code>intranet
+Created symlink '/home/webapp/.config/systemd/user/default.target.wants/container-intranet.service' → '/home/webapp/.config/systemd/user/container-intranet.service'.
+&lt;h1&gt;Intranet: running as a service&lt;/h1&gt;</code></pre>
+                        <p>
+                            With <code>--new</code>, the unit runs its own copy
+                            of your <code>podman run</code> command, so the
+                            container you started by hand goes first; the
+                            service then creates a fresh <code>intranet</code>.
+                        </p>
+                    </li>
+                    <li class="step">
+                        <h2>Log out and test the page</h2>
+                        <pre><code>exit</code></pre>
+                        <p>
+                            You are back in <code>student</code>'s shell on
+                            <code>servera</code>. Wait about 15 seconds, then
+                            test the page:
+                        </p>
+                        <pre><code>curl localhost:8083</code></pre>
+                        <pre><code>curl: (7) Failed to connect to localhost port 8083 after 0 ms: Could not connect to server</code></pre>
+                        <p>
+                            About 10 seconds after <code>webapp</code>'s last
+                            session ends, systemd stops <code>webapp</code>'s
+                            services, and the container with them. Without
+                            <code>-s</code>, <code>curl</code> says why it
+                            failed.
+                        </p>
+                    </li>
+                    <li class="step">
+                        <h2>Enable lingering for webapp and test again</h2>
+                        <pre><code>sudo loginctl enable-linger webapp
+loginctl list-users
+curl -s localhost:8083</code></pre>
+                        <pre><code> UID USER    LINGER STATE
+1000 student no     active
+1001 webapp  yes    lingering
+
+2 users listed.
+&lt;h1&gt;Intranet: running as a service&lt;/h1&gt;</code></pre>
+                        <p>
+                            With lingering on, systemd starts
+                            <code>webapp</code>'s services without a login, so
+                            the page is back with nobody logged in as
+                            <code>webapp</code>. For a moment the state may read
+                            <code>opening</code>; if <code>curl</code> is
+                            refused, wait a few seconds and try again.
+                        </p>
+                    </li>
+                    <li class="step">
+                        <h2>Reboot servera and test again</h2>
+                        <pre><code>sudo systemctl reboot</code></pre>
+                        <p>
+                            Wait for <code>servera</code> to boot, then log back
+                            in as <code>student</code>:
+                        </p>
+                        <pre><code>ssh servera
+curl -s localhost:8083
+podman ps</code></pre>
+                        <pre><code>&lt;h1&gt;Intranet: running as a service&lt;/h1&gt;
+CONTAINER ID  IMAGE       COMMAND     CREATED     STATUS      PORTS       NAMES</code></pre>
+                        <p>
+                            The service started at boot, with no one logged in
+                            as <code>webapp</code>. <code>podman ps</code> as
+                            <code>student</code> lists nothing:
+                            <code>webapp</code>'s containers belong to
+                            <code>webapp</code>.
+                        </p>
+                    </li>
+                    <li class="step">
+                        <h2>Clean up</h2>
+                        <p>
+                            This is the week's last exercise. Turn lingering
+                            off, which stops <code>webapp</code>'s services,
+                            then delete the user and Podman.
+                        </p>
+                        <pre><code>sudo loginctl disable-linger webapp</code></pre>
+                        <p>
+                            Wait a few seconds for the services to stop, then:
+                        </p>
+                        <pre><code>sudo userdel -r webapp
+sudo dnf remove -y podman</code></pre>
+                        <p>
+                            <code>userdel -r</code> removes
+                            <code>webapp</code>'s home directory, its images and
+                            unit file with it, and its lines in
+                            <code>/etc/subuid</code> and
+                            <code>/etc/subgid</code>. If it says the user is
+                            still in use, wait a few seconds and run it again.
+                            <code>dnf</code> removes <code>podman</code> and the
+                            16 packages installed with it. Podman's empty
+                            storage directory,
+                            <code>~/.local/share/containers</code>, stays behind
+                            in <code>student</code>'s home; it is harmless.
+                        </p>
+                    </li>
+                </ol>
+            </article>
+            <nav class="exercise-navigation" aria-label="Exercise navigation">
+                <a href="../">← Back to week overview</a>
+            </nav>
+        </main>
+
+        <footer>
+            <p>
+                <a href="../../../">IT-230</a> ·
+                <a href="../../../">Linux Administration</a>
+            </p>
+        </footer>
+    </body>
+</html>
