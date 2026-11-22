@@ -120,7 +120,7 @@ Proposed and accepted 2026-11-22:
 
 ## Exercises
 
-Step 1 of the build order, built 2026-11-19 and verified on the lab in chain order (Round 6). Each is a `kitty-demo` command file in `course/chapters/it230-self-hosting-forgejo/exercises/` (Decision 23). The written HTML versions wait for step 3, which may change commands. Lengths are estimates, from the presses at 3 seconds each plus the pauses; a live dry run will time them.
+Step 1 of the build order, built 2026-11-19 and verified on the lab in chain order (Round 6). Each is a `kitty-demo` command file in `course/chapters/it230-self-hosting-forgejo/exercises/` (Decision 23). The written HTML versions wait for step 3, which may change commands; Build the Data Tier's was written on 2026-11-22 with fragment 3. Lengths are estimates, from the presses at 3 seconds each plus the pauses; a live dry run will time them.
 
 1. **Build the Data Tier** (`build-the-data-tier-exercise.sh`; `serverb`; 164 presses, about 9 minutes). Rewritten 2026-11-21 for Decision 26 and verified in Round 11. **Recorded 2026-11-21**, last at 11:17 after your edit that opens `postgresql` alone and then `nfs`, `rpc-bind`, and `mountd` together: 10.5 minutes, 10 markers (the title and nine steps), processed and checked (Rounds 14 and 15). Its steps: tune serverb for throughput performance; install PostgreSQL and the NFS server; create logical volumes for PostgreSQL's data and Forgejo's files; prepare the logical volume for PostgreSQL; initialize PostgreSQL on its logical volume; allow the forgejo user to connect to PostgreSQL from servera; start PostgreSQL and create the forgejo user and database; share Forgejo's logical volume with servera over NFS; open the firewall for PostgreSQL and NFS. As root (`sudo -i`): `tuned` installed and set to `throughput-performance` (w05); `postgresql-server` and `nfs-utils`; an lvm partition using all of `/dev/sdb`, `pvcreate`, `vgcreate vg_data`, `lvcreate --name lv_db --size 2G`, and `lvcreate --name lv_forgejo --extents 100%FREE`; `mkfs.xfs` on both, two `/etc/fstab` lines by path, and `mount -av`, which warns twice that a file system "does not contain SELinux labels" (w10, w11); `/srv/db/pgsql` for `postgres`, the `semanage fcontext` rule, and `restorecon`; `systemctl edit postgresql` and `postgresql-setup --initdb`; `listen_addresses = 'localhost,172.25.250.11'` and the `pg_hba.conf` line in vim; `systemctl enable --now postgresql`, then `su - postgres` and `psql` with the two `CREATE` statements; `useradd -u 2000 forgejo`, `chown forgejo:forgejo /srv/forgejo`, `restorecon -Rv /srv/forgejo`, `/srv/forgejo servera.lab.example.com(rw)` typed into `/etc/exports`, `systemctl enable --now nfs-server`, and `exportfs -v` (w13); the `postgresql` and `nfs` firewall services, then `rpc-bind` and `mountd`, which only `showmount` needs (changed 2026-11-21 at your request, Round 13).
 2. **Build the App Tier** (`build-the-app-tier-exercise.sh`; `servera`; 104 presses, about 6 minutes). Rewritten 2026-11-21 for Decision 26 and verified in Round 11. **Recorded again 2026-11-21** at 11:25, after the step 3 fix and your edit that puts `-v ~/data:/var/lib/gitea:Z` on its own line: 7.7 minutes, 7 markers, processed and checked (Rounds 14 and 15). The file keeps your earlier changes (no clock and journal step, `podman ps` before the first `curl`, the admin made from a shell inside the container). Its steps: install Podman, autofs, and the NFS client; create the user forgejo, with UID 2000, a password, and lingering; automount Forgejo's files from serverb on forgejo's ~/data; run Forgejo in a container as the forgejo user; create Forgejo's first admin; run the container as a user service that starts at boot. `sudo dnf install -y podman autofs nfs-utils`; `useradd -u 2000 forgejo`, `passwd forgejo`, and `loginctl enable-linger forgejo`; `showmount --exports serverb` (w13; added 2026-11-21, Round 13); `/etc/auto.master.d/forgejo.autofs` with `/-  /etc/auto.forgejo` and `/etc/auto.forgejo` with `/home/forgejo/data  -rw,sync  serverb.lab.example.com:/srv/forgejo`, both typed in vim, `systemctl enable --now autofs`, then w13's check: `mount | grep forgejo` with only the `autofs` trigger, `sudo ls -la /home/forgejo/data` to mount the share, and `mount | grep forgejo` again with the `nfs4` mount below it (fixed 2026-11-21, Round 14); `ssh forgejo@servera`; `podman run -d --name forgejo --network host --userns keep-id:uid=1000,gid=1000 -v ~/data:/var/lib/gitea:Z` with seven `FORGEJO__` settings, one per line after a `\`, and `codeberg.org/forgejo/forgejo:15-rootless`; `podman ps`; `podman exec -it forgejo /bin/bash`, `forgejo admin user create ...`, and `exit`; `podman generate systemd --new --files --name --restart-sec 10` with the network wait, `podman rm -f`, `systemctl --user daemon-reload`, and `enable --now container-forgejo`; `curl` before and after logging out.
@@ -202,7 +202,7 @@ Proposed 2026-11-21 as Decision 29 and accepted the same day. Each new item gets
 
 Drafted 2026-11-21 for your review; nothing is built. Six fragments in `course/chapters/it230-self-hosting-forgejo/` (Decisions 23 and 25), each aligned to RH134 chapter 19 (Decision 17) and opening with a `section` slide that carries its `routeAlias` and `topicInfo`. Transcripts come from your four recordings (the casts) or from Round 21, with prompts rewritten to the theme's `student@servera:~$` form. No presenter notes. Each tier's fragment opens with the week's architecture diagram, its own tier highlighted, and ends with its exercise and recording slides. Cut candidates are listed at the end.
 
-**The weekly entry, `course/w15-draft.md`** (built 2026-11-22, with fragments 1 and 2 so far): a cover titled "Self-Hosting Forgejo", accent `orange`, your change from `green` (w14 was `teal`; the guide prefers cool accents for Bash-heavy decks), with a six-line agenda (Self-Hosting Forgejo, The Data Tier, PostgreSQL, The App Tier, The Web Tier, Operating Forgejo) and the summary from your opening paragraph; then the VM reminder, "Start `workstation`, `servera`, and `serverb` on your VDI"; then one `src:` import per fragment.
+**The weekly entry, `course/w15-draft.md`** (built 2026-11-22, with fragments 1 to 3 so far): a cover titled "Self-Hosting Forgejo", accent `orange`, your change from `green` (w14 was `teal`; the guide prefers cool accents for Bash-heavy decks), with a six-line agenda (Self-Hosting Forgejo, The Data Tier, PostgreSQL, The App Tier, The Web Tier, Operating Forgejo) and the summary from your opening paragraph; then the VM reminder, "Start `workstation`, `servera`, and `serverb` on your VDI"; then one `src:` import per fragment.
 
 #### Fragment 1: Self-Hosting Forgejo (`self-hosting.md`), built 2026-11-22
 
@@ -302,51 +302,55 @@ As built, seven rows, with the "Weeks" column worded like 1.8's table:
 
 The planned closing line, "A single point of failure: fine for a lab, not for your users' work", overflowed the footer by 16px together with the table. It is folded into the Resiliency row, and "fine for a lab" is lost. The exercise's steps and its written version still cover the other items the earlier draft's 2.8 listed: `/etc/fstab`, services, and `useradd -u`.
 
-#### Fragment 3: PostgreSQL (`postgresql.md`)
+#### Fragment 3: PostgreSQL (`postgresql.md`), built 2026-11-22
+
+Built 2026-11-22 with its written exercise, as the week-porting skill requires of a fragment that closes with an exercise. Eleven slides, as drafted. Transcripts come from Build the Data Tier's recording or from Round 23 on `serverb`, with prompts in the theme's `root@serverb:~#` form. `check:entry`, `check:slides`, and `check:exercises` pass, and every slide was looked at in the review browser at 1920x1080.
 
 ##### 3.1 PostgreSQL
 
-`section`, with `routeAlias: postgresql` and `topicInfo` declaring Build the Data Tier.
+`section`, with `routeAlias: postgresql` and `topicInfo` (RH134 chapter 19) declaring Build the Data Tier Exercise, and the subtitle "The data tier's database".
 
 ##### 3.2 PostgreSQL on RHEL
 
-A narrow table: package `postgresql-server`, which brings `postgresql` and its client `psql`; account `postgres` (UID 26, home `/var/lib/pgsql`); service `postgresql`, not enabled; data `/var/lib/pgsql/data`, empty until initialized; port 5432, the firewall service `postgresql`.
+A narrow two-column table, "What" and "On RHEL 10": package `postgresql-server` 16.8, from AppStream; client `psql`, in `postgresql`, installed with it; account `postgres`, UID 26, home `/var/lib/pgsql`; service `postgresql`, not enabled; data `/var/lib/pgsql/data`, empty until initialized; network port 5432, the firewall service `postgresql`. Sources: the recording (16.8, `dvd-appstream`), Round 7, and Round 23 (`getent passwd postgres`, `systemctl is-enabled` printing `disabled`, and an empty `ls -A`).
 
 ##### 3.3 SELinux Already Knows PostgreSQL
 
-`postgresql_db_t`, and the rule that gives it to `/var/lib/pgsql`, come with RHEL's policy, not the package. Data anywhere else needs a rule of its own: `semanage fcontext` for `/srv/db`, then `restorecon -Rv`, which a new file system needs anyway, since it starts with no labels (w06, w10). `/srv/forgejo` needs no rule: `restorecon` gives it `var_t`, the default for `/srv`. This takes over the earlier fragment 2 draft's 2.5 (Decision 30).
+Two fixed `TerminalWindow`s, each under a line. First, "RHEL's policy has a rule for `/var/lib/pgsql` before PostgreSQL is installed", over Round 23's `rpm -q postgresql-server` ("package postgresql-server is not installed") and `semanage fcontext -l | grep '^/var/lib/pgsql('`, which prints the `postgresql_db_t` rule. Second, "Data anywhere else needs a rule of its own, and a new file system has no labels", over the recording's step 4: `ls -ldZ /srv/db /srv/db/pgsql` (both `unlabeled_t`), `semanage fcontext -a`, and `restorecon -Rv` with its two `Relabeled` lines. This takes over the earlier fragment 2 draft's 2.5 (Decision 30). `/srv/forgejo` taking `var_t` is left to the exercise, since this slide is about PostgreSQL.
 
 ##### 3.4 Change a Unit Without Editing It
 
-`TerminalWindow` of Round 21's `systemctl cat postgresql`, whose own comment says to use a drop-in rather than edit the unit; then `systemctl edit postgresql` with its two lines, and `systemctl cat postgresql | tail -3` from the recording. New.
+Line: "A package update replaces its unit file, so add a <AccentText>drop-in</AccentText> instead". A Magic Move `TerminalWindow` (`rows` 16) in three banners: the unit file says not to edit it (Round 23's `systemctl cat postgresql | head -6`, the header comment); `systemctl edit` writes a drop-in (the recording's "Successfully installed edited file '/etc/systemd/system/postgresql.service.d/override.conf'."); the drop-in comes last, so its `PGDATA` wins (the recording's `systemctl cat postgresql | tail -3`). New.
 
 ##### 3.5 Initialize the Database
 
-`two-cols-header`: left, the service started before initializing (Round 21: "Directory "/var/lib/pgsql/data" is missing or empty." and "Use "/usr/bin/postgresql-setup --initdb""); right, `postgresql-setup --initdb` from the recording. One line: the data goes one directory below the mount point, as PostgreSQL recommends. New.
+The planned two columns became one Magic Move `TerminalWindow` (`rows` 12), all from Round 23, so it is one real session in exercise order: with no database in `PGDATA`, `systemctl start postgresql` fails ("Job for postgresql.service failed because the control process exited with error code." and its "See ..." line); `postgresql-setup --initdb` creates one; now `systemctl start` succeeds and `systemctl is-active` prints `active`. Two lines under it: "The journal says why: `Directory "/srv/db/pgsql/data" is missing or empty.`", which is Round 23's journal, and "The data goes one directory below the mount point, as PostgreSQL recommends". New.
 
 ##### 3.6 Two Configuration Files
 
-Both in the data directory: `postgresql.conf`, the server's settings, and `pg_hba.conf`, who may connect. `TerminalWindow` of Round 21's `listen_addresses` lines, the commented default and the added `'localhost,172.25.250.11'`. One line: `listen_addresses` picks which of the server's own addresses it listens on; `pg_hba.conf` and the firewall decide who may connect. New.
+Line: "`postgresql.conf` holds the server's settings; `pg_hba.conf` says who may connect". A Magic Move `TerminalWindow` (`rows` 14) from Round 23, in three banners. By default PostgreSQL listens only on localhost: `ss -ltn | grep 5432` shows `127.0.0.1` and `[::1]`. `listen_addresses` adds `serverb`'s lab address: `grep -n` shows line 60, the commented default, and line 61, the added line. After a restart, `ss` adds `172.25.250.11`. Line under it: "Listening is not permission: `pg_hba.conf` and the firewall decide who connects". New.
 
 ##### 3.7 A pg_hba.conf Line
 
-`TextExplainer` over `host forgejo forgejo 172.25.250.10/32 scram-sha-256`: connection type, database, user, client address, authentication method. One line: the default lines allow only local connections. New.
+`TextExplainer` (`size="sm"`; the automatic `md` ran 15px off the slide's right edge) over `host    forgejo    forgejo    172.25.250.10/32    scram-sha-256`, in five steps: connection type, over the network; database, only `forgejo`; user, only `forgejo`; client address, `servera` and only `servera`; method, a password never sent in the clear. Line under it: "The default lines allow only connections from `serverb` itself", which Round 23's six default lines (`local ... peer`, and `host` from `127.0.0.1/32` and `::1/128` with `ident`) bear out. New.
 
 ##### 3.8 psql
 
-`TerminalWindow` from Round 21: `su - postgres`, `psql`, `SELECT current_user` without its `;` and the `postgres-#` prompt that waits for it, the `;`, and `\q`. Two lines: `su - postgres` lets `psql` in as the matching database user (`peer`); SQL ends with `;`, but `psql`'s own backslash commands do not. New.
+A Magic Move `TerminalWindow` (`rows` 15) in one banner, "A statement without its ; waits for more": `su - postgres` and `psql`, with its "psql (16.8)" greeting, as in the recording; then Round 23's `SELECT current_user` without `;` and the `postgres-#` prompt that waits, then the `;`, its one-row result, and `\q`. Two lines: "As `postgres`, `psql` logs in as the database user of the same name" and "SQL ends with `;`, but `psql`'s own commands, such as `\q`, do not". New.
 
 ##### 3.9 A Database and Its Owner
 
-`CREATE USER forgejo WITH PASSWORD 'redhat';` and `CREATE DATABASE forgejo OWNER forgejo;`, with `CREATE ROLE` and `CREATE DATABASE` from the recording. New.
+A fixed `TerminalWindow` of the recording's two statements and their replies, `CREATE ROLE` and `CREATE DATABASE`. Two lines: "PostgreSQL calls users <AccentText>roles</AccentText>, so `CREATE USER` answers `CREATE ROLE`" and "The owner may create tables in its database, which Forgejo does when it first starts" (Decision 21; Round 5 found 128 tables owned by `forgejo`). New.
 
 ##### 3.10 Exercise: Build the Data Tier
 
-`exercise`: its goal, `serverb`, and its nine steps.
+`exercise`: goal "Hold Forgejo's database and files on `serverb`", host `serverb`, no prerequisite, and the command file's nine steps.
+
+The written version, `exercises/build-the-data-tier-exercise.html`, was built the same day. It follows the command file step by step, and its output comes from the recording. It tells students to check `lsblk` first, since disk names can change between boots, and to use any blank 5 GB disk in place of `sdb`. It notes that their optical drives and `mount -av`'s first lines may differ. It ends by telling them to leave `serverb` for Build the App Tier. It has no cleanup (Decision 19).
 
 ##### 3.10a Recording: Build the Data Tier
 
-`exercise`, `variant: recording`, with the cast and the written exercise.
+`exercise`, `variant: recording`, with the cast (10.5 minutes, 10 markers) and the written exercise. The player loads in the review browser.
 
 #### Fragment 4: The App Tier (`app-tier.md`)
 
@@ -610,6 +614,19 @@ Nothing on the chain's hosts was changed. To-verify item 8 is answered by the fi
 9. For slide 6.3: that `app.ini` holds secrets Forgejo generated at its first start (`SECRET_KEY`, `INTERNAL_TOKEN`), and that losing `SECRET_KEY` breaks users' two-factor logins, from Forgejo's documentation or a test on `serverc`.
 
 **Round 22, 2026-11-22, fragment 2.** Fragment 2 shows no command or output, so it had nothing to capture. Its one claim about the lab, 2.5's first bottom line, rested on Round 21: the first admin was still in PostgreSQL after Build the App Tier's step 6 deleted the container. That line has since been replaced, and the slide moved to fragment 1 as 1.5a. This session ran on a machine whose lab has not run the exercise chain, so a read-only check found no `forgejo` user on `servera` and no `postgres` account on `serverb`. Nothing was changed on that lab.
+
+**Round 23, 2026-11-22, fragment 3's transcripts.** This machine's lab was at its snapshot, with no PostgreSQL on `serverb`. As root on `serverb`, in exercise order but with `/srv/db/pgsql` as a plain directory instead of a logical volume, since no transcript here shows the volume:
+
+- **Before the install:** `rpm -q postgresql-server` printed "package postgresql-server is not installed", and `semanage fcontext -l | grep '^/var/lib/pgsql('` printed the `postgresql_db_t` rule, so the rule comes with RHEL's policy.
+- **After `dnf install -y postgresql-server`:** `postgres` is UID 26 with home `/var/lib/pgsql` and shell `/bin/bash`. `systemctl is-enabled postgresql` printed `disabled`, and `/var/lib/pgsql/data` was empty. `systemctl cat postgresql | head -6` printed the unit's path and its five-line comment against editing it in place.
+- **The drop-in:** written as `override.conf` with `[Service]` and `Environment=PGDATA=/srv/db/pgsql/data`, then `daemon-reload`. `systemctl cat postgresql | tail -3` matched the recording.
+- **Before initializing:** `systemctl start postgresql` failed (exit 1) with "Job for postgresql.service failed because the control process exited with error code.". The journal read `Directory "/srv/db/pgsql/data" is missing or empty.`, then `Use "/usr/bin/postgresql-setup --initdb"`. Earlier the same day, with the default `PGDATA`, it named `/var/lib/pgsql/data` instead.
+- **Initializing:** `postgresql-setup --initdb` printed the two lines the recording shows, and then `systemctl start` succeeded and `is-active` printed `active`.
+- **Listening:** `ss -ltn | grep 5432` showed `127.0.0.1` and `[::1]`. With `listen_addresses = 'localhost,172.25.250.11'` inserted below line 60's commented default, so as line 61, and a restart, it added `172.25.250.11`.
+- **`pg_hba.conf`:** its six default lines are `local ... peer` and `host` from `127.0.0.1/32` and `::1/128` with `ident`, each for `all` and for `replication`.
+- **`psql`:** run under `script` as `postgres`, so it had a terminal. `SELECT current_user` without its `;` left the `postgres-#` prompt, and `;` then printed ` current_user` / `postgres` / `(1 row)`.
+
+`serverb` was reverted with `start-latest-snapshot serverb` twice, after each capture batch. Each time, `postgresql-server` was gone, along with `/srv/db` and the drop-in directory, and the clock was set to the host's. One earlier attempt, piping keystrokes into `pnpm lab -- --tty`, hung and was stopped.
 
 ## Open questions
 

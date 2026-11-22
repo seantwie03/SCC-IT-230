@@ -40,3 +40,7 @@ src: ./chapters/it230-self-hosting-forgejo/self-hosting.md
 ---
 src: ./chapters/it230-self-hosting-forgejo/data-tier.md
 ---
+
+---
+src: ./chapters/it230-self-hosting-forgejo/postgresql.md
+---
