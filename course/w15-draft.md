@@ -36,3 +36,7 @@ Start `workstation`, `servera`, and `serverb` on your VDI
 ---
 src: ./chapters/it230-self-hosting-forgejo/self-hosting.md
 ---
+
+---
+src: ./chapters/it230-self-hosting-forgejo/data-tier.md
+---

@@ -49,7 +49,7 @@ Recordings come last, as in every week.
 
 ## Decisions
 
-Decisions 1 to 6 were recorded on 2026-11-15 from your answers while planning. Decisions 7 to 20 were recorded on 2026-11-19 from your answers to Open questions 1 to 7, your guidance the same day, and your acceptance of the proposals that became Decisions 15 to 17. Decisions 21 to 23 are accepted. Decision 24 was recorded on 2026-11-21 from your request, Decision 25, its placement, is proposed, and Decision 26 was proposed and accepted the same day.
+Decisions 1 to 6 were recorded on 2026-11-15 from your answers while planning. Decisions 7 to 20 were recorded on 2026-11-19 from your answers to Open questions 1 to 7, your guidance the same day, and your acceptance of the proposals that became Decisions 15 to 17. Decisions 21 to 23 are accepted. Decision 24 was recorded on 2026-11-21 from your request, Decision 25, its placement, is proposed, and Decision 26 was proposed and accepted the same day. Decision 30, fragment 2's redraft, was proposed and accepted on 2026-11-22.
 
 1. **Forgejo, not Gitea or Vikunja.** Forgejo is fully open source, with no community and enterprise editions to account for. Vikunja was the other candidate; Forgejo has more review hooks: a service account, log files, and Git over SSH should the class get that far (Decision 9).
 2. **Architecture.**
@@ -106,6 +106,17 @@ Proposed 2026-11-21; Decisions 25 and 26 were accepted the same day, and Decisio
 27. **No reboot exercise** (your call, 2026-11-21): Survive a Reboot did not add enough to earn its class time, which is better spent elsewhere. Its command file is deleted, and Operate Forgejo now follows Build the Web Tier. The week loses its review of w12's targets (`systemctl get-default`, `default.target`) and of w05's persistent journal; the app tier still enables every service and lingering, so the application still comes back at boot (Rounds 6 and 11), but no exercise shows it.
 28. **The backup takes Forgejo's files too** (your call, 2026-11-21), in the same script, so the database and the files from one moment stay together under one schedule, log, retention rule, and copy. Each run is a dated directory, `/var/backups/forgejo/forgejo_<date>`, holding `database.sql.gz` and `files.tar.gz`, so keeping the seven newest runs keeps seven complete backups. `/var/backups/forgejo` replaces `/var/lib/pgsql/backups`, since the backups are no longer only PostgreSQL's; `mkdir -p` makes it on the first run. The files come from `tar -C /srv -czf "${run_dir}/files.tar.gz" --exclude=forgejo/indexers forgejo`, with `-C` first at your request. The search index is left out because a local read of it on `serverb` can fail while Forgejo holds it open over NFS (Round 18), and Forgejo can rebuild it: its own `forgejo dump` has `--skip-index` ("Skip bleve index data"), and its backup guide says lost indexer data can be rebuilt. The push design, the count-based pruning, and `logrotate` for the log stay (2026-11-21).
 29. **What each new item gets** (proposed and accepted 2026-11-21): slides for the new concepts, "New in this tier" lines for the small ones, and no changes of command, as listed under "New material". You agreed the same day that `tail -n +8` takes a table line, where a slide could set `seq 10 | tail -n 8` (3 to 10) beside `seq 10 | tail -n +8` (8 to 10), and `seq 5` beside both (all five, then nothing): with `tail -n 8` the loop would delete every backup until there were more than eight.
+
+Proposed and accepted 2026-11-22:
+
+30. **Fragment 2 teaches the data tier's purpose and design, not the exercise's steps** (your direction, 2026-11-22; accepted and built the same day). It covers what data is, why keeping it in one tier lets the web and app tiers be stateless, and what matters when designing a data tier: backups, resiliency, capacity, performance, and access (see "Fragment 2"). The earlier draft's 2.4 to 2.8 are no longer slides, and their content goes as follows:
+    - **2.4 Storage of Its Own:** into 2.6's capacity item and 2.9's capacity row.
+    - **2.5 New File Systems Have No Labels:** into 3.3, which then carries the `semanage fcontext` rule for `/srv/db` and `restorecon` itself. `mount -av`'s "does not contain SELinux labels" warning is shown only in the exercise.
+    - **2.6 Sharing Files with NFS:** into a row of 2.9. The `/etc/exports` line and `exportfs -v` stay in the exercise, and 4.5 still shows the share arriving on `servera`.
+    - **2.7 One UID on Both Hosts:** 4.6 One Process, Three Views already shows `forgejo` as UID 2000 on both hosts. The root-squash line, root on `servera` refused with "Permission denied", is dropped.
+    - **2.8 Review in This Tier:** into 2.9, which names the week for each consideration the exercise handles.
+
+    What is lost: no slide walks through the NFS export or the shared UID before students type them in Build the Data Tier. The exercise's step comments and its written version carry them. The fragment grows from eight slides to nine, and RAID and replication come in as ideas only. The alternative is the earlier draft, which reviewed the exercise's steps one slide at a time.
 
 ## Exercises
 
@@ -191,7 +202,7 @@ Proposed 2026-11-21 as Decision 29 and accepted the same day. Each new item gets
 
 Drafted 2026-11-21 for your review; nothing is built. Six fragments in `course/chapters/it230-self-hosting-forgejo/` (Decisions 23 and 25), each aligned to RH134 chapter 19 (Decision 17) and opening with a `section` slide that carries its `routeAlias` and `topicInfo`. Transcripts come from your four recordings (the casts) or from Round 21, with prompts rewritten to the theme's `student@servera:~$` form. No presenter notes. Each tier's fragment opens with the week's architecture diagram, its own tier highlighted, and ends with its exercise and recording slides. Cut candidates are listed at the end.
 
-**The weekly entry, `course/w15-draft.md`** (built 2026-11-22, with fragment 1 only so far): a cover titled "Self-Hosting Forgejo", accent `green` for now (w14 was `teal`; the guide prefers cool accents for Bash-heavy decks), with a six-line agenda (Self-Hosting Forgejo, The Data Tier, PostgreSQL, The App Tier, The Web Tier, Operating Forgejo) and the summary from your opening paragraph; then the VM reminder, "Start `workstation`, `servera`, and `serverb` on your VDI"; then one `src:` import per fragment.
+**The weekly entry, `course/w15-draft.md`** (built 2026-11-22, with fragments 1 and 2 so far): a cover titled "Self-Hosting Forgejo", accent `orange`, your change from `green` (w14 was `teal`; the guide prefers cool accents for Bash-heavy decks), with a six-line agenda (Self-Hosting Forgejo, The Data Tier, PostgreSQL, The App Tier, The Web Tier, Operating Forgejo) and the summary from your opening paragraph; then the VM reminder, "Start `workstation`, `servera`, and `serverb` on your VDI"; then one `src:` import per fragment.
 
 #### Fragment 1: Self-Hosting Forgejo (`self-hosting.md`), built 2026-11-22
 
@@ -217,6 +228,12 @@ A Mermaid `flowchart` at scale 1: a `user-multiple` icon for the users, then thr
 
 `IconGrid` of four: `security`, only the web tier faces the network; `locked`, each tier is secured for its own job; `renew`, update or replace one tier at a time; `search`, a failure stays in its own tier.
 
+##### 1.5a Stateless and Stateful Tiers
+
+Moved here from fragment 2 (its 2.5) on 2026-11-22, at your direction, so it comes where the tiers are introduced. It expands 1.5's "update or replace one tier at a time": that is cheap for two tiers and not the third. `two-cols-header`, each column headed by a one-item `IconGrid`. Under the title, a line added in the move: "An application's **state** is the data it stores persistently". Without it, "stateless" would appear before 2.3 defines the idea. Left, `renew`, "**Web and app tiers** are stateless": rebuilt by installing them again; replaced to upgrade or recover; copied to serve more users. Right, `data-base`, "**The data tier** is stateful": backed up; protected from failure; grown as the data grows. `::bottom::`, your two lines: "Lose the web or app tier and you can reinstall it." and "Lose the data tier and it's gone, unless you have a backup".
+
+Two notes that stay off the slide unless you want them. First, copying a tier to serve more users is the pattern's general benefit. This week does not show it, and the slide does not claim it for Forgejo. Second, each tier still writes logs on its own host, such as httpd's access log on `servera`, which Operate Forgejo reads. Losing those loses history, not users' work.
+
 ##### 1.6 What Is Forgejo?
 
 `two-cols-header`, `leftWidth: 55`: left, your screenshot of Forgejo's product page (`assets/forgejo-product-page.png`, 1073x699), "Forge great software with Forgejo" over its six features, among them "Self-hosted alternative to GitHub" and "Guaranteed 100% Free Software" (it replaced a screenshot of Forgejo's README on 2026-11-22); right, three bullets: a self-hosted web application, a GitHub alternative you run yourself; a community project, fully open source, with no enterprise edition; pronounced for-JEH-yo (in `AccentText`), from the Esperanto word for forge. The `IconGrid` of repositories, issues, and pull requests went when 1.6a began showing them for real (2026-11-22).
@@ -235,39 +252,55 @@ The week's Mermaid `flowchart LR` at scale 0.8, to be reused in 2.2, 4.2, and 5.
 
 A table of the four exercises, their hosts, and the weeks each reviews (from "Classification"): Build the Data Tier, `serverb`, 1, 4 to 7, 10, 11, and 13; Build the App Tier, `servera`, 13 and 14; Build the Web Tier, `workstation` and `servera`, 5 to 7 and 14; Operate Forgejo, `serverb` and `servera`, 2 to 6. Line under it: "Each one starts where the last one ended".
 
-#### Fragment 2: The Data Tier (`data-tier.md`)
+#### Fragment 2: The Data Tier (`data-tier.md`), built 2026-11-22
+
+Redrafted 2026-11-22 at your direction and built the same day (Decision 30). The fragment teaches what data is and what matters when designing a data tier; why a tier of its own lets the web and app tiers be stateless is now 1.5a's job. The earlier draft walked through Build the Data Tier's steps instead. Fragment 3 still teaches PostgreSQL and closes with the exercise. The earlier draft's 2.4 to 2.8 are no longer slides; Decision 30 says where their content goes. The stateless and stateful slide, built as 2.5, moved to fragment 1 as 1.5a the same day, which leaves eight slides. `check:slides` passes, and every slide was looked at in the review browser at 1920x1080.
 
 ##### 2.1 The Data Tier
 
-`section`, with `routeAlias: data-tier` and `topicInfo` (RH134 chapter 19, no exercise: Build the Data Tier closes fragment 3).
+`section`, with `routeAlias: data-tier` and `topicInfo` (RH134 chapter 19, no exercise: Build the Data Tier closes fragment 3), and the subtitle "Where an application keeps what it cannot lose".
 
 ##### 2.2 The Data Tier in the Architecture
 
-1.7's diagram, the data tier highlighted.
+1.7's diagram as it now stands (your labels, scale 0.83), with the data tier highlighted. Its two nodes keep their pink fill with a 2px stroke, and the `serverb` box takes a 3px pink border. Every other node, and the `servera` box, is white with a grey stroke. The labels still name every tier, so the highlight does not rely on color alone. Line under it: "The database and Forgejo's files, both on `serverb`".
 
-##### 2.3 The Data Tier Holds Your Users' Work
+##### 2.3 What Is Data?
 
-`two-cols-header` (Option A, your choice 2026-11-22): what Forgejo's users create, by where it lives. Left, **In the database**: accounts, issues, pull requests, comments, and the settings people choose. Right, **In the files**: repositories (the code and its history), uploaded attachments, and avatars. `::bottom::` line: "Lose the software and you reinstall it. Lose this and it's gone, unless you have a backup."
+New. `center`, a title and a subtitle, like fragment 1's "What Is Self-Hosting?": "What Is Data?" over your definition (2026-11-22), "Everything the application stores persistently after installation". It replaced the planned "Everything an application remembers that you cannot download again", and an interim version that used the word "data" to define data. "The application" is the subject, so system configuration on `servera`, such as httpd's `forgejo.conf` and the container's service, does not count. It is written again from the exercise's steps, which keeps 1.5a's claim that the web and app tiers are stateless. Forgejo's own settings do count: they live in `app.ini`, among its files on `serverb` (Round 18). The line under the subtitle, "An application's data is also called its <AccentText>state</AccentText>", now repeats 1.5a's definition.
 
-##### 2.4 Storage of Its Own
+##### 2.4 Forgejo Stores Data in Two Places
 
-A narrow table of `vg_data` on `sdb`: `lv_db`, 2 GiB, at `/srv/db`, for PostgreSQL; `lv_forgejo`, the rest, at `/srv/forgejo`, for Forgejo's files. One line: separate volumes grow separately (w11), and one filling up does not stop the other.
+The earlier draft's 2.3 (Option A, your choice 2026-11-22), retitled by you from "The Data Tier Holds Your Users' Work", as the example that makes 2.3 concrete. `two-cols-header`: what Forgejo stores, by where it lives, each column headed by a one-item `IconGrid` (`data-base` and `folder`). Left, **In the database**, your bullets: user accounts; admin and user settings; issues, pull requests, and comments. Right, **In the files**: repositories (the code and its history), uploaded attachments, and avatars. Both columns have three bullets, so their headers line up. No `::bottom::` band: its "lose this" line moved, reworded, to 1.5a's.
 
-##### 2.5 New File Systems Have No Labels
+##### 2.5 Stateless and Stateful Tiers
 
-`TerminalWindow` from the data tier recording: one of `mount -av`'s "does not contain SELinux labels" warnings, then `restorecon -Rv` relabeling `/srv/db` to `postgresql_db_t` (with the `semanage fcontext` rule) and `/srv/forgejo` to `var_t` (the default for `/srv`). Review of w06 and w10.
+Moved to fragment 1 as 1.5a on 2026-11-22. Its first built bottom line, "Build the App Tier deletes Forgejo's container; its service makes a new one, and nothing is lost", rested on Round 21 and was replaced by your two lines before the move.
 
-##### 2.6 Sharing Files with NFS
+##### 2.6 Designing a Data Tier
 
-The `/etc/exports` line, `exportfs -v`'s output from the recording, and the firewall's `nfs` service, with `rpc-bind` and `mountd` only so `showmount` works. Review of w13.
+New. `IconGrid` of five, centered, in rows of three and two like 1.3, each caption led by the consideration's name in bold: `data-backup`, **Backups** you can restore; `replicate`, **Resiliency** when hardware fails; `growth`, **Capacity** for the data to grow; `meter`, **Performance** under load; `locked`, **Access** for the app tier only. Two captions were shortened from the plan ("when a disk or server fails", "under the application's load"), since each wrapped and left one word on its second line.
 
-##### 2.7 One UID on Both Hosts
+##### 2.7 What Makes a Backup Useful
 
-NFS sends each file's UID as a number, so `forgejo` gets UID 2000 on both hosts (`useradd -u`, w13). `TerminalWindow` from Round 21: `ls -ln /srv/forgejo` (2000) beside `ls -l` (`forgejo`). One line: root on `servera` is squashed to `nobody` and cannot enter Forgejo's private directories (Round 21's "Permission denied"), as w13 taught.
+New, titled "Backups" in the plan. `IconGrid` of four, what makes a backup useful: `send-alt`, kept off the host it protects; `time`, taken automatically on a schedule; `version`, several versions kept, since the newest copy may already hold a mistake; `task-complete`, tested by restoring it. Line under it: "Operate Forgejo does the first three, in the last section". It does not say what is left out. No exercise restores a backup. The copy goes to `servera`, which is off the data host but in the same lab, and a real site also keeps a copy off-site.
 
-##### 2.8 Review in This Tier
+##### 2.8 Resiliency
 
-A narrow table naming the week for each reviewed item of Build the Data Tier, from "Classification": `tuned` (w05), partitions and `/etc/fstab` (w10), LVM (w11), SELinux labels (w06), the firewall (w07), NFS and `useradd -u` (w13), services (w04).
+New. `two-cols-header`, with the line "Keeping the data available when hardware fails" under the title, and each column headed by a one-item `IconGrid` (`vmdk-disk` and `bare-metal-server`). Left, **When a disk fails**: "**RAID 1** mirrors the data on two disks" and "The other disk keeps working". W11 mentions a RAID device as one kind of physical volume, and nothing more. Right, **When a server fails**: "**Replication** copies to a standby server" and "The standby is ready to take over". "Keeps a standby server up to date" wrapped and put the headers out of line. `::bottom::` line: "Neither is a backup: a deleted repository is deleted on every copy at once". RAID and replication are named as ideas, with no commands, since the course teaches neither.
+
+##### 2.9 This Week's Data Tier
+
+New. It takes over the earlier draft's review table (2.8) and the substance of that draft's 2.4 to 2.7: how Build the Data Tier answers each consideration in 2.6, and the week that taught each part. A narrow table with three columns: the consideration, what the exercise does, and the weeks.
+
+As built, seven rows, with the "Weeks" column worded like 1.8's table:
+
+- **Capacity:** a partition and two logical volumes (10 and 11).
+- **Performance:** the `throughput-performance` profile (5).
+- **Access**, three rows: the firewall opens PostgreSQL and NFS (7); only `servera` may connect or mount (13 and 15, since `pg_hba.conf` is taught in fragment 3); SELinux labels on the new volumes (6).
+- **Backups:** in Operate Forgejo, nightly to `servera` (2 to 6, 1.8's range for that exercise).
+- **Resiliency:** "None: a single point of failure" (not taught).
+
+The planned closing line, "A single point of failure: fine for a lab, not for your users' work", overflowed the footer by 16px together with the table. It is folded into the Resiliency row, and "fine for a lab" is lost. The exercise's steps and its written version still cover the other items the earlier draft's 2.8 listed: `/etc/fstab`, services, and `useradd -u`.
 
 #### Fragment 3: PostgreSQL (`postgresql.md`)
 
@@ -281,7 +314,7 @@ A narrow table: package `postgresql-server`, which brings `postgresql` and its c
 
 ##### 3.3 SELinux Already Knows PostgreSQL
 
-`postgresql_db_t`, and the rule that gives it to `/var/lib/pgsql`, come with RHEL's policy, not the package. Data anywhere else needs a rule of its own, which is 2.5's `semanage fcontext` for `/srv/db`.
+`postgresql_db_t`, and the rule that gives it to `/var/lib/pgsql`, come with RHEL's policy, not the package. Data anywhere else needs a rule of its own: `semanage fcontext` for `/srv/db`, then `restorecon -Rv`, which a new file system needs anyway, since it starts with no labels (w06, w10). `/srv/forgejo` needs no rule: `restorecon` gives it `var_t`, the default for `/srv`. This takes over the earlier fragment 2 draft's 2.5 (Decision 30).
 
 ##### 3.4 Change a Unit Without Editing It
 
@@ -419,7 +452,7 @@ Two narrow tables: reviewed (w05 httpd, w06 `sealert` and booleans, w07 the fire
 
 ##### 6.3 What to Back Up
 
-The database and the files, from the same moment. `pg_dump` (new) copies a running database consistently; `tar` copies the files, minus the search index, which Forgejo can rebuild (its own `forgejo dump` has `--skip-index`). One honest line: `tar` reads files while Forgejo may write them, so the two halves are close to, not exactly, one moment. Another: the files also hold `app.ini`, whose secrets Forgejo wrote at its first start, such as the key that encrypts users' two-factor secrets, so a backup without it would lock those users out; that is why the files, not only the database, are backed up (kept off 2.3, which stays about user data).
+The database and the files, from the same moment. `pg_dump` (new) copies a running database consistently; `tar` copies the files, minus the search index, which Forgejo can rebuild (its own `forgejo dump` has `--skip-index`). One honest line: `tar` reads files while Forgejo may write them, so the two halves are close to, not exactly, one moment. Another: the files also hold `app.ini`, whose secrets Forgejo wrote at its first start, such as the key that encrypts users' two-factor secrets, so a backup without it would lock those users out; that is why the files, not only the database, are backed up (kept off 2.4, which stays about user data).
 
 ##### 6.4 The Backup Script
 
@@ -459,7 +492,7 @@ Two narrow tables: reviewed (w02, w03, w04, w05, w06) and new (`pg_dump`, `tar -
 
 #### Size and cut candidates
 
-62 slides across the six fragments (with 1.6a), plus the cover and the VM reminder. With about 28 minutes of recorded exercises, longer typed live, that is likely too much for 2.5 hours. Candidates, in the order I would cut: merge 1.3 into 1.2 and 1.5 into 1.4; fold 3.3 into 2.5; merge each tier's review and new tables (2.8, 4.11, 5.7, 6.10) into the exercise slide's environment notes or drop them for a single closing review map; drop 6.2. That brings it to about 53.
+63 slides across the six fragments (with 1.5a and 1.6a, and fragment 2 at eight since its 2026-11-22 redraft and 1.5a's move), plus the cover and the VM reminder. With about 28 minutes of recorded exercises, longer typed live, that is likely too much for 2.5 hours. Candidates, in the order I would cut: merge 1.3 into 1.2 and 1.5 into 1.4; fold 2.3 into 2.4 as its opening line; drop 2.6, since 2.9 names the same five considerations; merge each later tier's review and new tables (4.11, 5.7, 6.10) into the exercise slide's environment notes or drop them for a single closing review map; drop 6.2. That brings it to about 55.
 
 ## Verification
 
@@ -575,6 +608,8 @@ Nothing on the chain's hosts was changed. To-verify item 8 is answered by the fi
 7. The time: estimated under "Exercises"; a live dry run will time it (Decision 16).
 8. Answered in Round 21. For the PostgreSQL fragment, from a transcript at step 4: what `psql` shows when a statement lacks its `;`, `\q`'s exit, and what the service says when started before `postgresql-setup --initdb` (Decision 24).
 9. For slide 6.3: that `app.ini` holds secrets Forgejo generated at its first start (`SECRET_KEY`, `INTERNAL_TOKEN`), and that losing `SECRET_KEY` breaks users' two-factor logins, from Forgejo's documentation or a test on `serverc`.
+
+**Round 22, 2026-11-22, fragment 2.** Fragment 2 shows no command or output, so it had nothing to capture. Its one claim about the lab, 2.5's first bottom line, rested on Round 21: the first admin was still in PostgreSQL after Build the App Tier's step 6 deleted the container. That line has since been replaced, and the slide moved to fragment 1 as 1.5a. This session ran on a machine whose lab has not run the exercise chain, so a read-only check found no `forgejo` user on `servera` and no `postgres` account on `serverb`. Nothing was changed on that lab.
 
 ## Open questions
 

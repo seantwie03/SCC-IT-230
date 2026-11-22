@@ -14,10 +14,12 @@ topicInfo:
 ## Self-Hosting Forgejo
 
 ---
+layout: center
+---
 
 # What Is Self-Hosting?
 
-## Running applications on hardware you control
+## Running applications <AccentText>yourself</AccentText> instead of using <DangerText>hosted services</DangerText>
 
 ---
 layout: two-cols-header
@@ -26,7 +28,7 @@ horizontal: center
 listSpacing: padded
 ---
 
-# What Is Self-Hosting?
+# Self-Hosted vs Company Hosted
 
 ::left::
 
@@ -144,6 +146,51 @@ A failure stays in its own tier
 </IconGrid>
 
 ---
+layout: two-cols-header
+vertical: center
+horizontal: center
+listSpacing: padded
+---
+
+# Stateless and Stateful Tiers
+
+An application's **state** is the data it stores persistently
+
+::left::
+
+<IconGrid>
+<IconGridItem icon="renew">
+
+**Web and app tiers** are stateless
+
+</IconGridItem>
+</IconGrid>
+
+- Rebuilt by installing them again
+- Replaced to upgrade or recover
+- Copied to serve more users
+
+::right::
+
+<IconGrid>
+<IconGridItem icon="data-base">
+
+**The data tier** is stateful
+
+</IconGridItem>
+</IconGrid>
+
+- Backed up
+- Protected from failure
+- Grown as the data grows
+
+::bottom::
+
+Lose the web or app tier and you can reinstall it
+
+Lose the data tier and it's gone, unless you have a backup
+
+---
 horizontal: center
 ---
 
@@ -164,13 +211,13 @@ vertical: center
 
 ![Forgejo's own repository, forgejo/forgejo, on Codeberg: tabs for Code, Issues (1.7k), Pull requests (194), Projects, Releases, Packages, Activity, and Actions, then 26,160 commits, 33 branches, and 311 tags above the start of its file list](./assets/forgejo-codeberg-repo.png)
 
-Codeberg hosts Forgejo's own code on Forgejo
+Codeberg is a non-profit that hosts a Forgejo instance for public use
 
 ::right::
 
 ![Fedora Forge's welcome page: "Welcome to Fedora Forge", "The Fedora Project's collaborative development platform", and "Fedora Forge is a git forge built on Forgejo", with Forgejo highlighted](./assets/fedora-forgejo.png)
 
-The Fedora Project's forge is built on Forgejo
+The Fedora Community hosts a Forgejo instance for their developers
 
 ---
 horizontal: center
@@ -179,23 +226,23 @@ vertical: center
 
 # This Week's Architecture
 
-```mermaid {scale: 0.8}
+```mermaid {scale: 0.83}
 flowchart LR
-    W@{ icon: "carbon:laptop", form: "square", label: "workstation", pos: "b" }
+    W@{ icon: "carbon:laptop", form: "square", label: "User's\nWorkstation", pos: "b" }
     subgraph A ["servera"]
         direction LR
-        H@{ icon: "carbon:application-web", form: "square", label: "httpd (web tier)", pos: "b" }
-        F@{ icon: "carbon:container-software", form: "square", label: "Forgejo (app tier)", pos: "b" }
-        H -- "port 3000" --> F
+        H@{ icon: "carbon:application-web", form: "square", label: "Web Tier\nhttpd", pos: "b" }
+        F@{ icon: "carbon:container-software", form: "square", label: "App Tier\nForgejo", pos: "b" }
+        H -- "Port 3000\n(HTTP)" --> F
     end
     subgraph B ["serverb"]
         direction LR
-        D@{ icon: "carbon:data-base", form: "square", label: "PostgreSQL (data tier)", pos: "b" }
-        N@{ icon: "carbon:folder-shared", form: "square", label: "Forgejo's files (data tier)", pos: "b" }
+        D@{ icon: "carbon:data-base", form: "square", label: "Data Tier\nPostgreSQL (DB)", pos: "b" }
+        N@{ icon: "carbon:folder-shared", form: "square", label: "Data Tier\nFiles (NFS)", pos: "b" }
     end
-    W -- "port 80" --> H
-    F -- "port 5432" --> D
-    F -- "NFS" --> N
+    W -- "Port 80\n(HTTP)" --> H
+    F -- "Port 5432\n(PostgreSQL)" --> D
+    F -- "Port 2049\n(NFS)" --> N
     style A fill:#ffffff,stroke:#9aa4ad
     style B fill:#ffffff,stroke:#9aa4ad
     style W fill:#ffffff,stroke:#55555b
@@ -205,7 +252,8 @@ flowchart LR
     style N fill:#f6dce9,stroke:#d56199
 ```
 
-Only port 80 is open to other hosts; Forgejo's files are automounted from `serverb`
+- Users reach Forgejo only through the web tier; port 3000 stays closed
+- Forgejo keeps its data on `serverb`: in PostgreSQL and on an NFS share
 
 ---
 vertical: center
