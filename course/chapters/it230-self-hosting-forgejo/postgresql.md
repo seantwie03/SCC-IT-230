@@ -40,8 +40,6 @@ RHEL's policy has a rule for `/var/lib/pgsql` before PostgreSQL is installed
 <TerminalWindow title="root@serverb:~">
 
 ```bash-session
-root@serverb:~# rpm -q postgresql-server
-package postgresql-server is not installed
 root@serverb:~# semanage fcontext -l | grep '^/var/lib/pgsql('
 /var/lib/pgsql(/.*)?                               all files          system_u:object_r:postgresql_db_t:s0
 ```
@@ -53,9 +51,6 @@ Data anywhere else needs a rule of its own, and a new file system has no labels
 <TerminalWindow title="root@serverb:~">
 
 ```bash-session
-root@serverb:~# ls -ldZ /srv/db /srv/db/pgsql
-drwxr-xr-x. 3 root     root     system_u:object_r:unlabeled_t:s0     19 Nov 21 17:11 /srv/db
-drwx------. 2 postgres postgres unconfined_u:object_r:unlabeled_t:s0  6 Nov 21 17:11 /srv/db/pgsql
 root@serverb:~# semanage fcontext -a -t postgresql_db_t '/srv/db(/.*)?'
 root@serverb:~# restorecon -Rv /srv/db
 Relabeled /srv/db from system_u:object_r:unlabeled_t:s0 to system_u:object_r:postgresql_db_t:s0
@@ -66,156 +61,108 @@ Relabeled /srv/db/pgsql from unconfined_u:object_r:unlabeled_t:s0 to unconfined_
 
 ---
 
-# Change a Unit Without Editing It
+# Use a Custom Data Directory
 
-A package update replaces its unit file, so add a <AccentText>drop-in</AccentText> instead
+PostgreSQL stores its data in `/var/lib/pgsql/data` by default
 
-<TerminalWindow title="root@serverb:~" :rows="16">
-
-````md magic-move
-```bash-session
-#^ 1. The unit file says not to edit it
-root@serverb:~# systemctl cat postgresql | head -6
-# /usr/lib/systemd/system/postgresql.service
-# It's not recommended to modify this file in-place, because it will be
-# overwritten during package upgrades.  It is recommended to use systemd
-# "dropin" feature;  i.e. create file with suffix .conf under
-# /etc/systemd/system/UNITNAME.service.d directory overriding the
-# unit's defaults.  Look at systemd.unit(5) manual page for more info.
+```ini [/usr/lib/systemd/system/postgresql.service]
+[Service]
+Environment=PGDATA=/var/lib/pgsql/data
 ```
-```bash-session
-#^ 1. The unit file says not to edit it
-root@serverb:~# systemctl cat postgresql | head -6
+
+We want to use `/srv/db` because it is on a separate Logical Volume
+
+Setting `PGDATA=/srv/db/pgsql/data` in a systemd <AccentText>drop-in</AccentText> overrides the package default
+
+---
+
+# Easily Create Systemd Drop-In Files
+
+`systemctl edit postgresql` opens a drop-in file in `vim`
+
+<TextExplainer
+  size="sm"
+  :lines="[
+    '### Editing /etc/systemd/system/postgresql.service.d/override.conf',
+    '### Anything between here and the comment below will become the contents of the drop-in file',
+    '',
+    '[Service]',
+    'Environment=PGDATA=/srv/db/pgsql/data',
+    '### Edits below this comment will be discarded',
+  ]"
+  :steps="[
+    { line: 1, text: '/etc/systemd/system/postgresql.service.d/override.conf', explanation: 'The drop-in that systemctl edit postgresql opens in vim' },
+    { line: 4, explanation: 'The section the directive belongs to, as in the unit file' },
+    { line: 5, explanation: 'Only the directives to add or override: here, just PGDATA' },
+    { line: 6, explanation: 'Below this line: the package unit file, for reference only' },
+  ]"
+/>
+
+---
+
+# View the Full Systemd Unit
+
+`systemctl cat` shows the full Systemd Unit with any drop-in files
+
+```[systemctl cat postgresql (abridged)] {1,2,5,8-10}
 # /usr/lib/systemd/system/postgresql.service
-# It's not recommended to modify this file in-place, because it will be
-# overwritten during package upgrades.  It is recommended to use systemd
-# "dropin" feature;  i.e. create file with suffix .conf under
-# /etc/systemd/system/UNITNAME.service.d directory overriding the
-# unit's defaults.  Look at systemd.unit(5) manual page for more info.
-#^ 2. systemctl edit writes a drop-in
-root@serverb:~# systemctl edit postgresql
-Successfully installed edited file '/etc/systemd/system/postgresql.service.d/override.conf'.
-```
-```bash-session
-#^ 1. The unit file says not to edit it
-root@serverb:~# systemctl cat postgresql | head -6
-# /usr/lib/systemd/system/postgresql.service
-# It's not recommended to modify this file in-place, because it will be
-# overwritten during package upgrades.  It is recommended to use systemd
-# "dropin" feature;  i.e. create file with suffix .conf under
-# /etc/systemd/system/UNITNAME.service.d directory overriding the
-# unit's defaults.  Look at systemd.unit(5) manual page for more info.
-#^ 2. systemctl edit writes a drop-in
-root@serverb:~# systemctl edit postgresql
-Successfully installed edited file '/etc/systemd/system/postgresql.service.d/override.conf'.
-#^ 3. The drop-in comes last, so its PGDATA wins
-root@serverb:~# systemctl cat postgresql | tail -3
+[Service]
+User=postgres
+Group=postgres
+Environment=PGDATA=/var/lib/pgsql/data
+...output omitted...
+
 # /etc/systemd/system/postgresql.service.d/override.conf
 [Service]
 Environment=PGDATA=/srv/db/pgsql/data
 ```
-````
 
-</TerminalWindow>
-
+---
+listSpacing: padded
 ---
 
 # Initialize the Database
 
-<TerminalWindow title="root@serverb:~" :rows="12">
+**<AccentText>Before starting the service</AccentText>**, you must run `postgresql-setup --initdb`
 
-````md magic-move
+<TerminalWindow title="root@serverb:~">
+
 ```bash-session
-#^ 1. With no database in PGDATA, the service fails
-root@serverb:~# systemctl start postgresql
-Job for postgresql.service failed because the control process exited with error code.
-See "systemctl status postgresql.service" and "journalctl -xeu postgresql.service" for details.
-```
-```bash-session
-#^ 1. With no database in PGDATA, the service fails
-root@serverb:~# systemctl start postgresql
-Job for postgresql.service failed because the control process exited with error code.
-See "systemctl status postgresql.service" and "journalctl -xeu postgresql.service" for details.
-#^ 2. postgresql-setup --initdb creates one
 root@serverb:~# postgresql-setup --initdb
  * Initializing database in '/srv/db/pgsql/data'
  * Initialized, logs are in /var/lib/pgsql/initdb_postgresql.log
 ```
-```bash-session
-#^ 1. With no database in PGDATA, the service fails
-root@serverb:~# systemctl start postgresql
-Job for postgresql.service failed because the control process exited with error code.
-See "systemctl status postgresql.service" and "journalctl -xeu postgresql.service" for details.
-#^ 2. postgresql-setup --initdb creates one
-root@serverb:~# postgresql-setup --initdb
- * Initializing database in '/srv/db/pgsql/data'
- * Initialized, logs are in /var/lib/pgsql/initdb_postgresql.log
-#^ 3. Now the service starts
-root@serverb:~# systemctl start postgresql
-root@serverb:~# systemctl is-active postgresql
-active
-```
-````
 
 </TerminalWindow>
 
-The journal says why: `Directory "/srv/db/pgsql/data" is missing or empty.`
+- Reads `PGDATA` from the `postgresql` service, drop-ins included
+- Switches to the `postgres` user, which will own the files
+- Creates the database files, including configuration files
 
-The data goes one directory below the mount point, as PostgreSQL recommends
+---
+
+# postgresql.conf
+
+- In the data directory: `/srv/db/pgsql/data/postgresql.conf`
+- Holds the server's settings, one `name = value` per line
+
+<TextExplainer
+  :lines="[
+    'listen_addresses = \'localhost,172.25.250.11\'',
+  ]"
+  :steps="[
+    { text: 'listen_addresses', explanation: 'The addresses PostgreSQL listens on' },
+    { text: 'localhost', explanation: 'The default: connections from serverb itself' },
+    { text: '172.25.250.11', explanation: 'Also serverb\'s lab address, so servera can reach it' },
+  ]"
+/>
 
 ---
 
-# Two Configuration Files
+# pg_hba.conf
 
-`postgresql.conf` holds the server's settings; `pg_hba.conf` says who may connect
-
-<TerminalWindow title="root@serverb:~" :rows="14">
-
-````md magic-move
-```bash-session
-#^ 1. By default, PostgreSQL listens only on localhost
-root@serverb:~# ss -ltn | grep 5432
-LISTEN 0      200        127.0.0.1:5432      0.0.0.0:*
-LISTEN 0      200            [::1]:5432         [::]:*
-```
-```bash-session
-#^ 1. By default, PostgreSQL listens only on localhost
-root@serverb:~# ss -ltn | grep 5432
-LISTEN 0      200        127.0.0.1:5432      0.0.0.0:*
-LISTEN 0      200            [::1]:5432         [::]:*
-#^ 2. listen_addresses adds serverb's lab address
-root@serverb:~# grep -n listen_addresses /srv/db/pgsql/data/postgresql.conf
-60:#listen_addresses = 'localhost'		# what IP address(es) to listen on;
-61:listen_addresses = 'localhost,172.25.250.11'
-```
-```bash-session
-#^ 1. By default, PostgreSQL listens only on localhost
-root@serverb:~# ss -ltn | grep 5432
-LISTEN 0      200        127.0.0.1:5432      0.0.0.0:*
-LISTEN 0      200            [::1]:5432         [::]:*
-#^ 2. listen_addresses adds serverb's lab address
-root@serverb:~# grep -n listen_addresses /srv/db/pgsql/data/postgresql.conf
-60:#listen_addresses = 'localhost'		# what IP address(es) to listen on;
-61:listen_addresses = 'localhost,172.25.250.11'
-#^ 3. After a restart, it listens there too
-root@serverb:~# systemctl restart postgresql
-root@serverb:~# ss -ltn | grep 5432
-LISTEN 0      200    172.25.250.11:5432      0.0.0.0:*
-LISTEN 0      200        127.0.0.1:5432      0.0.0.0:*
-LISTEN 0      200            [::1]:5432         [::]:*
-```
-````
-
-</TerminalWindow>
-
-Listening is not permission: `pg_hba.conf` and the firewall decide who connects
-
----
-horizontal: center
-vertical: center
----
-
-# A pg_hba.conf Line
+- Also in the data directory: `/srv/db/pgsql/data/pg_hba.conf`
+- Host-based authentication: who may connect, and how they prove it
 
 <TextExplainer
   size="sm"
@@ -230,8 +177,6 @@ vertical: center
     { text: 'scram-sha-256', explanation: 'Method: a password, never sent in the clear' },
   ]"
 />
-
-The default lines allow only connections from `serverb` itself
 
 ---
 
