@@ -8,7 +8,7 @@ Plan w15 as something new: put what students learned all semester into action by
 
 ## Answer in brief
 
-**Stub, updated 2026-11-19.** No slides, exercises, or fragments yet, and no source deck: w15 is new material, not a port. It takes the place of RH134 chapter 18, *Working with Image-Based RHEL*, which the lesson plan in `~/s/IT-230/w15/` covered; RHA's chapter 19 review labs are the week's homework (Decision 7).
+**Updated 2026-11-24.** Fragments 1 to 4 are built and fragments 5 and 6 are drafted; all four exercises are recorded, and two have their written versions. There is no source deck: w15 is new material, not a port. It takes the place of RH134 chapter 18, *Working with Image-Based RHEL*, which the lesson plan in `~/s/IT-230/w15/` covered; RHA's chapter 19 review labs are the week's homework (Decision 7).
 
 What is settled:
 
@@ -22,7 +22,7 @@ What is settled:
 8. **One exercise chain, tier by tier.** Each tier opens with the host configuration it needs, and the operating steps come last, where they can be cut on the day (Decisions 16 and 27).
 9. **Aligned to RH134 chapter 19,** *Comprehensive Review*, with no Cert Guide chapter (Decision 17).
 
-The week is built in the order under "Build order". Step 1 is done: its three unknowns are answered (Round 5), and the command files are written and verified in chain order (Round 6; see "Exercises"); there are four since Decision 27 dropped the reboot exercise. Decision 26, Forgejo's data on `serverb` over NFS, was accepted on 2026-11-21, and Build the Data Tier and Build the App Tier were rewritten for it (Round 11). All four exercises are recorded (Rounds 15, 16, and 20), Operate Forgejo's with the backup that also takes Forgejo's files (Decision 28). Steps 2 and 3 are done (see "Classification" and "New material"; Decision 29 accepted), and step 4, the slides, is next. Decisions 21 to 23 are accepted. Decisions 21 to 23 and 25 are proposed and await your call.
+The week is built in the order under "Build order". Step 1 is done: its three unknowns are answered (Round 5), and the command files are written and verified in chain order (Round 6; see "Exercises"); there are four since Decision 27 dropped the reboot exercise. Decision 26, Forgejo's data on `serverb` over NFS, was accepted on 2026-11-21, and Build the Data Tier and Build the App Tier were rewritten for it (Round 11). All four exercises are recorded (Rounds 15, 16, and 20), Operate Forgejo's with the backup that also takes Forgejo's files (Decision 28). Steps 2 and 3 are done (see "Classification" and "New material"; Decision 29 accepted). Step 4, the slides, is under way: fragments 1 to 4 are built, with 45 slides between them, and fragment 5 is next (see "Slides"). Decisions 1 to 30 are all settled; none awaits your call.
 
 ## Scope
 
@@ -200,21 +200,25 @@ Proposed 2026-11-21 as Decision 29 and accepted the same day. Each new item gets
 
 ## Slides (step 4, draft)
 
-Drafted 2026-11-21 for your review; nothing is built. Six fragments in `course/chapters/it230-self-hosting-forgejo/` (Decisions 23 and 25), each aligned to RH134 chapter 19 (Decision 17) and opening with a `section` slide that carries its `routeAlias` and `topicInfo`. Transcripts come from your four recordings (the casts) or from Round 21, with prompts rewritten to the theme's `student@servera:~$` form. No presenter notes. Each tier's fragment opens with the week's architecture diagram, its own tier highlighted, and ends with its exercise and recording slides. Cut candidates are listed at the end.
+Drafted 2026-11-21. Fragments 1 to 4 are built, and their entries describe the slides as they stand on 2026-11-24, after your revisions; fragments 5 and 6 are still the draft. Six fragments in `course/chapters/it230-self-hosting-forgejo/` (Decisions 23 and 25), each aligned to RH134 chapter 19 (Decision 17) and opening with a `section` slide that carries its `routeAlias` and `topicInfo`. Transcripts come from your four recordings (the casts) or from Round 21, with prompts rewritten to the theme's `student@servera:~$` form. No presenter notes. Each tier's fragment opens with the week's architecture diagram, its own tier highlighted, and ends with its exercise and recording slides. Cut candidates are listed at the end.
 
-**The weekly entry, `course/w15-draft.md`** (built 2026-11-22, with fragments 1 to 3 so far): a cover titled "Self-Hosting Forgejo", accent `orange`, your change from `green` (w14 was `teal`; the guide prefers cool accents for Bash-heavy decks), with a six-line agenda (Self-Hosting Forgejo, The Data Tier, PostgreSQL, The App Tier, The Web Tier, Operating Forgejo) and the summary from your opening paragraph; then the VM reminder, "Start `workstation`, `servera`, and `serverb` on your VDI"; then one `src:` import per fragment.
+**The weekly entry, `course/w15-draft.md`** (built 2026-11-22, with fragments 1 to 4 so far): a cover titled "Self-Hosting Forgejo", accent `orange`, your change from `green` (w14 was `teal`; the guide prefers cool accents for Bash-heavy decks), with a six-line agenda (Self-Hosting Forgejo, The Data Tier, PostgreSQL, The App Tier, The Web Tier, Operating Forgejo) and the summary from your opening paragraph; then the VM reminder, "Start `workstation`, `servera`, and `serverb` on your VDI"; then one `src:` import per fragment.
 
 #### Fragment 1: Self-Hosting Forgejo (`self-hosting.md`), built 2026-11-22
 
-The tiers keep one hue each through the week, named in words every time, as `docs/design-system.md` asks of a hue key: web blue, app purple, data pink, all clear of the green accent.
+Eleven slides as of 2026-11-24, after your revisions: 1.2 became two slides (1.2 and 1.2a), and 1.5, 1.5a, 1.6, 1.6a, and 1.7 changed wording or layout. The tiers keep one hue each through the week, named in words every time, as `docs/design-system.md` asks of a hue key: web blue, app purple, data pink, none of them the deck's orange accent.
 
-##### 1.1 Self-Hosting Forgejo
+##### 1.1 Final Review
 
-`section`, with `routeAlias: self-hosting-forgejo` and `topicInfo` (RH134 chapter 19, *Comprehensive Review*, no exercise), and the subtitle "Putting the semester into practice".
+`section`, with `routeAlias: self-hosting-forgejo` and `topicInfo` (RH134 chapter 19, *Comprehensive Review*, no exercise). Its heading is "Final Review" and its subtitle "Self-Hosting Forgejo"; the drafted heading was "Self-Hosting Forgejo", with the subtitle "Putting the semester into practice".
 
 ##### 1.2 What Is Self-Hosting?
 
-`two-cols-header`, each column headed by a one-item `IconGrid` (`cloud`, "**Hosted service**, such as GitHub"; `home`, "**Self-hosted**, such as Forgejo") over three bullets: someone else runs it, they keep your data, they set the rules; you run it on your own servers, you keep your data, you do the administration. No closing line, as you edited.
+`center`, a title and a subtitle: "Running applications <AccentText>yourself</AccentText> instead of using <DangerText>hosted services</DangerText>". It took 1.2's title when you split the slide; the comparison moved to 1.2a.
+
+##### 1.2a Self-Hosted vs Company Hosted
+
+The drafted 1.2's comparison, retitled. `two-cols-header`, centered both ways, with `listSpacing: padded`. Each column is headed by a one-item `IconGrid` (`cloud`, "**Hosted service**, such as <AccentText>GitHub</AccentText>"; `home`, "**Self-hosted**, such as <AccentText>Forgejo</AccentText>") over three bullets, each opening with its subject in bold: "**Someone else** runs it", "**They** keep your data", and "**They** set the rules"; "**You** run it on your own servers", "**You** keep your data", and "**You** do the administration". No closing line.
 
 ##### 1.3 Home Labs
 
@@ -226,27 +230,27 @@ A Mermaid `flowchart` at scale 1: a `user-multiple` icon for the users, then thr
 
 ##### 1.5 Why Separate the Tiers
 
-`IconGrid` of four: `security`, only the web tier faces the network; `locked`, each tier is secured for its own job; `renew`, update or replace one tier at a time; `search`, a failure stays in its own tier.
+`IconGrid` of four: `security`, "Only the web tier accepts user connections" (drafted as "only the web tier faces the network"); `locked`, "Each tier is secured for its own job"; `renew`, "Update or replace one tier at a time"; `search`, "A failure stays in its own tier".
 
 ##### 1.5a Stateless and Stateful Tiers
 
-Moved here from fragment 2 (its 2.5) on 2026-11-22, at your direction, so it comes where the tiers are introduced. It expands 1.5's "update or replace one tier at a time": that is cheap for two tiers and not the third. `two-cols-header`, each column headed by a one-item `IconGrid`. Under the title, a line added in the move: "An application's **state** is the data it stores persistently". Without it, "stateless" would appear before 2.3 defines the idea. Left, `renew`, "**Web and app tiers** are stateless": rebuilt by installing them again; replaced to upgrade or recover; copied to serve more users. Right, `data-base`, "**The data tier** is stateful": backed up; protected from failure; grown as the data grows. `::bottom::`, your two lines: "Lose the web or app tier and you can reinstall it." and "Lose the data tier and it's gone, unless you have a backup".
+Moved here from fragment 2 (its 2.5) on 2026-11-22, at your direction, so it comes where the tiers are introduced. It expands 1.5's "update or replace one tier at a time": that is cheap for two tiers and not the third. `two-cols-header`, each column headed by a one-item `IconGrid`. Under the title, a line added in the move: "An application's **state** is the data it stores persistently". Without it, "stateless" would appear before 2.3 defines the idea. Left, `renew`, "**Web and app tiers** are stateless": rebuilt by installing them again; replaced to upgrade or recover; copied to serve more users. Right, `data-base`, "**The data tier** is stateful": backed up; protected from failure; grown as the data grows. `::bottom::`, your two lines: "Lose the web or app tier and you can reinstall it" and "Lose the data tier and it's gone, unless you have a backup". The slide is centered both ways, with `listSpacing: padded`.
 
 Two notes that stay off the slide unless you want them. First, copying a tier to serve more users is the pattern's general benefit. This week does not show it, and the slide does not claim it for Forgejo. Second, each tier still writes logs on its own host, such as httpd's access log on `servera`, which Operate Forgejo reads. Losing those loses history, not users' work.
 
 ##### 1.6 What Is Forgejo?
 
-`two-cols-header`, `leftWidth: 55`: left, your screenshot of Forgejo's product page (`assets/forgejo-product-page.png`, 1073x699), "Forge great software with Forgejo" over its six features, among them "Self-hosted alternative to GitHub" and "Guaranteed 100% Free Software" (it replaced a screenshot of Forgejo's README on 2026-11-22); right, three bullets: a self-hosted web application, a GitHub alternative you run yourself; a community project, fully open source, with no enterprise edition; pronounced for-JEH-yo (in `AccentText`), from the Esperanto word for forge. The `IconGrid` of repositories, issues, and pull requests went when 1.6a began showing them for real (2026-11-22).
+Default layout, `horizontal: center`: your screenshot of Forgejo's product page (`assets/forgejo-product-page.png`, 1073x699) alone, "Forge great software with Forgejo" over its six features, among them "Self-hosted alternative to GitHub" and "Guaranteed 100% Free Software" (it replaced a screenshot of Forgejo's README on 2026-11-22). Its alt text gives the heading, the tagline, and all six features. One line under it: "Pronounced <AccentText>for-JEH-yo</AccentText>, from the Esperanto word for forge". The drafted `two-cols-header` with three bullets beside the screenshot is gone, and with it "a GitHub alternative you run yourself" and "a community project, fully open source, with no enterprise edition"; the screenshot's own features cover the first. The `IconGrid` of repositories, issues, and pull requests went when 1.6a began showing them for real (2026-11-22).
 
 ##### 1.6a Forgejo in Use
 
-Added 2026-11-22 for two of your screenshots. `two-cols-header`: left, Forgejo's own repository on Codeberg (`assets/forgejo-codeberg-repo.png`, 1170x413), with its Code, Issues, and Pull requests tabs, captioned "Codeberg hosts Forgejo's own code on Forgejo"; right, Fedora Forge's welcome page (`assets/fedora-forgejo.png`, 1170x486), "a git forge built on Forgejo", with your highlight on Forgejo, captioned "The Fedora Project's forge is built on Forgejo".
+Added 2026-11-22 for two of your screenshots. `two-cols-header`, `vertical: center`: left, Forgejo's own repository on Codeberg (`assets/forgejo-codeberg-repo.png`, 1170x413), with its Code, Issues, and Pull requests tabs, captioned "Codeberg is a non-profit that hosts a Forgejo instance for public use"; right, Fedora Forge's welcome page (`assets/fedora-forgejo.png`, 1170x486), "a git forge built on Forgejo", with your highlight on Forgejo, captioned "The Fedora Community hosts a Forgejo instance for their developers".
 
 **The three screenshots** are yours, taken 2026-11-22, so they carry no credit line, and they are stored as PNG as w12's GNOME Software screenshots were, each with alt text that describes it. `fedora-forgejo.png`'s top bar carries the Fedora logo, whose trademark Red Hat holds; `AGENTS.md` admits Red Hat's logos only with explicit authorization, which this request is taken as, and the logo is left as captured. Cropping off the top bar would remove it.
 
 ##### 1.7 This Week's Architecture
 
-The week's Mermaid `flowchart LR` at scale 0.8, to be reused in 2.2, 4.2, and 5.2: Carbon icon nodes for `workstation` (`laptop`), then the `servera` box with "httpd (web tier)" (`application-web`, blue) and "Forgejo (app tier)" (`container-software`, purple), then the `serverb` box with "PostgreSQL (data tier)" (`data-base`) above "Forgejo's files (data tier)" (`folder-shared`), both pink. Edges: "port 80", "port 3000", "port 5432", and "NFS". Line under it: "Only port 80 is open to other hosts; Forgejo's files are automounted from `serverb`". At scale 0.9 with longer labels the diagram ran off the slide's right edge, which `check:slides` did not report; `serverb` needs `direction LR` to stack its two nodes, since in a top-to-bottom box two nodes of one rank sit side by side.
+The week's Mermaid `flowchart LR` at scale 0.83, with your labels, reused in 2.2 and to be reused in 4.2 and 5.2: Carbon icon nodes for "User's Workstation" (`laptop`, white), then the `servera` box with "Web Tier / httpd" (`application-web`, blue) and "App Tier / Forgejo" (`container-software`, purple), then the `serverb` box with "Data Tier / PostgreSQL (DB)" (`data-base`) stacked above "Data Tier / Files (NFS)" (`folder-shared`), both pink. Edges: "Port 80 (HTTP)" from the workstation to httpd, "Port 3000 (HTTP)" from httpd to Forgejo, and "Port 5432 (PostgreSQL)" and "Port 2049 (NFS)" from Forgejo to the two `serverb` nodes. Two bullets under it: "Users reach Forgejo only through the web tier; port 3000 stays closed" and "Forgejo keeps its data on `serverb`: in PostgreSQL and on an NFS share". At scale 0.9 with longer labels the diagram ran off the slide's right edge, which `check:slides` did not report; `serverb` needs `direction LR` to stack its two nodes, since in a top-to-bottom box two nodes of one rank sit side by side.
 
 ##### 1.8 Built in Four Exercises
 
@@ -270,7 +274,7 @@ New. `center`, a title and a subtitle, like fragment 1's "What Is Self-Hosting?"
 
 ##### 2.4 Forgejo Stores Data in Two Places
 
-The earlier draft's 2.3 (Option A, your choice 2026-11-22), retitled by you from "The Data Tier Holds Your Users' Work", as the example that makes 2.3 concrete. `two-cols-header`: what Forgejo stores, by where it lives, each column headed by a one-item `IconGrid` (`data-base` and `folder`). Left, **In the database**, your bullets: user accounts; admin and user settings; issues, pull requests, and comments. Right, **In the files**: repositories (the code and its history), uploaded attachments, and avatars. Both columns have three bullets, so their headers line up. No `::bottom::` band: its "lose this" line moved, reworded, to 1.5a's.
+The earlier draft's 2.3 (Option A, your choice 2026-11-22), retitled by you from "The Data Tier Holds Your Users' Work", as the example that makes 2.3 concrete. `two-cols-header`: what Forgejo stores, by where it lives, each column headed by a one-item `IconGrid` (`data-base` and `folder`). Left, **In the database**, your bullets: "User Accounts", "Admin and User Settings", and "Issues, pull requests, and comments". Right, **In the files**: "Repositories: the code and its history", "Uploaded attachments", and "Avatars". Both columns have three bullets, so their headers line up. No `::bottom::` band: its "lose this" line moved, reworded, to 1.5a's.
 
 ##### 2.5 Stateless and Stateful Tiers
 
@@ -282,7 +286,7 @@ New. `IconGrid` of five, centered, in rows of three and two like 1.3, each capti
 
 ##### 2.7 What Makes a Backup Useful
 
-New, titled "Backups" in the plan. `IconGrid` of four, what makes a backup useful: `send-alt`, kept off the host it protects; `time`, taken automatically on a schedule; `version`, several versions kept, since the newest copy may already hold a mistake; `task-complete`, tested by restoring it. Line under it: "Operate Forgejo does the first three, in the last section". It does not say what is left out. No exercise restores a backup. The copy goes to `servera`, which is off the data host but in the same lab, and a real site also keeps a copy off-site.
+New, titled "Backups" in the plan. `IconGrid` of four, what makes a backup useful: `send-alt`, "Kept off the host it protects"; `time`, "Taken automatically on a schedule"; `version`, "Several versions kept" (the reason, that the newest copy may already hold a mistake, is not on the slide); `task-complete`, "Tested by restoring it". Line under it: "Operate Forgejo does the first three, in the last section". It does not say what is left out. No exercise restores a backup. The copy goes to `servera`, which is off the data host but in the same lab, and a real site also keeps a copy off-site.
 
 ##### 2.8 Resiliency
 
@@ -304,7 +308,7 @@ The planned closing line, "A single point of failure: fine for a lab, not for yo
 
 #### Fragment 3: PostgreSQL (`postgresql.md`), built 2026-11-22
 
-Built 2026-11-22 with its written exercise, as the week-porting skill requires of a fragment that closes with an exercise. Eleven slides, as drafted. Transcripts come from Build the Data Tier's recording or from Round 23 on `serverb`, with prompts in the theme's `root@serverb:~#` form. `check:entry`, `check:slides`, and `check:exercises` pass, and every slide was looked at in the review browser at 1920x1080.
+Built 2026-11-22 with its written exercise, as the week-porting skill requires of a fragment that closes with an exercise, then reworked 2026-11-23 at your direction: the drop-in slide became three (3.4, 3.4a, and 3.4b), 3.5 was reframed around `postgresql-setup --initdb`, and the two configuration files got a slide each (3.6 and 3.7). Thirteen slides. Transcripts and file contents come from Build the Data Tier's recording, from Round 23, or from Round 24 on the chain's `serverb`, with prompts in the theme's `root@serverb:~#` form. `check:entry` and `check:exercises` passed at the build; `check:slides` passes on the reworked fragment, and every changed slide was looked at in a capture at 1920x1080.
 
 ##### 3.1 PostgreSQL
 
@@ -316,23 +320,41 @@ A narrow two-column table, "What" and "On RHEL 10": package `postgresql-server` 
 
 ##### 3.3 SELinux Already Knows PostgreSQL
 
-Two fixed `TerminalWindow`s, each under a line. First, "RHEL's policy has a rule for `/var/lib/pgsql` before PostgreSQL is installed", over Round 23's `rpm -q postgresql-server` ("package postgresql-server is not installed") and `semanage fcontext -l | grep '^/var/lib/pgsql('`, which prints the `postgresql_db_t` rule. Second, "Data anywhere else needs a rule of its own, and a new file system has no labels", over the recording's step 4: `ls -ldZ /srv/db /srv/db/pgsql` (both `unlabeled_t`), `semanage fcontext -a`, and `restorecon -Rv` with its two `Relabeled` lines. This takes over the earlier fragment 2 draft's 2.5 (Decision 30). `/srv/forgejo` taking `var_t` is left to the exercise, since this slide is about PostgreSQL.
+Two fixed `TerminalWindow`s, each under a line. First, "RHEL's policy has a rule for `/var/lib/pgsql` before PostgreSQL is installed", over Round 23's `semanage fcontext -l | grep '^/var/lib/pgsql('`, which prints the `postgresql_db_t` rule. Second, "Data anywhere else needs a rule of its own, and a new file system has no labels", over the recording's step 4: `semanage fcontext -a` and `restorecon -Rv`, whose two `Relabeled` lines show `/srv/db` and `/srv/db/pgsql` leaving `unlabeled_t`. You removed `rpm -q postgresql-server` from the first and `ls -ldZ /srv/db /srv/db/pgsql` from the second, so "before PostgreSQL is installed" now rests on Round 23 rather than on the transcript. This takes over the earlier fragment 2 draft's 2.5 (Decision 30). `/srv/forgejo` taking `var_t` is left to the exercise, since this slide is about PostgreSQL.
 
-##### 3.4 Change a Unit Without Editing It
+##### 3.4 Use a Custom Data Directory
 
-Line: "A package update replaces its unit file, so add a <AccentText>drop-in</AccentText> instead". A Magic Move `TerminalWindow` (`rows` 16) in three banners: the unit file says not to edit it (Round 23's `systemctl cat postgresql | head -6`, the header comment); `systemctl edit` writes a drop-in (the recording's "Successfully installed edited file '/etc/systemd/system/postgresql.service.d/override.conf'."); the drop-in comes last, so its `PGDATA` wins (the recording's `systemctl cat postgresql | tail -3`). New.
+New, replacing "Change a Unit Without Editing It" on 2026-11-23, whose 16-line transcript was too much text. Default layout. Line: "PostgreSQL stores its data in `/var/lib/pgsql/data` by default", over an `ini` block titled `/usr/lib/systemd/system/postgresql.service` holding `[Service]` and `Environment=PGDATA=/var/lib/pgsql/data`. It is an excerpt: in the unit, `Type=notify`, `User`, `Group`, and the OOM settings come between the two lines (Round 24). Then two lines: "We want to use `/srv/db` because it is on a separate Logical Volume" and "Setting `PGDATA=/srv/db/pgsql/data` in a systemd <AccentText>drop-in</AccentText> overrides the package default".
+
+No slide now says why the unit file is not edited in place, since a package update replaces it, and the unit's own header comment saying so is no longer shown. The written exercise still gives the reason.
+
+##### 3.4a Easily Create Systemd Drop-In Files
+
+New, 2026-11-23. Line: "`systemctl edit postgresql` opens a drop-in file in `vim`", over a `TextExplainer` (`size="sm"`) of the editor's first six lines as the recording shows them once the two lines are typed: `### Editing /etc/systemd/system/postgresql.service.d/override.conf`, `### Anything between here and the comment below will become the contents of the drop-in file`, a blank line, `[Service]`, `Environment=PGDATA=/srv/db/pgsql/data`, and `### Edits below this comment will be discarded`. The screen was read from the cast. Four steps: the path, "The drop-in that systemctl edit postgresql opens in vim"; `[Service]`, "The section the directive belongs to, as in the unit file"; the `PGDATA` line, "Only the directives to add or override: here, just PGDATA"; the last marker, "Below this line: the package unit file, for reference only".
+
+On the instructor lab `systemctl edit` opens `vim` because no editor variable is set and neither `editor` nor `nano` is installed (Round 24). The SCC lab is not checked: if it has `nano`, students get `nano` instead. The written exercise makes the same claim.
+
+##### 3.4b View the Full Systemd Unit
+
+New, 2026-11-23. Line: "`systemctl cat` shows the full Systemd Unit with any drop-in files", over a plain block titled `systemctl cat postgresql (abridged)`, with lines 1, 2, 5, and 8 to 10 highlighted: the unit's path, `[Service]`, `User=postgres`, `Group=postgres`, `Environment=PGDATA=/var/lib/pgsql/data`, `...output omitted...`, a blank line, then the drop-in's path, `[Service]`, and `Environment=PGDATA=/srv/db/pgsql/data`. Every line is in Round 24's full output, in this order. "Abridged" covers the lines dropped without a marker: the header comment, the `[Unit]` section, `Type=notify`, and the lines between `Group` and `Environment`. The exercise pipes the command through `tail -3`, which no slide shows; both are review (w04 and RH124).
 
 ##### 3.5 Initialize the Database
 
-The planned two columns became one Magic Move `TerminalWindow` (`rows` 12), all from Round 23, so it is one real session in exercise order: with no database in `PGDATA`, `systemctl start postgresql` fails ("Job for postgresql.service failed because the control process exited with error code." and its "See ..." line); `postgresql-setup --initdb` creates one; now `systemctl start` succeeds and `systemctl is-active` prints `active`. Two lines under it: "The journal says why: `Directory "/srv/db/pgsql/data" is missing or empty.`", which is Round 23's journal, and "The data goes one directory below the mount point, as PostgreSQL recommends". New.
+Reframed 2026-11-23: run it before the first start, rather than watch the service fail without it. `listSpacing: padded`. Line: "**Before starting the service**, you must run `postgresql-setup --initdb`", its lead in bold `AccentText`. A fixed `TerminalWindow` of the recording's `postgresql-setup --initdb` and its two lines, " * Initializing database in '/srv/db/pgsql/data'" and " * Initialized, logs are in /var/lib/pgsql/initdb_postgresql.log". Three bullets, all from Round 24's reading of `/usr/bin/postgresql-setup`: "Reads `PGDATA` from the `postgresql` service, drop-ins included"; "Switches to the `postgres` user, which will own the files"; "Creates the database files, including configuration files". New.
 
-##### 3.6 Two Configuration Files
+Dropped: the failing `systemctl start` and its journal line, `Directory "/srv/db/pgsql/data" is missing or empty.` (Round 23), the start that then succeeds, and "The data goes one directory below the mount point, as PostgreSQL recommends", which no slide now says.
 
-Line: "`postgresql.conf` holds the server's settings; `pg_hba.conf` says who may connect". A Magic Move `TerminalWindow` (`rows` 14) from Round 23, in three banners. By default PostgreSQL listens only on localhost: `ss -ltn | grep 5432` shows `127.0.0.1` and `[::1]`. `listen_addresses` adds `serverb`'s lab address: `grep -n` shows line 60, the commented default, and line 61, the added line. After a restart, `ss` adds `172.25.250.11`. Line under it: "Listening is not permission: `pg_hba.conf` and the firewall decide who connects". New.
+##### 3.6 postgresql.conf
 
-##### 3.7 A pg_hba.conf Line
+Split from "Two Configuration Files" on 2026-11-23, at your direction: one slide per file, with bullets for where it is and what it is for, then the line the exercise adds. Default layout. Two bullets: "In the data directory: `/srv/db/pgsql/data/postgresql.conf`" and "Holds the server's settings, one `name = value` per line". A `TextExplainer` (automatic size) of `listen_addresses = 'localhost,172.25.250.11'` in three steps: the name, "The addresses PostgreSQL listens on"; `localhost`, "The default: connections from serverb itself"; `172.25.250.11`, "Also serverb's lab address, so servera can reach it". The line and the default's comment, "defaults to 'localhost'", are from Round 24. New.
 
-`TextExplainer` (`size="sm"`; the automatic `md` ran 15px off the slide's right edge) over `host    forgejo    forgejo    172.25.250.10/32    scram-sha-256`, in five steps: connection type, over the network; database, only `forgejo`; user, only `forgejo`; client address, `servera` and only `servera`; method, a password never sent in the clear. Line under it: "The default lines allow only connections from `serverb` itself", which Round 23's six default lines (`local ... peer`, and `host` from `127.0.0.1/32` and `::1/128` with `ident`) bear out. New.
+Dropped: Round 23's Magic Move of `ss -ltn | grep 5432` (listening on `127.0.0.1` and `[::1]` only, then on `172.25.250.11` too after a restart), and "Listening is not permission: `pg_hba.conf` and the firewall decide who connects". No restart is needed in the exercise, since both files are edited before the first start.
+
+##### 3.7 pg_hba.conf
+
+Retitled from "A pg_hba.conf Line" on 2026-11-23 and given 3.6's shape. Default layout. Two bullets: "Also in the data directory: `/srv/db/pgsql/data/pg_hba.conf`" and "Host-based authentication: who may connect, and how they prove it", which the file's header bears out (Round 24). The `TextExplainer` is unchanged: `size="sm"` (the automatic `md` ran 15px off the slide's right edge), over `host    forgejo    forgejo    172.25.250.10/32    scram-sha-256`, in five steps: connection type, over the network; database, only `forgejo`; user, only `forgejo`; client address, `servera` and only `servera`; method, a password never sent in the clear. New.
+
+Dropped: "The default lines allow only connections from `serverb` itself", which Round 23's six default lines bore out.
 
 ##### 3.8 psql
 
@@ -352,59 +374,85 @@ The written version, `exercises/build-the-data-tier-exercise.html`, was built th
 
 `exercise`, `variant: recording`, with the cast (10.5 minutes, 10 markers) and the written exercise. The player loads in the review browser.
 
-#### Fragment 4: The App Tier (`app-tier.md`)
+#### Fragment 4: The App Tier (`app-tier.md`), built 2026-11-24
+
+Redrafted and built 2026-11-24, with its written exercise. It keeps the 2026-11-21 draft's thirteen slides and their numbers, but takes the shape fragments 1 to 3 took as you revised them. The tier's design comes first, as an `IconGrid` like 2.6. Each new item then gets a slide of its own (Decision 29): a framing line over a `TextExplainer`, a narrow table, or two columns, rather than a transcript. A closing table maps the design to the exercise and the weeks it reviews, as 2.9 does, so review items get a row there rather than a slide; the automount map in 4.5 is the one review slide. Facts come from Rounds 5, 9 to 11, 14, 15, 21, and 25, and from the recording. Like fragment 3, it closes with its exercise, and its written version was built with it. `check:entry`, `check:slides`, `check:exercises`, and `check:format` pass, and every slide and click state was looked at in a capture at 1920x1080. Five things changed in the build, each noted at its slide: 4.3's third caption, 4.7's left header and a right bullet, 4.8's title, 4.9's command, split over two lines, and 4.11's week entries.
+
+Changed from the 2026-11-21 draft: 4.3 became "Designing an App Tier", an `IconGrid` that 4.11 answers; 4.5's `mount | grep` transcript became w13's two map files; 4.6 gained the reason for `keep-id`; 4.7 became two columns against w14's `-p`; 4.9's `TerminalWindow` became a `TextExplainer`, since the container's prompt is not one the theme recognizes; 4.10 became two columns; and 4.11's two tables, one reviewed and one new, became one table in 2.9's shape, retitled "This Week's App Tier".
 
 ##### 4.1 The App Tier
 
-`section`, with `routeAlias: app-tier` and `topicInfo` declaring Build the App Tier.
+`section`, with `routeAlias: app-tier` and `topicInfo` (RH134 chapter 19) declaring Build the App Tier Exercise (`./exercises/build-the-app-tier-exercise.html`), and the subtitle "Where the application's code runs", after 2.1's "Where an application keeps what it cannot lose".
 
 ##### 4.2 The App Tier in the Architecture
 
-1.7's diagram, the app tier highlighted.
+1.7's diagram as built, highlighted the way 2.2 highlights the data tier: the Forgejo node keeps its purple fill with a 2px stroke, and every other node is white with a grey stroke. Unlike `serverb` in 2.2, the `servera` box keeps its grey border, since it also holds the web tier. The labels still name every tier, so the highlight does not rely on color alone. Line under it: "Forgejo, in a container on `servera`, with its data on `serverb`".
 
-##### 4.3 What the App Tier Does
+##### 4.3 Designing an App Tier
 
-It runs Forgejo's code and keeps nothing: its data is on `serverb`, so `servera` could be rebuilt or replaced. It runs as w14 taught, a rootless container started as a service of its own user.
+Retitled from "What the App Tier Does". `IconGrid` of five, centered, in rows of three and two like 2.6, each caption led by the consideration's name in bold: `renew`, "**Stateless**, so it can be replaced"; `locked`, "**Least privilege** for its process"; `power`, "**Availability** across reboots" (planned as "at boot and after failures", which wrapped and left "failures" alone on its line); `settings`, "**Configuration** passed in at start"; `data-connected`, "**Connections** to the data tier". 1.5a already says the web and app tiers are stateless; this slide adds what else an app tier needs. Every icon name is in the Carbon set. New.
 
 ##### 4.4 Forgejo's Image
 
-`codeberg.org/forgejo/forgejo:15-rootless`: 15 is Forgejo's long-term-support line; the `-rootless` variant runs Forgejo as a regular user (UID 1000) inside the container, keeps its data in `/var/lib/gitea`, and serves SSH on 2222. One line: the standard image changes its files' owner as it starts, which NFS refuses. New.
+`TextExplainer` (automatic size; at 40 columns it is `lg`) over `codeberg.org/forgejo/forgejo:15-rootless`, in four steps: `codeberg.org`, "The registry: Codeberg, where Forgejo is developed"; `forgejo/forgejo`, "Forgejo's own image"; `15`, "Version 15, Forgejo's long-term-support line"; `rootless`, "Runs Forgejo as a regular user, UID 1000, from the start". Line under it: "The standard image changes its files' owner as it starts, which NFS refuses". W14 taught an image's registry, name, and tag; the version line and the variant are new.
+
+Sources: Decision 8 and Round 5 for the long-term-support line (15.0.12 when tested; the `15` tag follows its patch releases), and Round 9 for both variants. The standard image logged "chown: /data/gitea: Operation not permitted" and stopped when it could not save `app.ini`; the `-rootless` image runs as 1000:1000 and keeps everything, `app.ini` included, in `/var/lib/gitea`. New.
 
 ##### 4.5 Automounting Forgejo's Data
 
-The direct map's two files (w13) and, from the recording, `mount | grep forgejo` before and after `ls`: the `autofs` trigger, then the `nfs4` mount from `serverb` below it. Review.
+Review (w13), laid out like w13's "Direct Maps" slide so that it reads as review: two `text` blocks titled with their files, `/etc/auto.master.d/forgejo.autofs` holding `/-  /etc/auto.forgejo`, and `/etc/auto.forgejo` holding `/home/forgejo/data  -rw,sync  serverb.lab.example.com:/srv/forgejo`. Line under them: "Forgejo's data appears on `servera` the first time something looks inside `~/data`". The exercise still runs w13's check, `mount | grep forgejo` before and after `sudo ls -la`, which the earlier draft showed as a transcript (Round 15); `ls -ld` reads only the mount point and does not trigger the mount (Round 14).
 
 ##### 4.6 One Process, Three Views
 
-A narrow table from Round 21 and Round 11: inside the container, Forgejo is `git`, UID 1000; on `servera`, `ps` shows it as `forgejo`, UID 2000; on `serverb`, its files belong to `forgejo`, UID 2000. `--userns keep-id:uid=1000,gid=1000` makes the container's UID 1000 the user's own UID. New.
+A narrow two-column table, "Where" and "Forgejo is": inside the container, `git`, UID 1000 (Round 11's `id`); on `servera`, `forgejo`, UID 2000 (Round 25's `ps`); its files on `serverb`, `forgejo`, UID 2000 (Round 21's `ls -ln /srv/forgejo`). Under it, a `TextExplainer` (`size="md"`) of `--userns keep-id:uid=1000,gid=1000` in three steps: `--userns`, "How users inside the container match users on servera"; `keep-id`, "Keep the ID of the user running Podman: forgejo, UID 2000"; `uid=1000,gid=1000`, "Inside, that ID is UID 1000, the git user that runs Forgejo". It replaced the built line "`--userns keep-id:uid=1000,gid=1000` makes the container's UID 1000 the `forgejo` user's own UID" on 2026-11-24, which you found unclear: w14 never taught how a rootless container's UIDs relate to the host's, so the line leaned on an idea students do not have. The automatic `lg` overflowed the footer by 7px, hence `md`. Podman's documentation for `keep-id` bears out the steps: it maps the running user's UID into the container, and `uid=` picks the UID it takes there. Then the line "Without it, Forgejo cannot write its own files on the share", which Round 9 bears out: without `keep-id`, the image exited with "mkdir: can't create directory '/var/lib/gitea/git': Permission denied". New.
+
+Not on the slide: `ps` names the process `gitea`, the program Forgejo was forked from, so a student who looks for `forgejo` in `ps` finds only the user.
 
 ##### 4.7 Host Networking
 
-`--network host` against w14's `-p`: the container uses `servera`'s own network, so Forgejo listens on `servera`'s ports 3000 and 2222 and reaches `serverb` directly; the firewall still decides who can connect. New.
+`two-cols-header`, each column headed by a one-item `IconGrid`, like 1.2a. Left, `network-3`, "**Published port**, `-p 8000:8080`", w14's example (planned with "such as", which wrapped the header and put the columns out of line): "The container has a network of its own" and "Podman forwards a host port into it". Right, `network-4`, "**Host network**, `--network host`": "The container uses `servera`'s network" and "Forgejo listens on ports 3000 and 2222" (planned with "`servera`'s", which wrapped; the first bullet already names the host). `::bottom::`: "Either way, the firewall decides who connects, and port 3000 stays closed". New.
+
+Sources: Decision 2 (no port mapping, either for the proxy on `servera` or for the connection to `serverb`); Decision 9 (port 2222, since `servera`'s `sshd` holds 22); Round 5 (PostgreSQL saw `forgejo` connect from 172.25.250.10, `servera`'s own address, which 3.7's `pg_hba.conf` line allows); and Round 21 (`ss` showed `*:3000` and `*:2222`, and port 3000 refused `workstation`).
 
 ##### 4.8 Configuring Forgejo with -e
 
-`TextExplainer` over the `-e` lines: `FORGEJO__section__KEY` sets `KEY` in `[section]` of Forgejo's `app.ini`; `ROOT_URL`, the address Forgejo calls itself; `INSTALL_LOCK`, which skips the install page; the five database settings. New.
+Titled "Configuring Forgejo with `-e`". Line: "Forgejo reads `FORGEJO__section__KEY` variables into `app.ini`, its configuration file", over a `TextExplainer` (`size="sm"`) of the exercise's seven `-e` lines, verbatim with their trailing `\`. Five steps: on line 1, `FORGEJO__server__ROOT_URL`, "ROOT_URL in the [server] section of app.ini"; the URL, "The address Forgejo puts in its own links"; on line 2, `INSTALL_LOCK=true`, "Skips the install page, since everything is set here"; on line 4, `serverb.lab.example.com:5432`, "The [database] lines: PostgreSQL on serverb"; on line 7, `PASSWD=redhat`, "The password from CREATE USER in Build the Data Tier". W14 taught `-e`; the names are new.
+
+Sources: Round 25 read the result in `app.ini`, with `ROOT_URL` under `[server]`, `INSTALL_LOCK = true` under `[security]`, and the database lines under `[database]`; Round 5 found that without `ROOT_URL`, Forgejo calls itself `http://localhost:3000/`.
 
 ##### 4.9 The First Admin
 
-`TerminalWindow`: `podman exec -it forgejo /bin/bash`, the prompt `servera:/var/lib/gitea$`, `forgejo admin user create ...`, and its success line, from the recording; then Round 21's row in PostgreSQL on `serverb`, `student | t`. New.
+Line: "`INSTALL_LOCK` skipped the install page, so make the first admin from a shell inside the container", over a `TextExplainer` (`size="sm"`) of the command, `forgejo admin user create --admin --username student --password student --email student@lab.example.com`. At 98 columns it ran 112px off the slide's right edge even at `sm`, so it is split after `--admin` with a `\`, as the `-e` lines are; the exercise types it on one line. Four steps: `forgejo admin user create`, "Forgejo's own command-line tool"; `--admin`, "An administrator, who can manage the site"; `--username student`, "The name it signs in with"; `--password student`, "Its password". Line under it: "The account is a row in PostgreSQL on `serverb`, like every account", which 2.4 lists and Round 21's `SELECT name, is_admin FROM "user";` (`student | t`) bears out. New.
+
+The exercise opens the shell with `podman exec -it forgejo /bin/bash` (w14), and the recording prints "New user 'student' has been successfully created!". A `TerminalWindow` is set aside: the container's prompt, `servera:/var/lib/gitea$` (Round 11), is not a form the theme's `bash-session` recognizes, so it would render as output, and the command line wraps.
 
 ##### 4.10 When the Data Arrives Late
 
-Nothing makes `autofs` start before `forgejo`'s services at boot. From Round 10: with `--restart-sec 10`, a container that starts first fails ("statfs ... no such file or directory") and starts on a later try; with systemd's default 100 ms, it gives up within a second ("Start request repeated too quickly") and stays down. Closing line: a service that needs network storage must tolerate it arriving late. New.
+Line: "At boot, nothing makes `autofs` mount `~/data` before `forgejo`'s service starts". `two-cols-header`, each column headed by a one-item `IconGrid`. Left, `close-outline`, "**Without `--restart-sec`**": "Retries after 100 ms", "Gives up after 5 tries in 10 seconds", and "Forgejo stays down". Right, `checkmark-outline`, "**With `--restart-sec 10`**": "Retries every 10 seconds", "Never reaches that limit", and "Starts once the data is there". `::bottom::`: "A service that needs network storage must tolerate it arriving late". The option rides on w14's `podman generate systemd` line, whose other options are review. New.
 
-##### 4.11 Review and New in This Tier
+Sources: Round 10, with `autofs` held back 30 seconds. With `RestartSec=10`, the unit failed with "Error: statfs /home/fjtest/data: no such file or directory" at 5.5, 15.8, and 26.0 seconds and started at 36.5; without it, it logged "Start request repeated too quickly" by 6.5 seconds and never started. Round 25 read the exercise's unit: `RestartUSec=10s`, `StartLimitBurst=5`, and `StartLimitIntervalUSec=10s`. Not on the slide: in every real reboot `autofs` won the race by about 0.2 seconds (Rounds 9 and 11), so the option is insurance against a slow boot.
 
-Two narrow tables from "Classification": reviewed (w13's automount and `useradd -u`, w14's Podman and lingering) and new (pointing to 4.4 to 4.10).
+##### 4.11 This Week's App Tier
+
+Retitled from "Review and New in This Tier". 2.9's shape: a narrow table with three columns, the consideration from 4.3, what Build the App Tier does, and the weeks, worded like 2.9's. Seven rows:
+
+- **Stateless:** its files and database on `serverb` (13 and 15). This week is written "15", as 2.9 writes it.
+- **Least privilege**, two rows: a rootless container (14); its own user, `forgejo`, UID 2000 (13 and 14: w13 taught `useradd -u`, and w14 a service user of its own).
+- **Availability**, two rows: a user service with lingering (14); retries until its data arrives (15).
+- **Configuration:** settings passed with `-e` (14 and 15).
+- **Connections:** host networking to PostgreSQL (15).
+
+The commands behind the rows, such as `showmount`, `passwd`, `loginctl`, `ssh` as the service user, `podman ps`, `podman exec`, `podman rm -f`, `systemctl --user`, and `curl`, are w13's and w14's, as "Classification" lists. The earlier draft's table of new items is gone, since each has its own slide, 4.4 to 4.10.
 
 ##### 4.12 Exercise: Build the App Tier
 
-`exercise`: its goal, `servera`, and its six steps.
+`exercise`: goal "Run Forgejo in a container on `servera`, with its data on `serverb`", host `servera`, prerequisite exercise Build the Data Tier, and the command file's six steps: install Podman, autofs, and the NFS client; create the user `forgejo`, with UID 2000, a password, and lingering; automount Forgejo's files from `serverb` on `forgejo`'s `~/data`; run Forgejo in a container as the `forgejo` user; create Forgejo's first admin; run the container as a user service that starts at boot.
+
+The written version, `exercises/build-the-app-tier-exercise.html`, was built with the fragment, as 3.10's was. It follows the command file step by step, with output from the recording. It notes that `passwd` warns "BAD PASSWORD: The password is shorter than 8 characters" and sets the password anyway, and that the first `ssh` as `forgejo` may ask to trust `servera`'s host key, as w14's written exercise says. It explains each of `podman run`'s options and `--restart-sec`, warns to log in as `forgejo` with SSH rather than `su`, and says to run `curl` again if Forgejo is still starting. It ends by telling students to leave `servera` for Build the Web Tier. It has no cleanup (Decision 19).
 
 ##### 4.12a Recording: Build the App Tier
 
-`exercise`, `variant: recording`.
+`exercise`, `variant: recording`, with the cast (7.7 minutes, 7 markers; Rounds 14 and 15) and the written exercise. The player's label describes the recorded workflow: installing Podman, `autofs`, and `nfs-utils` on `servera`; creating `forgejo` with UID 2000, a password, and lingering; listing `serverb`'s exports and automounting `/srv/forgejo` on `forgejo`'s `~/data` with a direct map; running Forgejo's `-rootless` image with host networking, `keep-id`, and its settings; creating the first admin inside the container; and generating a user service with `--restart-sec 10` that keeps running after `forgejo` logs out.
 
 #### Fragment 5: The Web Tier (`web-tier.md`)
 
@@ -496,7 +544,7 @@ Two narrow tables: reviewed (w02, w03, w04, w05, w06) and new (`pg_dump`, `tar -
 
 #### Size and cut candidates
 
-63 slides across the six fragments (with 1.5a and 1.6a, and fragment 2 at eight since its 2026-11-22 redraft and 1.5a's move), plus the cover and the VM reminder. With about 28 minutes of recorded exercises, longer typed live, that is likely too much for 2.5 hours. Candidates, in the order I would cut: merge 1.3 into 1.2 and 1.5 into 1.4; fold 2.3 into 2.4 as its opening line; drop 2.6, since 2.9 names the same five considerations; merge each later tier's review and new tables (4.11, 5.7, 6.10) into the exercise slide's environment notes or drop them for a single closing review map; drop 6.2. That brings it to about 55.
+66 slides across the six fragments, plus the cover and the VM reminder: fragment 1 at eleven (with 1.2a, 1.5a, and 1.6a), fragment 2 at eight, fragment 3 at thirteen (with 3.4a and 3.4b), and fragments 4 to 6 as drafted, at thirteen, nine, and twelve. With about 28 minutes of recorded exercises, longer typed live, that is likely too much for 2.5 hours. Candidates, in the order I would cut: merge 1.3 into 1.2a and 1.5 into 1.4; fold 2.3 into 2.4 as its opening line; drop 2.6, since 2.9 names the same five considerations; merge each later tier's review and new tables (4.11, 5.7, 6.10) into the exercise slide's environment notes or drop them for a single closing review map; drop 6.2. That brings it to about 58.
 
 ## Verification
 
@@ -627,6 +675,23 @@ Nothing on the chain's hosts was changed. To-verify item 8 is answered by the fi
 - **`psql`:** run under `script` as `postgres`, so it had a terminal. `SELECT current_user` without its `;` left the `postgres-#` prompt, and `;` then printed ` current_user` / `postgres` / `(1 row)`.
 
 `serverb` was reverted with `start-latest-snapshot serverb` twice, after each capture batch. Each time, `postgresql-server` was gone, along with `/srv/db` and the drop-in directory, and the clock was set to the host's. One earlier attempt, piping keystrokes into `pnpm lab -- --tty`, hung and was stopped.
+
+**Round 24, 2026-11-23, fragment 3's rework.** Read-only, on `serverb` with the data tier built: `postgresql-server-16.8-1.el10_0` installed, the service active, and the drop-in in place. Nothing was changed.
+
+- **`systemctl cat postgresql`:** the unit's path, its five-line comment against editing it in place, and a blank line; `[Unit]` with `Description=PostgreSQL database server`, a comment, and `After=network-online.target`; `[Service]` with `Type=notify`, then `User=postgres` and `Group=postgres`, the `OOMScoreAdjust` and `PG_OOM_ADJUST_*` settings, `Environment=PGDATA=/var/lib/pgsql/data`, `ExecStartPre=/usr/libexec/postgresql-check-db-dir %N`, `ExecStart=/usr/bin/postgres -D ${PGDATA}`, and the rest; `[Install]`; then, after a blank line, the drop-in's path and its two lines. `systemctl cat postgres` printed "No files found for postgres.service." and exited 1.
+- **The editor `systemctl edit` opens:** `EDITOR`, `VISUAL`, and `SYSTEMD_EDITOR` are unset, `editor` and `nano` are not installed, and `vim` and `vi` are. `systemctl` tries `editor`, `nano`, `vim`, then `vi`, so it opens `vim`.
+- **`/usr/bin/postgresql-setup`** (8.9, built against 16.8): run as root, it runs itself again as `postgres` with `runuser`. It takes `PGDATA` from `systemctl show -p Environment postgresql.service`, so a drop-in's value counts, and refuses a directory that already holds `PG_VERSION` with "Data directory ... is not empty!". It then runs `initdb --pgdata=... --auth=ident`, logging to `/var/lib/pgsql/initdb_postgresql.log`, and makes `log` in the data directory. Its `--help` calls `--initdb` "usually the first action you perform after PostgreSQL server installation".
+- **`/srv/db/pgsql/data`:** `postgres:postgres`, mode `700`, holding `postgresql.conf`, `pg_hba.conf`, `pg_ident.conf`, `postgresql.auto.conf`, `PG_VERSION`, `base`, `global`, `pg_wal`, and the other subdirectories, plus the running server's `postmaster.pid`.
+- **`postgresql.conf`:** line 60 is the commented default, `#listen_addresses = 'localhost'`, with "what IP address(es) to listen on;", and line 61 the exercise's `listen_addresses = 'localhost,172.25.250.11'`; the comment goes on "comma-separated list of addresses;" and "defaults to 'localhost'; use '*' for all".
+- **`pg_hba.conf`:** its header says "This file controls: which hosts are allowed to connect, how clients are authenticated, which PostgreSQL user names they can use, which databases they can access." The six default lines come first and the exercise's `host` line last.
+
+**Round 25, 2026-11-24, fragment 4's redraft.** Read-only, on `servera` with the app tier built: `forgejo` is UID 2000 and lingering, Podman and `autofs` are installed, and `autofs` is active. Nothing was changed.
+
+- **`app.ini`**, read as `forgejo`, since root is squashed on the share, and only for these keys: `ROOT_URL = http://git.lab.example.com/` under `[server]`; `DB_TYPE = postgres`, `HOST = serverb.lab.example.com:5432`, `NAME = forgejo`, and `USER = forgejo` under `[database]`; `INSTALL_LOCK = true` under `[security]`.
+- **`ps -o user,uid,comm -C gitea`:** `forgejo 2000 gitea`.
+- **The user service:** `systemctl --user show container-forgejo` gave `Restart=on-failure`, `RestartUSec=10s`, `StartLimitBurst=5`, and `StartLimitIntervalUSec=10s`.
+- **The recording**, read as text: `podman ps` showed the container `Up 20 seconds` with `2222/tcp, 3000/tcp`, and at `servera:/var/lib/gitea$` the admin step printed "New user 'student' has been successfully created!".
+- **Icons:** every Carbon name 4.3, 4.7, and 4.10 use is in the installed set.
 
 ## Open questions
 

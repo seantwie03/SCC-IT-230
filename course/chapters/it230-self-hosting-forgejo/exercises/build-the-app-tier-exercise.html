@@ -1,0 +1,809 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Build the App Tier Exercise</title>
+        <style>
+            :root {
+                color-scheme: light;
+                --it230-color-canvas: #fafafb;
+                --it230-color-surface: #ffffff;
+                --it230-color-raised: #ebebed;
+                --it230-color-line: #b9b9bf;
+                --it230-color-text: #25252b;
+                --it230-color-muted: #55555b;
+                --it230-color-accent-text: #0461be;
+                --it230-color-accent-fill: #3584e4;
+                --it230-color-accent-wash: rgb(53 132 228 / 14%);
+                --it230-color-warning: #905400;
+                --it230-font-sans:
+                    "Lato", "Segoe UI", "Noto Sans", "Liberation Sans",
+                    sans-serif;
+                --it230-font-mono:
+                    "Cascadia Code", "JetBrains Mono", "Noto Sans Mono",
+                    "DejaVu Sans Mono", monospace;
+                --it230-space-1: 0.25rem;
+                --it230-space-2: 0.5rem;
+                --it230-space-3: 0.75rem;
+                --it230-space-4: 1rem;
+                --it230-space-5: 1.5rem;
+                --it230-space-6: 2rem;
+                --it230-space-7: 3rem;
+                --it230-radius-sm: 0.5rem;
+                --it230-radius-md: 0.75rem;
+                --it230-radius-lg: 0.9375rem;
+                --it230-shadow-raised:
+                    0 0.125rem 0.25rem rgb(0 0 6 / 10%),
+                    0 1.2rem 3rem rgb(0 0 6 / 10%);
+                line-height: 1.6;
+                color: var(--it230-color-text);
+                background: var(--it230-color-canvas);
+            }
+
+            * {
+                box-sizing: border-box;
+            }
+
+            body {
+                min-width: 20rem;
+                margin: 0;
+                color: var(--it230-color-text);
+                background:
+                    radial-gradient(
+                        circle at 95% 5%,
+                        var(--it230-color-accent-wash),
+                        transparent 40%
+                    ),
+                    radial-gradient(
+                            circle,
+                            rgb(0 0 6 / 2%) 0 0.035rem,
+                            transparent 0.04rem
+                        )
+                        0 0 / 0.22rem 0.22rem,
+                    linear-gradient(
+                        145deg,
+                        var(--it230-color-surface),
+                        #f5f6f8 72%
+                    );
+                /*
+                 * The accent wash is pinned to the viewport so it stays in the
+                 * corner as a long exercise scrolls under it. Only the wash is
+                 * fixed; the dot texture and the base gradient still travel
+                 * with the content.
+                 */
+                background-attachment: fixed, scroll, scroll;
+                font-family: var(--it230-font-sans);
+                font-feature-settings:
+                    "liga" 0,
+                    "calt" 0;
+                font-variant-ligatures: none;
+                text-rendering: optimizeLegibility;
+            }
+
+            ::selection {
+                color: var(--it230-color-text);
+                background: color-mix(
+                    in srgb,
+                    var(--it230-color-accent-fill) 22%,
+                    white
+                );
+            }
+
+            :focus-visible {
+                border-radius: var(--it230-radius-sm);
+                outline: 0.18rem solid var(--it230-color-accent-fill);
+                outline-offset: 0.16rem;
+            }
+
+            a {
+                color: var(--it230-color-accent-text);
+                text-decoration: underline;
+                text-decoration-thickness: 0.08em;
+                text-underline-offset: 0.16em;
+            }
+
+            a:hover {
+                text-decoration-thickness: 0.14em;
+            }
+
+            .skip-link {
+                position: fixed;
+                z-index: 10;
+                top: var(--it230-space-3);
+                left: var(--it230-space-3);
+                padding: var(--it230-space-3) var(--it230-space-4);
+                border: 1px solid var(--it230-color-line);
+                border-radius: var(--it230-radius-sm);
+                background: var(--it230-color-surface);
+                box-shadow: var(--it230-shadow-raised);
+                transform: translateY(-200%);
+            }
+
+            .skip-link:focus {
+                transform: translateY(0);
+            }
+
+            .site-header {
+                position: sticky;
+                z-index: 5;
+                top: 0;
+                border-bottom: 1px solid var(--it230-color-line);
+                background: color-mix(
+                    in srgb,
+                    var(--it230-color-surface) 92%,
+                    transparent
+                );
+                box-shadow: 0 0.125rem 0.35rem rgb(0 0 6 / 8%);
+                backdrop-filter: blur(0.75rem);
+            }
+
+            .header-inner,
+            main,
+            footer {
+                width: min(64rem, calc(100% - 2rem));
+                margin-inline: auto;
+            }
+
+            .header-inner {
+                display: flex;
+                min-height: 3.5rem;
+                align-items: center;
+                gap: var(--it230-space-3);
+            }
+
+            .header-inner p {
+                margin: 0;
+            }
+
+            /*
+             * The course identity is chrome, not prose, so it keeps the
+             * surrounding text color and takes its underline on hover. It
+             * appears in the header and again in the footer, and both lead to
+             * the course home.
+             */
+            .header-inner a,
+            footer a {
+                color: inherit;
+                text-decoration: none;
+            }
+
+            .header-inner a:hover,
+            footer a:hover {
+                text-decoration: underline;
+            }
+
+            .course-code,
+            .course-code a {
+                color: var(--it230-color-accent-text);
+                font-weight: 800;
+                letter-spacing: 0.04em;
+            }
+
+            .course-code {
+                display: flex;
+                align-items: center;
+            }
+
+            .course-code::after {
+                content: "";
+                display: inline-block;
+                width: 1px;
+                height: 1.1em;
+                margin-left: var(--it230-space-3);
+                background: var(--it230-color-line);
+            }
+
+            h1,
+            h2 {
+                line-height: 1.2;
+            }
+
+            h1 {
+                max-width: 30ch;
+                margin: 0;
+                font-size: clamp(2rem, 6vw, 3rem);
+            }
+
+            main {
+                padding-block: clamp(2.1rem, 5.6vw, 3.85rem)
+                    var(--it230-space-7);
+                scroll-margin-top: 4rem;
+            }
+
+            .exercise-document {
+                overflow: hidden;
+                border: 1px solid var(--it230-color-line);
+                border-radius: var(--it230-radius-lg);
+                background: var(--it230-color-surface);
+                box-shadow: var(--it230-shadow-raised);
+            }
+
+            .exercise-header {
+                padding: clamp(1.5rem, 4vw, 2.25rem);
+                border-bottom: 0.25rem solid var(--it230-color-accent-fill);
+                background: var(--it230-color-accent-wash);
+            }
+
+            .exercise-kicker {
+                margin: 0 0 var(--it230-space-2);
+                color: var(--it230-color-accent-text);
+                font-size: 0.82rem;
+                font-weight: 800;
+                letter-spacing: 0.06em;
+                text-transform: uppercase;
+            }
+
+            .overview {
+                padding: var(--it230-space-5);
+                border-bottom: 1px solid var(--it230-color-line);
+            }
+
+            .overview h2,
+            .step h2 {
+                margin: 0 0 var(--it230-space-4);
+                padding-left: var(--it230-space-3);
+                border-left: 0.22rem solid var(--it230-color-accent-fill);
+                font-size: clamp(1.35rem, 3vw, 1.65rem);
+            }
+
+            .requirements {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+                margin: var(--it230-space-5) 0;
+                border-block: 1px solid var(--it230-color-line);
+            }
+
+            .requirements div {
+                padding-block: var(--it230-space-3);
+            }
+
+            .requirements dt {
+                color: var(--it230-color-muted);
+                font-weight: 700;
+            }
+
+            .requirements dd {
+                margin: 0.25rem 0 0;
+            }
+
+            .steps {
+                margin: 0;
+                padding: 0;
+                list-style: none;
+                counter-reset: exercise-step;
+            }
+
+            .step {
+                counter-increment: exercise-step;
+                padding: var(--it230-space-5);
+                border-bottom: 1px solid var(--it230-color-line);
+            }
+
+            .step:last-child {
+                border-bottom: 0;
+            }
+
+            .step h2::before {
+                content: "Step " counter(exercise-step);
+                display: block;
+                margin-bottom: var(--it230-space-1);
+                color: var(--it230-color-accent-text);
+                font-size: 0.72rem;
+                font-weight: 800;
+                letter-spacing: 0.06em;
+                text-transform: uppercase;
+            }
+
+            code,
+            kbd {
+                font-family: var(--it230-font-mono);
+                font-weight: 600;
+            }
+
+            code:not(pre code) {
+                overflow-wrap: anywhere;
+                color: var(--it230-color-accent-text);
+            }
+
+            kbd {
+                padding: 0.1rem 0.3rem;
+                color: var(--it230-color-text);
+                background: var(--it230-color-raised);
+                border: 1px solid var(--it230-color-line);
+                border-radius: 0.25rem;
+                box-shadow: 0 1px 0 var(--it230-color-line);
+            }
+
+            pre {
+                max-width: 100%;
+                padding: var(--it230-space-4);
+                overflow-x: auto;
+                overflow-wrap: anywhere;
+                color: var(--it230-color-text);
+                border: 1px solid var(--it230-color-line);
+                border-radius: var(--it230-radius-md);
+                background: #f7f7f8;
+                box-shadow: inset 0 1px 0 rgb(255 255 255 / 80%);
+                tab-size: 4;
+                white-space: pre-wrap;
+            }
+
+            pre code {
+                font-size: 0.95rem;
+            }
+
+            .note,
+            .warning {
+                margin-block: var(--it230-space-5);
+                padding: var(--it230-space-3) var(--it230-space-4);
+                border-left: 0.3rem solid;
+            }
+
+            .note {
+                background: var(--it230-color-accent-wash);
+                border-color: var(--it230-color-accent-fill);
+            }
+
+            .note strong {
+                color: var(--it230-color-accent-text);
+            }
+
+            .warning {
+                background: color-mix(
+                    in srgb,
+                    var(--it230-color-warning) 9%,
+                    var(--it230-color-canvas)
+                );
+                border-color: var(--it230-color-warning);
+            }
+
+            .warning strong {
+                color: var(--it230-color-warning);
+            }
+
+            .note strong,
+            .warning strong {
+                display: block;
+            }
+
+            .exercise-navigation {
+                margin-top: var(--it230-space-6);
+                padding-top: var(--it230-space-4);
+            }
+
+            .exercise-navigation a {
+                font-weight: 700;
+            }
+
+            footer {
+                padding-block: 0 var(--it230-space-7);
+                color: var(--it230-color-muted);
+            }
+
+            footer::before {
+                display: block;
+                width: 100%;
+                height: 0.125rem;
+                margin-bottom: 0.35rem;
+                border-radius: 999px;
+                background: linear-gradient(
+                    90deg,
+                    var(--it230-color-line) 0 52%,
+                    color-mix(
+                            in srgb,
+                            var(--it230-color-accent-fill) 25%,
+                            transparent
+                        )
+                        100%
+                );
+                content: "";
+            }
+
+            footer p {
+                margin: 0;
+            }
+
+            @media (max-width: 32rem) {
+                .header-inner,
+                main,
+                footer {
+                    width: min(100% - 1.5rem, 64rem);
+                }
+
+                .header-inner {
+                    min-height: 3.25rem;
+                }
+
+                .overview,
+                .step {
+                    padding: var(--it230-space-4);
+                }
+
+                h1 {
+                    overflow-wrap: anywhere;
+                }
+            }
+
+            @media print {
+                :root {
+                    background: #ffffff;
+                }
+
+                body {
+                    background: #ffffff;
+                }
+
+                .skip-link,
+                .site-header {
+                    display: none;
+                }
+
+                main {
+                    width: 100%;
+                    padding: 0;
+                }
+
+                .exercise-document {
+                    border: 0;
+                    box-shadow: none;
+                }
+
+                .step {
+                    break-inside: avoid;
+                }
+            }
+        </style>
+    </head>
+
+    <body>
+        <a class="skip-link" href="#main-content">Skip to exercise</a>
+
+        <header class="site-header">
+            <div class="header-inner">
+                <p class="course-code"><a href="../../../">IT-230</a></p>
+                <p class="course-title">
+                    <a href="../../../">Linux Administration</a>
+                </p>
+            </div>
+        </header>
+
+        <main id="main-content">
+            <article class="exercise-document">
+                <header class="exercise-header">
+                    <p class="exercise-kicker">Exercise</p>
+                    <h1>Build the App Tier Exercise</h1>
+                </header>
+
+                <section class="overview" aria-labelledby="overview-heading">
+                    <h2 id="overview-heading">Task</h2>
+                    <p>
+                        Make <code>servera</code> Forgejo's app tier. Run
+                        Forgejo in a rootless container, as a service of a user
+                        of its own, with all of its data on
+                        <code>serverb</code>: its files on the NFS share from
+                        Build the Data Tier, automounted on
+                        <code>servera</code>, and its database in PostgreSQL.
+                        The next exercise, Build the Web Tier, puts httpd in
+                        front of Forgejo, so leave <code>servera</code> as this
+                        exercise ends.
+                    </p>
+
+                    <dl class="requirements">
+                        <div>
+                            <dt>Host</dt>
+                            <dd><code>servera</code></dd>
+                        </div>
+                        <div>
+                            <dt>Prerequisite</dt>
+                            <dd>Build the Data Tier</dd>
+                        </div>
+                    </dl>
+                </section>
+
+                <ol class="steps">
+                    <li class="step">
+                        <h2>Install Podman, autofs, and the NFS client</h2>
+                        <p>
+                            Log in to <code>servera</code> as
+                            <code>student</code>. This exercise uses
+                            <code>sudo</code> where it needs root.
+                            <code>autofs</code> does not bring
+                            <code>nfs-utils</code>, which holds the program that
+                            mounts NFS shares, so install all three:
+                        </p>
+                        <pre><code>ssh servera
+sudo dnf install -y podman autofs nfs-utils</code></pre>
+                        <p>
+                            The install prints two warnings that
+                            <code>gssproxy.service</code> changed on disk, which
+                            you can ignore.
+                        </p>
+                    </li>
+                    <li class="step">
+                        <h2>
+                            Create the user forgejo, with UID 2000, a password,
+                            and lingering
+                        </h2>
+                        <p>
+                            Forgejo's files on <code>serverb</code> belong to
+                            UID 2000, and NFS keeps owners as UIDs, so create
+                            <code>forgejo</code> with the same UID here:
+                        </p>
+                        <pre><code>sudo useradd -u 2000 forgejo
+sudo passwd forgejo</code></pre>
+                        <p>
+                            Enter <code>redhat</code> twice.
+                            <code>passwd</code> warns that it is short and sets
+                            it anyway, because root asked:
+                        </p>
+                        <pre><code>New password:
+BAD PASSWORD: The password is shorter than 8 characters
+Retype new password:
+passwd: password updated successfully</code></pre>
+                        <p>
+                            Lingering starts <code>forgejo</code>'s services at
+                            boot and keeps them running after it logs out:
+                        </p>
+                        <pre><code>sudo loginctl enable-linger forgejo
+loginctl list-users</code></pre>
+                        <pre><code> UID USER    LINGER STATE
+1000 student no     active
+2000 forgejo yes    lingering
+
+2 users listed.</code></pre>
+                    </li>
+                    <li class="step">
+                        <h2>
+                            Automount Forgejo's files from serverb on forgejo's
+                            ~/data
+                        </h2>
+                        <p>
+                            Build the Data Tier opened <code>rpc-bind</code> and
+                            <code>mountd</code> on <code>serverb</code>, so
+                            <code>showmount</code> can list its exports:
+                        </p>
+                        <pre><code>showmount --exports serverb</code></pre>
+                        <pre><code>Export list for serverb:
+/srv/forgejo servera.lab.example.com</code></pre>
+                        <p>
+                            Mount the share with a direct map. First, a master
+                            map file that names the map, with <code>/-</code>
+                            for a direct map:
+                        </p>
+                        <pre><code>sudo vim /etc/auto.master.d/forgejo.autofs</code></pre>
+                        <p>Press <kbd>i</kbd> and type:</p>
+                        <pre><code>/-  /etc/auto.forgejo</code></pre>
+                        <p>
+                            Press <kbd>Esc</kbd>, then type <code>:wq</code> and
+                            press <kbd>Enter</kbd>. Then the map itself, which
+                            gives the full path of the mount point, its options,
+                            and the share:
+                        </p>
+                        <pre><code>sudo vim /etc/auto.forgejo</code></pre>
+                        <p>Press <kbd>i</kbd> and type:</p>
+                        <pre><code>/home/forgejo/data  -rw,sync  serverb.lab.example.com:/srv/forgejo</code></pre>
+                        <p>
+                            Press <kbd>Esc</kbd>, then type <code>:wq</code> and
+                            press <kbd>Enter</kbd>. Start <code>autofs</code>
+                            and look at what is mounted:
+                        </p>
+                        <pre><code>sudo systemctl enable --now autofs
+mount | grep forgejo</code></pre>
+                        <pre><code>Created symlink '/etc/systemd/system/multi-user.target.wants/autofs.service' → '/usr/lib/systemd/system/autofs.service'.
+/etc/auto.forgejo on /home/forgejo/data type autofs (rw,relatime,fd=12,pgrp=2803,timeout=300,minproto=5,maxproto=5,direct,pipe_ino=16250)</code></pre>
+                        <p>
+                            Only the <code>autofs</code> trigger is there:
+                            nothing from <code>serverb</code> yet. Looking
+                            inside the mount point mounts the share.
+                            <code>forgejo</code>'s home is private, so use
+                            <code>sudo</code>:
+                        </p>
+                        <pre><code>sudo ls -la /home/forgejo/data
+mount | grep forgejo</code></pre>
+                        <pre><code>total 0
+drwxr-xr-x. 2 forgejo forgejo   6 Nov 21 17:09 .
+drwx------. 4 forgejo forgejo 103 Nov 21 17:20 ..
+/etc/auto.forgejo on /home/forgejo/data type autofs (rw,relatime,fd=12,pgrp=2803,timeout=300,minproto=5,maxproto=5,direct,pipe_ino=16250)
+serverb.lab.example.com:/srv/forgejo on /home/forgejo/data type nfs4 (rw,relatime,sync,vers=4.2,rsize=262144,wsize=262144,namlen=255,hard,proto=tcp,timeo=600,retrans=2,sec=sys,clientaddr=172.25.250.10,local_lock=none,addr=172.25.250.11)</code></pre>
+                        <p>
+                            The <code>nfs4</code> mount from
+                            <code>serverb</code> now sits below the trigger.
+                            Your dates and the numbers in the
+                            <code>autofs</code> line may differ.
+                        </p>
+                    </li>
+                    <li class="step">
+                        <h2>Run Forgejo in a container as the forgejo user</h2>
+                        <p>Log in as <code>forgejo</code> with SSH:</p>
+                        <pre><code>ssh forgejo@servera</code></pre>
+                        <p>
+                            Enter <code>forgejo</code>'s password,
+                            <code>redhat</code>. If SSH asks whether to trust
+                            <code>servera</code>'s host key, answer
+                            <code>yes</code>.
+                        </p>
+                        <aside class="warning">
+                            <strong>Log in with SSH, not su</strong>
+                            Only a login session gives <code>forgejo</code> a
+                            systemd of its own, which step 6 needs.
+                            <code>su - forgejo</code> and
+                            <code>sudo -iu forgejo</code> do not start one.
+                        </aside>
+                        <p>
+                            Run Forgejo. Type the command on several lines, each
+                            ending in <code>\</code>, or on one line without
+                            them:
+                        </p>
+                        <pre><code>podman run -d --name forgejo --network host --userns keep-id:uid=1000,gid=1000 \
+-v ~/data:/var/lib/gitea:Z \
+-e FORGEJO__server__ROOT_URL=http://git.lab.example.com/ \
+-e FORGEJO__security__INSTALL_LOCK=true \
+-e FORGEJO__database__DB_TYPE=postgres \
+-e FORGEJO__database__HOST=serverb.lab.example.com:5432 \
+-e FORGEJO__database__NAME=forgejo \
+-e FORGEJO__database__USER=forgejo \
+-e FORGEJO__database__PASSWD=redhat \
+codeberg.org/forgejo/forgejo:15-rootless</code></pre>
+                        <p>Its options, in order:</p>
+                        <ul>
+                            <li>
+                                <code>--network host</code> uses
+                                <code>servera</code>'s own network, so Forgejo
+                                listens on <code>servera</code>'s ports 3000 and
+                                2222 with no <code>-p</code>, and reaches
+                                <code>serverb</code> from <code>servera</code>'s
+                                address.
+                            </li>
+                            <li>
+                                <code>--userns keep-id:uid=1000,gid=1000</code>
+                                keeps the ID of the user running Podman,
+                                <code>forgejo</code> (UID 2000), and gives it to
+                                UID 1000 inside the container, the
+                                <code>git</code> user that runs Forgejo. So
+                                Forgejo's files on <code>serverb</code> belong
+                                to <code>forgejo</code>; without it, Forgejo
+                                cannot write them.
+                            </li>
+                            <li>
+                                <code>-v ~/data:/var/lib/gitea:Z</code> gives
+                                Forgejo the automounted share as its data
+                                directory.
+                            </li>
+                            <li>
+                                Each
+                                <code>-e FORGEJO__section__KEY</code> becomes
+                                <code>KEY</code> in the
+                                <code>[section]</code> of Forgejo's
+                                configuration file, <code>app.ini</code>:
+                                <code>ROOT_URL</code> is the address Forgejo
+                                puts in its links, <code>INSTALL_LOCK</code>
+                                skips its install page, and the
+                                <code>database</code> lines point it at
+                                PostgreSQL on <code>serverb</code>, with the
+                                password from Build the Data Tier.
+                            </li>
+                            <li>
+                                The <code>-rootless</code> image of version 15,
+                                Forgejo's long-term-support line, runs Forgejo
+                                as a regular user from the start. The standard
+                                image changes its files' owner as it starts,
+                                which NFS refuses.
+                            </li>
+                        </ul>
+                        <p>
+                            Podman pulls the image, printing its progress, then
+                            the new container's ID. The pull and Forgejo's first
+                            start can take half a minute.
+                        </p>
+                        <pre><code>Trying to pull codeberg.org/forgejo/forgejo:15-rootless...
+Getting image source signatures
+...output omitted...
+Writing manifest to image destination
+c3ceedb0717c1a75e7a4b265c2f8b8bfcfeccd8a9a7e69978382a8e58882ccc9</code></pre>
+                        <p>Check the container, then Forgejo's home page:</p>
+                        <pre><code>podman ps
+curl -s localhost:3000 | grep '&lt;title&gt;'</code></pre>
+                        <pre><code>CONTAINER ID  IMAGE                                     COMMAND     CREATED         STATUS         PORTS               NAMES
+c3ceedb0717c  codeberg.org/forgejo/forgejo:15-rootless              22 seconds ago  Up 20 seconds  2222/tcp, 3000/tcp  forgejo
+&#9;&lt;title&gt;Forgejo: Beyond coding. We forge.&lt;/title&gt;</code></pre>
+                        <p>
+                            If <code>curl</code> prints nothing, Forgejo is
+                            still starting. Wait a few seconds and run it again.
+                        </p>
+                    </li>
+                    <li class="step">
+                        <h2>Create Forgejo's first admin</h2>
+                        <p>
+                            <code>INSTALL_LOCK</code> skipped Forgejo's install
+                            page, so make the first admin from a shell inside
+                            the container:
+                        </p>
+                        <pre><code>podman exec -it forgejo /bin/bash</code></pre>
+                        <p>
+                            The prompt changes to
+                            <code>servera:/var/lib/gitea$</code>: this shell
+                            runs inside the container, as Forgejo's own user,
+                            <code>git</code>. Create the admin with Forgejo's
+                            command-line tool, then leave the container:
+                        </p>
+                        <pre><code>forgejo admin user create --admin --username student --password student --email student@lab.example.com
+exit</code></pre>
+                        <pre><code>New user 'student' has been successfully created!</code></pre>
+                        <p>
+                            Like every Forgejo account, the new admin is stored
+                            in PostgreSQL on <code>serverb</code>.
+                        </p>
+                    </li>
+                    <li class="step">
+                        <h2>
+                            Run the container as a user service that starts at
+                            boot
+                        </h2>
+                        <p>
+                            Back at <code>forgejo</code>'s prompt, make the
+                            directory for its own units and generate one for the
+                            container:
+                        </p>
+                        <pre><code>mkdir -p ~/.config/systemd/user
+cd ~/.config/systemd/user
+podman generate systemd --new --files --name --restart-sec 10 \
+--wants podman-user-wait-network-online.service \
+--after podman-user-wait-network-online.service forgejo</code></pre>
+                        <pre><code>DEPRECATED command:
+It is recommended to use Quadlets for running containers and pods under systemd.
+
+Please refer to podman-systemd.unit(5) for details.
+/home/forgejo/.config/systemd/user/container-forgejo.service</code></pre>
+                        <p>
+                            The notice is expected; the command still works.
+                            <code>--restart-sec 10</code> is new: at boot,
+                            nothing makes <code>autofs</code> mount
+                            <code>~/data</code> before this service starts. If
+                            the service starts first, it fails, and without the
+                            option systemd retries after 100 ms and gives up
+                            after five tries in ten seconds. With it, systemd
+                            retries every 10 seconds, which never reaches that
+                            limit, so Forgejo starts once its data is there.
+                        </p>
+                        <p>
+                            <code>--new</code> makes the service create its own
+                            container, so remove this one. Its data stays on
+                            <code>serverb</code>.
+                        </p>
+                        <pre><code>podman rm -f forgejo
+systemctl --user daemon-reload
+systemctl --user enable --now container-forgejo
+curl -s localhost:3000 | grep '&lt;title&gt;'</code></pre>
+                        <pre><code>forgejo
+Created symlink '/home/forgejo/.config/systemd/user/default.target.wants/container-forgejo.service' → '/home/forgejo/.config/systemd/user/container-forgejo.service'.
+&#9;&lt;title&gt;Forgejo: Beyond coding. We forge.&lt;/title&gt;</code></pre>
+                        <p>
+                            Log out of <code>forgejo</code>, and check the page
+                            again as <code>student</code>:
+                        </p>
+                        <pre><code>exit
+curl -s localhost:3000 | grep '&lt;title&gt;'</code></pre>
+                        <pre><code>&#9;&lt;title&gt;Forgejo: Beyond coding. We forge.&lt;/title&gt;</code></pre>
+                        <p>
+                            <code>forgejo</code> has logged out, and lingering
+                            keeps its service running. Leave
+                            <code>servera</code> as it is: Build the Web Tier
+                            puts httpd in front of port 3000.
+                        </p>
+                    </li>
+                </ol>
+            </article>
+            <nav class="exercise-navigation" aria-label="Exercise navigation">
+                <a href="../">← Back to week overview</a>
+            </nav>
+        </main>
+
+        <footer>
+            <p>
+                <a href="../../../">IT-230</a> ·
+                <a href="../../../">Linux Administration</a>
+            </p>
+        </footer>
+    </body>
+</html>
