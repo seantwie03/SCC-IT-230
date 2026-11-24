@@ -52,3 +52,7 @@ src: ./chapters/it230-self-hosting-forgejo/app-tier.md
 ---
 src: ./chapters/it230-self-hosting-forgejo/web-tier.md
 ---
+
+---
+src: ./chapters/it230-self-hosting-forgejo/operating-forgejo.md
+---

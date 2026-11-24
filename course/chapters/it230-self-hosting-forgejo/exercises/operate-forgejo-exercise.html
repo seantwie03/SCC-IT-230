@@ -1,0 +1,732 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Operate Forgejo Exercise</title>
+        <style>
+            :root {
+                color-scheme: light;
+                --it230-color-canvas: #fafafb;
+                --it230-color-surface: #ffffff;
+                --it230-color-raised: #ebebed;
+                --it230-color-line: #b9b9bf;
+                --it230-color-text: #25252b;
+                --it230-color-muted: #55555b;
+                --it230-color-accent-text: #0461be;
+                --it230-color-accent-fill: #3584e4;
+                --it230-color-accent-wash: rgb(53 132 228 / 14%);
+                --it230-color-warning: #905400;
+                --it230-font-sans:
+                    "Lato", "Segoe UI", "Noto Sans", "Liberation Sans",
+                    sans-serif;
+                --it230-font-mono:
+                    "Cascadia Code", "JetBrains Mono", "Noto Sans Mono",
+                    "DejaVu Sans Mono", monospace;
+                --it230-space-1: 0.25rem;
+                --it230-space-2: 0.5rem;
+                --it230-space-3: 0.75rem;
+                --it230-space-4: 1rem;
+                --it230-space-5: 1.5rem;
+                --it230-space-6: 2rem;
+                --it230-space-7: 3rem;
+                --it230-radius-sm: 0.5rem;
+                --it230-radius-md: 0.75rem;
+                --it230-radius-lg: 0.9375rem;
+                --it230-shadow-raised:
+                    0 0.125rem 0.25rem rgb(0 0 6 / 10%),
+                    0 1.2rem 3rem rgb(0 0 6 / 10%);
+                line-height: 1.6;
+                color: var(--it230-color-text);
+                background: var(--it230-color-canvas);
+            }
+
+            * {
+                box-sizing: border-box;
+            }
+
+            body {
+                min-width: 20rem;
+                margin: 0;
+                color: var(--it230-color-text);
+                background:
+                    radial-gradient(
+                        circle at 95% 5%,
+                        var(--it230-color-accent-wash),
+                        transparent 40%
+                    ),
+                    radial-gradient(
+                            circle,
+                            rgb(0 0 6 / 2%) 0 0.035rem,
+                            transparent 0.04rem
+                        )
+                        0 0 / 0.22rem 0.22rem,
+                    linear-gradient(
+                        145deg,
+                        var(--it230-color-surface),
+                        #f5f6f8 72%
+                    );
+                /*
+                 * The accent wash is pinned to the viewport so it stays in the
+                 * corner as a long exercise scrolls under it. Only the wash is
+                 * fixed; the dot texture and the base gradient still travel
+                 * with the content.
+                 */
+                background-attachment: fixed, scroll, scroll;
+                font-family: var(--it230-font-sans);
+                font-feature-settings:
+                    "liga" 0,
+                    "calt" 0;
+                font-variant-ligatures: none;
+                text-rendering: optimizeLegibility;
+            }
+
+            ::selection {
+                color: var(--it230-color-text);
+                background: color-mix(
+                    in srgb,
+                    var(--it230-color-accent-fill) 22%,
+                    white
+                );
+            }
+
+            :focus-visible {
+                border-radius: var(--it230-radius-sm);
+                outline: 0.18rem solid var(--it230-color-accent-fill);
+                outline-offset: 0.16rem;
+            }
+
+            a {
+                color: var(--it230-color-accent-text);
+                text-decoration: underline;
+                text-decoration-thickness: 0.08em;
+                text-underline-offset: 0.16em;
+            }
+
+            a:hover {
+                text-decoration-thickness: 0.14em;
+            }
+
+            .skip-link {
+                position: fixed;
+                z-index: 10;
+                top: var(--it230-space-3);
+                left: var(--it230-space-3);
+                padding: var(--it230-space-3) var(--it230-space-4);
+                border: 1px solid var(--it230-color-line);
+                border-radius: var(--it230-radius-sm);
+                background: var(--it230-color-surface);
+                box-shadow: var(--it230-shadow-raised);
+                transform: translateY(-200%);
+            }
+
+            .skip-link:focus {
+                transform: translateY(0);
+            }
+
+            .site-header {
+                position: sticky;
+                z-index: 5;
+                top: 0;
+                border-bottom: 1px solid var(--it230-color-line);
+                background: color-mix(
+                    in srgb,
+                    var(--it230-color-surface) 92%,
+                    transparent
+                );
+                box-shadow: 0 0.125rem 0.35rem rgb(0 0 6 / 8%);
+                backdrop-filter: blur(0.75rem);
+            }
+
+            .header-inner,
+            main,
+            footer {
+                width: min(64rem, calc(100% - 2rem));
+                margin-inline: auto;
+            }
+
+            .header-inner {
+                display: flex;
+                min-height: 3.5rem;
+                align-items: center;
+                gap: var(--it230-space-3);
+            }
+
+            .header-inner p {
+                margin: 0;
+            }
+
+            /*
+             * The course identity is chrome, not prose, so it keeps the
+             * surrounding text color and takes its underline on hover. It
+             * appears in the header and again in the footer, and both lead to
+             * the course home.
+             */
+            .header-inner a,
+            footer a {
+                color: inherit;
+                text-decoration: none;
+            }
+
+            .header-inner a:hover,
+            footer a:hover {
+                text-decoration: underline;
+            }
+
+            .course-code,
+            .course-code a {
+                color: var(--it230-color-accent-text);
+                font-weight: 800;
+                letter-spacing: 0.04em;
+            }
+
+            .course-code {
+                display: flex;
+                align-items: center;
+            }
+
+            .course-code::after {
+                content: "";
+                display: inline-block;
+                width: 1px;
+                height: 1.1em;
+                margin-left: var(--it230-space-3);
+                background: var(--it230-color-line);
+            }
+
+            h1,
+            h2 {
+                line-height: 1.2;
+            }
+
+            h1 {
+                max-width: 30ch;
+                margin: 0;
+                font-size: clamp(2rem, 6vw, 3rem);
+            }
+
+            main {
+                padding-block: clamp(2.1rem, 5.6vw, 3.85rem)
+                    var(--it230-space-7);
+                scroll-margin-top: 4rem;
+            }
+
+            .exercise-document {
+                overflow: hidden;
+                border: 1px solid var(--it230-color-line);
+                border-radius: var(--it230-radius-lg);
+                background: var(--it230-color-surface);
+                box-shadow: var(--it230-shadow-raised);
+            }
+
+            .exercise-header {
+                padding: clamp(1.5rem, 4vw, 2.25rem);
+                border-bottom: 0.25rem solid var(--it230-color-accent-fill);
+                background: var(--it230-color-accent-wash);
+            }
+
+            .exercise-kicker {
+                margin: 0 0 var(--it230-space-2);
+                color: var(--it230-color-accent-text);
+                font-size: 0.82rem;
+                font-weight: 800;
+                letter-spacing: 0.06em;
+                text-transform: uppercase;
+            }
+
+            .overview {
+                padding: var(--it230-space-5);
+                border-bottom: 1px solid var(--it230-color-line);
+            }
+
+            .overview h2,
+            .step h2 {
+                margin: 0 0 var(--it230-space-4);
+                padding-left: var(--it230-space-3);
+                border-left: 0.22rem solid var(--it230-color-accent-fill);
+                font-size: clamp(1.35rem, 3vw, 1.65rem);
+            }
+
+            .requirements {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+                margin: var(--it230-space-5) 0;
+                border-block: 1px solid var(--it230-color-line);
+            }
+
+            .requirements div {
+                padding-block: var(--it230-space-3);
+            }
+
+            .requirements dt {
+                color: var(--it230-color-muted);
+                font-weight: 700;
+            }
+
+            .requirements dd {
+                margin: 0.25rem 0 0;
+            }
+
+            .steps {
+                margin: 0;
+                padding: 0;
+                list-style: none;
+                counter-reset: exercise-step;
+            }
+
+            .step {
+                counter-increment: exercise-step;
+                padding: var(--it230-space-5);
+                border-bottom: 1px solid var(--it230-color-line);
+            }
+
+            .step:last-child {
+                border-bottom: 0;
+            }
+
+            .step h2::before {
+                content: "Step " counter(exercise-step);
+                display: block;
+                margin-bottom: var(--it230-space-1);
+                color: var(--it230-color-accent-text);
+                font-size: 0.72rem;
+                font-weight: 800;
+                letter-spacing: 0.06em;
+                text-transform: uppercase;
+            }
+
+            code,
+            kbd {
+                font-family: var(--it230-font-mono);
+                font-weight: 600;
+            }
+
+            code:not(pre code) {
+                overflow-wrap: anywhere;
+                color: var(--it230-color-accent-text);
+            }
+
+            kbd {
+                padding: 0.1rem 0.3rem;
+                color: var(--it230-color-text);
+                background: var(--it230-color-raised);
+                border: 1px solid var(--it230-color-line);
+                border-radius: 0.25rem;
+                box-shadow: 0 1px 0 var(--it230-color-line);
+            }
+
+            pre {
+                max-width: 100%;
+                padding: var(--it230-space-4);
+                overflow-x: auto;
+                overflow-wrap: anywhere;
+                color: var(--it230-color-text);
+                border: 1px solid var(--it230-color-line);
+                border-radius: var(--it230-radius-md);
+                background: #f7f7f8;
+                box-shadow: inset 0 1px 0 rgb(255 255 255 / 80%);
+                tab-size: 4;
+                white-space: pre-wrap;
+            }
+
+            pre code {
+                font-size: 0.95rem;
+            }
+
+            .note,
+            .warning {
+                margin-block: var(--it230-space-5);
+                padding: var(--it230-space-3) var(--it230-space-4);
+                border-left: 0.3rem solid;
+            }
+
+            .note {
+                background: var(--it230-color-accent-wash);
+                border-color: var(--it230-color-accent-fill);
+            }
+
+            .note strong {
+                color: var(--it230-color-accent-text);
+            }
+
+            .warning {
+                background: color-mix(
+                    in srgb,
+                    var(--it230-color-warning) 9%,
+                    var(--it230-color-canvas)
+                );
+                border-color: var(--it230-color-warning);
+            }
+
+            .warning strong {
+                color: var(--it230-color-warning);
+            }
+
+            .note strong,
+            .warning strong {
+                display: block;
+            }
+
+            .exercise-navigation {
+                margin-top: var(--it230-space-6);
+                padding-top: var(--it230-space-4);
+            }
+
+            .exercise-navigation a {
+                font-weight: 700;
+            }
+
+            footer {
+                padding-block: 0 var(--it230-space-7);
+                color: var(--it230-color-muted);
+            }
+
+            footer::before {
+                display: block;
+                width: 100%;
+                height: 0.125rem;
+                margin-bottom: 0.35rem;
+                border-radius: 999px;
+                background: linear-gradient(
+                    90deg,
+                    var(--it230-color-line) 0 52%,
+                    color-mix(
+                            in srgb,
+                            var(--it230-color-accent-fill) 25%,
+                            transparent
+                        )
+                        100%
+                );
+                content: "";
+            }
+
+            footer p {
+                margin: 0;
+            }
+
+            @media (max-width: 32rem) {
+                .header-inner,
+                main,
+                footer {
+                    width: min(100% - 1.5rem, 64rem);
+                }
+
+                .header-inner {
+                    min-height: 3.25rem;
+                }
+
+                .overview,
+                .step {
+                    padding: var(--it230-space-4);
+                }
+
+                h1 {
+                    overflow-wrap: anywhere;
+                }
+            }
+
+            @media print {
+                :root {
+                    background: #ffffff;
+                }
+
+                body {
+                    background: #ffffff;
+                }
+
+                .skip-link,
+                .site-header {
+                    display: none;
+                }
+
+                main {
+                    width: 100%;
+                    padding: 0;
+                }
+
+                .exercise-document {
+                    border: 0;
+                    box-shadow: none;
+                }
+
+                .step {
+                    break-inside: avoid;
+                }
+            }
+        </style>
+    </head>
+
+    <body>
+        <a class="skip-link" href="#main-content">Skip to exercise</a>
+
+        <header class="site-header">
+            <div class="header-inner">
+                <p class="course-code"><a href="../../../">IT-230</a></p>
+                <p class="course-title">
+                    <a href="../../../">Linux Administration</a>
+                </p>
+            </div>
+        </header>
+
+        <main id="main-content">
+            <article class="exercise-document">
+                <header class="exercise-header">
+                    <p class="exercise-kicker">Exercise</p>
+                    <h1>Operate Forgejo Exercise</h1>
+                </header>
+
+                <section class="overview" aria-labelledby="overview-heading">
+                    <h2 id="overview-heading">Task</h2>
+                    <p>
+                        Run what the last three exercises built. On
+                        <code>serverb</code>, write a script that backs up
+                        Forgejo's database and files together, keeps the seven
+                        newest backups, and copies them to <code>servera</code>,
+                        then schedule it nightly at a low priority, with its log
+                        rotated. On <code>servera</code>, search httpd's access
+                        log for server errors. This is the last exercise of the
+                        week.
+                    </p>
+
+                    <dl class="requirements">
+                        <div>
+                            <dt>Hosts</dt>
+                            <dd>
+                                <code>serverb</code> and <code>servera</code>
+                            </dd>
+                        </div>
+                        <div>
+                            <dt>Prerequisite</dt>
+                            <dd>Build the Web Tier</dd>
+                        </div>
+                    </dl>
+                </section>
+
+                <ol class="steps">
+                    <li class="step">
+                        <h2>Install rsync on serverb and servera</h2>
+                        <p>
+                            Every command on <code>serverb</code> in steps 1 to
+                            5 runs as <code>root</code>, so start a root shell
+                            there. <code>rsync</code> must be installed at both
+                            ends of the copy:
+                        </p>
+                        <pre><code>ssh serverb
+sudo -i
+dnf install -y rsync
+ssh servera dnf install -y rsync</code></pre>
+                        <p>
+                            <code>root</code> reaches every lab host with a key,
+                            so <code>ssh</code> asks for no password. The first
+                            time, it may report that it added
+                            <code>servera</code> to its known hosts.
+                        </p>
+                    </li>
+                    <li class="step">
+                        <h2>
+                            Write a script that backs up the database and files,
+                            keeps the seven newest, and copies them to servera
+                        </h2>
+                        <pre><code>vim /usr/local/bin/forgejo_backup.sh</code></pre>
+                        <p>Press <kbd>i</kbd> and type:</p>
+                        <pre><code>#!/bin/bash
+backup_dir="/var/backups/forgejo"
+run_dir="${backup_dir}/forgejo_$(date --iso-8601=minutes)"
+mkdir -p "${run_dir}"
+su - postgres -c "pg_dump forgejo" | gzip &gt; "${run_dir}/database.sql.gz"
+tar -C /srv -czf "${run_dir}/files.tar.gz" --exclude=forgejo/indexers forgejo
+for old_run in $(ls -dt ${backup_dir}/forgejo_* | tail -n +8); do
+    rm -r "${old_run}"
+done
+rsync -av --delete "${backup_dir}/" servera:forgejo-backups/
+echo "$(date) wrote ${run_dir}"</code></pre>
+                        <p>
+                            Press <kbd>Esc</kbd>, then type <code>:wq</code> and
+                            press <kbd>Enter</kbd>. Make it executable:
+                        </p>
+                        <pre><code>chmod a+x /usr/local/bin/forgejo_backup.sh</code></pre>
+                        <p>What each part does:</p>
+                        <ul>
+                            <li>
+                                Each run gets a directory named for the minute
+                                it ran, holding both the database and the files,
+                                so keeping seven runs keeps seven complete
+                                backups. <code>mkdir -p</code> also creates
+                                <code>/var/backups/forgejo</code> on the first
+                                run.
+                            </li>
+                            <li>
+                                <code>pg_dump</code>, run as
+                                <code>postgres</code>, makes a consistent copy
+                                of the database even while Forgejo uses it, and
+                                <code>gzip</code> compresses it.
+                            </li>
+                            <li>
+                                <code>tar -C /srv</code> works from
+                                <code>/srv</code>, so the archive holds
+                                <code>forgejo/</code> and everything in it.
+                                <code>--exclude=forgejo/indexers</code> leaves
+                                out the search index, which Forgejo can rebuild
+                                and which is busy while Forgejo runs.
+                            </li>
+                            <li>
+                                <code>ls -dt</code> lists the run directories
+                                newest first, and <code>tail -n +8</code> prints
+                                every one after the seventh, which
+                                <code>rm -r</code> deletes. Without the
+                                <code>+</code>, <code>tail -n 8</code> would
+                                print the last eight lines, the oldest runs, and
+                                the loop would delete those instead.
+                            </li>
+                            <li>
+                                <code>rsync -av --delete</code> mirrors
+                                <code>/var/backups/forgejo</code> to
+                                <code>forgejo-backups</code> in
+                                <code>root</code>'s home on
+                                <code>servera</code>, deleting the pruned runs
+                                there too.
+                            </li>
+                            <li>
+                                The last line writes one line to the log per
+                                run.
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="step">
+                        <h2>
+                            Run it by hand under nice, and check the copy on
+                            servera
+                        </h2>
+                        <p>
+                            Run it by hand before trusting it to a schedule, at
+                            a lower priority than Forgejo's users.
+                            <code>2&gt;&amp;1</code> sends its errors to the
+                            same log as its output:
+                        </p>
+                        <pre><code>nice -n 10 /usr/local/bin/forgejo_backup.sh &gt;&gt; /var/log/forgejo_backup.log 2&gt;&amp;1
+cat /var/log/forgejo_backup.log</code></pre>
+                        <pre><code>sending incremental file list
+created directory forgejo-backups
+./
+forgejo_2026-11-21T18:41+00:00/
+forgejo_2026-11-21T18:41+00:00/database.sql.gz
+forgejo_2026-11-21T18:41+00:00/files.tar.gz
+
+sent 36,586 bytes  received 103 bytes  73,378.00 bytes/sec
+total size is 36,326  speedup is 0.99
+Sat Nov 21 06:41:47 PM UTC 2026 wrote /var/backups/forgejo/forgejo_2026-11-21T18:41+00:00</code></pre>
+                        <p>
+                            Your run directory carries your own date and time,
+                            and your sizes may differ. <code>rsync</code> made
+                            <code>forgejo-backups</code> in <code>root</code>'s
+                            home on <code>servera</code>, with one directory per
+                            run:
+                        </p>
+                        <pre><code>ssh servera ls -lR forgejo-backups</code></pre>
+                        <pre><code>forgejo-backups:
+total 0
+drwxr-xr-x. 2 root root 49 Nov 21 18:41 forgejo_2026-11-21T18:41+00:00
+
+forgejo-backups/forgejo_2026-11-21T18:41+00:00:
+total 40
+-rw-r--r--. 1 root root 27537 Nov 21 18:41 database.sql.gz
+-rw-r--r--. 1 root root  8789 Nov 21 18:41 files.tar.gz</code></pre>
+                    </li>
+                    <li class="step">
+                        <h2>Schedule it nightly in /etc/cron.d</h2>
+                        <p>
+                            Copying <code>/etc/crontab</code> gives you its
+                            field reference as a starting point:
+                        </p>
+                        <pre><code>cp /etc/crontab /etc/cron.d/forgejo_backup
+vim /etc/cron.d/forgejo_backup</code></pre>
+                        <p>
+                            Press <kbd>G</kbd> to go to the last line and
+                            <kbd>o</kbd> to open a line below it, then type:
+                        </p>
+                        <pre><code>0 2 * * * root nice -n 10 /usr/local/bin/forgejo_backup.sh &gt;&gt; /var/log/forgejo_backup.log 2&gt;&amp;1</code></pre>
+                        <p>
+                            Press <kbd>Esc</kbd>, then type <code>:wq</code> and
+                            press <kbd>Enter</kbd>. Every day at 2:00, as
+                            <code>root</code>, the line runs the same command
+                            you ran by hand. Lines in
+                            <code>/etc/cron.d</code> name the user that runs
+                            them. Check the line:
+                        </p>
+                        <pre><code>tail -1 /etc/cron.d/forgejo_backup</code></pre>
+                        <pre><code>0 2 * * * root nice -n 10 /usr/local/bin/forgejo_backup.sh &gt;&gt; /var/log/forgejo_backup.log 2&gt;&amp;1</code></pre>
+                    </li>
+                    <li class="step">
+                        <h2>Rotate the backup's log with logrotate</h2>
+                        <pre><code>vim /etc/logrotate.d/forgejo_backup</code></pre>
+                        <p>Press <kbd>i</kbd> and type:</p>
+                        <pre><code>/var/log/forgejo_backup.log {
+    weekly
+    rotate 4
+    compress
+    missingok
+}</code></pre>
+                        <p>
+                            Press <kbd>Esc</kbd>, then type <code>:wq</code> and
+                            press <kbd>Enter</kbd>.
+                            <code>logrotate.timer</code> would rotate the log
+                            weekly; <code>--force</code> rotates it now, which
+                            checks the file:
+                        </p>
+                        <pre><code>logrotate --force /etc/logrotate.d/forgejo_backup
+ls /var/log/forgejo_backup*</code></pre>
+                        <pre><code>/var/log/forgejo_backup.log.1.gz</code></pre>
+                        <p>
+                            The log was moved aside and compressed. The next run
+                            starts a new one.
+                        </p>
+                    </li>
+                    <li class="step">
+                        <h2>Search servera's access log for errors</h2>
+                        <p>
+                            Leave the root shell, and log in to
+                            <code>servera</code> as <code>student</code>. If
+                            <code>ssh</code> reports that it added
+                            <code>servera</code> to its known hosts, that is
+                            expected.
+                        </p>
+                        <pre><code>exit
+ssh servera
+sudo grep -E '" 5[0-9]{2} ' /var/log/httpd/access_log</code></pre>
+                        <pre><code>::1 - - [21/Nov/2026:18:03:53 +0000] "GET / HTTP/1.1" 503 299 "-" "curl/8.9.1"</code></pre>
+                        <p>
+                            Each line of the access log is one request, and the
+                            status follows the quoted request. The pattern's
+                            leading quote and space anchor the match there, so
+                            it finds statuses from 500 to 599, server errors,
+                            and not a 5 anywhere else in the line. This 503 is
+                            Build the Web Tier's first <code>curl</code>, before
+                            httpd was allowed to reach Forgejo. Count every
+                            status:
+                        </p>
+                        <pre><code>sudo grep -oE '" [0-9]{3} ' /var/log/httpd/access_log | sort | uniq -c</code></pre>
+                        <pre><code>      2 " 200&#32;
+      1 " 503 </code></pre>
+                        <p>
+                            <code>-o</code> prints only the matches, and
+                            <code>sort | uniq -c</code> counts each one. Your
+                            log also holds your own requests, such as Firefox's
+                            from Build the Web Tier, so your counts differ. This
+                            ends the week's exercises.
+                        </p>
+                    </li>
+                </ol>
+            </article>
+            <nav class="exercise-navigation" aria-label="Exercise navigation">
+                <a href="../">← Back to week overview</a>
+            </nav>
+        </main>
+
+        <footer>
+            <p>
+                <a href="../../../">IT-230</a> ·
+                <a href="../../../">Linux Administration</a>
+            </p>
+        </footer>
+    </body>
+</html>

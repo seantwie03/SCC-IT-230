@@ -8,7 +8,7 @@ Plan w15 as something new: put what students learned all semester into action by
 
 ## Answer in brief
 
-**Updated 2026-11-24.** Fragments 1 to 5 are built and fragment 6 is drafted; all four exercises are recorded, and three have their written versions. There is no source deck: w15 is new material, not a port. It takes the place of RH134 chapter 18, *Working with Image-Based RHEL*, which the lesson plan in `~/s/IT-230/w15/` covered; RHA's chapter 19 review labs are the week's homework (Decision 7).
+**Updated 2026-11-24.** All six fragments are built, and all four exercises are recorded and have their written versions. There is no source deck: w15 is new material, not a port. It takes the place of RH134 chapter 18, *Working with Image-Based RHEL*, which the lesson plan in `~/s/IT-230/w15/` covered; RHA's chapter 19 review labs are the week's homework (Decision 7).
 
 What is settled:
 
@@ -22,7 +22,7 @@ What is settled:
 8. **One exercise chain, tier by tier.** Each tier opens with the host configuration it needs, and the operating steps come last, where they can be cut on the day (Decisions 16 and 27).
 9. **Aligned to RH134 chapter 19,** *Comprehensive Review*, with no Cert Guide chapter (Decision 17).
 
-The week is built in the order under "Build order". Step 1 is done: its three unknowns are answered (Round 5), and the command files are written and verified in chain order (Round 6; see "Exercises"); there are four since Decision 27 dropped the reboot exercise. Decision 26, Forgejo's data on `serverb` over NFS, was accepted on 2026-11-21, and Build the Data Tier and Build the App Tier were rewritten for it (Round 11). All four exercises are recorded (Rounds 15, 16, and 20), Operate Forgejo's with the backup that also takes Forgejo's files (Decision 28). Steps 2 and 3 are done (see "Classification" and "New material"; Decision 29 accepted). Step 4, the slides, is under way: fragments 1 to 5 are built, with 54 slides between them, and fragment 6 is next (see "Slides"). Decisions 1 to 30 are all settled; none awaits your call.
+The week is built in the order under "Build order". Step 1 is done: its three unknowns are answered (Round 5), and the command files are written and verified in chain order (Round 6; see "Exercises"); there are four since Decision 27 dropped the reboot exercise. Decision 26, Forgejo's data on `serverb` over NFS, was accepted on 2026-11-21, and Build the Data Tier and Build the App Tier were rewritten for it (Round 11). All four exercises are recorded (Rounds 15, 16, and 20), Operate Forgejo's with the backup that also takes Forgejo's files (Decision 28). Steps 2 and 3 are done (see "Classification" and "New material"; Decision 29 accepted). Step 4, the slides, is done: all six fragments are built, 66 slides, and step 5, publication, is next (see "Slides"). Decisions 1 to 30 are all settled; none awaits your call.
 
 ## Scope
 
@@ -200,9 +200,9 @@ Proposed 2026-11-21 as Decision 29 and accepted the same day. Each new item gets
 
 ## Slides (step 4, draft)
 
-Drafted 2026-11-21. Fragments 1 to 5 are built, and their entries describe the slides as they stand on 2026-11-24, after your revisions; fragment 6 is still the draft. Six fragments in `course/chapters/it230-self-hosting-forgejo/` (Decisions 23 and 25), each aligned to RH134 chapter 19 (Decision 17) and opening with a `section` slide that carries its `routeAlias` and `topicInfo`. Transcripts come from your four recordings (the casts) or from Round 21, with prompts rewritten to the theme's `student@servera:~$` form. No presenter notes. Each tier's fragment opens with the week's architecture diagram, its own tier highlighted, and ends with its exercise and recording slides. Cut candidates are listed at the end.
+Drafted 2026-11-21. All six fragments are built, and their entries describe the slides as they stand on 2026-11-24, after your revisions. Six fragments in `course/chapters/it230-self-hosting-forgejo/` (Decisions 23 and 25), each aligned to RH134 chapter 19 (Decision 17) and opening with a `section` slide that carries its `routeAlias` and `topicInfo`. Transcripts come from your four recordings (the casts) or from Round 21, with prompts rewritten to the theme's `student@servera:~$` form. No presenter notes. Each tier's fragment opens with the week's architecture diagram, its own tier highlighted, and ends with its exercise and recording slides. Cut candidates are listed at the end.
 
-**The weekly entry, `course/w15-draft.md`** (built 2026-11-22, with fragments 1 to 5 so far): a cover titled "Self-Hosting Forgejo", accent `orange`, your change from `green` (w14 was `teal`; the guide prefers cool accents for Bash-heavy decks), with a six-line agenda (Self-Hosting Forgejo, The Data Tier, PostgreSQL, The App Tier, The Web Tier, Operating Forgejo) and the summary from your opening paragraph; then the VM reminder, "Start `workstation`, `servera`, and `serverb` on your VDI"; then one `src:` import per fragment.
+**The weekly entry, `course/w15-draft.md`** (built 2026-11-22, and importing all six fragments since 2026-11-24): a cover titled "Self-Hosting Forgejo", accent `orange`, your change from `green` (w14 was `teal`; the guide prefers cool accents for Bash-heavy decks), with a six-line agenda (Self-Hosting Forgejo, The Data Tier, PostgreSQL, The App Tier, The Web Tier, Operating Forgejo) and the summary from your opening paragraph; then the VM reminder, "Start `workstation`, `servera`, and `serverb` on your VDI"; then one `src:` import per fragment.
 
 #### Fragment 1: Self-Hosting Forgejo (`self-hosting.md`), built 2026-11-22
 
@@ -514,59 +514,89 @@ The written version, `exercises/build-the-web-tier-exercise.html`, was built wit
 
 `exercise`, `variant: recording`, with the cast (3.9 minutes, 6 markers; Round 16) and the written exercise. The player's label describes the recorded workflow: adding `git.lab.example.com` for `servera` to `workstation`'s `/etc/hosts`; installing httpd on `servera` and writing `/etc/httpd/conf.d/forgejo.conf` with the three proxy lines; starting httpd and opening the firewall for `http`; getting 503, installing `setroubleshoot-server`, and finding with `sealert` that SELinux denied httpd's connection to port 3000; enabling `httpd_can_network_connect`; and getting Forgejo's page from `servera` and, by name, from `workstation`.
 
-#### Fragment 6: Operating Forgejo (`operating-forgejo.md`)
+#### Fragment 6: Operating Forgejo (`operating-forgejo.md`), built 2026-11-24
+
+Redrafted and built 2026-11-24, with its written exercise. It keeps the 2026-11-21 draft's twelve slides and their numbers, and takes fragment 4's and 5's shape: what running an application in production takes, as an `IconGrid` in 6.2 like 2.6, 4.3, and 5.3; then one slide per part of the exercise, each a framing line over a `TextExplainer`, two columns, or a short transcript; then the security recap; and a closing table in 2.9's shape. It has no architecture slide, since operating Forgejo touches every tier. Facts come from Decisions 11, 28, and 29, Rounds 6, 17, 18, 20, 21, and 27, and the recording. Like fragments 3 to 5, it closes with its exercise, and its written version was built with it. `check:entry`, `check:slides`, `check:exercises`, and `check:format` pass, and every slide and click state was looked at in a capture at 1920x1080. Three slides changed in the build, each noted at its slide: 6.2's captions, 6.3's right column, and 6.7, whose cron line could not be a `TextExplainer`.
+
+Changed from the 2026-11-21 draft: 6.2 gains bold-led captions and drops security, which keeps its own slide in 6.9; 6.3 becomes two columns, like 2.4, and loses the `app.ini` secrets line, which is still unverified (to-verify item 9); 6.4's highlighted code block becomes a `TextExplainer`, which teaches the new `tar -C`, `--exclude`, `ls -t`, and `tail -n +8` in place; 6.5's one transcript becomes two side by side; 6.7 becomes a `TextExplainer` of the cron line, which teaches `2>&1`, over the `logrotate` file; 6.8 becomes a `TextExplainer` of one access log line; 6.9 becomes a table; and 6.10's two tables become one in 2.9's shape, retitled "This Week's Operations". Decision 29 gave `tail -n +8`, `tar -C`, `--exclude`, `ls -t`, and `2>&1` lines in a "new in this tier" table. That table is gone in fragments 4 and 5, so here they are taught on the slides that show them instead.
 
 ##### 6.1 Operating Forgejo
 
-`section`, with `routeAlias: operating-forgejo` and `topicInfo` declaring Operate Forgejo.
+`section`, with `routeAlias: operating-forgejo` and `topicInfo` (RH134 chapter 19) declaring Operate Forgejo Exercise (`./exercises/operate-forgejo-exercise.html`), and the subtitle "Keeping the application running and its data safe".
 
 ##### 6.2 Running an App in Production
 
-`IconGrid` of what this section covers: backups, getting them off the host, scheduling and logs, reading the logs, and security.
+`IconGrid` of five, centered, in rows of three and two like 2.6, each caption led by the consideration in bold: `data-backup`, "**Backups** of all the data"; `send-alt`, "**Copies** kept off the host"; `time`, "**Scheduling** every night"; `meter`, "**Priority** below the users"; `catalog`, "**Logs** kept, rotated, and read". The first, third, and fourth captions were planned as "of the database and files", ", so nobody has to remember", and "below the users' requests"; each wrapped onto a second line. The first three are 2.7's "what makes a backup useful", which said Operate Forgejo does them; this slide keeps that promise. New.
 
 ##### 6.3 What to Back Up
 
-The database and the files, from the same moment. `pg_dump` (new) copies a running database consistently; `tar` copies the files, minus the search index, which Forgejo can rebuild (its own `forgejo dump` has `--skip-index`). One honest line: `tar` reads files while Forgejo may write them, so the two halves are close to, not exactly, one moment. Another: the files also hold `app.ini`, whose secrets Forgejo wrote at its first start, such as the key that encrypts users' two-factor secrets, so a backup without it would lock those users out; that is why the files, not only the database, are backed up (kept off 2.4, which stays about user data).
+`two-cols-header`, each column headed by a one-item `IconGrid`, like 2.4. Left, `data-base`, "**The database**, with `pg_dump`": "A consistent copy while PostgreSQL runs" and "Plain SQL, compressed with `gzip`". Right, `folder`, "**The files**, with `tar`": "Repositories, uploads, and `app.ini`" (planned as "Repositories, attachments, avatars, and `app.ini`", which wrapped and put the column headers out of line; attachments and avatars are both uploads) and "Not the search index, which Forgejo rebuilds". `::bottom::`: "Both go in one dated directory per run, so every run is a complete backup". `pg_dump` is new (Decision 29); `tar` and `gzip` are w06's.
+
+Sources: `pg_dump`'s man page on `serverb` (Round 27): "It makes consistent backups even if the database is being used concurrently"; plain SQL is its default format. Round 18 for the archive, 35 entries with `app.ini` and no index, and for why the index is left out; Decision 28 for Forgejo's own `forgejo dump --skip-index` and its documentation's word that the index can be rebuilt.
+
+Not on the slide, and yours to add if you want them. First, `tar` reads the files while Forgejo may be writing them, so the two halves are close to one moment, not exactly one. Second, `app.ini` holds secrets Forgejo generated at its first start (Round 27 found `SECRET_KEY`, `INTERNAL_TOKEN`, and `JWT_SECRET`); the draft's claim that losing `SECRET_KEY` locks out users' two-factor logins is still to-verify item 9, so it stays off.
 
 ##### 6.4 The Backup Script
 
-The 11-line script in a code block, its lines highlighted in steps: the dated run directory, the dump, the archive, the pruning loop, the copy.
+A `TextExplainer` (`size="sm"`) of the script's 11 lines, verbatim, with `&quot;` for each double quote as w06's and w03's explainers write them. Eight steps: on line 3, `forgejo_$(date --iso-8601=minutes)`, "Each run gets a directory named for the minute it ran"; on line 5, `pg_dump forgejo`, "Dump the database as postgres, while it runs"; on line 6, `-C /srv`, "Work from /srv, so the archive holds forgejo/" and `--exclude=forgejo/indexers`, "Leave out the search index"; on line 7, `ls -dt`, "Run directories, newest first" and `tail -n +8`, "Every one after the seventh"; on line 10, `rsync -av --delete`, "Mirror to servera, pruned runs included"; line 11, "One line in the log per run". New: `tar -C`, `--exclude`, `ls -t`, and `tail -n +8`; the rest is w03's scripts and loops, w04's `$(date --iso-8601=minutes)` and `rsync --delete`, and w06's `tar` and `gzip`.
+
+Sources: Round 27 read the script on `serverb`, the command file's 11 lines exactly (Rounds 18 and 20: 465 bytes). If 11 lines and their caption do not fit, the shebang and `mkdir -p` lines can be dropped with a marked omission, as you abridged 3.4b.
 
 ##### 6.5 Keeping the Seven Newest
 
-`TerminalWindow` from Round 21: `seq 10 | tail -n 8` (3 to 10) beside `seq 10 | tail -n +8` (8 to 10). Lines: `ls -dt` lists newest first, so `tail -n +8` is everything after the seventh; counting, not age, keeps the last seven good backups even if backups stop working.
+`two-cols-header`, a fixed `TerminalWindow` (`student@servera:~`) in each column, from Round 21. Left, under "The last eight lines": `seq 10 | tail -n 8`, printing 3 to 10. Right, under "From the eighth line on": `seq 10 | tail -n +8`, printing 8 to 10. `::bottom::`: "Runs are listed newest first, so `tail -n +8` deletes all but the newest seven". New.
+
+Decision 29 gave `tail -n +8` a table line and set this slide aside, and the draft kept it anyway. The redraft keeps it because the difference is one character and the wrong one is destructive: with `tail -n 8`, the loop would delete the eight oldest runs, or every run while there are eight or fewer. Dropping it leaves 6.4's step as the only teaching.
 
 ##### 6.6 Getting Backups Off the Host
 
-`rsync -av --delete` to `servera` (w02, w04), with `ssh servera ls -lR forgejo-backups` from the recording. One line: here the data host pushes; many sites have the backup host pull instead, so the data host holds no key to its own backups.
+Line: "`rsync -av --delete` mirrors the backups to `servera`, deletions included". A fixed `TerminalWindow` (`root@serverb:~`) of the recording's `ssh servera ls -lR forgejo-backups`: `forgejo-backups:`, `total 0`, the run directory `forgejo_2026-11-21T18:41+00:00`, then that directory's listing with `database.sql.gz` (27537 bytes) and `files.tar.gz` (8789). Line under it: "Here the data host pushes; many sites have the backup host pull, so the data host holds no key to its own backups". Review of w02's `rsync`, w04's `--delete` and `ssh` with a command.
+
+Sources: Round 20 and the recording. `root` reaches `servera` with no password in every lab environment (Decision 11, `docs/lab-environments.md`).
 
 ##### 6.7 Every Night, Quietly
 
-The `/etc/cron.d` line (w04), its `nice -n 10` (w05), and `>> ... 2>&1` (new: errors go to the same log); the `logrotate.d` file (w05).
+Line: "A line in `/etc/cron.d` runs the script every night at 2:00, as `root`". A `text` block titled `/etc/cron.d/forgejo_backup (last line)` holding the cron line, `0 2 * * * root nice -n 10 /usr/local/bin/forgejo_backup.sh >> /var/log/forgejo_backup.log 2>&1`. Line under it: "`nice -n 10` lowers its priority, and `2>&1` sends its errors to the same log". The planned five-step `TextExplainer` of the line ran 36px off the slide's right edge even at `sm`, and a cron line cannot be continued with `\`, as 4.9's command was; a code block sets the 95 characters smaller, so it fits. Under that, a `text` block titled `/etc/logrotate.d/forgejo_backup`: `/var/log/forgejo_backup.log {`, `weekly`, `rotate 4`, `compress`, `missingok`, `}`. Review of w04's cron and w05's `nice` and `logrotate`; `2>&1` is new (w01 taught `>` and `>>` only).
+
+Sources: the recording's `tail -1` and Round 27's read of both files on `serverb`. Not on the slide: `logrotate --force` on the file alone left only `forgejo_backup.log.1.gz`, since run alone it does not read `/etc/logrotate.conf`'s `create` (Round 6); the nightly timer's run does.
 
 ##### 6.8 Reading the Access Log
 
-One access log line from the recording, its status after the quoted request; `grep -E '" 5[0-9]{2} '` with the quote anchoring the match, and the `uniq -c` counts. Review of w02.
+Line: "httpd writes one line per request to `/var/log/httpd/access_log`". A `TextExplainer` (`size="sm"`) of the recording's 503 line, `::1 - - [21/Nov/2026:18:03:53 +0000] "GET / HTTP/1.1" 503 299 "-" "curl/8.9.1"`, in five steps: `::1`, "The client: servera itself"; the bracketed time, "When"; `"GET / HTTP/1.1"`, "The request, in quotes"; `503`, "The status: 5xx is a server error"; `299`, "Bytes sent". Line under it: "`grep -E '" 5[0-9]{2} '` finds every 5xx, and `-o` with `sort | uniq -c` counts each status". Review of w02's ranges, quantifiers, and `uniq -c`, and w05's `/var/log/httpd/`.
+
+Sources: the recording, where the first `grep` printed that line and the counts were two `200`s and one `503` (Round 20). The draft's transcript of both commands is left to the exercise; the line explains why the pattern starts with a quote, which anchors it after the request.
 
 ##### 6.9 Security, Tier by Tier
 
-A recap: the web tier is the only one other hosts reach, on port 80; Forgejo runs rootless as its own user with no open port; PostgreSQL listens on one address and admits one user from one host; NFS shares one directory with one host; SELinux enforces throughout.
+The week's recap, as a narrow table with three columns, "Tier", "Listens on", and "Who gets in": web, httpd, port 80 on `servera`, anyone, through the firewall's `http`; app, Forgejo, ports 3000 and 2222, closed by the firewall, httpd on `servera` itself; data, PostgreSQL, port 5432 on `serverb`, `forgejo` from `servera` only; data, NFS, `/srv/forgejo` on `serverb`, mounted by `servera` only. Line under it: "SELinux enforces on both servers, and Forgejo runs rootless as its own user". Review of every tier.
 
-##### 6.10 Review and New in This Tier
+Sources: Round 26 for `servera`'s firewall and ports; Round 27 for `serverb`'s firewall (`cockpit dhcpv6-client mountd nfs postgresql rpc-bind ssh`), PostgreSQL on `127.0.0.1`, `[::1]`, and `172.25.250.11`, the export to `servera.lab.example.com` only, and `getenforce` printing `Enforcing` on both servers; 3.7's `pg_hba.conf` line for `forgejo` from `servera`. `rpc-bind` and `mountd` are open on `serverb` only so `showmount` can list the export, which mounting still restricts to `servera`.
 
-Two narrow tables: reviewed (w02, w03, w04, w05, w06) and new (`pg_dump`, `tar -C` and `--exclude`, `ls -t`, `tail -n +8`, `2>&1`).
+##### 6.10 This Week's Operations
+
+Retitled from "Review and New in This Tier". 2.9's shape: a narrow table with three columns, the consideration from 6.2, what Operate Forgejo does, and the weeks, worded like 2.9's, 4.11's, and 5.7's. Six rows:
+
+- **Backups:** a script with `pg_dump` and `tar`, keeping seven runs (3, 6, and 15).
+- **Copies:** `rsync` to `servera`, over `root`'s key (2 and 4).
+- **Scheduling:** a line in `/etc/cron.d` (4).
+- **Priority:** `nice -n 10` (5).
+- **Logs**, two rows: the backup's own log, rotated by `logrotate` (5 and 15); httpd's access log, searched with `grep` (2 and 5).
+
+The other commands, `su - postgres -c`, `rm -r`, `cat`, `tail -1`, and `exit`, are RH124 prerequisites, as "Classification" lists. Every new item is taught on its slide: `pg_dump` on 6.3, `tar -C`, `--exclude`, `ls -t`, and `tail -n +8` on 6.4 and 6.5, and `2>&1` on 6.7.
 
 ##### 6.11 Exercise: Operate Forgejo
 
-`exercise`: its goal, `serverb` and `servera`, and its six steps.
+`exercise`: goal "Back up Forgejo every night, and read the web tier's log", hosts `serverb` and `servera`, prerequisite exercise Build the Web Tier, and the command file's six steps: install `rsync` on `serverb` and `servera`; write a script that backs up the database and files, keeps the seven newest, and copies them to `servera`; run it by hand under `nice`, and check the copy on `servera`; schedule it nightly in `/etc/cron.d`; rotate the backup's log with `logrotate`; search `servera`'s access log for errors.
+
+The written version, `exercises/operate-forgejo-exercise.html`, was built with the fragment, as 3.10's, 4.12's, and 5.8's were. It explains each part of the script, including why `tail -n 8` would be wrong, and writes the trailing space in `uniq -c`'s `" 200 ` as `&#32;`, since Prettier strips it otherwise. It follows the command file step by step, with output from the recording: the backup's log with `rsync`'s file list and the script's last line, `ssh servera ls -lR forgejo-backups`, the cron line from `tail -1`, the rotated log, and the access log's 503 and counts. It notes that a student's run directory carries their own date and time, that their access log holds their own requests, such as Firefox's from Build the Web Tier, so their counts differ, and that the first `ssh servera` from `serverb` as `student` may report a new host key. It ends the week's chain. It has no cleanup (Decision 19).
 
 ##### 6.11a Recording: Operate Forgejo
 
-`exercise`, `variant: recording`.
+`exercise`, `variant: recording`, with the cast (6.1 minutes, 7 markers; Round 20) and the written exercise. The player's label describes the recorded workflow: installing `rsync` on `serverb` and `servera`; writing `/usr/local/bin/forgejo_backup.sh`, which dumps the database and archives Forgejo's files into a dated directory, keeps the seven newest, and copies them to `servera` with `rsync`; running it under `nice` and listing the copy on `servera`; adding a nightly line to `/etc/cron.d`; rotating its log with `logrotate`; and searching `servera`'s access log for server errors and counting each status code.
 
 #### Size and cut candidates
 
-66 slides across the six fragments, plus the cover and the VM reminder: fragment 1 at eleven (with 1.2a, 1.5a, and 1.6a), fragment 2 at eight, fragment 3 at thirteen (with 3.4a and 3.4b), and fragments 4 to 6 as drafted, at thirteen, nine, and twelve. With about 28 minutes of recorded exercises, longer typed live, that is likely too much for 2.5 hours. Candidates, in the order I would cut: merge 1.3 into 1.2a and 1.5 into 1.4; fold 2.3 into 2.4 as its opening line; drop 2.6, since 2.9 names the same five considerations; merge each later tier's review and new tables (4.11, 5.7, 6.10) into the exercise slide's environment notes or drop them for a single closing review map; drop 6.2. That brings it to about 58.
+66 slides across the six fragments, plus the cover and the VM reminder: fragment 1 at eleven (with 1.2a, 1.5a, and 1.6a), fragment 2 at eight, fragment 3 at thirteen (with 3.4a and 3.4b), and fragments 4 to 6 at thirteen, nine, and twelve. With about 28 minutes of recorded exercises, longer typed live, that is likely too much for 2.5 hours. Candidates, in the order I would cut: merge 1.3 into 1.2a and 1.5 into 1.4; fold 2.3 into 2.4 as its opening line; drop 2.6, since 2.9 names the same five considerations; merge each later tier's review and new tables (4.11, 5.7, 6.10) into the exercise slide's environment notes or drop them for a single closing review map; drop 6.2. That brings it to about 58.
 
 ## Verification
 
@@ -681,7 +711,7 @@ Nothing on the chain's hosts was changed. To-verify item 8 is answered by the fi
 6. Forgejo's proxy drop-in, and `--network host` across a reboot: answered in Round 6 (Decisions 15 and 16).
 7. The time: estimated under "Exercises"; a live dry run will time it (Decision 16).
 8. Answered in Round 21. For the PostgreSQL fragment, from a transcript at step 4: what `psql` shows when a statement lacks its `;`, `\q`'s exit, and what the service says when started before `postgresql-setup --initdb` (Decision 24).
-9. For slide 6.3: that `app.ini` holds secrets Forgejo generated at its first start (`SECRET_KEY`, `INTERNAL_TOKEN`), and that losing `SECRET_KEY` breaks users' two-factor logins, from Forgejo's documentation or a test on `serverc`.
+9. For slide 6.3: that `app.ini` holds secrets Forgejo generated at its first start (`SECRET_KEY`, `INTERNAL_TOKEN`), and that losing `SECRET_KEY` breaks users' two-factor logins, from Forgejo's documentation or a test on `serverc`. Half answered in Round 27: `app.ini` holds `SECRET_KEY`, `INTERNAL_TOKEN`, and `JWT_SECRET`. The two-factor claim is still open, and 6.3's redraft no longer makes it.
 
 **Round 22, 2026-11-22, fragment 2.** Fragment 2 shows no command or output, so it had nothing to capture. Its one claim about the lab, 2.5's first bottom line, rested on Round 21: the first admin was still in PostgreSQL after Build the App Tier's step 6 deleted the container. That line has since been replaced, and the slide moved to fragment 1 as 1.5a. This session ran on a machine whose lab has not run the exercise chain, so a read-only check found no `forgejo` user on `servera` and no `postgres` account on `serverb`. Nothing was changed on that lab.
 
@@ -724,6 +754,15 @@ Nothing on the chain's hosts was changed. To-verify item 8 is answered by the fi
 - **`/etc/httpd/conf.d/forgejo.conf`:** the three lines the exercise types.
 - **The recording**, read as text: the first `curl` on `workstation` failed with "curl: (7) Failed to connect to git.lab.example.com port 80 after 0 ms: Could not connect to server"; on `servera`, `curl -s localhost | grep '<title>'` printed `<title>503 Service Unavailable</title>`; and `sealert` printed, in order, "found 1 alerts in /var/log/audit/audit.log", "SELinux is preventing /usr/sbin/httpd from name_connect access on the tcp_socket port 3000.", the `catchall_boolean` plugin's banner, "If you want to allow httpd to can network connect", "Then you must tell SELinux about this by enabling the 'httpd_can_network_connect' boolean.", "Do", and `setsebool -P httpd_can_network_connect 1`.
 - **Icons:** `security`, `login`, `port-input`, `catalog`, and `certificate` are in the installed Carbon set.
+
+**Round 27, 2026-11-24, fragment 6's redraft.** Read-only, on `serverb` and `servera` at the end of the chain: Operate Forgejo has run, so `rsync` is on both, and the script and cron file are on `serverb`. Nothing was changed.
+
+- **`serverb`:** `getenforce` printed `Enforcing`. The firewall lists `cockpit dhcpv6-client mountd nfs postgresql rpc-bind ssh`; `exportfs -v` shows `/srv/forgejo` exported to `servera.lab.example.com` only; PostgreSQL listens on `172.25.250.11`, `127.0.0.1`, and `[::1]`, port 5432.
+- **The backup's files:** `/usr/local/bin/forgejo_backup.sh` and `/etc/logrotate.d/forgejo_backup` match the command file line for line.
+- **`man pg_dump`:** "It makes consistent backups even if the database is being used concurrently."
+- **`servera`:** `getenforce` printed `Enforcing`; `ps` shows httpd as one `root` process and four `apache` workers.
+- **`app.ini`**, read as `forgejo` for key names only, not values: `SECRET_KEY`, `INTERNAL_TOKEN`, and `JWT_SECRET`.
+- **The recording**, read as text: the backup's log lists `rsync` creating `forgejo-backups` and copying `forgejo_2026-11-21T18:41+00:00/` with `database.sql.gz` and `files.tar.gz`, then "Sat Nov 21 06:41:47 PM UTC 2026 wrote /var/backups/forgejo/forgejo_2026-11-21T18:41+00:00"; `ssh servera ls -lR forgejo-backups` lists the run directory and its two files (27537 and 8789 bytes); `ls /var/log/forgejo_backup*` after `logrotate --force` shows only `forgejo_backup.log.1.gz`; the first `grep` prints `::1 - - [21/Nov/2026:18:03:53 +0000] "GET / HTTP/1.1" 503 299 "-" "curl/8.9.1"`; and the counts are two `200`s and one `503`.
 
 ## Open questions
 
