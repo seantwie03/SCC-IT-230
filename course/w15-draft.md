@@ -48,3 +48,7 @@ src: ./chapters/it230-self-hosting-forgejo/postgresql.md
 ---
 src: ./chapters/it230-self-hosting-forgejo/app-tier.md
 ---
+
+---
+src: ./chapters/it230-self-hosting-forgejo/web-tier.md
+---

@@ -279,15 +279,15 @@ vertical: center
 
 # This Week's App Tier
 
-| Consideration   | In Build the App Tier               | Weeks      |
-|-----------------|-------------------------------------|------------|
-| Stateless       | Its files and database on `serverb` | 13 and 15  |
-| Least privilege | A rootless container                | 14         |
-| Least privilege | Its own user, `forgejo`, UID 2000   | 13 and 14  |
-| Availability    | A user service with lingering       | 14         |
-| Availability    | Retries until its data arrives      | 15         |
-| Configuration   | Settings passed with `-e`           | 14 and 15  |
-| Connections     | Host networking to PostgreSQL       | 15         |
+| Consideration   | In Build the App Tier               | Weeks     |
+|-----------------|-------------------------------------|-----------|
+| Stateless       | Its files and database on `serverb` | 13 and 15 |
+| Least privilege | A rootless container                | 14        |
+| Least privilege | Its own user, `forgejo`, UID 2000   | 13 and 14 |
+| Availability    | A user service with lingering       | 14        |
+| Availability    | Retries until its data arrives      | 15        |
+| Configuration   | Settings passed with `-e`           | 14 and 15 |
+| Connections     | Host networking to PostgreSQL       | 15        |
 
 ---
 layout: exercise

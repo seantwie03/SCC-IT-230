@@ -8,7 +8,7 @@ Plan w15 as something new: put what students learned all semester into action by
 
 ## Answer in brief
 
-**Updated 2026-11-24.** Fragments 1 to 4 are built and fragments 5 and 6 are drafted; all four exercises are recorded, and two have their written versions. There is no source deck: w15 is new material, not a port. It takes the place of RH134 chapter 18, *Working with Image-Based RHEL*, which the lesson plan in `~/s/IT-230/w15/` covered; RHA's chapter 19 review labs are the week's homework (Decision 7).
+**Updated 2026-11-24.** Fragments 1 to 5 are built and fragment 6 is drafted; all four exercises are recorded, and three have their written versions. There is no source deck: w15 is new material, not a port. It takes the place of RH134 chapter 18, *Working with Image-Based RHEL*, which the lesson plan in `~/s/IT-230/w15/` covered; RHA's chapter 19 review labs are the week's homework (Decision 7).
 
 What is settled:
 
@@ -22,7 +22,7 @@ What is settled:
 8. **One exercise chain, tier by tier.** Each tier opens with the host configuration it needs, and the operating steps come last, where they can be cut on the day (Decisions 16 and 27).
 9. **Aligned to RH134 chapter 19,** *Comprehensive Review*, with no Cert Guide chapter (Decision 17).
 
-The week is built in the order under "Build order". Step 1 is done: its three unknowns are answered (Round 5), and the command files are written and verified in chain order (Round 6; see "Exercises"); there are four since Decision 27 dropped the reboot exercise. Decision 26, Forgejo's data on `serverb` over NFS, was accepted on 2026-11-21, and Build the Data Tier and Build the App Tier were rewritten for it (Round 11). All four exercises are recorded (Rounds 15, 16, and 20), Operate Forgejo's with the backup that also takes Forgejo's files (Decision 28). Steps 2 and 3 are done (see "Classification" and "New material"; Decision 29 accepted). Step 4, the slides, is under way: fragments 1 to 4 are built, with 45 slides between them, and fragment 5 is next (see "Slides"). Decisions 1 to 30 are all settled; none awaits your call.
+The week is built in the order under "Build order". Step 1 is done: its three unknowns are answered (Round 5), and the command files are written and verified in chain order (Round 6; see "Exercises"); there are four since Decision 27 dropped the reboot exercise. Decision 26, Forgejo's data on `serverb` over NFS, was accepted on 2026-11-21, and Build the Data Tier and Build the App Tier were rewritten for it (Round 11). All four exercises are recorded (Rounds 15, 16, and 20), Operate Forgejo's with the backup that also takes Forgejo's files (Decision 28). Steps 2 and 3 are done (see "Classification" and "New material"; Decision 29 accepted). Step 4, the slides, is under way: fragments 1 to 5 are built, with 54 slides between them, and fragment 6 is next (see "Slides"). Decisions 1 to 30 are all settled; none awaits your call.
 
 ## Scope
 
@@ -200,9 +200,9 @@ Proposed 2026-11-21 as Decision 29 and accepted the same day. Each new item gets
 
 ## Slides (step 4, draft)
 
-Drafted 2026-11-21. Fragments 1 to 4 are built, and their entries describe the slides as they stand on 2026-11-24, after your revisions; fragments 5 and 6 are still the draft. Six fragments in `course/chapters/it230-self-hosting-forgejo/` (Decisions 23 and 25), each aligned to RH134 chapter 19 (Decision 17) and opening with a `section` slide that carries its `routeAlias` and `topicInfo`. Transcripts come from your four recordings (the casts) or from Round 21, with prompts rewritten to the theme's `student@servera:~$` form. No presenter notes. Each tier's fragment opens with the week's architecture diagram, its own tier highlighted, and ends with its exercise and recording slides. Cut candidates are listed at the end.
+Drafted 2026-11-21. Fragments 1 to 5 are built, and their entries describe the slides as they stand on 2026-11-24, after your revisions; fragment 6 is still the draft. Six fragments in `course/chapters/it230-self-hosting-forgejo/` (Decisions 23 and 25), each aligned to RH134 chapter 19 (Decision 17) and opening with a `section` slide that carries its `routeAlias` and `topicInfo`. Transcripts come from your four recordings (the casts) or from Round 21, with prompts rewritten to the theme's `student@servera:~$` form. No presenter notes. Each tier's fragment opens with the week's architecture diagram, its own tier highlighted, and ends with its exercise and recording slides. Cut candidates are listed at the end.
 
-**The weekly entry, `course/w15-draft.md`** (built 2026-11-22, with fragments 1 to 4 so far): a cover titled "Self-Hosting Forgejo", accent `orange`, your change from `green` (w14 was `teal`; the guide prefers cool accents for Bash-heavy decks), with a six-line agenda (Self-Hosting Forgejo, The Data Tier, PostgreSQL, The App Tier, The Web Tier, Operating Forgejo) and the summary from your opening paragraph; then the VM reminder, "Start `workstation`, `servera`, and `serverb` on your VDI"; then one `src:` import per fragment.
+**The weekly entry, `course/w15-draft.md`** (built 2026-11-22, with fragments 1 to 5 so far): a cover titled "Self-Hosting Forgejo", accent `orange`, your change from `green` (w14 was `teal`; the guide prefers cool accents for Bash-heavy decks), with a six-line agenda (Self-Hosting Forgejo, The Data Tier, PostgreSQL, The App Tier, The Web Tier, Operating Forgejo) and the summary from your opening paragraph; then the VM reminder, "Start `workstation`, `servera`, and `serverb` on your VDI"; then one `src:` import per fragment.
 
 #### Fragment 1: Self-Hosting Forgejo (`self-hosting.md`), built 2026-11-22
 
@@ -454,43 +454,65 @@ The written version, `exercises/build-the-app-tier-exercise.html`, was built wit
 
 `exercise`, `variant: recording`, with the cast (7.7 minutes, 7 markers; Rounds 14 and 15) and the written exercise. The player's label describes the recorded workflow: installing Podman, `autofs`, and `nfs-utils` on `servera`; creating `forgejo` with UID 2000, a password, and lingering; listing `serverb`'s exports and automounting `/srv/forgejo` on `forgejo`'s `~/data` with a direct map; running Forgejo's `-rootless` image with host networking, `keep-id`, and its settings; creating the first admin inside the container; and generating a user service with `--restart-sec 10` that keeps running after `forgejo` logs out.
 
-#### Fragment 5: The Web Tier (`web-tier.md`)
+#### Fragment 5: The Web Tier (`web-tier.md`), built 2026-11-24
+
+Redrafted and built 2026-11-24, with its written exercise. It keeps the 2026-11-21 draft's nine slides and their numbers, and takes fragment 4's shape. Your theme, why a reverse proxy at all (build order, step 4), opens it as an `IconGrid` of reasons, as 4.3 does for the app tier's design. The two new items get a slide each (Decision 29): the proxy's three lines as a `TextExplainer`, and the boolean, which Decision 29 gave only a table line, as a short transcript with `sealert`'s answer abridged the way you abridged 3.4b's `systemctl cat`. A closing table maps the reasons to the exercise and the weeks it reviews, as 2.9 and 4.11 do. Facts come from Decisions 15 and 29, Rounds 5, 6, 16, 21, and 26, and the recording. Like fragments 3 and 4, it closes with its exercise, and its written version was built with it. `check:entry`, `check:slides`, `check:exercises`, and `check:format` pass, and every slide and click state was looked at in a capture at 1920x1080. Two lines changed in the build, each noted at its slide: 5.3's port 80 caption and 5.6's closing line.
+
+Changed from the 2026-11-21 draft: 5.3's `IconGrid` gains bold-led captions and your port 80 reason, and drops "many sites on one port" and "limits", which this week does not use; 5.4's transcript shrinks to the two `curl` commands from `workstation`; 5.5 gains the two bullets 3.6 and 3.7 open with; 5.6's `sealert` output becomes an abridged block; and 5.7's two tables become one in 2.9's shape, retitled "This Week's Web Tier".
 
 ##### 5.1 The Web Tier
 
-`section`, with `routeAlias: web-tier` and `topicInfo` declaring Build the Web Tier.
+`section`, with `routeAlias: web-tier` and `topicInfo` (RH134 chapter 19) declaring Build the Web Tier Exercise (`./exercises/build-the-web-tier-exercise.html`), and the subtitle "Where users reach the application", after 2.1's and 4.1's.
 
 ##### 5.2 The Web Tier in the Architecture
 
-1.7's diagram, the web tier highlighted.
+1.7's diagram as built, highlighted the way 4.2 highlights the app tier: the httpd node keeps its blue fill with a 2px stroke, and every other node is white with a grey stroke. The `servera` box keeps its grey border, since it also holds the app tier. Line under it: "httpd on `servera`, in front of Forgejo".
 
 ##### 5.3 Why a Reverse Proxy
 
-Your theme: an application's built-in web server is made to run the application, not to face the network; Apache httpd and nginx are hardened and full-featured for that job (encryption, many sites on one port, logging, limits), so they stand in front. `IconGrid` of those features.
+Your theme. Line under the title: "Forgejo's own web server is made to run Forgejo, not to face the network". `IconGrid` of five, centered, in rows of three and two like 2.6 and 4.3, each caption led by the reason in bold: `security`, "**Hardened** to face the network"; `login`, "**One way in** for every user"; `port-input`, "**Port 80**, which needs root" (planned as "which rootless containers cannot use", which wrapped under its icon; only root can bind a port below 1024, which is why a rootless container cannot); `catalog`, "**Logging** of every request"; `certificate`, "**Encryption** with HTTPS". Every icon name is in the Carbon set (Round 26). New.
+
+Sources: the port 80 reason is the build order's second reason, from Round 5 (Forgejo's own SSH server could not bind port 22) and Round 26 (`ip_unprivileged_port_start` is 1024 on `servera`). The draft's "many sites on one port" and "limits" are left out: one site needs no virtual host (Decision 15), and the exercise sets no limit. Encryption stays as a reason even though the lab serves plain HTTP; 5.7 says so.
 
 ##### 5.4 Only Port 80 Is Open
 
-`TerminalWindow` from Round 21: `ss` with 80, 2222, and 3000 listening on `servera`, the firewall listing only `http`, and from `workstation`, port 3000 refused ("Could not connect to server") while port 80 serves the page. One line: a rootless container cannot listen below port 1024 anyway.
+Line: "Forgejo listens on port 3000, but the firewall opens only `http`". A fixed `TerminalWindow` (`student@workstation:~`) of Round 21's two commands from `workstation`: `curl git.lab.example.com:3000`, which prints "curl: (7) Failed to connect to git.lab.example.com port 3000 after 0 ms: Could not connect to server", and `curl -s git.lab.example.com | grep '<title>'`, which prints Forgejo's title. Line under it: "Every request reaches Forgejo through httpd". Review of w07's firewall, and the demonstration of 5.3's "one way in".
+
+Sources: Round 21 for both commands; Round 26 for the firewall (`cockpit dhcpv6-client http ssh`) and for `ss`, which shows httpd on `*:80` and Forgejo, as `gitea`, on `*:3000` and `*:2222`. The draft's `ss` and `firewall-cmd` lines move to the sources, which keeps the transcript to the two results students can compare.
 
 ##### 5.5 The Proxy Configuration
 
-`TextExplainer` over `/etc/httpd/conf.d/forgejo.conf`: `ProxyPreserveHost On` passes the name the browser asked for; `AllowEncodedSlashes NoDecode` and `nocanon` keep encoded characters in paths intact; `ProxyPass / http://127.0.0.1:3000/` forwards every request to Forgejo. One line: the three lines come from Forgejo's documentation. New.
+Laid out like 3.6 and 3.7. Two bullets: "A file of its own: `/etc/httpd/conf.d/forgejo.conf`" and "Three lines from Forgejo's documentation for Apache". A `TextExplainer` (automatic size) of the file's three lines, in six steps: `ProxyPreserveHost On`, "Pass on the name the browser asked for, git.lab.example.com"; `AllowEncodedSlashes NoDecode`, "Accept encoded slashes in paths, and leave them encoded"; `ProxyPass`, "Forward requests to another web server"; its `/`, "Every path on this site"; `http://127.0.0.1:3000/`, "Forgejo, on servera's own loopback address"; `nocanon`, "Pass each path on as it came, encoded characters included". New.
+
+Sources: Decision 15 and Round 6 for the three lines, which are all Forgejo's documentation needs on RHEL 10 (`ProxyRequests off` is Apache's default, `ProxyPassReverse` is not needed, and the proxy modules are loaded by default); Round 16 for the file the recording saved, 3 lines and 93 bytes; Round 26 for the file on `servera`. W06 taught a file of its own in `/etc/httpd/conf.d/`; the directives are new.
 
 ##### 5.6 SELinux Blocks the Proxy
 
-`TerminalWindow` from the recording: `503 Service Unavailable`, then `sealert`'s "SELinux is preventing /usr/sbin/httpd from name_connect access on the tcp_socket port 3000." and its advice to enable `httpd_can_network_connect`. Review of w06's method; the boolean is new.
+Line: "httpd answers with 503: SELinux will not let it connect to port 3000". A fixed `TerminalWindow` (`student@servera:~`) of the recording's `curl -s localhost | grep '<title>'` and its `<title>503 Service Unavailable</title>`. Under it, a plain block titled `sealert -a /var/log/audit/audit.log (abridged)`, its lines in the recording's order: "SELinux is preventing /usr/sbin/httpd from name_connect access on the tcp_socket port 3000.", `...output omitted...`, "Then you must tell SELinux about this by enabling the 'httpd_can_network_connect' boolean.", a blank line, "Do", and `setsebool -P httpd_can_network_connect 1`. Line under it: "`setsebool -P httpd_can_network_connect on` lets httpd connect" (planned with ", and Forgejo's page comes through", which wrapped and left "through" alone on its line). Review of w06's `sealert` and `setsebool -P`; the boolean is new.
 
-##### 5.7 Review and New in This Tier
+Sources: Round 16 and the recording for every line; Round 6 found `servera` labels port 3000 `ntop_port_t`, and Round 26 that `httpd_can_network_connect` is now `on`. The exercise sets it with `on`, where `sealert` suggests `1`; both work. The omitted lines are the plugin's banner and "If you want to allow httpd to can network connect", `sealert`'s own wording.
 
-Two narrow tables: reviewed (w05 httpd, w06 `sealert` and booleans, w07 the firewall, RH124 `/etc/hosts`) and new (`ProxyPass` and its partners, `httpd_can_network_connect`).
+##### 5.7 This Week's Web Tier
+
+Retitled from "Review and New in This Tier". 2.9's shape: a narrow table with three columns, the reason from 5.3, what Build the Web Tier does, and the weeks, worded like 2.9's and 4.11's. Six rows:
+
+- **Hardened**, two rows: httpd forwards each request to Forgejo (5 and 15); SELinux confines httpd, and a boolean lets it connect (6 and 15).
+- **One way in:** the firewall opens only `http` (7).
+- **Port 80:** httpd on port 80, Forgejo on 3000 (5 and 15).
+- **Logging:** httpd's access log, searched in Operate Forgejo (5 and 15). W05 named `/var/log/httpd/` among httpd's files.
+- **Encryption:** "None: plain HTTP in the lab" (not taught), as 2.9 writes its Resiliency row.
+
+The other commands, `/etc/hosts` on `workstation` and `ssh servera`, are RH124 prerequisites, as "Classification" lists, and stay in the exercise without a row. Every new item has its own slide, 5.5 and 5.6.
 
 ##### 5.8 Exercise: Build the Web Tier
 
-`exercise`: its goal, `workstation` and `servera`, and its five steps.
+`exercise`: goal "Serve Forgejo at `http://git.lab.example.com` through httpd on `servera`", hosts `workstation` and `servera`, prerequisite exercise Build the App Tier, and the command file's five steps: name `servera` `git.lab.example.com` on `workstation`; install httpd on `servera` and reverse proxy it to Forgejo; start httpd and open the firewall for `http`; use `sealert` to figure out why the reverse proxy fails; let httpd connect to Forgejo and test from `workstation`.
+
+The written version, `exercises/build-the-web-tier-exercise.html`, was built with the fragment, as 3.10's and 4.12's were. It follows the command file step by step, with output from the recording: the first `curl` failing with "Could not connect to server", the 503, the `sealert` lines, and Forgejo's title from both hosts. It notes three things the recording does not show a student: `setroubleshoot-server` is already installed on the SCC lab, where the instructor lab lacks it (`docs/lab-environments.md`), so `dnf` has nothing to do; `sealert` may list older, unrelated alerts first (Round 6), which is why the search for `port 3000` comes before reading; and `setsebool -P` takes several seconds. It ends with opening `http://git.lab.example.com` in Firefox on `workstation` and logging in as `student` with the password `student`, which the recording cannot show, and tells students to leave the lab for Operate Forgejo. It has no cleanup (Decision 19).
 
 ##### 5.8a Recording: Build the Web Tier
 
-`exercise`, `variant: recording`.
+`exercise`, `variant: recording`, with the cast (3.9 minutes, 6 markers; Round 16) and the written exercise. The player's label describes the recorded workflow: adding `git.lab.example.com` for `servera` to `workstation`'s `/etc/hosts`; installing httpd on `servera` and writing `/etc/httpd/conf.d/forgejo.conf` with the three proxy lines; starting httpd and opening the firewall for `http`; getting 503, installing `setroubleshoot-server`, and finding with `sealert` that SELinux denied httpd's connection to port 3000; enabling `httpd_can_network_connect`; and getting Forgejo's page from `servera` and, by name, from `workstation`.
 
 #### Fragment 6: Operating Forgejo (`operating-forgejo.md`)
 
@@ -692,6 +714,16 @@ Nothing on the chain's hosts was changed. To-verify item 8 is answered by the fi
 - **The user service:** `systemctl --user show container-forgejo` gave `Restart=on-failure`, `RestartUSec=10s`, `StartLimitBurst=5`, and `StartLimitIntervalUSec=10s`.
 - **The recording**, read as text: `podman ps` showed the container `Up 20 seconds` with `2222/tcp, 3000/tcp`, and at `servera:/var/lib/gitea$` the admin step printed "New user 'student' has been successfully created!".
 - **Icons:** every Carbon name 4.3, 4.7, and 4.10 use is in the installed set.
+
+**Round 26, 2026-11-24, fragment 5's redraft.** Read-only, on `servera` with the web tier built: `httpd-2.4.63-1.el10` and `setroubleshoot-server-3.3.35-1.el10` installed, and httpd active. Nothing was changed, and `workstation` was not touched: a `curl` through httpd would add a line to the access log that Operate Forgejo counts.
+
+- **Firewall:** `cockpit dhcpv6-client http ssh`.
+- **`ss -ltnp`:** httpd on `*:80`, and Forgejo's process, `gitea`, on `*:2222` and `*:3000`.
+- **SELinux:** `httpd_can_network_connect --> on`, and `semanage port -l` gives TCP and UDP 3000 to 3001 the type `ntop_port_t`.
+- **`/proc/sys/net/ipv4/ip_unprivileged_port_start`:** 1024.
+- **`/etc/httpd/conf.d/forgejo.conf`:** the three lines the exercise types.
+- **The recording**, read as text: the first `curl` on `workstation` failed with "curl: (7) Failed to connect to git.lab.example.com port 80 after 0 ms: Could not connect to server"; on `servera`, `curl -s localhost | grep '<title>'` printed `<title>503 Service Unavailable</title>`; and `sealert` printed, in order, "found 1 alerts in /var/log/audit/audit.log", "SELinux is preventing /usr/sbin/httpd from name_connect access on the tcp_socket port 3000.", the `catchall_boolean` plugin's banner, "If you want to allow httpd to can network connect", "Then you must tell SELinux about this by enabling the 'httpd_can_network_connect' boolean.", "Do", and `setsebool -P httpd_can_network_connect 1`.
+- **Icons:** `security`, `login`, `port-input`, `catalog`, and `certificate` are in the installed Carbon set.
 
 ## Open questions
 
